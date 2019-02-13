@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/Users/noamfo/dotfiles/hd-dragon-ball-z-wallpaper_125244822_276.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#151515",
+        "foreground": "#ccd4da",
+        "cursor": "#ccd4da"
+    },
+    "colors": {
+        "color0": "#151515",
+        "color1": "#CE9161",
+        "color2": "#5F7C98",
+        "color3": "#9B999A",
+        "color4": "#AEB1B3",
+        "color5": "#D6B1A0",
+        "color6": "#EBCEAD",
+        "color7": "#ccd4da",
+        "color8": "#8e9498",
+        "color9": "#CE9161",
+        "color10": "#5F7C98",
+        "color11": "#9B999A",
+        "color12": "#AEB1B3",
+        "color13": "#D6B1A0",
+        "color14": "#EBCEAD",
+        "color15": "#ccd4da"
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/home/aerex/Downloads/Wallpapers/gokugohan.png",
+    "alpha": "100",
+    "special": {
+        "background": "#050613",
+        "foreground": "#decebf",
+        "cursor": "#decebf"
+    },
+    "colors": {
+        "color0": "#050613",
+        "color1": "#906136",
+        "color2": "#99665B",
+        "color3": "#B0A34A",
+        "color4": "#B19660",
+        "color5": "#C7A467",
+        "color6": "#A4A195",
+        "color7": "#decebf",
+        "color8": "#9b9085",
+        "color9": "#906136",
+        "color10": "#99665B",
+        "color11": "#B0A34A",
+        "color12": "#B19660",
+        "color13": "#C7A467",
+        "color14": "#A4A195",
+        "color15": "#decebf"
+    }
+}
