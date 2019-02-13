@@ -1,0 +1,214 @@
+extends javascript-node
+
+snippet req "assign a CommonJS-style module to a var"
+const ${0:${1/(.+\/)*(\w+)(-|\b|$)(\..+$)?/\u$2/g}} 
+endsnippet
+# vim:ft=snippets:
+
+snippet befe "create a before each block"
+beforeEach(done => {
+	$1
+	done();
+});
+endsnippet
+
+snippet befa "create a beforeEach and afterEach block (sandbox)"
+beforeEach(() => {
+	$1
+});
+afterEach(() => {
+	sandbox.restore();
+});
+endsnippet
+
+snippet log "Print a simple console.log statement"
+console.log('\n\n$1\n\n');
+endsnippet
+
+snippet logn "Print current number line"
+console.log('\n`!v line(".")`\n');
+endsnippet
+snippet logj "Print a prettyify variable block"
+console.log(\`\n\n${1} : \${JSON.stringify(${0}, null, 2)\}\n\n\`);
+endsnippet
+
+snippet logc "Print console.log"
+console.log(\`\n$2: ${$2}\n\`);
+endsnippet
+
+snippet logcn "Print console.log with line number ref"
+console.log('`!v line(".")`');
+console.log(\`$2: ${$2}\n\`);
+endsnippet
+
+snippet logjn "Print a prettyify variable block with line number ref"
+console.log('`!v line(".")`');
+console.log(\`\n\n$2 : \${JSON.stringify($2, null, 2)\}\n\n\`);
+endsnippet
+
+snippet clj "Deep clone json object to a variable"
+const $1 = JSON.parse(JSON.stringify($2));
+endsnippet
+
+
+
+#================== Sinon ==================
+snippet sand "Create sinon sandbox"
+let sandbox = sinon.createSandbox()$0
+endsnippet
+
+snippet stub "Add a sinon stub using a sandbox"
+$1 = sandbox.stub($2, '${1/Stub//}'); $0
+endsnippet
+
+snippet stubsqm "Create stub for Sequelize model"
+$1 = sandbox.stub(Sequelize.prototype.Model, '${1/Stub//}'); $0
+endsnippet
+
+snippet exa0 "Add expect({var}.args[0][0]).to.be.equal(...)"
+expect($1.args[0][0]).to.be.equal($0);
+endsnippet
+
+#================== Lab/Code ==================
+snippet expe "expect(...).to.be.equal(...)"
+expect($1).to.be.equal($0);
+endsnippet
+
+snippet expt "expect(...).to.be.true()"
+expect($1).to.be.true();
+endsnippet
+
+snippet expf "expect(...).to.be.false()"
+expect($1).to.be.false();
+endsnippet
+
+snippet expnu "expect(..).to.not.be.undefined()"
+expect($1).to.not.be.undefined();
+endsnippet
+
+snippet expa "expect(..).to.be.an.array()"
+expect($1).to.be.an.array();
+endsnippet
+
+snippet expo "expect(..).to.be.an.object()"
+expect($1).to.be.an.object();
+endsnippet
+
+
+
+snippet des "Create a describe using arrow convention"
+describe('$1', () => {
+	$0
+});
+endsnippet
+
+snippet suite "Create a suite block using arrow convention"
+suite('$1', () => {
+	$0
+});
+endsnippet
+
+snippet test "Create a test block using arrow convention"
+test('$1', () => {
+	$0
+});
+endsnippet
+
+snippet testa "Create a test async block using arrow convention"
+test('$1', async () => {
+	$0
+});
+endsnippet
+
+snippet fl "Generate Lab.fail statement"
+fail(\`This should not happen: ${$1}\`);
+endsnippet
+
+snippet fle "Generate Lab.fail statement with error object"
+fail(\`This should not happen: ${error}\`);
+$0
+endsnippet
+
+snippet tryl "Create a try catch w/ Lab.fail"
+try {
+	$0
+} catch(error){
+	fail(\`This should not happen: ${error}\`);
+}
+endsnippet
+
+snippet itd "Create an it block with done"
+it('should $1', done => {
+	$0
+	done();
+});
+endsnippet
+
+snippet ita "Create an it block with await/async"
+it('should $1', async () => {
+	$0
+});
+endsnippet
+
+#==================  Sinon / Lab / Code ==================
+snippet createlab "Create lab starter following airbnb specs"
+const Code = require('code');
+const Lab = require('lab');
+const sinon = require('sinon');
+
+/* eslint no-multi-assign: 0 */
+const {
+  suite, test, beforeEach, afterEach
+} = exports.lab = Lab.script();
+const { fail, expect } = Code;
+const sandbox = sinon.createSandbox();
+
+$0
+endsnippet
+
+#snippet createlabv1 "description"
+#const Code = require('code');
+#const Lab = require('lab');
+#const sinon = require('sinon');
+#const lab = exports.lab = Lab.script();
+#const fail = lab.fail;
+#const describe = lab.describe;
+#const it = lab.it;
+#const beforeEach = lab.beforeEach;
+#const afterEach = lab.afterEach;
+#const expect = Code.expect;
+#endsnippet
+	
+#==================  Log4J ==================
+
+snippet 4l "create log4js getLogger instance"
+const logger = Log4js.getLogger('$1');
+endsnippet
+
+#==================  ES6 Classes  ==================
+
+snippet crc "create class module"
+module.exports = class $1 {
+	$0
+};
+endsnippet
+
+snippet sta "Create static method"
+static $1($2){
+	$0
+}
+endsnippet
+
+
+snippet staa "Create static async method"
+static async $1($2){
+	$0
+}
+endsnippet
+
+
+#==================  Transformations ==================
+# snippet js "Description" b
+# ${1:a text}
+# ${1/\w+\s*/\u$0/}
+# endsnippet
