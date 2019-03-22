@@ -1,0 +1,24 @@
+# vim: filetype=muttrc
+
+set my_imap_domain       = `./getcred Email/paperless imap`
+set editor            = "$EDITOR" 
+set quit              = yes 
+set imap_user         = `./getcred Email/paperless login`
+set imap_pass         = `./getcred Email/paperless pass`
+set realname          =  "Paperless" 
+set record            = "~/.Mail/Aerex/Paperless/Sent"
+set mbox_type         = Maildir
+set sendmail          = "/usr/bin/msmtp -a INBOX"
+set folder            = "imaps://$my_imap_domain"
+set spoolfile         = +INBOX
+set ssl_starttls      = yes
+set ssl_force_tls     = yes
+mailboxes             = +INBOX
+set header_cache      = ~/.config/neomutt/accounts/aerex/paperless/cache/headers
+set message_cachedir  = ~/.config/neomutt/accounts/aerex/paperless/cache/bodies
+set certificate_file  = ~/.config/neomutt/accounts/aerex/paperless/certificates
+set spoolfile         = +INBOX
+set record            = +INBOX.Sent
+set postponed         = +INBOX.Drafts
+
+

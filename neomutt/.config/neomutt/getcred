@@ -1,0 +1,17 @@
+#!/bin/bash
+
+PASS_STORE=$1
+CRED_FIELD=$2
+
+if [ -z $CRED_FIELD ]; then
+  echo 'Need a field'
+  exit 1
+fi
+
+if [ $CRED_FIELD = 'pass' ];  then
+  CRED=$(pass show "$PASS_STORE" | head -1)
+else
+  CRED=$(pass show "$PASS_STORE" | grep "$CRED_FIELD" | awk '{sub(/:/, "")}{print $2}')
+fi
+
+echo $CRED

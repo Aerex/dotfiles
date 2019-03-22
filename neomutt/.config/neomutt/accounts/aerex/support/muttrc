@@ -1,0 +1,28 @@
+# vim: filetype=muttrc
+
+set my_smtp_domain       = `./getcred Email/support smtp`
+set my_imap_domain       = `./getcred Email/support imap`
+set editor            = "$EDITOR" 
+set quit              = yes 
+set imap_user         = `./getcred Email/support login`
+set imap_pass         = `./getcred Email/support pass`
+set smtp_url          = "smtp://$imap_user:\"$imap_pass\"@$my_smtp_domain"
+set realname          = "Support"
+set record            = "~/.Mail/Aerex/Support/Sent"
+set postponed          = "~/.Mail/Aerex/Support/Draft"
+set from              = `./getcred Email/support login`
+set use_from          = yes
+set mbox_type         = Maildir
+set sendmail          = "/usr/bin/msmtp -a INBOX"
+set folder            = "imaps://$my_imap_domain"
+set spoolfile         = +INBOX
+set ssl_starttls      = yes
+set ssl_force_tls     = yes
+mailboxes             = +INBOX
+set header_cache      = ~/.config/neomutt/accounts/aerex/support/cache/headers
+set message_cachedir  = ~/.config/neomutt/accounts/aerex/support/cache/bodies
+set certificate_file  = ~/.config/neomutt/accounts/aerex/support/certificates
+set spoolfile         = +INBOX
+set record            = +INBOX.Sent
+set postponed         = +INBOX.Drafts
+

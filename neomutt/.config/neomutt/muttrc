@@ -1,0 +1,118 @@
+# vim: filetype=muttrc
+
+#███╗   ███╗██╗   ██╗████████╗████████╗██████╗  ██████╗
+#████╗ ████║██║   ██║╚══██╔══╝╚══██╔══╝██╔══██╗██╔════╝
+#██╔████╔██║██║   ██║   ██║      ██║   ██████╔╝██║     
+#██║╚██╔╝██║██║   ██║   ██║      ██║   ██╔══██╗██║     
+#██║ ╚═╝ ██║╚██████╔╝   ██║      ██║   ██║  ██║╚██████╗
+#╚═╝     ╚═╝ ╚═════╝    ╚═╝      ╚═╝   ╚═╝  ╚═╝ ╚═════╝
+
+
+
+# Default account
+source ~/.config/neomutt/accounts/aerex/main/muttrc
+
+auto_view text/html
+set implicit_autoview
+set mailcap_path='~/.config/neomutt/.mailcap'
+
+# Macros for switching accounts
+macro index ,1 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/main/muttrc<enter><enter-command>echo "Switched to Main Account"<enter><change-folder>!<enter>'
+macro index ,2 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/support/muttrc<enter><enter-command>echo "Switching to Support Account"<enter><change-folder>!<enter>'
+macro index ,3 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/gmail/muttrc<enter><enter-command>echo "Switching to Gmail Account"<enter><change-folder>!<enter>'
+macro index ,4 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/yahoo/muttrc<enter><enter-command>echo "Switching to Yahoo Account"<enter><change-folder>!<enter>'
+color index yellow default '.*'
+color index_author red default '.*'
+color index_number brightblue default
+color index_subject cyan default '.s'
+color index_size green default
+color normal default default
+
+set new_mail_command="notify-send 'New Email in %f' '%n new messages, %u unread.' &"
+
+#==================== Vi Key Bindings ==============================#  
+# Credits to https://github.com/pigmonkey/dotfiles/blob/ef06f29de046ef14094eedabba343f8854f239ea/mutt/vim-keybindings.rc
+
+# Moving around
+bind attach,pager,browser,index g   noop
+bind attach,browser,index       gg  first-entry
+bind attach,browser,index       G   last-entry
+bind pager                      gg  top
+bind pager                      G   bottom
+bind pager                      k   previous-line
+bind pager                      j   next-line
+bind index                      l   display-message
+
+macro attach s <save-entry><bol>~/Downloads/
+# Credits to https://github.com/ohthehugemanatee/personalize/blob/00649893973fe87a14988132a8df40a5656f5490/.mutt/muttrc#L126
+
+# Custom movements
+macro index gi "<change-folder>=Inbox<enter>" "Go to Inbox"
+macro index gd "<change-folder>=Drafts<enter>" "Go to Drafts"
+macro index gs "<change-folder>=Sent<enter>" "Go to Sent"
+macro index gj "<change-folder>=Trash<enter>" "Go to Trash"
+macro index ga "<change-folder>=Archive<enter>" "Go to Archive"
+
+# Scrolling
+bind attach,browser,pager,index \CF next-page
+bind attach,browser,pager,index \CB previous-page
+bind attach,browser,pager,index \Cu half-up
+bind attach,browser,pager,index \Cd half-down
+bind browser,pager              \Ce next-line
+bind browser,pager              \Cy previous-line
+bind index                      \Ce next-line
+bind index                      \Cy previous-line
+
+# Refreshing
+bind index                      \Cl imap-fetch-mail
+
+bind attach,pager,browser,index d   noop
+bind pager,index                dd  delete-message
+
+
+# unbinding x and i because only one key is enough
+bind generic,compose,attach,pager,index i noop    
+bind generic,compose,attach,pager,index q noop    
+                                                  
+# binding q for exiting all menus                 
+bind generic,compose,attach,pager q exit          
+                                                  
+# making q do nothing in index                    
+bind index x noop                                 
+                                                  
+# binding ZZ like in vim to quit, only in index   
+bind index zz quit                                
+                                                  
+# Mail & Reply
+#bind index                      \Cm list-reply # Doesn't work currently
+bind index                      f forward-message
+bind index                      r reply
+bind index                      R group-reply
+
+# Threads
+bind browser,pager,index        N   search-opposite
+bind pager,index                dT  delete-thread
+bind pager,index                dt  delete-subthread
+bind pager,index                gt  next-thread
+bind pager,index                gT  previous-thread
+bind index                      za  collapse-thread
+bind index                      zA  collapse-all # Missing :folddisable/foldenableacro index gt "<change-folder>=INBOX.Trash<enter>" "Go to trash"
+
+# Toggle
+bind index                      tn toggle-new
+bind index                      tr toggle-read  
+
+
+
+
+# Editor
+#macro editor \c0 <bol> 
+macro editor  \ab <backward-word> 
+macro editor \af <forward-word>
+macro editor \cd <delete-char>
+macro editor \ce <eol>
+macro editor \cu <kill-line>
+macro editor \cn <history-up>
+macro editor \cp <history-down>
+macro editor \cU <upcase-word>
+macro editor \cu <downcase-word>

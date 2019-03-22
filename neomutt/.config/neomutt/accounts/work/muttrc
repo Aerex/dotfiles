@@ -1,0 +1,29 @@
+# vim: filetype=muttrc
+
+
+set smtp_domain       = `./getcred Email/work smtp`
+set imap_domain       = `./getcred Email/work imap`
+set editor            = "$EDITOR"
+set quit              = yes
+set imap_user         = `./getcred Email/work login`
+set imap_pass         = `./getcred Email/work pass`
+set smtp_url          = 'smtp://$imap_user:$imap_pass@$smtp_domain'
+set realname          = "$MUTT_REAL_NAME"
+set from              = `./getcred Email/work login`
+set use_from          = yes
+mailboxes             = +INBOX
+set record            = "~/.Mail/Aerex/Work/Sent/"
+set mbox_type         = Maildir
+set sendmail          = "/usr/bin/msmtp -a INBOX"
+set folder            = "imaps://$imap_domain" 
+set spoolfile         = +INBOX
+set postponed         = +INBOX.Drafts
+set header_cache      = ~/.config/neomutt/accounts/work/cache/headers
+set message_cachedir  = ~/.config/neomutt/accounts/work/cache/bodies
+set certificate_file  = ~/.config/neomutt/accounts/work/certificates
+
+color index yellow default '.*'
+color index_author red default '.*'
+color index_number brightblue default
+color index_subject cyan default '.s'
+color index_size green default

@@ -1,0 +1,29 @@
+# vim: filetype=muttrc
+
+
+set my_smtp_domain       = `./getcred Email/yahoo smtp`
+set my_imap_domain       = `./getcred Email/yahoo imap`
+set editor            = "$EDITOR"
+set quit              = yes
+set imap_user         = `./getcred Email/yahoo login`
+set imap_pass         = `./getcred Email/yahoo pass`
+set smtp_url          = "smtp://$imap_user:$imap_pass@$my_smtp_domain"
+set realname          = "$MUTT_REAL_NAME"
+set from              = `./getcred Email/yahoo login`
+set use_from          = yes
+mailboxes             = +INBOX
+set mbox_type         = Maildir
+set sendmail          = "/usr/bin/msmtp -a INBOX"
+set folder            = "imaps://$my_imap_domain" 
+set spoolfile         = +INBOX
+set record            = +INBOX.Sent
+set postponed         = +INBOX.Drafts
+set header_cache      = ~/.config/neomutt/accounts/yahoo/cache/headers
+set message_cachedir  = ~/.config/neomutt/accounts/yahoo/cache/bodies
+set certificate_file  = ~/.config/neomutt/accounts/yahoo/certificates
+
+color index yellow default '.*'
+color index_author red default '.*'
+color index_number brightblue default
+color index_subject cyan default '.s'
+color index_size green default
