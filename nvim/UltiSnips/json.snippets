@@ -1,0 +1,19 @@
+# ======= JSON SCHEMA ======= #
+snippet sp "Add json schema property block"
+"$1": {
+	"$id": "#/properties/$1",
+	"type": "$2",
+	"title": "$1",
+	"default": "$3",
+	"examples": [
+		"$4"
+	]
+}
+endsnippet
+
+snippet sr "Add json schema ref block"
+"$1": {
+	"$ref": "$2"
+}
+endsnippet	
+
