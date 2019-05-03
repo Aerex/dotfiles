@@ -1,0 +1,5 @@
+# To set the DJANGO_SETTINGS_MODULE if in the same directory as settings folder
+export DJANGO_SETTINGS_MODULE=.settings OR i
+
+# To set the DJANGO_SETTINGS_MODULE if in a different directory as settings folder
+export DJANGO_SETTINGS_MODULE=.settings.local 

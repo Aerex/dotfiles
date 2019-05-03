@@ -1,0 +1,5 @@
+# To uninstall a package
+apt-get --purge remove <package>
+
+# To remove files of a package
+dpkg --pure <package>

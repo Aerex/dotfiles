@@ -1,0 +1,2 @@
+# Load JWT token from a file
+http --auth-type=jwt --auth="$(cat mytoken.txt)" example.org

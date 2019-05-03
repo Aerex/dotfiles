@@ -1,0 +1,2 @@
+# Geneate a password using SHA512-CRYPT scheme
+doveadm pw -s SHA512-CRYPT -u john.roe@example.com

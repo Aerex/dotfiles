@@ -1,0 +1,3 @@
+# Assertws that referene value is a function
+
+expect(function(){}).to.be.a.function()

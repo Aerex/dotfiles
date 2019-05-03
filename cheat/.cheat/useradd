@@ -1,0 +1,12 @@
+# Create a user with no home directory
+useradd -M test
+
+# Create a user and add it to an existing group
+useradd -G root test
+
+# Create a user with no shell access
+useradd -s /sbin/nologin test 
+useradd -s /usr/sbin/nologin test 
+
+# Add a comment to to describe the user (usually full name of user)
+useradd -c "Test User" test

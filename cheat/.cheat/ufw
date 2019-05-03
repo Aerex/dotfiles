@@ -1,0 +1,5 @@
+# Delete a rule (eg. ufw deny 80/tcp)
+ufw delete deny 80/tcp
+
+# To delete a rule by the row number from the status (ufw status)
+ufw delete <NUM>

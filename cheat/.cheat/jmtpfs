@@ -1,0 +1,5 @@
+# To mount  (make sure device is connected)
+jmtpfs <file-directory>
+
+
+

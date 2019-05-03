@@ -1,0 +1,7 @@
+# Note if you are using fish omit `$` to evalute expressions (e.g echo (grep "hello"))
+
+# Delete all images from bx registry given a specified pattern
+
+export PATTERN=mern && bx cr image-rm  $(bx cr images | awk '{if($1, match($1, /"$PATTERN"/))print $1 ":" $3}'
+
+

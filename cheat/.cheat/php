@@ -1,0 +1,41 @@
+# To view the php version:
+php -v
+
+# To view the installed php modules:
+php -m
+
+# To view phpinfo() information:
+php -i
+
+# To lint a php file:
+php -l file.php
+
+# To lint all php files within the cwd:
+find . -name "*.php" -print0 | xargs -0 -n1 -P8 php -l
+
+# To enter an interactive shell:
+php -a
+
+# To locate the system's php.ini files:
+php -i | grep "php.ini"
+
+# To start a local webserver for the cwd on port 3000 (requires php >= 5.4):
+php -S localhost:3000
+
+# Restart php-fpm
+/etc/init.d/php-fpm restart    # typical
+/etc/init.d/php5-fpm restart   # debian-style
+/etc/init.d/php7.0-fpm restart # debian-style PHP 7
+#https://serverfault.com/questions/189940/how-do-you-restart-php-fpm#189961
+#
+#
+# Instaling php-fpm 5.6 on Centos
+rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
+rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+cd /etc/yum.repos.d
+curl -O http://rpms.famillecollet.com/enterprise/remi.repo
+yum install php-fpm php php-devel -y --enablerepo=remi-php56  
+
+yum install php-mbstring php-mcrypt php-soap php-apc -y --enablerepo=remi-php56
+yum install gd-last --enablerepo=remi
+yum groupinstall "PHP Support" --enablerepo=remi-php56 –y

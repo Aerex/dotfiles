@@ -1,0 +1,2 @@
+# To add the library system wide
+vim /etc/ld.so.conf

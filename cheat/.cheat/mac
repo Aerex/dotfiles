@@ -1,0 +1,5 @@
+# Disable moving spaces
+Uncheck checkbox in Mission Control preferences
+
+# Make hidden files/folder visible in Finder
+defaults write -g AppleShowAllFiles -bool true

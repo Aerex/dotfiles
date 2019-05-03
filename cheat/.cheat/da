@@ -1,0 +1,3 @@
+# To get token for pricing service
+Get a jwt from logining as a customer
+Call getCustomerQuote with the auth jwt which will give you the jwt that you need

@@ -1,0 +1,17 @@
+# Default Command / Report
+task config default.command <reportname>
+
+# Define a context based on a defined filter
+task define context <reportname> <filter> 
+
+# Set the context
+task context <context>
+
+# Clear context
+task context none
+
+# Add alias
+task config alias.<name> <filter>
+
+# Show task added in the last hour 
+task entry.after:now-1hour list

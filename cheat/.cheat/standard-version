@@ -1,0 +1,6 @@
+# Release as a prerelease
+standard-version --prerelease <name>
+
+# To forgo automated version bump 
+standard-version --release-as <major,minor,path,version>
+

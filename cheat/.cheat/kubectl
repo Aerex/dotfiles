@@ -1,0 +1,6 @@
+# SSH into pod 
+
+#BASH
+export POD=mern && kubectl exec -it $(kubectl get pods | tail -n +2 | awk '{if(match(, /"$POD"/))print}') bash
+#FISH
+set POD mern; kubectl exec -it (kubectl get pods | tail -n +2 | awk '{if(match(, /"$POD"/))print}') bash
