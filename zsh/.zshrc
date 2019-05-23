@@ -4,6 +4,8 @@ export PATH=$HOME/bin:/usr/local/bin:$HOME/go/bin:$PATH
 export ZLE_REMOVE_SUFFIX_CHARS=""
 export XDG_CONFIG_PATH=$HOME/.config
 
+. $HOME/bin/z.sh
+
 OS=$(uname -s)
 if [ "$OS" = "Darwin" ]; then 
   PYTHON_ROOT_37=/Library/Frameworks/Python.framework/Versions/3.7
@@ -18,12 +20,16 @@ export PATH=$PATH:$HOME/.local/bin
 export PATH=$PATH:/usr/local/sbin 
 # Python
 export PATH=$PATH:$PYTHON_PATH_27/bin 
-export PATH=$PATH:$PYTHON_PATH_37/bin 
+export PATH=$PYTHON_PATH_37/bin:$PATH
 export PATH=$PATH:$PYTHON_ROOT_37/bin 
 
 # Go
 export GOPATH=$HOME/go
+export GOROOT=/usr/local/opt/go/libexec
 export PATH=$PATH:$GOPATH/bin 
+export PATH=$PATH:$GOROOT/bin
+
+export PYTHONWARNINGS="ignore:Unverified HTTPS request"
 
 # Powerline
 export POWERLINE_NO_ZSH_PROMPT=1 
@@ -36,7 +42,7 @@ eval "$(fasd --init auto)"
 # Misc
 export EDITOR=/usr/local/bin/nvim
 export NOTES_DIRECTORY=~/Documents/notes
-export PAGER=vimpager
+export PAGER=less
 export BROWSER=qutebrowser
 export RTV_EDITOR=$(which nvim)
 
@@ -111,7 +117,6 @@ if [ -d $HOME/.config/zsh/functions ]; then
 fi
 
 
-
 # Load ZLE Widgets and Functions
 if [ -d $HOME/.config/zsh/widgets ]; then
   for file in $HOME/.config/zsh/widgets/*.zsh; do
@@ -134,10 +139,10 @@ export __GIT_PROMPT_DIR=~/.zsh/bundles/olivierverdier/zsh-git-prompt
 if [[ -f $__GIT_PROMPT_DIR/src/.bin/gitstatus ]]; then GIT_PROMPT_EXECUTABLE="haskell"; fi
 
 antigen bundle olivierverdier/zsh-git-prompt
-antigen bundle zsh-users/zsh-completions
-antigen bundle pjg/zsh-vim-plugin
-antigen bundle lukechilds/zsh-better-npm-completion
-antigen bundle brew
+#antigen bundle zsh-users/zsh-completions
+#antigen bundle pjg/zsh-vim-plugin
+# antigen bundle lukechilds/zsh-better-npm-completion
+# antigen bundle brew
 antigen bundle $HOME/.config/zsh/themes theunraveler-mod.zsh-theme  --no-local-clone
 antigen bundle $HOME/.config/zsh/plugins/vim-mode-redux vim-mode-redux.zsh --no-local-clone
 antigen apply
@@ -182,6 +187,8 @@ if [ -d $ZSH_CUSTOM/conf.d ]; then
 fi
 # export MANPATH="/usr/local/man:$MANPATH"
 #
+#
+export FZF_DEFAULT_OPTS="--bind \"K:preview-up,J:preview-down,ctrl-g:jump\""
 
 # make backward-word and forward-word move to each word separated by a '/'
 export WORDCHARS=''
@@ -200,5 +207,8 @@ CORRECT_IGNORE='_*'
 #
 source ~/.bin/tmuxinator.zsh
 
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+[[ -s "$HOME/.local/share/marker/marker.sh" ]] && source "$HOME/.local/share/marker/marker.sh"

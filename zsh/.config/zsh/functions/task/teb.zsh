@@ -14,9 +14,6 @@ function teb(){
     return 1;
   elif [ -z $LIST_TYPE ]; then
     LIST_TYPE=ls
-    echo "Missing filter"
-    teb_help
-    return 1;
   fi
-  task entry.after:now-"${TIME_FILTER}" "${LIST_TYPE}"
+  task entry.after:now-"${TIME_FILTER}" "${LIST_TYPE}" 
 }

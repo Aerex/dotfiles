@@ -7,7 +7,7 @@ bindkey -v
 case "$TERM" in
   *xterm*|screen-256color)
     # VI MODE KEYBINDINGS (ins mode)
-    bindkey -M viins '^a'    beginning-of-line
+    bindkey -M viins '^h'    beginning-of-line
     bindkey -M viins '^e'    end-of-line
     bindkey -M viins -s '^b' "←\n" # C-b move to previous directory (in history)
     bindkey -M viins -s '^f' "→\n" # C-f move to next directory (in history)
@@ -18,15 +18,17 @@ case "$TERM" in
     bindkey -M viins '^p'    history-beginning-search-backward
     bindkey -M viins '^n'    history-beginning-search-forward
     bindkey -M viins '^y'    yank
+    bindkey -M viins '^\ew'    backward-kill-word
     bindkey -M viins '^w'    backward-kill-word
     bindkey -M viins '^u'    backward-kill-line
-    bindkey -M viins '^h'    backward-delete-char
+    bindkey -M viins '^j'    backward-delete-char
+    bindkey -M viins '^k'    forward-delete-char
     bindkey -M viins '^?'    backward-delete-char
     bindkey -M viins '^_'    undo
     bindkey -M viins '^x^l'  history-beginning-search-backward-then-append
     bindkey -M viins '^x^r'  redisplay
-    bindkey -M viins '\eOH'  beginning-of-line # Home
-    bindkey -M viins '\eOF'  end-of-line       # End
+    # bindkey -M viins '\eOH'  beginning-of-line # Home
+    # bindkey -M viins '\eOF'  end-of-line       # End
     bindkey -M viins '\e[2~' overwrite-mode    # Insert
 
 

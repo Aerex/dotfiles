@@ -1,43 +1,75 @@
-#
-# ================ GENERAL  ==================== #
+# ================ GENERAL  ==================== #1
 alias cls="clear"
-# ================ GENERAL  ==================== #
+alias cat="vimcat -c 'set bg=light'"
+alias ls="exa"
+alias wconf="nvim ~/.wuzz/config.toml"
+alias rm='trash'
+alias wttr="curl wttr.in?0"
+alias speedtest="export PYTHONHTTPSVERIFY=0; speedtest-cli"
 alias uuid="python -c \"import uuid; print uuid.uuid4()\" | pbcopy"
+alias mail="neomutt"
+alias n="nnn"
+alias khdrc="nvim ~/.skhdrc"
+alias alconf="nvim ~/.config/alacritty/alacritty.yml"
 
-# ================ PASS ==================== #
+# ================ HUB  ==================== #1
+alias hpr="hub pull-request -c" 
+
+# ================ DOCKER ==================== #1
+alias di="docker images"
+
+# ================ ALACRITTY  ==================== #1
+alias aconf="nvim ~/.config/alacritty/alacritty.yml"
+#
+# ================ BUGWARRIOR  ==================== #1
+alias bpl="bugwarrior-pull"
+# ================ PASS ==================== #1
 alias pgpl="pass git pull"
 alias pgp="pass git push"
 
-# ================ GIT ==================== #
-alias gcz="git cz"
-alias gco="git co"
-alias grsu="git remote set-url"
+# ================ GCAL ==================== #1
+alias gcal="gcalcli" 
+alias gcalw="gcalcli calw"
+alias gcalm="gcalcli calm"
+
+# ================ GIT ==================== #1
 alias g="git"
-alias gtr="git ls-tree HEAD"
-alias gh="git hist"
-alias ga="git add"
+alias git-bug="$HOME/go/bin/git-bug"
+### add ### #2
 alias gaa="git add -A"
+alias ga="git add"
+### branches ### #2
 alias gb="git b"
-alias gl="git log"
-alias gm="git merge"
-alias gr="git rebase -i"
-alias grmc="git rm --cached"
-alias gta="git tag"
-alias gtad="git tag -d"
-alias gmm="git merge master"
-alias grc="git rebase --continue"
-alias gd="git diff"
-alias gst="git st"
 alias gnb="git nb"
 alias gdB="git dB"
 alias gdb="git db"
-alias gs="git status"
+alias grnb="git branch -m"
+alias gRnb="git rename-branch"
+### tags ### #2
+alias gta="git tag"
+alias gtad="git tag -d"
+### logs ### #2
+alias gl="git log"
+alias grl="git reflog"
+alias grlr="git reflog | fzf --preview=\"echo {}\" | awk '{print \$2}' | sed \"s/://\" | xargs -I % bash -c 'git reset %'"
+### pull ### #2
+alias gpl="git pull"
+alias gpm="git pull origin master"
+alias gcz="git cz"
+alias gco="git co"
+alias grsu="git remote set-url"
+alias gtr="git ls-tree HEAD"
+alias gh="git hist"
+alias gm="git merge"
+alias gr="git rebase -i"
+alias grmc="git rm --cached"
+alias gmm="git merge master"
+alias grc="git rebase --continue"
+alias gd="git diff"
 alias gst="git stash"
-alias gpl="git pl"
-alias gpm="git pl origin master"
+alias gs="git status"
 alias gk="gitk --all&"
 alias gx="gitx --all"
-alias go="gco"
 alias gcm="git commit"
 alias gam="git commit --amend"
 alias gpu="git pu"
@@ -46,17 +78,20 @@ alias gpd="git push --delete"
 alias gpuf="git pu -f"
 alias gpus="git push --set-upstream" 
 alias gpufm="export OVERRIDE_MASTER_PUSH=1; git push origin master -f"
+alias gpum="export OVERRIDE_MASTER_PUSH=1; git push origin master"
 alias gpuso="git push --set-upstream origin"
 alias gcom="git co master"
 alias gmv="git mv"
 alias gconf="git config --global"
 alias gpr="git pull-request"
-alias gtag1="git tag -d v1.0.0; git push --delete origin v1.0.0; git tag v1.0.0; git push origin v1.0.0"
 
-
-# ================ NPM ==================== #
+# ================ NPM ==================== #1
 alias ns="npm start"
+alias nsi="export PORT=3001; npm start"
+alias nlkm="npm run link:models"
+alias nv="npm version"
 alias nt="npm test"
+alias nup="npm update"
 alias nlk="npm link"
 alias nulk="npm unlink"
 alias nlt="npm run lint"
@@ -82,28 +117,25 @@ alias tmc="tmux attach -t chat"
 alias tconf="nvim ~/.tmux.conf"
 
 # ================ FASD ==================== #
-alias jj='zz'
+# alias jj='zz'
 alias a='fasd -a'        # any
 alias s='fasd -si'       # show / search / select
 alias d='fasd -d'        # directory
 alias f='fasd -f'        # file
 alias sd='fasd -sid'     # interactive directory selection
 alias sf='fasd -sif'     # interactive file selection
-alias z='fasd_cd -d'     # cd, same functionality as j in autojump
-alias zz='fasd_cd -d -i' # cd with interactive selection
+# alias z='fasd_cd -d'     # cd, same functionality as j in autojump
+# alias zz='fasd_cd -d -i' # cd with interactive selection
 
 # ================ BREW ==================== #
 alias restart_khd="brew services restart khd"
 alias restart_kwm="brew services retart kwm"
 
 # ================ TASKWARRIOR ==================== #
-# TaskWarrior
-#
 alias t="task" # for work
 alias trm="task rm"
 alias tm="task modify"
 alias tn="task note"
-alias tdn="task denote"
 alias ta="task add"
 alias td="task done"
 alias to="taskopen"
@@ -115,15 +147,17 @@ alias tin="task in"
 alias tcc="task context none"
 alias tda="task context da"
 alias tu="task undo"
+alias te="task edit"
 alias tn="task note"
+alias tst="task start"
+alias tsp="task stop"
 alias tun="task denote"
 
-
-# ================ RANGER  ==================== #
+# ================ RANGER  ==================== #1
 alias r="ranger"
-alias rs="sudo ranger"
+alias rs="sudo ranger ."
 
-# ================ MUSIC  ==================== #
+# ================ MUSIC  ==================== #1
 alias hp="http-prompt"
 alias music="ncmpcpp"
 alias splay="mpc play"
@@ -132,28 +166,41 @@ alias sstop="mpc stop"
 alias mplay="mpc play"
 alias yt="mpsyt"
 alias news="newsboat"
-alias mail="neomutt"
 alias pdf="zathura"
-alias rm="trash"
+#alias rm="trash"
 alias note="notes"
 
-# ================ VIM  ==================== #
+# ================ VIM  ==================== #1
 alias v="nvim"
-# ================ VIM  ==================== #
-# ================ ZSH  ==================== #
+alias vconf="nvim ~/.config/nvim/init.vim"
+
+# ================ ZSH  ==================== #1
 alias zae="nvim ~/.config/zsh/conf.d/aliases.zsh; source ~/.config/zsh/conf.d/aliases.zsh"
+alias zpconf="nvim ~/.zprofile; source ~/.zprofile"
 alias zase="nvim ~/.config/zsh/conf.d/aliases.sec.zsh; source ~/.config/zsh/conf.d/aliases.sec.zsh"
-alias zaev="nvim ~/.config/zsh/conf.d/env.sec.zsh"
+alias zsev="nvim ~/.config/zsh/conf.d/env.sec.zsh"
 alias sz="source ~/.zshrc"
+alias zeconf="nvim ~/.zshenv; source ~/.zshenv"
+alias history="cat ~/.zsh_history | less"
 alias zs="sz"
+alias zconf="nvim ~/.zshrc; source ~/.zshrc"
 alias zrc="nvim ~/.zshrc; source ~/.zshrc"
-# ================ JIRA  ==================== #
+
+# ================ JIRA  ==================== #1
 # Note: Anything prefix with a `j` is a jira alias
 alias j="jira"
-alias jcr="jira create"
 alias jc="jira c"
+alias jfc="jira fc"
+alias jfcs="jira fcs"
 alias jcs="jira cs"
-alias jqa="jira lqa"
+alias jsp="jira sprint"
+alias jspa="jira add-sprint"
+alias jcr="jira create"
+alias jqa="jira lqaa"
+alias jqam="jira lqa"
+#alias jqaa="jira lqaa"
+alias jmd="jira list-merge-deploy"
+alias jmdm="jira list-merge-deploy-me"
 alias jconf="nvim ~/.jira.d/config.yml"
 alias jqu="jira list --query"
 alias jdev="jira dev"
@@ -161,23 +208,23 @@ alias js="jira sm"
 alias jep="jira EPIC"
 alias jec="nvim ~/.jira.d/templates/create"
 alias jcr="jira create"
+alias jfbl="jira fzf-list-backlog"
 alias jlog="jira list-backlog-me"
 alias jloga="jira list-backlog"
-# ================ JIRA  ==================== #
 
-
+# ================ CHUNKWM  ==================== #1
+alias chconf="nvim ~/.chunkwmrc; brew services restart chunkwm"
 # Note: Anything prefix with a `b` is a build/jenkins/nestor alias
+
+# ================ NESTOR  ==================== #1
 alias b="nestor"
 alias bq="nestor queue"
 alias bb="nestor dashboard"
 
-# ================ KHAL  ==================== #
+# ================ KHAL  ==================== #1
 alias cals="vdirsyncer sync"
-#alias ckd="v ~/.khdrc"
-#setenv SWIFTENV_ROOT "$HOME/.swiftenv"
-#setenv PATH "$SWIFTENV_ROOT/bin" $PATH
 #status --is-interactive; and . (swiftenv init -|psub)
 #status --is-interactive; and . (rbenv init -|psub)
 
-alias wttr="curl wttr.in?0"
 
+# vim: nowrap fdm=marker fmr=#,#
