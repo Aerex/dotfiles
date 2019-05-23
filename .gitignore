@@ -20,3 +20,6 @@ wal/.cache/wal/colors-wal.vim
 weechat/.weechat/python/autoload/*
 
 neomutt/.config/neomutt/**/cache/**
+
+zsh/.config/zsh/functions/jenkins
+zsh/.config/zsh/functions/jira
