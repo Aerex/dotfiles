@@ -1,0 +1,113 @@
+
+# Vim-style keybindings for ./tig
+#
+# ================  Navigation  ====================
+bind generic h scroll-left
+bind generic j move-down
+bind generic k move-up
+bind generic l scroll-right
+
+bind generic g  none
+bind generic gg move-first-line
+bind generic gj next
+bind generic gk previous
+bind generic gp parent
+bind generic gP back
+bind generic gn view-next
+
+bind main    G  none
+bind generic G  move-last-line
+
+bind generic <C-f> move-page-down
+bind generic <C-b> move-page-up
+
+
+# ================ Copy  ====================
+bind main    yy !./tig-yank %(commit)
+
+
+# ================ Views  ====================
+bind generic v  none
+bind generic vm view-main
+bind generic vd view-diff
+bind generic vl view-log
+bind generic vt view-tree
+bind generic vb view-blob
+bind generic vx view-blame
+bind generic vr view-refs
+bind generic vs view-status
+bind generic vu view-stage
+bind generic vy view-stash
+bind generic vg view-grep
+bind generic vp view-pager
+bind generic vh view-help
+
+# ================ Toggle  ====================
+bind generic o  none
+bind generic oo :toggle sort-order
+bind generic os :toggle sort-field
+bind generic on :toggle line-number
+bind generic od :toggle date
+bind generic oa :toggle author
+bind generic og :toggle line-graphics
+bind generic of :toggle file-name
+bind generic op :toggle ignore-space
+bind generic oi :toggle id
+bind generic ot :toggle commit-title-overflow
+bind generic oF :toggle file-filter
+bind generic or :toggle commit-title-refs
+
+bind generic @  none
+bind generic @j :/^@@
+bind generic @k :?^@@
+bind generic @- :toggle diff-context -1
+bind generic @+ :toggle diff-context +1
+
+# ================ Status  ====================
+bind status  s  none
+bind stage   s  none
+bind generic su status-update
+bind generic sr status-revert
+bind generic sm status-merge
+bind generic sl stage-update-line
+bind generic ss stage-split-chunk
+
+
+# ================ Commits  ====================
+bind generic c  none
+bind generic cc !git commit
+bind generic ca !?@git commit --amend --no-edit
+bind generic cy !echo %(commit) | pbcopy 
+
+bind generic K view-help
+bind generic <C-n><C-w> view-next
+bind generic X !./open-commit %(commit)
+bind generic x !./open-links-in-commit-message %(commit)
+
+
+
+# ================ Tags ====================
+bind main Ta !git tag %(prompt) %(commit) 
+bind main Td !git tag -d %(tag)
+bind main Tp !git push origin %(tag)
+
+
+# Fixup with parent commit
+bind main <Ctrl-f> !./tig-rebase.sh fixup %(commit)
+bind diff <Ctrl-f> !./tig-rebase.sh fixup %(commit)
+
+# Rebase to move commit up
+bind main <Ctrl-k> !./tig-rebase.sh ascend %(commit)
+bind diff <Ctrl-k> !./tig-rebase.sh ascend %(commit)
+
+# Rebase to move commit down
+bind main <Ctrl-j> !./tig-rebase.sh descend %(commit)
+bind diff <Ctrl-j> !./tig-rebase.sh descend %(commit)
+
+# Edit commit message
+bind main <Ctrl-r> !./tig-rebase.sh reword %(commit)
+bind diff <Ctrl-r> !./tig-rebase.sh reword %(commit)
+
+# Abort current rebase
+bind main <Ctrl-x> !./tig-rebase.sh abort
+bind diff <Ctrl-x> !./tig-rebase.sh abort
