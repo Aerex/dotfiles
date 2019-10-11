@@ -18,12 +18,12 @@ au BufEnter *.ldg,*.journal,*.ledger setlocal ft=ledger fp=ledger\ -f\ -\ -S\ d\
 au BufNewFile,BufRead *.ldg,*.journal,*.ledger setf ledger | comp ledger
 let g:ledger_maxwidth = 120
 let g:ledger_fold_blanks = 1
-function LedgerSort()
+function! LedgerSort()
     :%! ledger -f - print --sort 'date, amount' | sed -i '1s/^/;default commodity\nD 1,000.00 USD\n\n'>/dev/null
     :%LedgerAlign
 endfunction
 
-command LedgerSort call LedgerSort()
+command! LedgerSort call LedgerSort()
 
 
 if exists('g:ycm_filetype_blacklist')

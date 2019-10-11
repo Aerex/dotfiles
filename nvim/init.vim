@@ -2,10 +2,12 @@
 call plug#begin('~/.config/nvim/plugged')
 
 " ================ General Config ==================== {{{1
+let OS=substitute(system('uname -s'),"\n","","")
 set relativenumber               
 set lazyredraw
 set nu
 set backspace=indent,eol,start  "Allow backspace in insert mode
+set diffopt+=iwhite             "Avoid whitespace comparison
 set history=1000                "Store lots of :cmdline history
 set showcmd                     "Show incomplete cmds down the bottom
 let g:spellfile_URL = 'http://ftp.vim.org/vim/runtime/spell' " Spell runtime dictionary
@@ -18,12 +20,37 @@ set noswapfile                  "No swap files generated
 set undofile
 set undodir=~/.config/nvim/tmp/undodir
 
+" function to toggle spell on and off
+function! ToggleSpell()
+  if &spell==0
+    set spell 
+  else
+    set nospell
+  endif
+endfunction
+
 " Don't add the comment prefix when I hit enter or o/O on a comment line.
 autocmd FileType * setlocal formatoptions-=r formatoptions-=o
+autocmd FileType crontab setlocal nobackup nowritebackup
 
-"Change vimrc with auto reload
-"autocmd BufWritePost init.vim source %
+autocmd BufEnter init.vim map <silent> <leader>pi :PlugInstall<CR>
+autocmd BufEnter init.vim map <silent> <leader>pu :PlugUpdate<CR>
+autocmd BufEnter init.vim map <silent> <leader>pc :PlugClean<CR>
 
+
+" Remove trailing spaces
+map <silent> <leader>rts :RemoveTrailingSpaces<CR>
+
+" To use echodoc, you must increase 'cmdheight' value.
+set noshowmode  
+let g:echodoc_enable_at_startup = 1
+
+"To map <Esc> to exit terminal-mode:
+tnoremap <Esc> <C-\><C-n>
+autocmd TermOpen fzf <Esc> <C-c>
+
+"Autoload init.vim after each save
+autocmd BufWritePost init.vim source %
 
 let g:patchreview_patch_needs_crlf = 1
 let g:vimtex_compiler_progname = 'nvr'
@@ -36,6 +63,32 @@ let maplocalleader="\<Space>"
 map <leader>w :w<CR>
 map <leader>zz ZQ 
 map <leader>xx ZZ 
+
+"Map :join due to easy-motion
+nmap <leader>jo :join<CR>
+vmap <leader>jo :join<CR>
+
+
+"Create easy map for toggling set wrap 
+function! ToggleWrap()
+  if &wrap==0
+    set wrap
+  else
+    set nowrap
+  endif
+endfunction
+map ,tw :call ToggleWrap()<CR> 
+
+"Map :e (reload buffer)
+map <silent> <leader>rb :call ReloadLocalBuffer()<CR>
+
+"Map reload vim init settings
+map <silent> <leader>rv :so ~/.config/nvim/init.vim<CR>
+
+function! ReloadLocalBuffer()
+  execute "e"
+  echo "Buffer Reloaded"
+endfunction
 
 "Easier way to go into command mode
 map <leader><enter> :
@@ -56,26 +109,29 @@ set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 " Credits to https://stackoverflow.com/a/4896234/3456790
 nnoremap <expr> O getline('.') =~ '^\s*//' ? 'O<esc>S' : 'O'
 nnoremap <expr> o getline('.') =~ '^\s*//' ? 'o<esc>S' : 'o'
+autocmd FileType vim nnoremap <expr> o getline('.') =~ '^\s*"' ? 'o<esc>S' : 'O'
+autocmd FileType vim nnoremap <expr> o getline('.') =~ '^\s*"' ? 'o<esc>S' : 'o'
 autocmd FileType * setlocal formatoptions-=cro
 
 " clear highlights by hitting ESC
 " or by hitting enter in normal mode
 nnoremap <CR> :noh<CR><CR>
+map <f1>  :noh<CR><CR>
 
 "Install plugins
 
 " ================ Dictionary =========================== {{{1
 set dictionary+=/usr/share/dict/words
 inoremap <F12> <C-X><C-K>
-au FileType journal, txt set complete+=k
+"au FileType journal, txt set complete+=k
 
 
 " ================ Command Key Binding =================== {{{1
 cnoremap <C-a> <Home>
 cnoremap <C-p> <Up>
-cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
 cnoremap <C-n> <Down>
 cnoremap <C-b> <Left>
+inoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
 inoremap <expr> <C-E> col('.')>strlen(getline('.'))<bar><bar>pumvisible()?"\<Lt>C-E>":"\<Lt>End>"
 inoremap <expr> <C-F> col('.')>strlen(getline('.'))?"\<Lt>C-F>":"\<Lt>Right>"
 cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
@@ -108,22 +164,6 @@ map g/ <Plug>(incsearch-stay)
 map z/ <Plug>(incsearch-easymotion-/)
 map z? <Plug>(incsearch-easymotion-?)
 map zg/ <Plug>(incsearch-easymotion-stay)
-"let $ZSH_ENV = $HOME . "/.zshrc"
-"au VimLeave * silent !exec rm -f "$ZSH_ENV"
-"silent !echo 'vim_setup() { shopt -s expand_aliases; trap write_aliases EXIT; eval "$@"; }; write_aliases() { typeset -f vim_setup write_aliases; alias; echo vim_setup \"\$@\";} > "$ZSH_ENV"; vim_setup "$@"' > "$ZSH_ENV"
-
-" ================ Search ===========================
-
-set clipboard+=unnamedplus
-set hlsearch
-set ignorecase 
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-
-map z/ <Plug>(incsearch-easymotion-/)
-map z? <Plug>(incsearch-easymotion-?)
-map zg/ <Plug>(incsearch-easymotion-stay)
 
 let g:incsearch#auto_nohlsearch = 1
 map n  <Plug>(incsearch-nohl-n)
@@ -133,14 +173,12 @@ map #  <Plug>(incsearch-nohl-#)
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
-map // :s/<C-R><C-W>/
-
-
 " ================ Indentation ======================
 "
 " ================ Fonts ======================
+if (OS == "Darwin")
 set guifont=Meslo_LG_L_DZ_Regular_Nerd_Font_Complete:h12
-
+endif 
 
 set autoindent
 set smartindent
@@ -165,9 +203,11 @@ set linebreak    "Wrap lines at convenient points
 
 " ================ Increment / Decrement   =======================
 
-map <A--> <C-a>
-map <A-=> <C-x>
-" ================ Windows  =======================
+if (OS == "Darwin")
+  map ++ <C-a>
+  map -- <C-x>
+endif
+" ================ Windows  ==================== {{{1
 
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
@@ -182,8 +222,16 @@ nnoremap <C-W><leader> <C-W>=
 set splitright
 
 
+" ================ Tabs  ==================== {{{1
 let g:tmux_navigator_no_mappings = 1
-
+if (OS == "Darwin")
+  nnoremap <silent> ]t gT
+  nnoremap <silent> [t gt
+  nnoremap <silent> <A-1> 1gt
+  nnoremap <silent> <A-2> 2gt
+  nnoremap <silent> <A-3> 3gt
+  nnoremap <silent> <A-4> 4gt
+endif
 nnoremap <silent> <D-S-h> gT
 nnoremap <silent> <D-S-l> gt
 nnoremap <silent> <D-1> 1gt
@@ -224,27 +272,47 @@ set foldnestmax=5       "deepest fold is 3 levels
 set nofoldenable        "dont fold by default
 
 " ================ File Types  ======================= {{{1
-autocmd Syntax   javascript   setlocal isk+=$, ts=2
+autocmd Syntax javascript setlocal ts=2
+autocmd FileType sql Autoformat 
+autocmd BufEnter,BufRead *sql :Autoformat<cr>
 autocmd FileType markdown,text,txt setlocal tw=190 linebreak nolist
-autocmd FileType xml,xsd,xslt,javascript setlocal ts=2
+autocmd FileType xml,xsd,xslt,javascript,javascript.jsx setlocal ts=2
+" autocmd FileType javascript map nlt :Dispatch npm run lint<CR>
 autocmd BufEnter,BufRead PULLREQ_EDITMSG setlocal wrap tw=190
+autocmd BufEnter,BufRead create* setlocal wrap tw=190
+autocmd BufEnter,BufRead subtask* setlocal wrap tw=190
 
 " ================ Plugins ======================= {{{1
-"Plug 'martinda/Jenkinsfile-vim-syntax', { 'for': ['Jenkinsfile'] }
-Plug 'jacquesbh/vim-showmarks'
+Plug 'ervandew/supertab'
+Plug 'godlygeek/tabular'
+Plug 'diepm/vim-rest-console'
+Plug 'Shougo/echodoc.vim'
+
+Plug 'Chiel92/vim-autoformat'
+Plug 'vifm/vifm.vim'
+" Plug 'autozimu/LanguageClient-neovim', {
+"     \ 'branch': 'next',
+"     \ 'do': 'bash install.sh',
+"     \ }
+
+" (Optional) Multi-entry selection UI.
+" Open a Quickfix item in a window you choose
+Plug 'yssl/QFEnter'
+" Enable repeating supported plugin maps with \"." 
+Plug 'tpope/vim-repeat'
+Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/fzf'
 Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mileszs/ack.vim'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 Plug 'gu-fan/riv.vim' , {'for': ['rst'] } 
-"Plug 'waiting-for-dev/vim-www'
-Plug 'scrooloose/nerdtree'
+" Plug 'scrooloose/nerdtree'
 Plug 'mnpk/vim-jira-complete'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
 Plug 'itchyny/lightline.vim'
 Plug 'nanotech/jellybeans.vim' "Load colorschemes
-Plug 'https://github.com/Valloric/YouCompleteMe', {'do': './install.py'}
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive' " Git fugitive
 Plug 'gregsexton/gitv', {'on': ['Gitv']}
@@ -252,12 +320,11 @@ Plug 'gregsexton/gitv', {'on': ['Gitv']}
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vim-scripts/YankRing.vim'
 Plug 'tpope/vim-dispatch'
-Plug 'xolox/vim-misc'
-"Plug 'dagwieers/asciidoc-vim'
-"Plug 'powerman/vim-plugin-AnsiEsc'
+Plug 'pedrosans/vim-misc'
+Plug 'luochen1990/rainbow'
 Plug 'pedrosans/vim-notes'
 Plug 'vim-scripts/utl.vim'
-Plug 'moll/vim-node', {'for': ['javascript']}
+" Plug 'moll/vim-node', {'for': ['javascript']}
 Plug 'beloglazov/vim-online-thesaurus'
 Plug 'w0rp/ale', { 'for': ['javascript']}
 Plug 'ledger/vim-ledger', { 'for': ['ledger'] }
@@ -271,17 +338,17 @@ Plug 'blindFS/vim-taskwarrior'
 Plug 'haya14busa/incsearch.vim'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'lervag/vimtex'
+Plug 'airblade/vim-gitgutter'
 Plug 'blindFS/vim-taskwarrior'
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-abolish'
-"Plug 'critium/vim-node-debugger' 
-Plug 'junkblocker/patchreview-vim'
-Plug 'codegram/vim-codereview'
+"Plug 'junkblocker/patchreview-vim'
+"Plug 'codegram/vim-codereview'
+Plug 'hashivim/vim-terraform'
 "Plug 'vimwiki/vimwiki'
 Plug 'tpope/vim-rhubarb'
-Plug 'vim-scripts/ShowMarks'
+Plug 'kshenoy/vim-signature'
 Plug 'dhruvasagar/vim-table-mode'
-Plug 'haya14busa/incsearch.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-jdaddy'
 Plug 'junegunn/fzf.vim'
@@ -299,11 +366,11 @@ function! BuildComposer(info)
 endfunction
 
 Plug 'euclio/vim-markdown-composer', { 'for': ['markdown'], 'do': function('BuildComposer') }
-" ================ Plugin / Setting Configuration  =======================
+" ================ Plugin / Setting Configuration  ======================= {{{1
 so ~/.config/nvim/settings.vim
 
 call plug#end()
-" ================ Colors  =======================
+" ================ Colors  =============================================== {{{1
 colorscheme jellybeans
 highlight LineNr ctermfg=grey
-" vim: nowrap fdm=marker
+" vim: nowrap fdm=marker tw=190

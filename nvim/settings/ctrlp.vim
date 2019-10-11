@@ -71,8 +71,8 @@ let g:ctrlp_prompt_mappings = {
     \ 'PrtDelete()':          ['<del>', '<c-x>'],
     \ 'PrtDeleteWord()':      ['<c-w>'],
     \ 'PrtClear()':           ['<c-u>'],
-    \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
-    \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
+    \ 'PrtSelectMove("j")':   ['<c-j>', '<down>', '<c-n>'],
+    \ 'PrtSelectMove("k")':   ['<c-k>', '<up>', '<c-p>'],
     \ 'PrtSelectMove("t")':   ['<Home>', '<kHome>', '<c-[>'],
     \ 'PrtSelectMove("b")':   ['<End>', '<kEnd>', '<c-]>'],
     \ 'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
@@ -91,14 +91,15 @@ let g:ctrlp_prompt_mappings = {
 " Idea from : http://www.charlietanksley.net/blog/blog/2011/10/18/vim-navigation-with-lustyexplorer-and-lustyjuggler/
 " Open CtrlP starting from a particular path, making it much
 " more likely to find the correct thing first. mnemonic 'jump to [something]'
+map <Space>bf :CtrlPBuffer<CR>
 map <Space>jl :CtrlP libs<CR>
 map <Space>jh :CtrlP api/handlers<CR>
 map <Space>jt :CtrlP test<CR>
 map <Space>ja :CtrlP api<CR>
 map <Space>jd :CtrlP libs/domain<CR>
 
-:com -nargs=* DCtrlP call CreateDynamicCtrlPMap(<f-args>) 
-fun CreateDynamicCtrlPMap(map, dir)
+:com! -nargs=* DCtrlP call CreateDynamicCtrlPMap(<f-args>) 
+fun! CreateDynamicCtrlPMap(map, dir)
   :execute "map  <leader>" . a:map . " :CtrlP " a:dir ."<CR>"
 endfun
 

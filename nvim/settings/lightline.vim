@@ -3,7 +3,7 @@ let g:lightline = {
         \ 'colorscheme': 'custom',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'cocstatus', 'readonly', 'filename',  'modified' ] ],
+      \             [  'readonly', 'filename',  'modified' ] ],
       \   'right': [ ['percent', 'filepath'], ['lineinfo'] ]
       \ },
       \ 'component_function': {
@@ -46,6 +46,7 @@ endfunction
 command! -nargs=1 -complete=custom,s:lightline_colorschemes LightlineColorscheme
       \ call s:set_lightline_colorscheme(<q-args>)
 
+" autocmd User CocDiagnosticChange call lineline#update()
 
 let g:unite_force_overwrite_statusline = 0
 let g:vimfiler_force_overwrite_statusline = 0

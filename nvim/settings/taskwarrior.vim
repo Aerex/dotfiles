@@ -10,14 +10,14 @@ nmap <leader>'tq <plug>(taskwarrior_quickref)
 augroup TaskwarriorMapping
   autocmd!
   autocmd FileType taskreport nmap <buffer> D
-        \ Dispatch <Plug>(taskwarrior_remove)
+        \ <Plug>(taskwarrior_remove)
   autocmd FileType taskreport nunmap <buffer> D 
 augroup END
 
 augroup TaskwarriorMapping
   autocmd!
   autocmd FileType taskreport nmap <buffer> n
-        \ Dispatch <Plug>(taskwarrior_annotate)
+        \ <Plug>(taskwarrior_annotate)
   autocmd FileType taskreport nunmap <buffer> n 
 augroup END
 
