@@ -1,0 +1,87 @@
+# Sample minimal config file.  Copy this to ~/.offlineimaprc and edit to
+# get started fast.
+
+[general]
+# Always use ASCII characters only.
+accounts = DA, Main
+ui = ttyui
+pythonfile = ~/.config/offlineimap/offlineimap.py
+
+##################################################
+# Mailbox name recorder
+##################################################
+[mbnames]
+
+# Offlineimap can record your mailbox names in a format you specify.
+# You can define the header, each mailbox item, the separator,
+# and the footer.  Here is an example for Mutt.
+# If enabled is yes, all settings except incremental must be specified, even if
+# they are just the empty string "".
+#
+# The header, peritem, sep, and footer are all Python expressions passed
+# through eval, so you can (and must) use Python quoting.
+#
+# The incremental setting controls whether the file is written after each
+# account completes or once all synced accounts are complete. This is useful if
+# an account is sightly slower than the other. It allows keeping the previous
+# file rather than having it partially written.
+# This works best with "no" if in one-shot mode started by cron or systemd
+# timers. Default: no.
+#
+# The following hash key are available to the expansion for 'peritem':
+# - accountname: the name of the corresponding account;
+# - foldername: the name of the folder;
+# - localfolders: path to the local directory hosting all Maildir
+#   folders for the account.
+#
+# Tilde and environment variable expansions will be performed
+# for "filename" knob.
+#
+# enabled = no
+filename = ~/.config/neomutt/accounts/work/muttrc.mailboxes
+header = "mailboxes "
+peritem = "+%(accountname)s/%(foldername)s"
+sep = " "
+footer = "\n"
+#incremental = no
+
+
+[Account DA]
+localrepository = DALocal
+remoterepository = DARemote
+
+[Repository DALocal]
+type = Maildir
+localfolders = ~/.Mail/DA
+
+[Repository DARemote]
+type = Gmail
+ssl = yes
+ssl_version = tls1_2
+sslcacertfile = /usr/local/etc/openssl/cert.pem
+remoteusereval = get_user('work')
+remotepasseval = get_pass('work')
+folderfilter = lambda folder: folder == 'INBOX'
+
+
+[Account Main]
+localrepository = MainLocal
+remoterepository = MainRemote
+
+[Repository MainLocal]
+type = Maildir
+localfolders = ~/.Mail/Main
+
+[Repository MainRemote]
+type = IMAP
+ssl = yes
+ssl_version = tls1_2
+sslcacertfile = /usr/local/etc/openssl/cert.pem
+readonly = False 
+realdelete=no
+remoteusereval = get_user('main')
+remotepasseval = get_pass('main')
+remotehosteval = get_imap_host('main')
+remoteporteval = get_imap_port('main')
+
+folderfilter = lambda folder: folder in ['INBOX', 'Sent', 'Drafts']
