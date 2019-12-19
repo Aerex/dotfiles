@@ -1,0 +1,54 @@
+# Date
+
+## Weekday
+d	    0..6	
+dd	  Su	 
+ddd	  Sun	 
+dddd	Sunday	 
+
+## Year
+YY	  13	
+YYYY	2013	 
+
+## Month
+M	    1..12 (Jan is 1)	
+Mo	  1st..31st	 
+MM	  01..12 (Jan is 1)	 
+MMM	  Jan	 
+MMMM	January	 
+
+## Quarter
+Q	  1..4	
+Qo	1st..4th	 
+D	  1..31	(Day)
+Do	1st..31st	 
+DD	01..31	 
+
+## Day of year
+DDD	  1..365	
+DDDo	1st..365th	 
+DDDD	001..365	 
+
+## Week of year
+w	  1..53	
+wo	1st..53rd	 
+ww	01..53
+
+# Time
+H	0..23	24h hour
+HH	00..23	 
+h	1..12	12h hour
+hh	01..12	 
+m	0..59	Minutes
+mm	00..59	 
+s	0..59	Seconds
+ss	00..59	 
+a	am	AM/PM
+A	AM	 
+Z	+07:00	Timezone offset
+ZZ	+0730	 
+S	0..9	Deciseconds
+SS	00..99	Centiseconds
+SSS	000..999	Milliseconds
+X	 	Unix timestamp
+x	 	Millisecond Unix timestamp

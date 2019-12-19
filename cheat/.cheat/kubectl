@@ -4,3 +4,151 @@
 export POD=mern && kubectl exec -it $(kubectl get pods | tail -n +2 | awk '{if(match(, /"$POD"/))print}') bash
 #FISH
 set POD mern; kubectl exec -it (kubectl get pods | tail -n +2 | awk '{if(match(, /"$POD"/))print}') bash
+
+# Get log from a different namespace
+kubectl logs <pod-name> --namespace <namespace>
+
+# Tail logs 
+kubectl logs <pod-name> --namespace <namespace> -f 
+
+# Show Merged kubeconfig settings.
+kubectl config view 
+
+# use multiple kubeconfig files at the same time and view merged config
+KUBECONFIG=~/.kube/config:~/.kube/kubconfig2 
+
+kubectl config view
+
+# get the password for the e2e user
+kubectl config view -o jsonpath='{.users[?(@.name == "e2e")].user.password}'
+
+kubectl config view -o jsonpath='{.users[].name}'    # get a list of users
+kubectl config get-contexts                          # display list of contexts 
+kubectl config current-context			               # display the current-context
+kubectl config use-context my-cluster-name           # set the default context to my-cluster-name
+
+# add a new cluster to your kubeconf that supports basic auth
+kubectl config set-credentials kubeuser/foo.kubernetes.com --username=kubeuser --password=kubepassword
+
+# permanently save the namespace for all subsequent kubectl commands in that context.
+kubectl config set-context --current --namespace=ggckad-s2
+
+# set a context utilizing a specific username and namespace.
+kubectl config set-context gce --user=cluster-admin --namespace=foo \
+  && kubectl config use-context gce
+ 
+# delete user foo
+kubectl config unset users.foo                       
+
+# create resource(s)
+kubectl apply -f ./my-manifest.yaml           
+# create from multiple files
+kubectl apply -f ./my1.yaml -f ./my2.yaml     
+# create resource(s) in all manifest files in dir
+kubectl apply -f ./dir     
+# create resource(s) from url
+kubectl apply -f https://git.io/vPieo         
+# start a single instance of nginx
+kubectl create deployment nginx --image=nginx  
+# get the documentation for pod and svc manifests
+kubectl explain pods,svc                       
+
+# Create multiple YAML objects from stdin
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-sleep
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    args:
+    - sleep
+    - "1000000"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-sleep-less
+
+# Get commands with basic output
+kubectl get services                          # List all services in the namespace
+kubectl get pods --all-namespaces             # List all pods in all namespaces
+kubectl get pods -o wide                      # List all pods in the namespace, with more details
+kubectl get deployment my-dep                 # List a particular deployment
+kubectl get pods --include-uninitialized      # List all pods in the namespace, including uninitialized ones
+kubectl get pod my-pod -o yaml                # Get a pod's YAML
+kubectl get pod my-pod -o yaml --export       # Get a pod's YAML without cluster specific information
+
+# Describe commands with verbose output
+kubectl describe nodes my-node
+kubectl describe pods my-pod
+
+kubectl get services --sort-by=.metadata.name # List Services Sorted by Name
+
+# List pods Sorted by Restart Count
+kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'
+
+# List pods in test namespace sorted by capacity 
+
+kubectl get pods -n test --sort-by=.spec.capacity.storage  
+
+# Get the version label of all pods with label app=cassandra
+kubectl get pods --selector=app=cassandra -o \
+  jsonpath='{.items[*].metadata.labels.version}'
+
+# Get all worker nodes (use a selector to exclude results that have a label
+# named 'node-role.kubernetes.io/master')
+kubectl get node --selector='!node-role.kubernetes.io/master'
+
+# Get all running pods in the namespace
+kubectl get pods --field-selector=status.phase=Running
+
+# Get ExternalIPs of all nodes
+kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'
+
+# List Names of Pods that belong to Particular RC
+# "jq" command useful for transformations that are too complex for jsonpath, it can be found at https://stedolan.github.io/jq/
+sel=${$(kubectl get rc my-rc --output=json | jq -j '.spec.selector | to_entries | .[] | "\(.key)=\(.value),"')%?}
+echo $(kubectl get pods --selector=$sel --output=jsonpath={.items..metadata.name})
+
+# Show labels for all pods (or any other Kubernetes object that supports labelling)
+# Also uses "jq"
+for item in $( kubectl get pod --output=name); do printf "Labels for %s\n" "$item" | grep --color -E '[^/]+$' && kubectl get "$item" --output=json | jq -r -S '.metadata.labels | to_entries | .[] | " \(.key)=\(.value)"' 2>/dev/null; printf "\n"; done
+
+# Or this command can be used as well to get all the labels associated with pods
+kubectl get pods --show-labels
+
+# Check which nodes are ready
+JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}' \
+ && kubectl get nodes -o jsonpath="$JSONPATH" | grep "Ready=True"
+
+# List all Secrets currently in use by a pod
+kubectl get pods -o json | jq '.items[].spec.containers[].env[]?.valueFrom.secretKeyRef.name' | grep -v null | sort | uniq
+
+# List Events sorted by timestamp
+kubectl get events --sort-by=.metadata.creationTimestamp
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    args:
+    - sleep
+    - "1000"
+EOF
+
+# Create a secret with several keys
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+type: Opaque
+data:
+  password: $(echo -n "s33msi4" | base64 -w0)
+  username: $(echo -n "jane" | base64 -w0)
+EOF
+
+# Update configmap
+kubectl get configmap <config-map-name> -n <namespace> kube-system -o yaml > output.yaml

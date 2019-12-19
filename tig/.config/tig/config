@@ -23,7 +23,6 @@ bind generic <C-b> move-page-up
 
 
 # ================ Copy  ====================
-bind main    yy !./tig-yank %(commit)
 
 
 # ================ Views  ====================
@@ -79,6 +78,7 @@ bind generic cc !git commit
 bind generic ca !?@git commit --amend --no-edit
 bind generic cy !echo %(commit) | pbcopy 
 
+# bind status   yy !./tig-yank commit %(commit)
 bind generic K view-help
 bind generic <C-n><C-w> view-next
 bind generic X !./open-commit %(commit)

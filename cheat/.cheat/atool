@@ -1,0 +1,4 @@
+# Extract a file
+atool -x <file-name>
+# Archive a file/folder
+atool -a <archive-name> <file-name/folder-name>

@@ -8,6 +8,12 @@ git config --global core.editor emacs
 # To enable color:
 git config --global color.ui true
 
+# To add a global alias
+git config --global alias.<name> <filter>
+
+# To delete/unset a global alias
+git config --global --unset alias.<name>
+
 # To stage all changes for commit:
 git add --all
 
@@ -66,11 +72,26 @@ git push origin master
 # To push to a specified repository:
 git push git@github.com:username/project.git
 
+# To push a single tag
+git push orign <tagname>
+
+# To push all the tags (not recommended)
+git push --tags
+
+# To checkout a tag
+git checkout tags/<tagname>
+
+# To delete a remote branch
+git push --delete origin <tagname>
+
 # To delete the branch "branch_name"
 git branch -D branch_name
 
 # To make an exisiting branch track a remote branch
 git branch -u upstream/foo
+
+# To rename a local branch
+git branch -m <oldname> <newname>
 
 # To see who commited which line in a file
 git blame filename
@@ -89,6 +110,8 @@ git diff branch_1 branch_2                              # Check difference betwe
 git log                                                 # Show all the commits
 git status                                              # Show the changes from last commit
 
+# Get status without untracked commits
+
 # Commit history of a set of files
 git log --pretty=email --patch-with-stat --reverse --full-index -- Admin\*.py > Sripts.patch
 
@@ -101,6 +124,12 @@ git log @{u}..
 # View changes that are new on a feature branch
 git log -p feature --not master
 git diff master...feature
+
+# View a log of all updates (e.g. checkout, reset, commit, merge)
+git reflog
+
+# To undo a rest use git reflog A
+git reset '<commit from git reflog>'
 
 # Interactive rebase for the last 7 commits
 git rebase -i @~7
@@ -149,3 +178,28 @@ git revert <commit SHA>
 # Pich a commit from a branch to current branch. This is different than merge as
 # this just applies a single commit from a branch to current branch
 git cherry-pick <commit SHA1>
+
+# List permission in HEAD
+git ls-tre HEAD
+
+# Fetch tags from remote
+git fetch --tags
+
+# Delete the index
+rm .git/index	
+
+# Delete a remote tag
+git push --delete origin <tagname>
+
+# Delete local tag
+git tag -d <tagname:>
+
+# Fetch remote tags
+git fetch --tags
+
+# Recover a drop stash (Need to have terminal still open where you called git stash drop)
+git fsc --no-reflo | awk '/dangling commit/ {print $3}'
+
+# Get blank / orphan master
+git branch -m master old_master
+git checkout --orphan master

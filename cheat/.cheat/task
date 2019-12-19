@@ -15,3 +15,7 @@ task config alias.<name> <filter>
 
 # Show task added in the last hour 
 task entry.after:now-1hour list
+
+# Replace description
+# Note the quotes are important
+task modify <id> '/old/new/'
