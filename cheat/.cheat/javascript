@@ -1,0 +1,11 @@
+# Exclude Object Properties
+
+const noPassword = ({ password, ...rest }) => rest
+const user = {
+    id: 100,
+      name: 'Howard Moon',
+        password: 'Password!'
+}
+
+noPassword(user) //=> { id: 100, name: 'Howard moon' }
+

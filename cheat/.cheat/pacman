@@ -19,7 +19,9 @@ pacman -Rcs <package name>
 pacman -Si <package name>
 
 # To install a package from builded package file (.tar.xz)
+# Old cached packages are stored under /var/cache/pacman/pkg
 pacman -U <file name/file url>
+
 
 # To list the commands provided by an installed package
 pacman -Ql <package name> | sed -n -e 's/.*\/bin\///p' | tail -n +2
@@ -55,3 +57,6 @@ sudo pacman -U <package file (.pkg.tar.xz)>
 
 # To import a key 
 pacman-key -recv-key <KEYID>
+
+# Installing a cached package 
+ pacman -U /var/cache/pacman/pkg/package-old_version.pkg.tar.xz

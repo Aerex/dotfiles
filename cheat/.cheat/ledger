@@ -1,0 +1,17 @@
+# any/all matches
+  ledger bal Rent Transportation  # any
+  ledger bal Income and Job       # all
+  ledger bal Expenses and not (Drinks or Food)
+
+# what did I spend on most? (--sorted)
+  ledger reg Expenses -S amount
+
+# how much did I have at this date? (--end)
+  ledger bal -e 01/15 ^Assets ^Liabilities
+
+# how much did I spend and earn this month?
+  ledger bal ^Expenses ^Income --invert
+
+# how much was spent over the course of 3 days? (totalled)
+  ledger reg -b 01/25 -e 01/27 --subtotal
+  ledger reg -b 01/25 -e 01/27 --subtotal grocery

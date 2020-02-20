@@ -1,0 +1,2 @@
+# Add an exiting user to a group
+usermod -a -G <group> <username>

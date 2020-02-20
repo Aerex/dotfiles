@@ -43,13 +43,16 @@ sshfs name@server:/path/to/folder /path/to/mount/point
 emacs /ssh:name@server:/path/to/file
 
 # Generating a new SSH key
-ssh-keygen -t rsa -b 4096 "your_email@example.com"
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 
 # Adding your SSH key to the ssh-agent
 eval "$(ssh-agent -s)"
 
 # Adding a configuration for your SSH keys
 Create a `config` file in ~/.ssh/config. Then add the following contents
+
+# Copy ssh key to server
+ssh-copy-id -d <identify-file> user@hostname
 
 Host *
  AddKeysToAgent yes

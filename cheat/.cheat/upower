@@ -1,0 +1,5 @@
+# List of available power resources
+upower --enumerate
+
+# Dump all power resources
+upower -d

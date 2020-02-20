@@ -11,9 +11,6 @@ git config --global color.ui true
 # To add a global alias
 git config --global alias.<name> <filter>
 
-# To delete/unset a global alias
-git config --global --unset alias.<name>
-
 # To stage all changes for commit:
 git add --all
 
@@ -81,6 +78,9 @@ git push --tags
 # To checkout a tag
 git checkout tags/<tagname>
 
+# To checkout a specific file in a remote branch
+git checkout <remote>/<remote-branch> -- <file>
+
 # To delete a remote branch
 git push --delete origin <tagname>
 
@@ -110,8 +110,6 @@ git diff branch_1 branch_2                              # Check difference betwe
 git log                                                 # Show all the commits
 git status                                              # Show the changes from last commit
 
-# Get status without untracked commits
-
 # Commit history of a set of files
 git log --pretty=email --patch-with-stat --reverse --full-index -- Admin\*.py > Sripts.patch
 
@@ -131,6 +129,8 @@ git reflog
 # To undo a rest use git reflog A
 git reset '<commit from git reflog>'
 
+# Check one file from a branc
+git checkout <branch-name> -- <filename>
 # Interactive rebase for the last 7 commits
 git rebase -i @~7
 
@@ -194,12 +194,3 @@ git push --delete origin <tagname>
 # Delete local tag
 git tag -d <tagname:>
 
-# Fetch remote tags
-git fetch --tags
-
-# Recover a drop stash (Need to have terminal still open where you called git stash drop)
-git fsc --no-reflo | awk '/dangling commit/ {print $3}'
-
-# Get blank / orphan master
-git branch -m master old_master
-git checkout --orphan master
