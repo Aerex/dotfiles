@@ -1,31 +1,8 @@
-# Command Editing Shortcuts
-Ctrl + a – go to the start of the command line
-Ctrl + e – go to the end of the command line
-Ctrl + k – delete from cursor to the end of the command line
-Ctrl + u – delete from cursor to the start of the command line
-Ctrl + w – delete from cursor to start of word (i.e. delete backwards one word)
-Ctrl + y – paste word or text that was cut using one of the deletion shortcuts (such as the one above) after the cursor
-Ctrl + xx – move between start of command line and current cursor position (and back again)
-Alt + b – move backward one word (or go to start of word the cursor is currently on)
-Alt + f – move forward one word (or go to end of word the cursor is currently on)
-Alt + d – delete to end of word starting at cursor (whole word if cursor is at the beginning of word)
-Alt + c – capitalize to end of word starting at cursor (whole word if cursor is at the beginning of word)
-Alt + u – make uppercase from cursor to end of word
-Alt + l – make lowercase from cursor to end of word
-Alt + t – swap current word with previous
-Ctrl + f – move forward one character
-Ctrl + b – move backward one character
-Ctrl + d – delete character under the cursor
-Ctrl + h – delete character before the cursor
-Ctrl + t – swap character under cursor with the previous one
 # To implement a for loop:
 for file in *;
 do 
     echo $file found;
 done
-
-# Unset a variable 
-unset $var
 
 # To implement a case command:
 case "$1"
@@ -52,15 +29,43 @@ echo ${PIPESTATUS[0]}  # replace 0 with N
 # Check if a variable is unset
 if [ -z ${var+x} ]; then echo "var is unset"; else echo "var is set to '$var'"; fi
 
-# Iterate through parameter options (e.g -n 1 -b 2)
-while getopts ":n:b" OPTIONS in; do
-  case "${OPTIONS}" in 
-    n)
-      n=${OPTARG}
-      ;;
-    b)
-      b=${OPTARG}
-      ;;
-  esac
-done
+# Exists 
+[[ -e $FILE ]]
 
+# Not empty
+[[ -n $VAR ]]
+
+# Keyboard shortcuts
+Moving the cursor:
+  Ctrl + a   Go to the beginning of the line (Home)
+  Ctrl + e   Go to the End of the line (End)
+  Ctrl + p   Previous command (Up arrow)
+  Ctrl + n   Next command (Down arrow)
+   Alt + b   Back (left) one word
+   Alt + f   Forward (right) one word
+  Ctrl + f   Forward one character
+  Ctrl + b   Backward one character
+  Ctrl + xx  Toggle between the start of line and current cursor position
+Editing:
+ Ctrl + L   Clear the Screen, similar to the clear command
+
+  Alt + Del Delete the Word before the cursor.
+  Alt + d   Delete the Word after the cursor.
+ Ctrl + d   Delete character under the cursor
+ Ctrl + h   Delete character before the cursor (Backspace)
+
+ Ctrl + w   Cut the Word before the cursor to the clipboard.
+ Ctrl + k   Cut the Line after the cursor to the clipboard.
+ Ctrl + u   Cut/delete the Line before the cursor to the clipboard.
+
+  Alt + t   Swap current word with previous
+ Ctrl + t   Swap the last two characters before the cursor (typo).
+ Esc  + t   Swap the last two words before the cursor.
+
+ ctrl + y   Paste the last thing to be cut (yank)
+  Alt + u   UPPER capitalize every character from the cursor to the end of the current word.
+  Alt + l   Lower the case of every character from the cursor to the end of the current word.
+  Alt + c   Capitalize the character under the cursor and move to the end of the word.
+  Alt + r   Cancel the changes and put back the line as it was in the history (revert).
+ ctrl + _   Undo
+ 

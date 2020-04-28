@@ -27,9 +27,6 @@ gk				move down one displayed line
 gj				move up one displayed line
 f 				move toward the next occurance of a character to the right
 F 				move toward the next occurance of a character to the left
-zz    move current line to the middle screen
-zt    move current line to the top of the screen
-zb    move current line to the bottom of the screen
 				
 
 # Insertion
@@ -87,21 +84,11 @@ f{char}			To [count]'th occurrence of {char} to the right.  The cursor is placed
 
 ;			Repeat latest f, t, F or T [count] times. 
 
-# Windows
+#Buffer
 
-Ctrl-W          Make all buffer windows equal to each other (length and width)
-Ctrl-W x        Swap the curent window with the next one
-Ctlr-W Shift-H  Move this with to the far left 
-Ctlr-W Shift-K  Move this with to the far right 
+Ctrl-W = Make all buffer windows equal to each other (length and width)
 
 :bunload close the buffer
-
-# Buffer
-
-# refresh buffer 
-redraw!
-redr!
-
 
 # To edit the previous buffer in the buffer list
 :bp
@@ -112,36 +99,3 @@ redr!
 set splitright
 set splittop
 
-
-# Targets.vim
-
-# To change the text in the next pair of parentheses, use the `cin)` command
-cin)
-# To delete the item in a comma separated list under the cursor, use `da,`
-da,
-
-# To change first argument but keep comma in function
-cia
-
-# To change second argument but keep comma in function
-c2ina
-
-
-
-# Abolish
-# To change to snake_case
-crs
-#To change to mixed case (lower)
-crm
-#To change to camelCase
-crc
-#To change to UPPER_CASE 
-cru
-#To change to dash-case 
-cr-
-#To change to dot.case 
-cr.
-#TO change to space case 
-cr<space>
-#TO change to TItle Case
-crt 

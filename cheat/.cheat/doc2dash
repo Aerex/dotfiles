@@ -1,0 +1,2 @@
+# Build docset from html dir
+doc2dash -f  -n <docset-name> --destination <dst-dir> <source-dir>

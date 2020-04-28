@@ -1,0 +1,40 @@
+# Basic Search
+
+## Find cat repositories with greater than 100 stars.
+cat stars:>100	
+
+## Get all repositories from the user defunkt.
+user:defunkt	
+
+## Find all tom users in "San Francisco, CA".
+tom location:"San Francisco, CA"	
+
+## Find all instances of join in code with coffee extension.
+join extension:coffee	
+
+## Excludes all results containing cat
+NOT cat	
+
+# Repository search
+Repository search looks through the projects you have access to on GitHub. You can also filter the results:
+
+## Find cat repositories with greater than 100 stars.
+cat stars:>100	
+
+## Get all repositories from the user defunkt.
+user:defunkt	
+
+## Pugs repositories pushed to since Jan 28, 2013.
+pugs pushed:>2013-01-28	
+
+## Find all node.js repositories with less than 200 forks.
+node.js forks:<200	
+
+## Find jquery repositories between the sizes 1024 and 4089 kB.
+jquery size:1024..4089	
+
+## Repository search includes forks of gitx.
+gitx fork:true	
+## Repository search returns only forks of gitx.
+
+gitx fork:only	

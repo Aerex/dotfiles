@@ -41,3 +41,10 @@ nmcli con up <name>
 
 # List available Wi-Fi APs
 nmcli device wifi list
+
+# To turn on Wifi
+sudo rfkill unblock wifi
+nmcli nm wifi on
+
+# To import ovpn client cert
+nmcli con import type openvpn file <file_dir>

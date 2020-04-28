@@ -1,0 +1,5 @@
+# To pull files 
+adb pull <remote> <local>
+
+# To push files
+adb push <local> <remote>

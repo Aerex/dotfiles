@@ -1,0 +1,2 @@
+# To generate 30 random charcters
+base64 /dev/urandom | head -c 30

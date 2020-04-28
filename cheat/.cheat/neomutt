@@ -1,0 +1,23 @@
+## Message Status Flags
+
+D	message is deleted (is marked for deletion)
+d	message has attachments marked for deletion
+K	contains a PGP public key
+N	message is new
+O	message is old
+P	message is PGP encrypted
+r	message has been replied to
+S	message is signed, and the signature is successfully verified
+s	message is signed
+!	message is flagged
+*	message is tagged
+n	thread contains new messages (only if collapsed)
+o	thread contains old messages (only if collapsed)
+
+# Message recipient flags
++	message is to you and you only
+T	message is to you, but also to or CC'ed to others
+C	message is CC'ed to you
+F	message is from you
+L	message is sent to a subscribed mailing list
+R	message has your address in the Reply-To field
