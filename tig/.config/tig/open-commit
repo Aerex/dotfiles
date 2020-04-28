@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import sys
+import platform
 import subprocess
 
 from util import get_site, get_github_user_and_repo, get_origin_url
@@ -24,7 +25,11 @@ def main():
 		repo_path  = origin_url.replace(b"https://chromium.googlesource.com/", b"", 1).rstrip(b"/")
 		url        = b"https://chromium.googlesource.com/%s/+/%s" % (repo_path, commit)
 
-	subprocess.call([b"xdg-open", url])
+        os = platform.system()
+        if os == 'Darwin':
+            subprocess.call([b"$BROWSER", url])
+        else:
+            subprocess.call([b"xdg-open", url])
 
 if __name__ == "__main__":
 	main()
