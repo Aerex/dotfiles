@@ -1,0 +1,400 @@
+# You can edit this file by hand, but it's recommended not to do that.
+
+# Marks:
+'H
+	/home/aerex/
+	..
+1560626673
+'S
+	/home/aerex/Documents/Scans
+	..
+1560717232
+'T
+	/home/aerex/Trash
+	..
+1560718191
+'b
+	/home/aerex/bin/
+	..
+1560626673
+'c
+	/home/aerex/.config
+	..
+1560719672
+'d
+	/home/aerex/Documents
+	..
+1560719717
+'h
+	/home/aerex/
+	..
+1560626673
+'j
+	/tmp
+	sample
+1560717299
+'k
+	/tmp
+	sample
+1560717297
+'l
+	/home/aerex/Downloads
+	..
+1560717189
+'t
+	/tmp
+	..
+1560719128
+'z
+	/home/aerex/.config/zsh
+	..
+1560719672
+
+# Bookmarks:
+
+# TUI:
+al
+q0
+v1
+ov
+m-1
+l2
+r2
+
+# Left window history (oldest to newest):
+d/home/aerex/.config/vifm
+	scripts
+2
+d/home/aerex/Documents
+	PVJXXOGFX5MRKJHDE4VRF23V55DLHTSQT6NR.ics
+12
+d/home/aerex/.ssh
+	config
+7
+d/home/aerex
+	..
+0
+d/home
+	lost+found
+2
+d/
+	home
+4
+d/home
+	aerex
+1
+d/home/aerex
+	Desktop
+1
+d/home/aerex/Desktop
+	..
+0
+d/home/aerex
+	Pictures
+6
+d/home/aerex/Pictures
+	..
+0
+d/home/aerex
+	Templates
+7
+d/home/aerex/Templates
+	..
+0
+d/home/aerex
+	Templates
+6
+d/home/aerex/Documents
+	work
+4
+d/tmp
+	neomutt-arch-1000-18792-13452793157690466953
+9
+d/
+	tmp
+9
+d/tmp
+	vimpager_19073
+19
+d/
+	home
+4
+d/home
+	aerex
+1
+d/home/aerex
+	Templates
+6
+d/home/aerex/.config
+	vifm
+24
+d/home/aerex/.config/vifm
+	colors
+1
+d/home/aerex/.config/vifm/colors
+	Default.vifm
+1
+d/home/aerex/.config/vifm
+	scripts
+2
+d/home/aerex/.config/vifm/scripts
+	..
+0
+d/home/aerex/.config/vifm
+	colors
+1
+d/home/aerex/.config/vifm/colors
+	Default.vifm
+1
+d/home/aerex/.config/vifm
+	scripts
+2
+d/home/aerex/Downloads
+	thor2
+5
+d/home/aerex/dotfiles/nvim/.config/nvim
+	..
+0
+d
+
+# Right window history (oldest to newest):
+D/home/aerex/Trash
+	files
+1
+D/home/aerex/.config
+	fisherman
+18
+D/tmp
+	neomutt-arch-1000-18792-13452793157690466953
+24
+D/home/aerex/Trash/files
+	f3901697-c499-4818-97e7-230c199028e8
+25
+D/tmp
+	nvimggQyO0
+9
+D/home/aerex/Documents/Scans
+	pending
+2
+D/home/aerex
+	
+0
+D/home/aerex/.ssh
+	bitbucket.pub
+6
+D/home/aerex
+	..
+0
+D/home
+	lost+found
+2
+D/
+	mnt
+9
+D/mnt
+	..
+0
+D/
+	home
+4
+D/home
+	rpi←
+3
+D/
+	home
+4
+D/home
+	aerex
+1
+D/home/aerex
+	Documents
+2
+D/home/aerex/Documents
+	git2go
+5
+D/home/aerex
+	Downloads
+3
+D/home
+	aerex
+1
+D/
+	home
+4
+D/home
+	aerex
+1
+D/home/aerex
+	testsign.jar
+25
+D/home/aerex/Documents
+	fonts
+4
+D/home/aerex
+	slack-ibn.json
+23
+D/home
+	aerex
+1
+D/home/aerex
+	..
+0
+D/home
+	aerex
+1
+D/
+	etc
+3
+D/home/aerex/Documents/Scans
+	pending
+2
+D/home/aerex/Downloads
+	Essential ADB and FASTBOOT
+3
+D/home/aerex/.config
+	bugwarrior
+6
+D/tmp
+	test
+18
+D/tmp/test
+	sample
+1
+D/tmp
+	test
+18
+D/tmp/test
+	sample
+1
+D/tmp
+	test
+18
+D/tmp/test
+	..
+0
+D/tmp
+	test
+18
+D/tmp/test
+	..
+0
+D/tmp
+	test
+18
+D/tmp/test
+	..
+0
+D/tmp
+	test
+18
+D/tmp/test
+	..
+0
+D/tmp
+	test
+18
+D/tmp/test
+	sample
+1
+D/tmp
+	email_public_key
+20
+D/
+	usr
+18
+D/tmp
+	hsperfdata_aerex
+5
+D/home/aerex/Trash
+	files
+1
+D/home/aerex/Trash/files
+	0a77f319-9746-4bc3-b24e-ca502804c8a2
+1
+D/home/aerex/Trash
+	info
+2
+D/home/aerex/Trash/info
+	..
+0
+D/home/aerex/Trash
+	files
+1
+D/home/aerex/Trash/files
+	fefd42f9-e753-4f23-9420-8c902d1ca484
+28
+D/home/aerex
+	Pictures
+6
+D/home/aerex/Trash
+	files
+1
+D/home/aerex/Trash/files
+	fefd42f9-e753-4f23-9420-8c902d1ca484
+24
+D
+
+# Command line history (oldest to newest):
+:help 
+:colorscheme solarized-dark
+:colorscheme solarized-darkj
+:echo %x
+:!echo %c
+:!echo 
+:!echo %f
+:!echo %f | @a
+:!cd /tmpp
+:!cd /tmp
+:cd /tmp
+:edit sample
+:new file
+:file name
+:file sample
+:reg
+:vs
+:h
+:!cd ~/Documents/
+:!cd ~/Documents/Scans/
+:cd ~/Documents/Scans/
+:!touch
+:!touch 
+:!touch sample
+:mkdir test
+:!aws
+:!echo %c:p | mv 
+:q
+:new test
+:!new test
+:/
+:help
+:edit test
+:rename
+
+# Search history (oldest to newest):
+/vif
+/sam
+/tes
+
+# Prompt history (oldest to newest):
+pthor1
+
+# Local filter history (oldest to newest):
+
+# Registers:
+""/tmp/sample
+"a/tmp/email_public_key
+
+# Directory stack (oldest to newest):
+
+# Trash content:
+
+# State:
+f
+i1
+[.1
+[F
+F
+I1
+].1
+]F
+s0
