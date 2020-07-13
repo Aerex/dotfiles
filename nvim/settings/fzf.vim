@@ -1,3 +1,7 @@
+"let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+" Border color
+" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo' } }
+
 " Border style (rounded / sharp / horizontal)
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo', 'border': 'sharp' } }
 " Shortcuts for opening up results in splits
@@ -7,15 +11,24 @@ let g:fzf_action = {
 nnoremap <silent> <leader>p :GFiles<CR>
 nnoremap <silent> <leader>,p :Files<CR>
 nnoremap <silent> <leader>m :History<CR>
+nnoremap <silent> <leader>L :Lines<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>v :Commands<CR>
 nnoremap <silent> <leader>yr :Registers<CR>
+
+  command! -bang -nargs=* Rg
+    \ call fzf#vim#grep(
+    \   'rg --column --line-number --no-heading --smart-case '.shellescape(<q-args>), 1,
+    \   fzf#vim#with_preview(), <bang>0)
+
 
 
  autocmd  FileType fzf set laststatus=0 noshowmode noruler
        \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--info=inline', '--prompt', '> ']}), <bang>0)
+ " command! -bang -nargs=? -complete=dir Files
+ "       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({ 'options': ['--prompt', '> '],'source': 'rg --iglob !node_modules! ""'}), <bang>0)
 
 function! RipgrepFzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
@@ -30,7 +43,7 @@ command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
  function! s:setcwd()
    let cph = expand('%:p:h', 1)
    if cph =~ '^.\+://' | retu | en
-   for mkr in ['.git/', '.hg/', 'node_modules/', '.svn/', '.bzr/', '_darcs/', '.vimprojects', 'init.vim']
+   for mkr in ['.git/', '.hg/', 'node_modules/', '.svn/', '.bzr/', '_darcs/', '.vimprojects', '.config/nvim/']
      let wd = call('find'.(mkr =~ '/$' ? 'dir' : 'file'), [mkr, cph.';'])
      if wd != '' | let &acd = 0 | brea | en
    endfo
@@ -71,6 +84,7 @@ function! s:yr_get_element_paste_handler(line)
 endfunction
 
 
+" Custom fzf functions
 function! FZFYankRing()
   call fzf#run({
   \ 'source':  s:get_yankring(),
@@ -79,6 +93,14 @@ function! FZFYankRing()
   \ 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo', 'border': 'sharp' } 
   \})
 endfunction
+"TODO: work on later
+" function! Settings()
+"   call fzf#run({
+"   \ 'source':  s:get_yankring(),
+"   \ 'sink':    function('s:yr_get_element_paste_handler'),
+"   \ 'options': '--info=inline --ansi --prompt "Clipboard> " ',
+"   \ 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo', 'border': 'sharp' } 
+"   \})
+" endfunction
 
 command! -nargs=* -bang Registers call FZFYankRing()
-
