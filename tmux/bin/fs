@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -x
+# fs [FUZZY PATTERN] - Select selected tmux session
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+list_session=$(tmux list-sessions -F "#{session_name}") 
+target_session=$(echo "$list_session" | fzf-tmux --query="$1" --select-1) 
+res=$?
+[ "$res" -eq "130" ] && exit 0
+tmux switch-client -t "$target_session"
