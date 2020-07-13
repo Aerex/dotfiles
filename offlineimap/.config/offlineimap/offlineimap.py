@@ -2,7 +2,9 @@
 from subprocess import check_output
 
 def get_pass(account):
-    return check_output('pass Email/' + account, shell=True).splitlines()[0]
+    output = check_output('pass Email/' + account, shell=True).splitlines()[0]
+    print('output {}'.format(output))
+    return output
 
 def get_user(account):
     output = check_output('pass Email/' + account, shell=True).splitlines()

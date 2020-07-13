@@ -3,7 +3,7 @@
 
 [general]
 # Always use ASCII characters only.
-accounts = DA, Main
+accounts = main
 ui = ttyui
 pythonfile = ~/.config/offlineimap/offlineimap.py
 
@@ -46,37 +46,37 @@ footer = "\n"
 #incremental = no
 
 
-[Account DA]
-localrepository = DALocal
-remoterepository = DARemote
+#[Account work]
+#localrepository = work_local 
+#remoterepository = work_remove
+#
+#[Repository work_local]
+#type = Maildir
+#localfolders = ~/.Mail/DA
+#
+#[Repository work_remote]
+#type = Gmail
+#ssl = yes
+#ssl_version = tls1_2
+#sslcacertfile = /usr/local/etc/openssl/cert.pem
+#remoteusereval = get_user('DA')
+#remotepasseval = get_pass('DA')
+#folderfilter = lambda folder: folder == 'INBOX'
 
-[Repository DALocal]
+
+[Account main]
+localrepository = main_local
+remoterepository = main_remote
+
+[Repository main_local]
 type = Maildir
-localfolders = ~/.Mail/DA
+localfolders = ~/.Mail/Aerex
 
-[Repository DARemote]
-type = Gmail
-ssl = yes
-ssl_version = tls1_2
-sslcacertfile = /usr/local/etc/openssl/cert.pem
-remoteusereval = get_user('work')
-remotepasseval = get_pass('work')
-folderfilter = lambda folder: folder == 'INBOX'
-
-
-[Account Main]
-localrepository = MainLocal
-remoterepository = MainRemote
-
-[Repository MainLocal]
-type = Maildir
-localfolders = ~/.Mail/Main
-
-[Repository MainRemote]
+[Repository main_remote]
 type = IMAP
 ssl = yes
-ssl_version = tls1_2
-sslcacertfile = /usr/local/etc/openssl/cert.pem
+#ssl_version = tls1_2
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 readonly = False 
 realdelete=no
 remoteusereval = get_user('main')
