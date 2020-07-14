@@ -65,9 +65,6 @@ r2
 d/home/aerex/.config/vifm
 	scripts
 2
-d/home/aerex/Documents
-	PVJXXOGFX5MRKJHDE4VRF23V55DLHTSQT6NR.ics
-12
 d/home/aerex/.ssh
 	config
 7
@@ -320,9 +317,6 @@ D/home/aerex/Trash/info
 D/home/aerex/Trash
 	files
 1
-D/home/aerex/Trash/files
-	fefd42f9-e753-4f23-9420-8c902d1ca484
-28
 D/home/aerex
 	Pictures
 6
@@ -360,7 +354,6 @@ D
 :!touch 
 :!touch sample
 :mkdir test
-:!aws
 :!echo %c:p | mv 
 :q
 :new test
