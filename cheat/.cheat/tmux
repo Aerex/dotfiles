@@ -54,3 +54,18 @@ Ctrl-b "
 
 # Find out if you are in zoom mode (will give a number greater than 0)
 tmux list-panes -F '#F' | grep Z | wc -l | sed 's/ //g'
+
+# List keys / bindings
+tmux list-keys
+
+# List options for window
+tmux show-options -w
+
+# List options for pane
+tmux show-options -p
+
+# List options for sessions
+tmux show-options -s
+
+# List global options
+tmux show-options -g

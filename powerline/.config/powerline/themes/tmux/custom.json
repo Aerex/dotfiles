@@ -1,0 +1,27 @@
+{
+    "segments": {
+        "right": [
+          {
+                "function": "powerline.segments.tmux.attached_clients",
+                "args": {
+                  "minimum": 1
+                }
+          },
+            {
+                "function": "powerline.segments.common.vcs.branch",
+                "priority": 50,
+                "args": {
+                  "status_colors": true
+                }
+            },
+            {
+                "args": {
+                    "format": "%I:%M %p",
+                    "istime": true
+                },
+                "function": "powerline.segments.common.time.date"
+            }
+            
+        ]
+    }
+}

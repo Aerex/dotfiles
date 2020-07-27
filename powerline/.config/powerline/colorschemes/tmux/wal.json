@@ -1,0 +1,14 @@
+{
+	"groups": {
+		"active_window_status": { "fg": "pywal4",   "bg": "pywal0", "attrs": [] },
+		"window_status":        { "fg": "pywal14",  "bg": "pywal0", "attrs": [] },
+		"activity_status":      { "fg": "pywal3", "bg": "pywal0", "attrs": [] },
+		"bell_status":          { "fg": "pywal1",    "bg": "pywal0", "attrs": [] },
+		"window":               { "fg": "pywal14",  "bg": "pywal0", "attrs": [] },
+		"window:divider":       { "fg": "pywal10", "bg": "pywal0", "attrs": [] },
+		"window:current":       { "fg": "pywal15",  "bg": "pywal10", "attrs": [] },
+		"window_name":          { "fg": "pywal15",  "bg": "pywal10", "attrs": ["bold"] },
+		"session":              { "fg": "pywal15",  "bg": "pywal10", "attrs": [] },
+		"session:prefix":       { "fg": "pywal10", "bg": "pywal15",  "attrs": [] }
+	}
+}

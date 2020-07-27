@@ -19,3 +19,6 @@ task entry.after:now-1hour list
 # Replace description
 # Note the quotes are important
 task modify <id> '/old/new/'
+
+# Remove note starting with "ABC"
+task denote "ABC"

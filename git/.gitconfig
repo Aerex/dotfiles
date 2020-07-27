@@ -1,0 +1,30 @@
+[user]
+	email = nanaus13@yahoo.com
+  user = Aerex
+	name = Aerex
+[core]
+	excludesfile = ~/.gitignore
+	commentChar = %
+
+[init]
+	templatedir = ~/.git_template
+[alias]
+  s = status
+  co = checkout 
+  auto = commit -m `date`
+	nb = checkout -b
+  b = branch
+  db = branch -d
+  dB = branch -D
+  l = log
+  pl = push 
+	c = checkout
+  pu = push
+	a = add
+	pl = pull
+	cl = clone
+	aa = add -A
+	fe = fetch
+	am = commit --amend
+	t = tag
+	hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
