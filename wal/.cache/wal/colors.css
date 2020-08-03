@@ -4,25 +4,25 @@
     --wallpaper: url("/Users/noamfo/dotfiles/hd-dragon-ball-z-wallpaper_125244822_276.jpg");
 
     /* Special */
-    --background: #1a1a1a;
-    --foreground: #e6e7e6;
-    --cursor: #e6e7e6;
+    --background: #151515;
+    --foreground: #ccd4da;
+    --cursor: #ccd4da;
 
     /* Colors */
-    --color0: #1a1a1a;
-    --color1: #A5A4A6;
-    --color2: #D6B1A0;
-    --color3: #EBCEAD;
-    --color4: #ADBAC6;
-    --color5: #B3CDD5;
-    --color6: #CED2D3;
-    --color7: #e6e7e6;
-    --color8: #a1a1a1;
-    --color9: #A5A4A6;
-    --color10: #D6B1A0;
-    --color11: #EBCEAD;
-    --color12: #ADBAC6;
-    --color13: #B3CDD5;
-    --color14: #CED2D3;
-    --color15: #e6e7e6;
+    --color0: #151515;
+    --color1: #CE9161;
+    --color2: #5F7C98;
+    --color3: #9B999A;
+    --color4: #AEB1B3;
+    --color5: #D6B1A0;
+    --color6: #EBCEAD;
+    --color7: #ccd4da;
+    --color8: #8e9498;
+    --color9: #CE9161;
+    --color10: #5F7C98;
+    --color11: #9B999A;
+    --color12: #AEB1B3;
+    --color13: #D6B1A0;
+    --color14: #EBCEAD;
+    --color15: #ccd4da;
 }

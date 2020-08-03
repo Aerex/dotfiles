@@ -1,6 +1,6 @@
 # ================ GENERAL  ==================== #1
 alias cls="clear"
-alias cat="vimcat -c 'set bg=light'"
+alias cat="vimcat"
 alias ls="exa"
 alias wconf="nvim ~/.wuzz/config.toml"
 alias rm='trash'
@@ -11,6 +11,11 @@ alias mail="neomutt"
 alias n="nnn"
 alias khdrc="nvim ~/.skhdrc"
 alias alconf="nvim ~/.config/alacritty/alacritty.yml"
+
+# ================ NIX  ==================== #1
+alias nixrb="darwin-rebuild switch"
+alias nixi="nix-env -i"
+alias nixs="nix search -u"
 
 # ================ HUB  ==================== #1
 alias hpr="hub pull-request -c" 
@@ -41,7 +46,7 @@ alias gaa="git add -A"
 alias ga="git add"
 ### branches ### #2
 alias gb="git b"
-alias gnb="git nb"
+alias gnb="git checkout -b"
 alias gdB="git dB"
 alias gdb="git db"
 alias grnb="git branch -m"
@@ -121,16 +126,7 @@ alias tmc="tmux attach -t chat"
 alias tcc="tmux context none"
 alias tconf="nvim ~/.tmux.conf"
 
-# ================ FASD ==================== #
-# alias jj='zz'
-alias a='fasd -a'        # any
-alias s='fasd -si'       # show / search / select
-alias d='fasd -d'        # directory
-alias f='fasd -f'        # file
-alias sd='fasd -sid'     # interactive directory selection
-alias sf='fasd -sif'     # interactive file selection
-# alias z='fasd_cd -d'     # cd, same functionality as j in autojump
-# alias zz='fasd_cd -d -i' # cd with interactive selection
+alias f='vifm'        
 
 # ================ BREW ==================== #
 alias restart_khd="brew services restart khd"
@@ -177,6 +173,7 @@ alias note="notes"
 
 # ================ VIM  ==================== #1
 alias v="nvim"
+alias vv="sudo nvim"
 alias vconf="nvim ~/.config/nvim/init.vim"
 
 # ================ ZSH  ==================== #1

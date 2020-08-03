@@ -1,6 +1,6 @@
 "Use a custom grep command
 "If you use an alternative to grep, you can tell vim-gitgutter to use it here.
-let g:gitgutter_grep = 'ag'
+let g:gitgutter_grep = 'rg'
 
 "To turn off signs by default
 let g:gitgutter_signs = 0

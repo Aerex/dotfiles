@@ -1,11 +1,25 @@
 function conf(){
   CONFIG_DIRS=(~/.wuzz/config.toml, ~/.tmux.conf, ~/.config/nvim/init.vim, ~/.jira.d/config.yml, ~/.chunkwmrc, ~/.skhdrc, ~/.kube/config,
   ~/.myclirc, ~/.qutebrowser/config.py, ~/.taskrc, ~/.config/bugwarrior/bugwarriorrc, ~/.config/vdirsyncer/config, ~/.config/tig/config, 
-  ~/tmux.powerline.conf, ~/.my.cnf, ~/.config/neomutt/muttrc, ~/.offlineimaprc)
+  ~/tmux.powerline.conf, ~/.my.cnf, ~/.config/neomutt/muttrc, ~/.offlineimaprc, ~/.nixpkgs/darwin-configuration.nix, ~/.config/alacritty)
   VERT_CONFIG_DIRS=$(echo $CONFIG_DIRS | awk -v RS=, '{ sub(" ", ""); print }')
 
   echo $VERT_CONFIG_DIRS | fzf --preview="highlight -O ansi -l --force {}" \
     --bind "enter:execute($EDITOR {})+abort"
+}
+
+ve (){
+VIM_CONFIG_FILE=$1
+
+if [ -z $VIM_CONFIG_FILE ]; then
+  nvim $HOME/.config/nvim/init.vim
+else
+  case "${VIM_CONFIG_FILE}" in
+    notes|note|no)  
+      nvim $HOME/.config/nvim/settings/notes.vim
+      ;;
+  esac
+fi
 }
 # Open a file at specified linenumber in $EDITOR using rg and fzf
 vg() {

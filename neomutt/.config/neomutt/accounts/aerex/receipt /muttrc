@@ -1,24 +1,26 @@
 # vim: filetype=muttrc
 
-set my_imap_domain       = `. ../../../getcred Email/receipt imap`
-set editor            = "$EDITOR" 
-set quit              = yes 
-set imap_user         = `. ../../../getcred Email/receipt login`
-set imap_pass         = `. ../../../getcred Email/receipt pass`
-set realname          = "Receipt"
-set record            = "~/.Mail/Aerex/Receipt/Sent"
-set mbox_type         = Maildir
-set sendmail          = "/usr/bin/msmtp -a INBOX"
-set folder            = "imaps://$my_imap_domain"
-set spoolfile         = +INBOX
-set ssl_starttls      = yes
-set ssl_force_tls     = yes
-mailboxes             = +INBOX
-set header_cache      = ~/.config/neomutt/accounts/aerex/receipt/cache/headers
-set message_cachedir  = ~/.config/neomutt/accounts/aerex/receipt/cache/bodies
-set certificate_file  = ~/.config/neomutt/accounts/aerex/receipt/certificates
-set spoolfile         = +INBOX
-set record            = +INBOX.Sent
-set postponed         = +INBOX.Drafts
+set my_smtp_domain        = `. $my_confdir/getcred Email/receipt smtp_domain`
+set my_imap_domain        = `. $my_confdir/getcred Email/receipt imap_domain`
+set my_imap_port          = `. $my_confdir/getcred Email/receipt imap_port`
+set editor                = "$EDITOR" 
+set quit                  = yes 
+set imap_user             = `. $my_confdir/getcred Email/receipt login`
+set imap_pass             = `. $my_confdir/getcred Email/receipt pass`
+set realname              = "Receipt"
+set record                = "~/.Mail/Aerex/Receipt/Sent"
+set mbox_type             = Maildir
+set sendmail              = "/usr/bin/msmtp -a INBOX"
+set folder                = "imaps://$my_imap_domain"
+set spoolfile             = +INBOX
+set ssl_starttls          = yes
+set ssl_force_tls         = yes
+mailboxes                 = +INBOX
+set header_cache          = ~/.config/neomutt/accounts/aerex/receipt/cache/headers
+set message_cachedir      = ~/.config/neomutt/accounts/aerex/receipt/cache/bodies
+set certificate_file      = ~/.config/neomutt/accounts/aerex/receipt/certificates
+set spoolfile             = +INBOX
+set record                = +INBOX.Sent
+set postponed             = +INBOX.Drafts
 
 

@@ -8,6 +8,7 @@
 #╚═╝     ╚═╝ ╚═════╝    ╚═╝      ╚═╝   ╚═╝  ╚═╝ ╚═════╝
 
 
+set my_confdir='$HOME/.config/neomutt'
 
 # Default account
 source ~/.config/neomutt/accounts/aerex/main/muttrc
@@ -17,7 +18,7 @@ set implicit_autoview
 set mailcap_path='~/.config/neomutt/.mailcap'
 
 # Macros for switching accounts
-macro index ,1 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/main/muttrc<enter><enter-command>echo "Switched to Main Account"<enter><change-folder>!<enter>'
+macro index <space>1 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/main/muttrc<enter><enter-command>echo "Switched to Main Account"<enter><change-folder>!<enter>'
 macro index ,2 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/support/muttrc<enter><enter-command>echo "Switching to Support Account"<enter><change-folder>!<enter>'
 macro index ,3 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/gmail/muttrc<enter><enter-command>echo "Switching to Gmail Account"<enter><change-folder>!<enter>'
 macro index ,4 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/yahoo/muttrc<enter><enter-command>echo "Switching to Yahoo Account"<enter><change-folder>!<enter>'
@@ -102,17 +103,3 @@ bind index                      zA  collapse-all # Missing :folddisable/foldenab
 bind index                      tn toggle-new
 bind index                      tr toggle-read  
 
-
-
-
-# Editor
-#macro editor \c0 <bol> 
-macro editor  \ab <backward-word> 
-macro editor \af <forward-word>
-macro editor \cd <delete-char>
-macro editor \ce <eol>
-macro editor \cu <kill-line>
-macro editor \cn <history-up>
-macro editor \cp <history-down>
-macro editor \cU <upcase-word>
-macro editor \cu <downcase-word>

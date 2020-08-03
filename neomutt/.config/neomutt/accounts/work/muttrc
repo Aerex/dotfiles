@@ -1,15 +1,16 @@
 # vim: filetype=muttrc
 
 
-set smtp_domain       = `./getcred Email/work smtp`
-set imap_domain       = `./getcred Email/work imap`
+set my_smtp_domain       = `. $my_confdir/getcred Email/work smtp_domain`
+set my_imap_domain       = `. $my_confdir/getcred Email/work imap_domain`
+set my_imap_port       = `. $my_confdir/getcred Email/work imap_port`
 set editor            = "$EDITOR"
 set quit              = yes
-set imap_user         = `./getcred Email/work login`
-set imap_pass         = `./getcred Email/work pass`
+set imap_user         = `. $my_confdir/getcred Email/work login`
+set imap_pass         = `. $my_confdir/getcred Email/work pass`
 set smtp_url          = 'smtp://$imap_user:$imap_pass@$smtp_domain'
 set realname          = "$MUTT_REAL_NAME"
-set from              = `./getcred Email/work login`
+set from              = `. $my_confdir/getcred Email/work login`
 set use_from          = yes
 mailboxes             = +INBOX
 set record            = "~/.Mail/Aerex/Work/Sent/"

@@ -4,7 +4,7 @@ export PATH=$HOME/bin:/usr/local/bin:$HOME/go/bin:$PATH
 export ZLE_REMOVE_SUFFIX_CHARS=""
 export XDG_CONFIG_PATH=$HOME/.config
 
-. $HOME/bin/z.sh
+. $HOME/z.sh
 
 OS=$(uname -s)
 if [ "$OS" = "Darwin" ]; then 
@@ -35,12 +35,8 @@ export PYTHONWARNINGS="ignore:Unverified HTTPS request"
 export POWERLINE_NO_ZSH_PROMPT=1 
 . /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
 
-# FASD Bootstrap
-# set fish_function_path $fish_function_path "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/powerline/bindings/fish"
-eval "$(fasd --init auto)"
-
 # Misc
-export EDITOR=/usr/local/bin/nvim
+export EDITOR=$HOME/.nix-profile/bin/nvim
 export NOTES_DIRECTORY=~/Documents/notes
 export PAGER=less
 export BROWSER=qutebrowser
@@ -97,18 +93,6 @@ ENABLE_CORRECTION="true"
 
 # Would you like to use another custom folder than $ZSH/custom?
 
-
-# Load the oh-my-zsh's library.
-# Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-ANTIGEN_LOG=$HOME/.antigen/antigen.log
-# Load Antigen ZSH Plugin Manager
-ANTIGEN_PATH=~/dotfiles
-source $ANTIGEN_PATH/antigen/antigen.zsh
-
 # Load User functions
 if [ -d $HOME/.config/zsh/functions ]; then
   for file in $HOME/.config/zsh/functions/**/*.zsh; do
@@ -131,6 +115,18 @@ fi
   }
   zle -N history-beginning-search-backward-then-append
 
+  # Load zgen only if a user type a zgen command
+  zgen() {
+    if [[ ! -s ${ZDOTDIR:-${HOME}}/.zgen/zgen.zsh ]]; then
+      git clone --recursive https://github.com/tarjoilija/zgen.git ${ZDOTDIR:-${HOME}}/.zgen
+    fi
+    source ${ZDOTDIR:-${HOME}}/.zgen/zgen.zsh
+    zgen "$@"
+  }
+  if [[ ! -s ${ZDOTDIR:-${HOME}}/.zgen/init.zsh ]]; then
+    zgen save
+  fi
+
 
 # [zsh-git-prompt] location
 export __GIT_PROMPT_DIR=~/.zsh/bundles/olivierverdier/zsh-git-prompt
@@ -138,14 +134,24 @@ export __GIT_PROMPT_DIR=~/.zsh/bundles/olivierverdier/zsh-git-prompt
 # use Haskell's version of zsh-git-prompt (if available)
 if [[ -f $__GIT_PROMPT_DIR/src/.bin/gitstatus ]]; then GIT_PROMPT_EXECUTABLE="haskell"; fi
 
-antigen bundle olivierverdier/zsh-git-prompt
-#antigen bundle zsh-users/zsh-completions
-#antigen bundle pjg/zsh-vim-plugin
-# antigen bundle lukechilds/zsh-better-npm-completion
-# antigen bundle brew
-antigen bundle $HOME/.config/zsh/themes theunraveler-mod.zsh-theme  --no-local-clone
-antigen bundle $HOME/.config/zsh/plugins/vim-mode-redux vim-mode-redux.zsh --no-local-clone
-antigen apply
+zgen load zsh-users/zsh-autosuggestions
+zgen load olivierverdier/zsh-git-prompt
+zgen oh-my-zsh plugins/ssh-agent
+zgen oh-my-zsh plugins/shrink-path
+zgen load zsh-users/zsh-completions
+zgen load pjg/zsh-vim-plugin
+zgen load taskwarrior
+zgen load tmux
+zgen load $HOME/.config/zsh/themes/theunraveler-mod.zsh-theme
+zgen load $HOME/.config/zsh/plugins/vim-mode-redux
+#antigen bundle olivierverdier/zsh-git-prompt
+##antigen bundle zsh-users/zsh-completions
+##antigen bundle pjg/zsh-vim-plugin
+## antigen bundle lukechilds/zsh-better-npm-completion
+## antigen bundle brew
+#antigen bundle $HOME/.config/zsh/themes theunraveler-mod.zsh-theme  --no-local-clone
+#antigen bundle $HOME/.config/zsh/plugins/vim-mode-redux vim-mode-redux.zsh --no-local-clone
+#antigen apply
 
 #ZSH_THEME="theunraveler-mod"
 #ZSH_THEME="theunraveler"
@@ -205,10 +211,11 @@ CORRECT_IGNORE='_*'
 #  alias $i="nocorrect $i"
 #done
 #
-source ~/.bin/tmuxinator.zsh
+#source ~/.bin/tmuxinator.zsh
 
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-[[ -s "$HOME/.local/share/marker/marker.sh" ]] && source "$HOME/.local/share/marker/marker.sh"
+if [ -e /Users/noamfo/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/noamfo/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
