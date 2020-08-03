@@ -1,23 +1,24 @@
 # vim: filetype=muttrc
 
-
-set smtp_domain       = `./getcred Email/work smtp`
-set imap_domain       = `./getcred Email/work imap`
+set my_smtp_domain       = `. $my_confdir/getcred Email/work smtp`
+set my_imap_domain       = `. $my_confdir/getcred Email/work imap`
 set editor            = "$EDITOR"
 set quit              = yes
-set imap_user         = `./getcred Email/work login`
-set imap_pass         = `./getcred Email/work pass`
-set smtp_url          = 'smtp://$imap_user:$imap_pass@$smtp_domain'
+set imap_user         = `. $my_confdir/getcred Email/work login`
+set imap_pass         = `. $my_confdir/getcred Email/work pass`
+set smtp_url          = "smtp://$imap_user:$imap_pass@$my_smtp_domain"
 set realname          = "$MUTT_REAL_NAME"
-set from              = `./getcred Email/work login`
+set from              = `. $my_confdir/getcred Email/work login`
 set use_from          = yes
-mailboxes             = +INBOX
-set record            = "~/.Mail/Aerex/Work/Sent/"
+set ssl_starttls      = yes
+set ssl_force_tls     = yes
+#mailboxes             = +INBOX
 set mbox_type         = Maildir
 set sendmail          = "/usr/bin/msmtp -a INBOX"
-set folder            = "imaps://$imap_domain" 
+set folder            = "imaps://$my_imap_domain" 
 set spoolfile         = +INBOX
-set postponed         = +INBOX.Drafts
+set record            = "~/.Mail/Gmail/Work/Sent"
+set postponed         = "~/.Mail/Gmail/Work/Drafts"
 set header_cache      = ~/.config/neomutt/accounts/work/cache/headers
 set message_cachedir  = ~/.config/neomutt/accounts/work/cache/bodies
 set certificate_file  = ~/.config/neomutt/accounts/work/certificates
@@ -27,3 +28,4 @@ color index_author red default '.*'
 color index_number brightblue default
 color index_subject cyan default '.s'
 color index_size green default
+

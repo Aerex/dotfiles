@@ -26,13 +26,13 @@ cp "$FILE_PATH" "$TMP_MUTT_ATTACH_DIR/$FILE_NAME.$FILE_TYPE"
 
 
 # Default to use xdg-open
-if [ -z $OPEN_WITH_PROG ]; then
+OS=$(uname -s)
+if [[ $OS == 'Linux' ]] && [[ -z $OPEN_WITH_PROG ]]; then
   xdg-open "$TMP_MUTT_ATTACH_DIR/$FILE_NAME.$FILE_TYPE"
-else
+elif [[ $OS == 'Linux' ]]; then
   $OPEN_WITH_PROG "$TMP_MUTT_ATTACH_DIR/$FILE_NAME.$FILE_TYPE"
+else
+  open -a $OPEN_WITH_PROG "$TMP_MUTT_ATTACH_DIR/$FILE_NAME.$FILE_TYPE"
   PROG=$(basename $OPEN_WITH_PROG)
   echo "Opening with \"$PROG\""
 fi
-
-
-
