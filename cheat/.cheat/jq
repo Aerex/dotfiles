@@ -11,3 +11,6 @@ jq '.[0]'
 jq '.[2:4]'
 jq '.[:3]'
 jq '.[-2:]'
+
+# Read input from json file
+jq -r '.prop | .[]' filename.json 

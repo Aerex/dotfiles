@@ -194,3 +194,15 @@ git push --delete origin <tagname>
 # Delete local tag
 git tag -d <tagname:>
 
+#Fetch tags
+git fetch --tags
+
+# Recover a drop stash (Need to have terminal still open where you called git stash drop)
+git fsc --no-reflo | awk '/dangling commit/ {print $3}'
+
+# Get blank / orphan master
+git branch -m master old_master
+git checkout --orphan master
+
+# Delete git ref
+git update-ref -d <ref-tags>

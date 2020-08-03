@@ -72,3 +72,10 @@ ALTER TABLE Orders ADD CONSTRAINT FK_PersonOrder FOREIGN KEY (PersonID) REFERENC
 # Truncate (clear) table
 TRUNCATE TABLE table_name
 
+L:
+ALTER TABLE Orders ADD CONSTRAINT FK_PersonOrder FOREIGN KEY (PersonID) REFERENCES Persons(PersonID);
+
+
+# Truncate (clear) table
+TRUNCATE TABLE table_name
+

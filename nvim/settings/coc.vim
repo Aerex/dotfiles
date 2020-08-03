@@ -1,6 +1,11 @@
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
 " Remap keys for gotos
+nmap <silent> gD :call CocVsplitJumpDefinition()<CR>
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent><leader>k :call <SID>show_documentation()<CR>
 
@@ -19,15 +24,19 @@ nnoremap <silent> <leader>lm :CocList marketplace<CR>
 " Fix autofix problem of current line
 nmap <leader>lf  <Plug>(coc-fix-current)
 " Find symbol of current document
-nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
+"nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
 
 
+function! CocVsplitJumpDefinition()
+  execute "vs | call CocActionAsync('jumpDefinition')"
+endfunction
 
 function! EditCocConfig()
   execute "vs | CocConfig"
 endfunction
+
 function! s:show_documentation()
-if (index(['vim','help'], &filetype) >= 0)
+  if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
   else
     call CocAction('doHover')
@@ -39,10 +48,11 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 "
 "" Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
-"
-"" Remap for format selected region
-vmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of LS, ex: coc-tsserver
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
 
 " Setup formatexpr specified filetype(s).
 augroup mygroup
@@ -50,12 +60,16 @@ augroup mygroup
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
 augroup end
 
+
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
 "" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-vmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+" vmap <leader>a  <Plug>(coc-codeaction-selected)
+" nmap <leader>a  <Plug>(coc-codeaction-selected)
 
 "" Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
+" nmap <leader>ac  <Plug>(coc-codeaction)
 
 "" Use `:Format` for format current buffer
 command! -nargs=0 Format :call CocAction('format')
@@ -64,9 +78,16 @@ command! -nargs=0 Format :call CocAction('format')
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 
-
-
-
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 " inoremap <silent><expr> <TAB>
@@ -86,4 +107,3 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 " " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " " Coc only does snippet and additional edit on confirm.
 " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-

@@ -69,3 +69,5 @@ Editing:
   Alt + r   Cancel the changes and put back the line as it was in the history (revert).
  ctrl + _   Undo
  
+done
+

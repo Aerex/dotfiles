@@ -6,3 +6,5 @@ date -d @1440359821
 
 # Convert Unix timestamp to Date(Mac)
 date -r 1440359821
+nix timestamp to Date(Mac)
+date -r 1440359821

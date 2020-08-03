@@ -12,7 +12,7 @@ if [ "$OS" = "Darwin" ]; then
   PYTHON_PATH_27=$HOME/Library/Python/2.7
   PYTHON_PATH_37=$HOME/Library/Python/3.7
   export GOROOT=/usr/local/Cellar/go/1.10.3/libexec
-  export RTV_BROWSER=jjjj
+  export RTV_BROWSER=$(which qutebrowser)
 fi
 
 export PATH=$PATH:/usr/local/bin

@@ -99,3 +99,58 @@ Ctrl-W = Make all buffer windows equal to each other (length and width)
 set splitright
 set splittop
 
+        Swap the curent window with the next one
+Ctlr-W Shift-H  Move this with to the far left 
+Ctlr-W Shift-K  Move this with to the far right 
+
+:bunload close the buffer
+
+# Buffer
+
+# refresh buffer 
+redraw!
+redr!
+
+
+# To edit the previous buffer in the buffer list
+:bp
+:bNext
+:bprevious
+
+# To set where windows are split 
+set splitright
+set splittop
+
+
+# Targets.vim
+
+# To change the text in the next pair of parentheses, use the `cin)` command
+cin)
+# To delete the item in a comma separated list under the cursor, use `da,`
+da,
+
+# To change first argument but keep comma in function
+cia
+
+# To change second argument but keep comma in function
+c2ina
+
+
+
+# Abolish
+# To change to snake_case
+crs
+#To change to mixed case (lower)
+crm
+#To change to camelCase
+crc
+#To change to UPPER_CASE 
+cru
+#To change to dash-case 
+cr-
+#To change to dot.case 
+cr.
+#TO change to space case 
+cr<space>
+#TO change to TItle Case
+crt 

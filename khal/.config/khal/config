@@ -1,0 +1,12 @@
+[calendars]
+
+[[default]]
+type = calendar
+path = ~/.calendars/default 
+
+[locale]
+timeformat = %H.%M
+dateformat = %-m.%d
+longdateformat = %d.%-m.%Y 
+datetimeformat = %-m.%d %H.%M 
+longdatetimeformat = %-m.%d.%Y %H.%M 

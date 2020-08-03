@@ -21,3 +21,17 @@ ffmpeg -i video.ext -i audio.ext -c:v copy -c:a copy output.ext
 # -autoexit : closes ffplay as soon as the audio finishes
 ffmpeg -ss 00:34:24.85 -t 10 -i path/to/file.mp4 -f mp3 pipe:play | ffplay -i pipe:play -autoexit
 
+/to/file.mp4 -f mp3 pipe:play | ffplay -i pipe:play -autoexit
+
+
+# Convert m4a to mp3
+ffmpeg -i foo.m4a -acodec libmp3lame -aq 2 bar.mp3
+
+# Conver amr to mp3 (22.05 kHz)
+ffmpeg -i foo.amr -ar 22050 bar.mp3
+
+#Or, for batch processing:
+$ for foo in *.m4a; do ffmpeg -i "$foo" -acodec libmp3lame -aq 2 "${foo%.m4a}.mp3"; done
+
+# Monitor progress using pv
+pv input.avi | ffmpeg -i pipe:0 -v warning {arguments}

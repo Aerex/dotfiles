@@ -1,0 +1,82 @@
+# reload config
+#cmd + alt + ctrl - r : khd -e "reload"; osascript -e "display notification \"Reloading...\" with title \"Khd\""
+
+# switch to last active desktop
+#cmd + shift - x   : `id=$(chunkc get _last_active_desktop); khd -p "cmd - $id" &> /dev/null`
+
+# open terminal, blazingly fast compared to iTerm/Hyper
+cmd - return : open -na /Applications/iTerm.app
+# Focus on window
+cmd - h : chunkc tiling::window -f west
+cmd - l : chunkc tiling::window -f east
+cmd - j : chunkc tiling::window -f south
+cmd - k : chunkc tiling::window -f north
+cmd - p : chunkc tiling::window -f prev
+cmd - n : chunkc tiling::window -f next
+
+# Move focus window
+cmd + alt - h : chunkc tiling::window -s west
+cmd + alt - j : chunkc tiling::window -s south
+cmd + alt - l : chunkc tiling::window -s east
+
+# Focus to space 1, 2, 3, 4, 5
+cmd - 1 : qes -k "ctrl - 1"
+cmd - 2 : qes -k "ctrl - 2"
+cmd - 3 : qes -k "ctrl - 3"
+cmd - 4 : qes -k "ctrl - 4"
+cmd - 5 : qes -k "ctrl - 5"
+cmd - 6 : qes -k "ctrl - 6"
+cmd - 7 : qes -k "ctrl - 7"
+cmd - 8 : qes -k "ctrl - 8"
+cmd - 9 : qes -k "ctrl - 9"
+cmd - 0 : qes -k "ctrl - 0x7C"
+
+# Move focused window to space 1, 2, 3, 4, 5
+cmd + shift - 1 : chunkc tiling::window --send-to-desktop 1
+cmd + shift - 2 : chunkc tiling::window --send-to-desktop 2
+cmd + shift - 3 : chunkc tiling::window --send-to-desktop 3
+cmd + shift - 4 : chunkc tiling::window --send-to-desktop 4
+cmd + shift - 5 : chunkc tiling::window --send-to-desktop 5
+cmd + shift - 6 : chunkc tiling::window --send-to-desktop 6
+cmd + shift - 7 : chunkc tiling::window --send-to-desktop 7
+cmd + shift - 8 : chunkc tiling::window --send-to-desktop 8
+cmd + shift - 9 : chunkc tiling::window --send-to-desktop 9
+
+# Change mode
+cmd + shift - b : chunkc tiling::desktop --layout bsp
+cmd + shift - m : chunkc tiling::desktop --layout monocle
+cmd + shift - n : chunkc tiling::desktop --layout float
+
+#Change desktop
+cmd + shift - h : chunkc tiling::monitor -f prev
+cmd + shift - l : chunkc tiling::monitor -f next
+cmd + shift - 0x2A  : chunkc tiling::monitor -f 3
+cmd + shift - 0x21  : chunkc tiling::monitor -f 2
+cmd + shift - 0x1E  : chunkc tiling::monitor -f 1
+
+#increase region size
+shift + alt - a : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
+shift + alt - s : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south
+shift + alt - w : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge north
+shift + alt - d : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east
+
+# decrease region size
+shift + cmd - a : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
+shift + cmd - s : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south
+shift + cmd - w : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north
+shift + cmd - d : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east
+# toogle window fullscreen
+fn + alt - f: chunkc tiling::window --toggle fullscreen
+# toggle window native fullscreen
+cmd + alt - f : chunkc tiling::window --toggle native-fullscreen
+
+# rotate tree
+cmd - r : chunkc tiling::desktop --rotate 90
+
+cmd - l					:	chunkc tiling::window next
+cmd - h					:	chunkc tiling::window prev
+#
+# remap caps-lock to escape for this config only !!!
+# macos sierra can also perform this remap for a given keyboard
+#- capslock : khd -p "- escape"
+

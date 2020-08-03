@@ -12,3 +12,9 @@ rsync -auv /src/foo /dest
 
 # Explicitly copy /src/foo to /dest/foo
 rsync -auv /src/foo/ /dest/foo
+
+# Copy whole files only (-H)
+rsync -avhW
+
+# Copy with ssh 
+rsync -e "ssh <optional-args>" username@host:/dir/of/dest
