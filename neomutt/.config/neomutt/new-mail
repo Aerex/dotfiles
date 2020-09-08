@@ -1,0 +1,18 @@
+#!/bin/bash
+
+MAIL_BOX=$1
+NUM_NEW_MESGS=$2
+NUM_UNREAD_MESGS=$3
+
+
+# Default to use notify-send
+OS=$(uname -s)
+if [[ $OS == 'Linux' ]]; then
+  notify-send 'New Email in $MAIL_BOX' '$NUM_NEW_MESGS new messages, $NUM_UNREAD_MESGS unread.' &
+elif [[ $OS == 'Darwin' ]]; then
+  osascript -e 'display notification "'$NUM_NEW_MESGS' new messages and '$NUM_UNREAD_MESGS' unread." with title "New Email in '$MAIL_BOX'"'
+else
+  notify-send 'New Email in $MAIL_BOX' '$NUM_NEW_MESGS new messages, $NUM_UNREAD_MESGS unread.' &
+fi
+
+

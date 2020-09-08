@@ -1,4 +1,4 @@
-# vim: filetype=muttrc
+# vim: filetype=muttrc foldmethod=marker 
 
 #███╗   ███╗██╗   ██╗████████╗████████╗██████╗  ██████╗
 #████╗ ████║██║   ██║╚══██╔══╝╚══██╔══╝██╔══██╗██╔════╝
@@ -8,33 +8,98 @@
 #╚═╝     ╚═╝ ╚═════╝    ╚═╝      ╚═╝   ╚═╝  ╚═╝ ╚═════╝
 
 
+#############################
+# Generation Configuration {{{1 
 set my_confdir='$HOME/.config/neomutt'
 
 # Default account
 source ~/.config/neomutt/accounts/aerex/main/muttrc
 
-auto_view text/html
-set implicit_autoview
+# Source GPG Configuration
+#source ~/.config/neomutt/gpgrc
+
+# @See https://neomutt.org/guide/reference#3-359-%C2%A0sleep_time
+# Specifies time, in seconds, to pause while displaying certain informational messages, while moving from folder to folder 
+# and after expunging messages from the current folder. The default is to pause one second, so a value of zero for this option 
+# suppresses the pause.
+set sleep_time = 0
+
+# @See https://neomutt.org/guide/reference#3-165-%C2%A0ispell
+# How to invoke ispell (GNU's spell-checking software).
+set ispell  = "aspell -e -c"
+
+# https://neomutt.org/guide/reference#3-388-%C2%A0sort
+# Specifies how to sort messages in the "index" menu. Valid values are: date or date-sent, date-received, from, mailbox-order (unsorted)
+# score, size, spam, subject, threads, to
+# You may optionally use the "reverse-" prefix to specify reverse sorting order.
+set sort = date 
+
+# https://neomutt.org/guide/reference#3-167-%C2%A0mail_check 
+# This variable configures how often (in seconds) NeoMutt should look for new mail. Also see the $timeout variable.
+set mail_check = 120
+
+#auto_view text/html
+#set implicit_autoview
 set mailcap_path='~/.config/neomutt/.mailcap'
 
 # Macros for switching accounts
-macro index <space>1 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/main/muttrc<enter><enter-command>echo "Switched to Main Account"<enter><change-folder>!<enter>'
-macro index ,2 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/support/muttrc<enter><enter-command>echo "Switching to Support Account"<enter><change-folder>!<enter>'
-macro index ,3 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/gmail/muttrc<enter><enter-command>echo "Switching to Gmail Account"<enter><change-folder>!<enter>'
-macro index ,4 '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/yahoo/muttrc<enter><enter-command>echo "Switching to Yahoo Account"<enter><change-folder>!<enter>'
+bind index <Space> noop
+macro index <Space>gm '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/main/muttrc<enter><enter-command>echo "Switched to Main Account"<enter><change-folder>!<enter>'
+macro index <Space>gw '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/work/muttrc<enter><enter-command>echo "Switched to Work Account"<enter><change-folder>!<enter>'
+macro index <Space>gs '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/support/muttrc<enter><enter-command>echo "Switching to Support Account"<enter><change-folder>!<enter>'
+macro index <Space>gS '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/sms/muttrc<enter><enter-command>echo "Switching to SMS Account"<enter><change-folder>!<enter>'
+macro index <Space>gj '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/junk/muttrc<enter><enter-command>echo "Switching to Junk Account"<enter><change-folder>!<enter>'
+macro index <Space>gg '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/gmail/muttrc<enter><enter-command>echo "Switching to Gmail Account"<enter><change-folder>!<enter>'
+macro index <Space>gr '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/receipt/muttrc<enter><enter-command>echo "Switching to Receipt Account"<enter><change-folder>!<enter>'
+macro index <Space>gy '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/yahoo/muttrc<enter><enter-command>echo "Switching to Yahoo Account"<enter><change-folder>!<enter>'
+macro index <Space>gp '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/paperless/muttrc<enter><enter-command>echo "Switching to Paperless Account"<enter><change-folder>!<enter>'
+
+# Colors
 color index yellow default '.*'
 color index_author red default '.*'
 color index_number brightblue default
 color index_subject cyan default '.s'
 color index_size green default
+color progress white red
 color normal default default
 
+# https://neomutt.org/guide/reference#3-284-%C2%A0postpone
+# Controls whether or not messages are saved in the $postponed mailbox when you elect not to send immediately. 
+# If set to ask-yes or ask-no , you will be prompted with "Save (postpone) draft message?" when quitting from the "compose" screen.
+# Also see the $recall variable.
+set postpone="ask-yes"
+
+
+# https://neomutt.org/guide/reference#3-205-%C2%A0new_mail_command
+# If set , NeoMutt will call this command after a new message is received. 
+# See the $status_format documentation for the values that can be formatted into this command.
 set new_mail_command="notify-send 'New Email in %f' '%n new messages, %u unread.' &"
 
-#==================== Vi Key Bindings ==============================#  
+# Contacts Searching and AutoComplete 
+# https://neomutt.org/guide/reference#3-295-%C2%A0query_command
+# This specifies the command NeoMutt will use to make external address queries. 
+# The string may contain a "%s", which will be substituted with the query string the user types. 
+# NeoMutt will add quotes around the string substituted for "%s" automatically according to shell quoting rules,
+# so you should avoid adding your own. If no "%s" is found in the string, NeoMutt will append the user's query to the end of the string. See " query" for more information.
+set query_command= "khard email --parsable %s"
+
+bind editor <Tab> complete-query
+bind editor ^T    complete
+macro index,pager A \
+    "<pipe-message>khard add-email<return>" \
+    "add the sender email address to khard"
+
+
+
+#############################
+# Key Binding             {{{1 
+#############################
 # Credits to https://github.com/pigmonkey/dotfiles/blob/ef06f29de046ef14094eedabba343f8854f239ea/mutt/vim-keybindings.rc
 
-# Moving around
+#############################
+# Moving Around           {{{2 
+#############################
+
 bind attach,pager,browser,index g   noop
 bind attach,browser,index       gg  first-entry
 bind attach,browser,index       G   last-entry
@@ -43,18 +108,7 @@ bind pager                      G   bottom
 bind pager                      k   previous-line
 bind pager                      j   next-line
 bind index                      l   display-message
-
-macro attach s <save-entry><bol>~/Downloads/
-# Credits to https://github.com/ohthehugemanatee/personalize/blob/00649893973fe87a14988132a8df40a5656f5490/.mutt/muttrc#L126
-
-# Custom movements
-macro index gi "<change-folder>=Inbox<enter>" "Go to Inbox"
-macro index gd "<change-folder>=Drafts<enter>" "Go to Drafts"
-macro index gs "<change-folder>=Sent<enter>" "Go to Sent"
-macro index gj "<change-folder>=Trash<enter>" "Go to Trash"
-macro index ga "<change-folder>=Archive<enter>" "Go to Archive"
-
-# Scrolling
+bind index                      L   limit
 bind attach,browser,pager,index \CF next-page
 bind attach,browser,pager,index \CB previous-page
 bind attach,browser,pager,index \Cu half-up
@@ -64,12 +118,64 @@ bind browser,pager              \Cy previous-line
 bind index                      \Ce next-line
 bind index                      \Cy previous-line
 
+# Credits to https://github.com/ohthehugemanatee/personalize/blob/00649893973fe87a14988132a8df40a5656f5490/.mutt/muttrc#L126
+macro attach s <save-entry><bol>~/Downloads/
+
+#############################
+# Notmuch Configuration {{{1 
+#############################
+## This variable allows you to customize the file browser display for virtual
+# folders to your personal taste.
+# %C   current folder number
+# %f   folder name (description)
+# %m   number of messages in the mailbox *
+# %n   number of unread messages in the mailbox *
+# %N   N if mailbox has new mail, blank otherwise
+# %>X  right justify the rest of the string and pad with character ``X''
+# %|X  pad to the end of the line with character ``X''
+# %*X  soft-fill with character ``X'' as pad
+set nm_unread_tag = unread
+set vfolder_format = "%6n(%6N) %f"
+
+set nm_query_window_duration=2
+set nm_query_window_timebase="week" # or "hour", "day", "week", "month", "year"
+
+macro index A "<modify-labels>+archive -unread -inbox\\n" "Archive message"
+macro index c "<change-vfolder>?" "Change to vfolder overview"
+macro index \\\\ "<vfolder-from-query>" "Search mailbox"
+
+# open a different virtual folder
+bind index,pager X change-vfolder
+# read entire thread of the current message
+bind index,pager + entire-thread
+# generate virtual folder from query
+bind index,pager \eX vfolder-from-query
+# generate virtual folder from query with time window
+bind index < vfolder-window-backward
+bind index > vfolder-window-forward
+# toggle between mailboxes and virtual mai
+
+# .i will show all new/flagged
+bind index . noop
+macro index .i  "<limit>(~N|~F)<Enter>"  "view new/flag"
+# .a will show all again
+macro index .a  "<limit>~A<Enter>"       "view all"
+#############################
+# Custom movements        {{{2 
+#############################
+
+macro index gi "<change-folder>=Inbox<enter>" "Go to Inbox"
+macro index gd "<change-folder>=Drafts<enter>" "Go to Drafts"
+macro index gs "<change-folder>=Sent<enter>" "Go to Sent"
+macro index gj "<change-folder>=Trash<enter>" "Go to Trash"
+macro index ga "<change-folder>=Archive<enter>" "Go to Archive"
+
+# Scrolling
+
 # Refreshing
-bind index                      \Cl imap-fetch-mail
+bind index                      \Cr imap-fetch-mail
 
 bind attach,pager,browser,index d   noop
-bind pager,index                dd  delete-message
-
 
 # unbinding x and i because only one key is enough
 bind generic,compose,attach,pager,index i noop    
@@ -85,15 +191,16 @@ bind index x noop
 bind index zz quit                                
                                                   
 # Mail & Reply
-#bind index                      \Cm list-reply # Doesn't work currently
 bind index                      f forward-message
 bind index                      r reply
 bind index                      R group-reply
 
 # Threads
-bind browser,pager,index        N   search-opposite
+#bind browser,pager,index        N   search-opposite
+
 bind pager,index                dT  delete-thread
 bind pager,index                dt  delete-subthread
+bind pager,index                dm  delete-message
 bind pager,index                gt  next-thread
 bind pager,index                gT  previous-thread
 bind index                      za  collapse-thread
@@ -103,3 +210,14 @@ bind index                      zA  collapse-all # Missing :folddisable/foldenab
 bind index                      tn toggle-new
 bind index                      tr toggle-read  
 
+# Editor
+#macro editor \C0 <bol> 
+#macro editor  \ab <backward-word> 
+#macro editor \af <forward-word>
+#macro editor \cd <delete-char>
+#macro editor \ce <eol>
+#macro editor \cu <kill-line>
+#macro editor \cn <history-up>
+#macro editor \cp <history-down>
+#macro editor \cU <upcase-word>
+#macro editor \cu <downcase-word>

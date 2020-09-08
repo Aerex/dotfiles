@@ -12,9 +12,12 @@ alias n="nnn"
 alias khdrc="nvim ~/.skhdrc"
 alias alconf="nvim ~/.config/alacritty/alacritty.yml"
 
-# ================ NIX  ==================== #1
-alias nixrb="darwin-rebuild switch"
-alias nixi="nix-env -i"
+# ================ YABAI ==================== #1
+alias ybm="yabai -m"
+
+# ================ HOME NIX  ==================== #1
+alias nixr="home-manager switch"
+alias nixb="home-manager build"
 alias nixs="nix search -u"
 
 # ================ HUB  ==================== #1
@@ -34,7 +37,7 @@ alias pgp="pass git push"
 
 # ================ GCAL ==================== #1
 alias gcal="gcalcli" 
-alias gcalt="gcalcli agenda $(date +\"%m/%d\") $(date +\"%m/%d\" --date='tomorrow')"
+#alias gcalt="gcalcli agenda $(date +\"%m/%d\") $(date +\"%m/%d\" --date='tomorrow')"
 alias gcalw="gcalcli calw"
 alias gcalm="gcalcli calm"
 
@@ -47,7 +50,7 @@ alias ga="git add"
 ### branches ### #2
 alias gb="git b"
 alias gnb="git checkout -b"
-alias gdB="git dB"
+alias gdB="git branch -d"
 alias gdb="git db"
 alias grnb="git branch -m"
 alias gRnb="git rename-branch"
@@ -62,7 +65,7 @@ alias grlr="git reflog | fzf --preview=\"echo {}\" | awk '{print \$2}' | sed \"s
 alias gpl="git pull"
 alias gpm="git pull origin master"
 alias gcz="git cz"
-alias gco="git co"
+alias gco="git checkout"
 alias gcp="git cherry-pick"
 alias gcpc="git cherry-pick --continue"
 alias grsu="git remote set-url"
@@ -72,10 +75,11 @@ alias gm="git merge"
 alias gr="git rebase -i"
 alias grmc="git rm --cached"
 alias gmm="git merge master"
-alias gmd="git merge develop"
+alias gmd="git merge development"
 alias grc="git rebase --continue"
 alias gd="git diff"
 alias gst="git stash"
+alias gsm="git stash create --message"
 alias gs="git status"
 alias gk="gitk --all&"
 alias gx="gitx --all"
@@ -89,8 +93,8 @@ alias gpus="git push --set-upstream"
 alias gpufm="export OVERRIDE_MASTER_PUSH=1; git push origin master -f"
 alias gpum="export OVERRIDE_MASTER_PUSH=1; git push origin master"
 alias gpuso="git push --set-upstream origin"
-alias gcom="git co master"
-alias gcod="git co develop"
+alias gcom="git checkout master"
+alias gcod="git checkout development"
 alias gmv="git mv"
 alias gconf="git config --global"
 alias gpr="git pull-request"
@@ -119,24 +123,24 @@ alias nus="npm uninstall --save"
 # Note: Anythig prefix with `tm` is a tmux alias
 # Edit tmux configuration
 alias tma="tmux attach -t"
+alias tmm="tmux attach -t main"
 alias tmcc="ssh aerex@aerex.me -t tmux attach -c chat"
 alias tmi="tmux attach -t misc"
 alias tmu="tmux attach -t music"
 alias tmc="tmux attach -t chat"
-alias tcc="tmux context none"
 alias tconf="nvim ~/.tmux.conf"
+alias mux="tmuxinator"
 
-alias f='vifm'        
+# ================ VIFM ==================== #
+alias f='vifm .'
+alias ff='sudo vifm .'
 
-# ================ BREW ==================== #
-alias restart_khd="brew services restart khd"
-alias restart_kwm="brew services retart kwm"
 
 # ================ TASKWARRIOR ==================== #
 alias t="task" # for work
 alias trm="task rm"
 alias tm="task modify"
-alias tn="task note"
+alias tn="task annotate"
 alias ta="task add"
 alias td="task done"
 alias to="taskopen"
@@ -146,7 +150,8 @@ alias tls="task ls"
 alias tlsn="task ls +next" 
 alias tin="task in"
 alias tcc="task context none"
-alias tda="task context da"
+alias tw="task context work"
+alias tww="task context workall"
 alias tu="task undo"
 alias te="task edit"
 alias tn="task note"
@@ -156,7 +161,7 @@ alias tun="task denote"
 
 # ================ RANGER  ==================== #1
 alias r="ranger"
-alias rs="sudo ranger ."
+alias rr="sudo ranger ."
 
 # ================ MUSIC  ==================== #1
 alias hp="http-prompt"
@@ -191,15 +196,15 @@ alias zrc="nvim ~/.zshrc; source ~/.zshrc"
 # ================ JIRA  ==================== #1
 # Note: Anything prefix with a `j` is a jira alias
 alias j="jira"
-alias jc="jira c"
+alias jc="jira mine-todo"
 alias jfc="jira fc"
 alias jfcs="jira fcs"
 alias jcs="jira cs"
 alias jsp="jira sprint"
 alias jspa="jira add-sprint"
 alias jcr="jira create"
-alias jqa="jira lqaa"
-alias jqam="jira lqa"
+#alias jqa="jira mine-under-review"
+alias jqam="jira mine-under-review"
 #alias jqaa="jira lqaa"
 alias jmd="jira list-merge-deploy"
 alias jmdm="jira list-merge-deploy-me"

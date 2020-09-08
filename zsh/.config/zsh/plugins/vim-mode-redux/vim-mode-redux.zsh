@@ -59,6 +59,7 @@ case "$TERM" in
     bindkey -M vicmd '\ed'   kill-word                         # Alt-d
     bindkey -M vicmd '\e[5~' history-beginning-search-backward # PageUp
     bindkey -M vicmd '\e[6~' history-beginning-search-forward  # PageDown
+    bindkey -M vicmd . edit-command-line
   ;;
 *)
   echo "Terminal is not supported; Currently support xterm and screen-256"

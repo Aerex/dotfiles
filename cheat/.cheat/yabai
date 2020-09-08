@@ -1,0 +1,27 @@
+# Set default layout
+yabai -m config layout <bsp|stack|float>
+
+# Set space layout
+yabai -m config --space <space-number> layout <bsp|stack|float>
+
+# Navigate/focus to the first window on stack
+yabai -m window --focus stack.first
+
+# Navigate/focus to the last window on stack
+yabai -m window --focus stack.last
+
+# Navigate/focus to the next window on stack
+yabai -m window --focus stack.next
+
+# Navigate/focus to the prev window on stack
+yabai -m window --focus stack.prev
+
+# Navigate/focus to the recent window on stack
+yabai -m window --focus stack.recent
+
+# stack source window on target window
+yabai -m window [<source window selector>] --stack <target window selector>
+
+# the next window gets inserted stacked on top of the source window
+# the window command --insert currently supports <DIR_SEL>
+yabai -m window [<source window selector>] --insert stack

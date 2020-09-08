@@ -1,0 +1,26 @@
+# vim: filetype=muttrc
+
+set my_smtp_domain    = `. $my_confdir/getcred Email/sms smtp_domain`
+set my_imap_domain    = `. $my_confdir/getcred Email/sms imap_domain`
+set my_imap_port      = `. $my_confdir/getcred Email/sms imap_port`
+set editor            = "$EDITOR" 
+set quit              = yes 
+set imap_user         = `. $my_confdir/getcred Email/sms login`
+set imap_pass         = "`. $my_confdir/getcred Email/sms pass`"
+set smtp_url          = "smtp://$imap_user:$imap_pass@$my_smtp_domain"
+set realname          = "$MUTT_REAL_NAME"
+set record            = "~/.Mail/SMS/Sent"
+set postponed         = "~/.Mail/SMS/Drafts"
+set from              = `. $my_confdir/getcred Email/sms login`
+set use_from          = yes
+set mbox_type         = Maildir
+set sendmail          = "/usr/bin/msmtp -a INBOX"
+set folder            = "imaps://$imap_user@$my_imap_domain:$my_imap_port"
+set spoolfile         = +INBOX
+set ssl_starttls      = yes
+set ssl_force_tls     = yes
+#mailboxes      "$folder/INBOX"
+set header_cache      = ~/.config/neomutt/accounts/aerex/sms/cache/headers
+set message_cachedir  = ~/.config/neomutt/accounts/aerex/sms/cache/bodies
+set certificate_file  = ~/.config/neomutt/accounts/aerex/sms/certificates
+

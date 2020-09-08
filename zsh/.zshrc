@@ -6,12 +6,12 @@ export XDG_CONFIG_PATH=$HOME/.config
 
 . $HOME/z.sh
 
-OS=$(uname -s)
+export OS=$(uname -s)
 if [ "$OS" = "Darwin" ]; then 
   PYTHON_ROOT_37=/Library/Frameworks/Python.framework/Versions/3.7
   PYTHON_PATH_27=$HOME/Library/Python/2.7
   PYTHON_PATH_37=$HOME/Library/Python/3.7
-  export GOROOT=/usr/local/Cellar/go/1.10.3/libexec
+  export GOROOT=/usr/local/go
   export RTV_BROWSER=$(which qutebrowser)
 fi
 
@@ -25,20 +25,20 @@ export PATH=$PATH:$PYTHON_ROOT_37/bin
 
 # Go
 export GOPATH=$HOME/go
-export GOROOT=/usr/local/opt/go/libexec
+#export GOROOT=/usr/local/opt/go/libexec
 export PATH=$PATH:$GOPATH/bin 
 export PATH=$PATH:$GOROOT/bin
 
 export PYTHONWARNINGS="ignore:Unverified HTTPS request"
 
 # Powerline
-export POWERLINE_NO_ZSH_PROMPT=1 
-. /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
+# export POWERLINE_NO_ZSH_PROMPT=1 
+# . /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
 
 # Misc
 export EDITOR=$HOME/.nix-profile/bin/nvim
 export NOTES_DIRECTORY=~/Documents/notes
-export PAGER=less
+export PAGER=vimpager
 export BROWSER=qutebrowser
 export RTV_EDITOR=$(which nvim)
 
@@ -191,7 +191,7 @@ if [ -d $ZSH_CUSTOM/conf.d ]; then
     source $file
   done
 fi
-# export MANPATH="/usr/local/man:$MANPATH"
+#export MANPATH="/usr/local/man:$MANPATH"
 #
 #
 export FZF_DEFAULT_OPTS="--bind \"K:preview-up,J:preview-down,ctrl-g:jump\""
@@ -212,10 +212,13 @@ CORRECT_IGNORE='_*'
 #done
 #
 #source ~/.bin/tmuxinator.zsh
+#
 
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
+if [ ! -z $(command -v jira) ]; then eval "$(jira --completion-script-zsh)"; fi
 if [ -e /Users/noamfo/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/noamfo/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+if [ -e $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]; then . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh; fi
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

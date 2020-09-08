@@ -14,3 +14,12 @@ jq '.[-2:]'
 
 # Read input from json file
 jq -r '.prop | .[]' filename.json 
+
+# Select item that has `John` for the `name`
+jq '[] | select(.name == "John")' 
+
+# Select items that have a name that contains `Jo`
+jq '[] | select(.name | contains("Jo"))'
+
+# Select items that have a name that matching PCRE regex 'Joe\+Smith'
+jq '[] | select(.name | test("Joe\s+Smith"))'  

@@ -375,6 +375,7 @@ set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
 " Mapping ------------------------------------------------------------------------------ {{{1
 " ------------------------------------------------------------------------------
 " leader = space
+ map f /
 map m :mark<space>
 map <space> nop
 map <space><cr> :
@@ -412,12 +413,16 @@ map <silent> gt :cd /tmp<cr>
 map <silent> ghh :cd~<cr>
 map <silent> cd :cd <space>
 map <silent> gl :cd ~/Downloads<cr>
-map <silent> gn :cd ~/Documents/notes<cr>
+map <silent> gno :cd ~/Documents/notes<cr>
 map <silent> gp :cd ~/Pictures<cr>
 map <silent> gd :cd ~/Documents<cr>
 map <silent> gj :cd ~/.jira.d<cr>
 map <silent> gvi :cd ~/.config/vifm<cr>
 map <silent> gtw :cd ~/.task<cr>
+map <silent> gnx : cd ~/.nix-profile<cr>
+map <silent> gz : cd ~/.config/zsh<cr>
+map <silent> gfo : cd ~/Documents/repos/samcart/foundation<cr>
+map <silent> gan : cd ~/Documents/repos/samcart/ansible<cr>
 
 
 " Sorting ------------------------------------------------------------------------------ {{{2
@@ -474,10 +479,10 @@ nnoremap <f8> :delete<cr>
 
 " Various customization examples
 
-" Use ag (the silver searcher) instead of grep
+" Use rg (the silver searcher) instead of grep
 "
-set grepprg='ag --line-numbers %i %a %s --ignore-dir ./dist'
-set locateprg="find | ag -i %a | fzf +s 2> /dev/tty"
+set grepprg='rg --line-number %i %a %s --iglob ./dist'
+set locateprg="find | rg --ignore-case %a | fzf +s 2> /dev/tty"
 nnoremap <silent> // :locate<space>
 
 " Add additional place to look for executables

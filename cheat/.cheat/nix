@@ -1,0 +1,6 @@
+# Find packages 
+nix-env -qaP '.*emacs.*'
+nix search emacs
+
+# Show package description
+nix-env -qa --description '.*emacs.*'
