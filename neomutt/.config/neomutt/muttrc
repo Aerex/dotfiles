@@ -13,7 +13,8 @@
 set my_confdir='$HOME/.config/neomutt'
 
 # Default account
-source ~/.config/neomutt/accounts/aerex/main/muttrc
+`source  './default-muttrc'`
+
 
 # Source GPG Configuration
 #source ~/.config/neomutt/gpgrc
@@ -38,12 +39,11 @@ set sort = date
 # This variable configures how often (in seconds) NeoMutt should look for new mail. Also see the $timeout variable.
 set mail_check = 120
 
-#auto_view text/html
-#set implicit_autoview
+auto_view text/html
 set mailcap_path='~/.config/neomutt/.mailcap'
 
 # Macros for switching accounts
-bind index <Space> noop
+bind  index <Space> noop
 macro index <Space>gm '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/main/muttrc<enter><enter-command>echo "Switched to Main Account"<enter><change-folder>!<enter>'
 macro index <Space>gw '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/work/muttrc<enter><enter-command>echo "Switched to Work Account"<enter><change-folder>!<enter>'
 macro index <Space>gs '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/support/muttrc<enter><enter-command>echo "Switching to Support Account"<enter><change-folder>!<enter>'
@@ -53,6 +53,10 @@ macro index <Space>gg '<sync-mailbox><enter-command>source ~/.config/neomutt/acc
 macro index <Space>gr '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/receipt/muttrc<enter><enter-command>echo "Switching to Receipt Account"<enter><change-folder>!<enter>'
 macro index <Space>gy '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/yahoo/muttrc<enter><enter-command>echo "Switching to Yahoo Account"<enter><change-folder>!<enter>'
 macro index <Space>gp '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/paperless/muttrc<enter><enter-command>echo "Switching to Paperless Account"<enter><change-folder>!<enter>'
+
+# Hooks
+folder-hook . exec collapse-all
+ 
 
 # Colors
 color index yellow default '.*'
@@ -70,10 +74,26 @@ color normal default default
 set postpone="ask-yes"
 
 
-# https://neomutt.org/guide/reference#3-205-%C2%A0new_mail_command
+# http://www.mutt.org/doc/manual/manual.html#sort-aux
+# This provides a secondary sort for messages in the “index” menu, used when the $sort value is equal for two messages.
+# When sorting by threads, this variable controls how threads are sorted in relation to other threads, and how the branches of the thread trees are sorted. 
+# This can be set to any value that $sort can, except “threads” (in that case, mutt will just use “date-sent”).
+# You can also specify the “last-” prefix in addition to the “reverse-” prefix, but “last-” must come after “reverse-”. 
+# The “last-” prefix causes messages to be sorted against its siblings by which has the last descendant, using the rest of $sort_aux as an ordering. For instance, set sort_aux=last-date-received
+# would mean that if a new message is received in a thread, that thread becomes the last one displayed (or the first, if you have “set sort=reverse-threads”.)
+set sort = threads 
+set sort_aux = last-date-received
+
+
+
+#https://neomutt.org/guide/reference#3-208-%C2%A0new_mail_command
 # If set , NeoMutt will call this command after a new message is received. 
 # See the $status_format documentation for the values that can be formatted into this command.
-set new_mail_command="notify-send 'New Email in %f' '%n new messages, %u unread.' &"
+#set new_mail_command="notify-send 'New Email in %f' '%n new messages, %u unread.' &"
+#set new_mail_command=`bash -c "$my_confdir/new-mail \"%n new message, %u unread\" 'New Email in %f'"`
+# set new_mail_command = `osascript -e 'display notification "%f new messages and %u unread." with title "New Email in %f"'`
+set new_mail_command="terminal-notifier -title '%v' -subtitle 'New Mail in %f' -message '%n new messages, %u unread.' -activate 'io.alacritty' -sound 'default' &"
+#set new_mail_command=`/usr/local/bin/terminal-notifier -title 'title' -subtitle 'New Mail in'  -message 'new messages,  unread.' -activate 'io.alacritty' &`
 
 # Contacts Searching and AutoComplete 
 # https://neomutt.org/guide/reference#3-295-%C2%A0query_command
@@ -155,11 +175,23 @@ bind index < vfolder-window-backward
 bind index > vfolder-window-forward
 # toggle between mailboxes and virtual mai
 
-# .i will show all new/flagged
+# .n will show all new/flagged
 bind index . noop
-macro index .i  "<limit>(~N|~F)<Enter>"  "view new/flag"
+macro index .n  "<limit>(~N|~F)<Enter><enter-command>echo 'View new/flag'<Enter>"  "view new/flag"
+# .u will show all unread
+macro index .u  "<limit>(~U|~F)<Enter><enter-command>echo 'View unread/flag'<Enter>"  "view unread/flag"
 # .a will show all again
-macro index .a  "<limit>~A<Enter>"       "view all"
+macro index .a  "<limit>~A<Enter><enter-command>'View all'<Enter>"       "view all"
+
+
+# mark <flag> as read...
+macro index <Space>mn \
+    "<tag-pattern>~N<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter><enter-command>echo 'Mark all new messages as read'<enter>" \
+    "mark all new messages as read"
+macro index <Space>mu \
+    "<tag-pattern>~O<enter><tag-prefix><clear-flag>O<untag-pattern>.<enter><enter-command>echo 'Mark all unread messages as read'<enter>" \
+    "mark all unread messages as read"
+
 #############################
 # Custom movements        {{{2 
 #############################
@@ -186,6 +218,7 @@ bind generic,compose,attach,pager q exit
                                                   
 # making q do nothing in index                    
 bind index x noop                                 
+
                                                   
 # binding ZZ like in vim to quit, only in index   
 bind index zz quit                                
@@ -198,17 +231,21 @@ bind index                      R group-reply
 # Threads
 #bind browser,pager,index        N   search-opposite
 
-bind pager,index                dT  delete-thread
-bind pager,index                dt  delete-subthread
-bind pager,index                dm  delete-message
+# bind pager,index                dT  delete-thread
+# bind pager,index                dt  delete-subthread
+# bind pager,index                dm  delete-message
 bind pager,index                gt  next-thread
 bind pager,index                gT  previous-thread
 bind index                      za  collapse-thread
 bind index                      zA  collapse-all # Missing :folddisable/foldenableacro index gt "<change-folder>=INBOX.Trash<enter>" "Go to trash"
 
 # Toggle
+# Reserve t for toggle on index
+bind index t  noop
 bind index                      tn toggle-new
 bind index                      tr toggle-read  
+
+# Macro to edit main muttrc
 
 # Editor
 #macro editor \C0 <bol> 
@@ -217,7 +254,7 @@ bind index                      tr toggle-read
 #macro editor \cd <delete-char>
 #macro editor \ce <eol>
 #macro editor \cu <kill-line>
-#macro editor \cn <history-up>
-#macro editor \cp <history-down>
+macro editor \cn <history-up>
+macro editor \cp <history-down>
 #macro editor \cU <upcase-word>
 #macro editor \cu <downcase-word>
