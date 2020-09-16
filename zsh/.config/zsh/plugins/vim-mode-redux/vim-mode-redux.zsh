@@ -22,7 +22,7 @@ case "$TERM" in
     bindkey -M viins '^w'    backward-kill-word
     bindkey -M viins '^u'    backward-kill-line
     bindkey -M viins '^j'    backward-delete-char
-    bindkey -M viins '^k'    forward-delete-char
+    #bindkey -M viins '^k'    forward-delete-char
     bindkey -M viins '^?'    backward-delete-char
     bindkey -M viins '^_'    undo
     bindkey -M viins '^x^l'  history-beginning-search-backward-then-append

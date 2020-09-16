@@ -1,4 +1,5 @@
 # ================ GENERAL  ==================== #1
+alias refub="osascript -e 'tell application \"'$(ps ax | grep sicht | awk '{print $5}' | head -1 | cut -d/ -f3 | cut -d. -f1)'\" to refresh'"
 alias cls="clear"
 alias cat="vimcat"
 alias ls="exa"
@@ -7,13 +8,17 @@ alias rm='trash'
 alias wttr="curl wttr.in?0"
 alias speedtest="export PYTHONHTTPSVERIFY=0; speedtest-cli"
 alias uuid="python -c \"import uuid; print uuid.uuid4()\" | pbcopy"
-alias mail="neomutt"
+alias mail="neomutt -d5"
 alias n="nnn"
 alias khdrc="nvim ~/.skhdrc"
 alias alconf="nvim ~/.config/alacritty/alacritty.yml"
 
+# ================ VAGRANT ==================== #1
+alias vags="vagrant ssh -c 'bash'"
+
+
 # ================ YABAI ==================== #1
-alias ybm="yabai -m"
+alias ybmq="yabai -m query"
 
 # ================ HOME NIX  ==================== #1
 alias nixr="home-manager switch"
@@ -22,6 +27,7 @@ alias nixs="nix search -u"
 
 # ================ HUB  ==================== #1
 alias hpr="hub pull-request -c" 
+alias hprd="hub pull-request -c development"
 
 # ================ DOCKER ==================== #1
 alias di="docker images"
@@ -101,8 +107,9 @@ alias gpr="git pull-request"
 
 # ================ NPM ==================== #1
 alias ns="npm start"
-alias nsi="export PORT=3001; npm start"
-alias nlkm="npm run link:models"
+alias nw="npm run watch"
+alias nb="npm run build"
+alias nbp="npm run build:prod"
 alias nv="npm version"
 alias nt="npm test"
 alias nup="npm update"
@@ -185,7 +192,7 @@ alias vconf="nvim ~/.config/nvim/init.vim"
 alias zae="nvim ~/.config/zsh/conf.d/aliases.zsh; source ~/.config/zsh/conf.d/aliases.zsh"
 alias zpconf="nvim ~/.zprofile; source ~/.zprofile"
 alias zase="nvim ~/.config/zsh/conf.d/aliases.sec.zsh; source ~/.config/zsh/conf.d/aliases.sec.zsh"
-alias zsev="nvim ~/.config/zsh/conf.d/env.sec.zsh"
+alias zse="nvim ~/.config/zsh/conf.d/env.sec.zsh; source ~/.config/zsh/conf.d/env.sec.zsh"
 alias sz="source ~/.zshrc"
 alias zeconf="nvim ~/.zshenv; source ~/.zshenv"
 alias history="cat ~/.zsh_history | less"
@@ -196,7 +203,8 @@ alias zrc="nvim ~/.zshrc; source ~/.zshrc"
 # ================ JIRA  ==================== #1
 # Note: Anything prefix with a `j` is a jira alias
 alias j="jira"
-alias jc="jira mine-todo"
+alias jtodo="jira mine \"To Do\""
+alias jc="jira mine \"In Progress\""
 alias jfc="jira fc"
 alias jfcs="jira fcs"
 alias jcs="jira cs"

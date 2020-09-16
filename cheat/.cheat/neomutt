@@ -22,47 +22,48 @@ F	message is from you
 L	message is sent to a subscribed mailing list
 R	message has your address in the Reply-To field
 
-~A	all messages
-~b  EXPR	messages which contain EXPR in the message body ***)
-=b  STRING	If IMAP is enabled, like ~b but searches for STRING on the server, rather than downloading each message and searching it locally.
-~B  EXPR	messages which contain EXPR in the whole message ***)
-=B  STRING	If IMAP is enabled, like ~B but searches for STRING on the server, rather than downloading each message and searching it locally.
-~c  EXPR	messages carbon-copied to EXPR
-%c  GROUP	messages carbon-copied to any member of GROUP
-~C  EXPR	messages either to: or cc: EXPR
-%C  GROUP	messages either to: or cc: to any member of GROUP
-~d  [MIN]-[MAX]	messages with “date-sent” in a Date range
-~D	deleted messages
-~e  EXPR	messages which contains EXPR in the “Sender” field
-%e  GROUP	messages which contain a member of GROUP in the “Sender” field
-~E	expired messages
-~F	flagged messages
-~f  EXPR	messages originating from EXPR
-%f  GROUP	messages originating from any member of GROUP
-~g	cryptographically signed messages
-~G	cryptographically encrypted messages
-~h  EXPR	messages which contain EXPR in the message header ***)
-=h  STRING	If IMAP is enabled, like ~h but searches for STRING on the server, rather than downloading each message and searching it locally; STRING must be of the form “header: substring” (see below).
-~H  EXPR	messages with a spam attribute matching EXPR
-~i  EXPR	messages which match EXPR in the “Message-ID” field
-~k	messages which contain PGP key material
-~L  EXPR	messages either originated or received by EXPR
-%L  GROUP	message either originated or received by any member of GROUP
-~l 	messages addressed to a known mailing list
-~m  [MIN]-[MAX]	messages in the range MIN to MAX *)
-~M  EXPR	messages which contain a mime Content-Type matching EXPR ***)
-~n  [MIN]-[MAX]	messages with a score in the range MIN to MAX *)
-~N	new messages
-~O	old messages
-~p	messages addressed to you (consults $from, alternates, and local account/hostname information)
-~P	messages from you (consults $from, alternates, and local account/hostname information)
-~Q	messages which have been replied to
-~r  [MIN]-[MAX]	messages with “date-received” in a Date range
-~R	read messages
-~s  EXPR	messages having EXPR in the “Subject” field.
-~S	superseded messages
-~t  EXPR	messages addressed to EXPR
-~T	tagged messages
+# Patterns
+~A	        all messages
+~b          EXPR	messages which contain EXPR in the message body ***)
+=b          STRING	If IMAP is enabled, like ~b but searches for STRING on the server, rather than downloading each message and searching it locally.
+~B          EXPR	messages which contain EXPR in the whole message ***)
+=B          STRING	If IMAP is enabled, like ~B but searches for STRING on the server, rather than downloading each message and searching it locally.
+~c          EXPR	messages carbon-copied to EXPR
+%c          GROUP	messages carbon-copied to any member of GROUP
+~C          EXPR	messages either to: or cc: EXPR
+%C          GROUP	messages either to: or cc: to any member of GROUP
+~d          [MIN]-[MAX]	messages with “date-sent” in a Date range
+~D	        deleted messages
+~e          EXPR	messages which contains EXPR in the “Sender” field
+%e          GROUP	messages which contain a member of GROUP in the “Sender” field
+~E	        expired messages
+~F	        flagged messages
+~f          EXPR	messages originating from EXPR
+%f          GROUP	messages originating from any member of GROUP
+~g	        cryptographically signed messages
+~G	        cryptographically encrypted messages
+~h          EXPR	messages which contain EXPR in the message header ***)
+=h          STRING	If IMAP is enabled, like ~h but searches for STRING on the server, rather than downloading each message and searching it locally; STRING must be of the form “header: substring” (see below).
+~H          EXPR	messages with a spam attribute matching EXPR
+~i          EXPR	messages which match EXPR in the “Message-ID” field
+~k	        messages which contain PGP key material
+~L          EXPR	messages either originated or received by EXPR
+%L          GROUP	message either originated or received by any member of GROUP
+~l 	        messages addressed to a known mailing list
+~m          [MIN]-[MAX]	messages in the range MIN to MAX *)
+~M          EXPR	messages which contain a mime Content-Type matching EXPR ***)
+~n          [MIN]-[MAX]	messages with a score in the range MIN to MAX *)
+~N	        new messages
+~O	        old messages
+~p	        messages addressed to you (consults $from, alternates, and local account/hostname information)
+~P	        messages from you (consults $from, alternates, and local account/hostname information)
+~Q	        messages which have been replied to
+~r          [MIN]-[MAX]	messages with “date-received” in a Date range
+~R	        read messages
+~s          EXPR	messages having EXPR in the “Subject” field.
+~S	        superseded messages
+~t          EXPR	messages addressed to EXPR
+~T	        tagged messages
 ~u	        messages addressed to a subscribed mailing list
 ~U	        unread messages
 ~v	        messages part of a collapsed thread.
@@ -78,6 +79,11 @@ R	message has your address in the Reply-To field
 ~>(PATTERN)	messages having an immediate child matching PATTERN, e.g. messages you replied to: ~>(~P)
 
 
+# To clear flag on a pattern (e.g unread (O) )
+Use "T" to start matching pattern
+Use ";" to run next operation 
+Use "W" to clear flag 
+Select flag "O" for unread
 # Key bindings
 W     Clear flag
 w     Set flag

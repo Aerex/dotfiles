@@ -56,6 +56,9 @@ macro index <Space>gp '<sync-mailbox><enter-command>source ~/.config/neomutt/acc
 
 # Hooks
 folder-hook . exec collapse-all
+
+# TODO: Figure out how to show/limit only new and flag messages when on darwin
+#startup-hook 'echo `./bin/startup`'
  
 
 # Colors
@@ -175,13 +178,13 @@ bind index < vfolder-window-backward
 bind index > vfolder-window-forward
 # toggle between mailboxes and virtual mai
 
-# .n will show all new/flagged
-bind index . noop
-macro index .n  "<limit>(~N|~F)<Enter><enter-command>echo 'View new/flag'<Enter>"  "view new/flag"
+# <Space>s prefix will show flagged messages
+#bind index . noop
+macro index <Space>sn  "<limit>(~N|~F)<Enter><enter-command>echo 'View new/flag'<Enter>"  "view new/flag"
 # .u will show all unread
-macro index .u  "<limit>(~U|~F)<Enter><enter-command>echo 'View unread/flag'<Enter>"  "view unread/flag"
+macro index <Space>su  "<limit>(~U|~F)<Enter><enter-command>echo 'View unread/flag'<Enter>"  "view unread/flag"
 # .a will show all again
-macro index .a  "<limit>~A<Enter><enter-command>'View all'<Enter>"       "view all"
+macro index <Space>sa  "<limit>~A<Enter><enter-command>'View all'<Enter>"       "view all"
 
 
 # mark <flag> as read...

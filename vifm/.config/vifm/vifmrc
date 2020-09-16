@@ -406,23 +406,28 @@ nnoremap <silent> <space>h <c-w>h
 
 
 " GOTO ------------------------------------------------------------------------------ {{{2
-map <silent> g. :cd ~/dotfiles<cr>
-map <silent> gC :cd ~/.config<cr>
-map <silent> gT :cd ~/.Trash<cr>
-map <silent> gt :cd /tmp<cr>
-map <silent> ghh :cd~<cr>
-map <silent> cd :cd <space>
-map <silent> gl :cd ~/Downloads<cr>
-map <silent> gno :cd ~/Documents/notes<cr>
-map <silent> gp :cd ~/Pictures<cr>
-map <silent> gd :cd ~/Documents<cr>
-map <silent> gj :cd ~/.jira.d<cr>
-map <silent> gvi :cd ~/.config/vifm<cr>
-map <silent> gtw :cd ~/.task<cr>
-map <silent> gnx : cd ~/.nix-profile<cr>
-map <silent> gz : cd ~/.config/zsh<cr>
-map <silent> gfo : cd ~/Documents/repos/samcart/foundation<cr>
-map <silent> gan : cd ~/Documents/repos/samcart/ansible<cr>
+map <silent> g.    :cd ~/.dotfiles<cr>
+map <silent> gC    :cd ~/.config<cr>
+map <silent> gT    :cd ~/.Trash<cr>
+map <silent> gP    :cd ~/Pictures/samcart<cr>
+map <silent> gt    :cd /tmp<cr>
+map <silent> gh    :cd ~<cr>
+map <silent> cd    :cd <space>
+map <silent> gl    :cd ~/Downloads<cr>
+map <silent> gno   :cd ~/Documents/notes<cr>
+map <silent> gp    :cd ~/Pictures<cr>
+map <silent> gd    :cd ~/Documents<cr>
+map <silent> gj    :cd ~/.jira.d<cr>
+map <silent> gvi   :cd ~/.config/vifm<cr>
+map <silent> gtw   :cd ~/.task<cr>
+map <silent> gnx   :cd ~/.nix-profile<cr>
+map <silent> gz    :cd ~/.config/zsh<cr>
+
+map <silent> gfo   :cd ~/Documents/repos/samcart/foundation<cr>
+map <silent> gan   :cd ~/Documents/repos/samcart/ansible<cr>
+map <silent> gui   :cd ~/Documents/repos/samcart/ui-backend<cr>
+map <silent> gsam  :cd ~/Documents/repos/samcart<cr>
+
 
 
 " Sorting ------------------------------------------------------------------------------ {{{2
@@ -501,3 +506,5 @@ let $PATH = $HOME.'/.config/vifm/scripts:'.$PATH
 "     vifm --server-name "$VIFM_SERVER_NAME" --remote +"cd '$PWD'"
 "
 " let $VIFM_SERVER_NAME = v:servername
+"
+"source '~/.config/vifm/vifm-devicons'
