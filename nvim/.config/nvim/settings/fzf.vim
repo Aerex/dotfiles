@@ -22,6 +22,10 @@ nnoremap <silent> <leader>yr :Registers<CR>
     \   'rg --column --line-number --no-heading --smart-case '.shellescape(<q-args>), 1,
     \   fzf#vim#with_preview(), <bang>0)
 
+  " command! -bang -nargs=* History
+  "   \ call fzf#vim#history(
+  "   \   'rg --column --line-number --no-heading --smart-case '.shellescape(<q-args>), 1,
+  "   \   fzf#vim#with_preview(), <bang>0)
 
 
  autocmd  FileType fzf set laststatus=0 noshowmode noruler
@@ -29,7 +33,7 @@ nnoremap <silent> <leader>yr :Registers<CR>
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--info=inline', '--prompt', '> ']}), <bang>0)
  " command! -bang -nargs=? -complete=dir Files
- "       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({ 'options': ['--prompt', '> '],'source': 'rg --iglob !node_modules! ""'}), <bang>0)
+ "       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({ 'op tions': ['--prompt', '> '],'source': 'rg --iglob !node_modules! ""'}), <bang>0)
 
 function! RipgrepFzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
@@ -105,3 +109,4 @@ endfunction
 " endfunction
 
 command! -nargs=* -bang Registers call FZFYankRing()
+
