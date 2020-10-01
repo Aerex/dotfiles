@@ -2,5 +2,12 @@
 nix-env -qaP '.*emacs.*'
 nix search emacs
 
+
 # Show package description
 nix-env -qa --description '.*emacs.*'
+
+# Install software from local repository
+$ nix-env -f $NIXPKGS -iA python-urlgrabber
+
+# Show installed packages
+nix-env --query --installed

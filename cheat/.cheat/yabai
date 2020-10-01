@@ -25,3 +25,9 @@ yabai -m window [<source window selector>] --stack <target window selector>
 # the next window gets inserted stacked on top of the source window
 # the window command --insert currently supports <DIR_SEL>
 yabai -m window [<source window selector>] --insert stack
+
+# Query all windows
+yabai -m query --windows
+
+# Query active window
+yabai -m query --windows --window
