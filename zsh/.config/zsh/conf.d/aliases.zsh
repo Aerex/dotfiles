@@ -28,6 +28,7 @@ alias nixs="nix search -u"
 # ================ HUB  ==================== #1
 alias hpr="hub pull-request -c" 
 alias hprd="hub pull-request -c development"
+alias hprm="hub pull-request -c master"
 
 # ================ DOCKER ==================== #1
 alias di="docker images"
@@ -49,8 +50,8 @@ alias gcalm="gcalcli calm"
 
 # ================ GIT ==================== #1
 alias g="git"
-alias git-bug="$HOME/go/bin/git-bug"
-### add ### #2
+#alias git-bug="$HOME/go/bin/git-bug"
+### add ### #3
 alias gaa="git add -A"
 alias ga="git add"
 ### branches ### #2
