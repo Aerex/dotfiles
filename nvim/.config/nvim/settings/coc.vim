@@ -21,6 +21,9 @@ nmap <silent><leader>k :call <SID>show_documentation()<CR>
 nnoremap <silent> <leader>ld  :<C-u>CocList diagnostics<cr>
 " Edit config 
 nnoremap <silent> <leader>lce :call EditCocConfig()<CR> 
+
+" Show symbols in current file
+nnoremap <silent> <leader><S-o> :<C-u>CocList outline<CR>
 " Manage extensions
 nnoremap <silent> <leader>lex  :<C-u>CocList extensions<cr>
 map <leader>led  :<C-u>CocUninstall 

@@ -75,8 +75,9 @@ bind generic ss stage-split-chunk
 # ================ Commits  ====================
 bind generic c  none
 bind generic cc !git commit
-bind generic ca !?@git commit --amend --no-edit
+bind generic ca !?@git commit --amend -z-no-edit
 bind generic cy !echo %(commit) | pbcopy 
+bind generic co !<git checkout %(commit)
 
 # bind status   yy !./tig-yank commit %(commit)
 bind generic K view-help
