@@ -1,0 +1,15 @@
+# Show all databases
+show dbs
+# Show all collections/tables
+show tables
+show collections
+
+# Find all in collection named `col`
+db.col.find()
+db.col.find({})
+
+# To get pretty results on collection named `col` 
+db.col.find().pretty()
+
+# Filter documents by field value condition
+db.books.find({"title":"Treasure Island"})

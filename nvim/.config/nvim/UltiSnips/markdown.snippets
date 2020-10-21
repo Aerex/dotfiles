@@ -1,0 +1,47 @@
+snippet title
+---
+title: $1
+description: $2
+tags: $3
+---
+endsnippet
+
+snippet refl "Add reference anchor link from footer"
+<i id="f$1">[$1](#a$1)</i>
+endsnippet
+
+snippet ref "Add reference footer link to footer"
+<sup id="a$1">[$1 - $0](#f$1)</sup>
+endsnippet
+
+snippet rel "Add reference link"
+<span id="$1"></span>
+endsnippet
+
+snippet br "bold red the text"
+<span style="color:red">*$1*</span>
+endsnippet
+snippet bb "bold blue the text"
+<span style="color:blue">*$1*</span>
+endsnippet
+
+snippet b "bold the text"
+*$1*
+endsnippet
+
+snippet hcode "Hidden code"
+<details><summary><font size="2" color="red">Click to show the code.</font></summary>
+$0
+</details>
+endsnippet
+	
+
+snippet ft "Add line mode filetype"
+#vim:filetype=$0
+endsnippet
+
+
+
+	
+
+	

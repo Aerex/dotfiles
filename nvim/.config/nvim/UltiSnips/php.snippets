@@ -1,0 +1,41 @@
+snippet todo "Create TODO comment"
+// TODO: $0
+endsnippet
+
+snippet logcn "echo with line number ref"
+echo('#`!v line(".")`');
+echo('$$2: ' . $$2);
+endsnippet
+
+
+snippet trycb "Add try catch with Bugsnag Error"
+try {
+	
+
+} catch(\Exception $e) {
+	\Bugsnag::notifyError('$1',
+		$e->getMessage(),
+		function(Report $report) use ($id) {
+		$report->setMetaData([
+				'$2' => $id
+		});
+		$0
+}
+endsnippet
+
+snippet mock "Add Mockery mock"
+$mock$1 = Mockery::mock($1::class);
+endsnippet
+
+snippet bugsnagn "Add BugSnag::notifyError"
+Bugsnag::notifyError(
+		'$1',
+		'$2',
+		function(Report $report) use ($3)  {
+				$report->setSeverity('$4');
+				$report->setMetaData([
+						$5
+				]);
+		}
+);
+endsnippet
