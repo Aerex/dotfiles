@@ -307,38 +307,50 @@ autocmd BufEnter,BufRead subtask* setlocal wrap tw=190
 " ================ Plugins ======================= {{{1
 
 call plug#begin('~/.config/nvim/plugged')
+
+" ================ LSP ======================= {{{2
 if has('nvim-0.5')
   Plug 'nvim-treesitter/nvim-treesitter'
- " [WIP] An implementation of the Popup API from vim in Neovim. Hope to upstream when complete
+ " An implementation of the Popup API from vim in Neovim. Hope to upstream when complete
   Plug 'nvim-lua/popup.nvim'
   Plug 'nvim-lua/plenary.nvim'
+
+  "Collection of common configurations for the Nvim LSP client.
   Plug 'neovim/nvim-lsp'
   "A Debug Adapter Protocol client implementation for Neovim (>= 0.5)
   Plug 'mfussenegger/nvim-dap'
-  " A high-performance color highlighter for Neovim which has no external dependencies! Written in performant Luajit.
-  "set termguicolors     " enable true colors support
-  "Plug 'norcalli/nvim-colorizer.lua'
-  " Utility to perform actions like go-to-definition, code-quickfix, etc 
+  "" A high-performance color highlighter for Neovim which has no external dependencies! Written in performant Luajit.
+  ""set termguicolors     " enable true colors support
+  ""Plug 'norcalli/nvim-colorizer.lua'
+  "" Utility to perform actions like go-to-definition, code-quickfix, etc 
+  "" or nvim-diagnostic
   Plug 'RishabhRD/nvim-lsputils'
   Plug 'RishabhRD/popfix'
 
-  "Refactor modules for nvim-treesitter
+  ""Refactor modules for nvim-treesitter
   Plug 'nvim-treesitter/nvim-treesitter-refactor'
+  "" LSP Extensions
+  Plug 'nvim-lua/lsp_extensions.nvim'
+
+  "Very basic alternative to context.vim implemented with nvim-treesitter.
+  Plug 'romgrk/nvim-treesitter-context'
 
   "View treesitter information directly in Neovim
-  Plug 'nvim-treesitter/nvim-treesitter'
   Plug 'nvim-treesitter/playground'
 
   "Create your own textobjects using tree-sitter queries!
-  Plug 'nvim-treesitter/nvim-treesitter'
   Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 
-  "A context.vim clone using treesitter 
-  Plug 'vigoux/treesitter-context.nvim'
+  ""A context.vim clone using treesitter 
+  "Plug 'vigoux/treesitter-context.nvim'
+  ""An auto completion framework that aims to provide a better completion experience with neovim's built-in LSP. 
   "Plug 'nvim-lua/completion-nvim'
-  " A wrapper for neovim built in LSP diagnosis config
-  "Plug 'haorenW1025/diagnostic-nvim'  
+  "" A wrapper for neovim built in LSP diagnosis config 
+  "" or nvim-lsputils
+  Plug 'nvim-lua/diagnostic-nvim'  
+
 endif
+"}}}
 " Visually select increasingly larger regions of text using the same key combination.
 Plug 'terryma/vim-expand-region'
 " Allows you to use <Tab> for all your insert completion needs 
@@ -425,6 +437,7 @@ function! BuildComposer(info)
 endfunction
 
 Plug 'euclio/vim-markdown-composer', { 'for': ['markdown'], 'do': function('BuildComposer') }
+"}}}
 " ================ Plugin / Setting Configuration  ======================= {{{1
 so ~/.config/nvim/settings.vim
 

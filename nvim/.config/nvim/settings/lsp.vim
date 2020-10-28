@@ -1,8 +1,8 @@
-let g:diagnostic_enable_virtual_text = 1
+let g:diagnostic_enable_virtual_text = 0
 let g:diagnostic_auto_popup_while_jump = 1
-function! NvimLspMaps()
+function! NvimLspKeyMapping()
     nnoremap <buffer><silent> <leader>rn <cmd>lua vim.lsp.buf.rename()<CR>
-    nnoremap <buffer><silent> gd         <cmd>lua vim.lsp.buf.declaration()<CR>
+    " nnoremap <buffer><silent> gd         <cmd>lua vim.lsp.buf.declaration()<CR>
     nnoremap <buffer><silent> gr         <cmd>lua vim.lsp.buf.references()<CR>
     nnoremap <buffer><silent> gi         <cmd>lua vim.lsp.buf.implementation()<CR>
     nnoremap <buffer><silent> gt    <cmd>lua vim.lsp.buf.type_definition()<CR>
@@ -20,19 +20,17 @@ function! NvimLspMaps()
     nnoremap <buffer><silent> <leader>ca <cmd>lua vim.lsp.buf.code_action()<CR>
     "Displays signature information about the symbol under the cursor in a floating window.
     inoremap <buffer><silent> <leader>K <cmd>lua vim.lsp.buf.signature_help()<CR>
-    nnoremap <buffer><silent> <leader>de :lua require'lsp-ext'.peek_definition()<cr>
-    nmap <buffer> <silent> gD  <c-w>vgd
-    "Displays the diagnostics for the current line in a floating hover window.
-    nnoremap <buffer><silent> <leader>ld <cmd>lua vim.lsp.util.show_line_diagnostics()<CR>
+    " nnoremap <buffer><silent> <leader>de :lua require'lsp-extensions'.peek_definition()<cr>
+    " nmap <buffer> <silent> gD  <c-w>vgd
     nnoremap <buffer><silent> <leader>ss :lua vim.lsp.buf.workspace_symbol()<cr>
-    nnoremap <buffer> <silent> <c-LeftMouse> <cmd>lua require'nvim-treesitter.refactor.navigation'.goto_definition_lsp_fallback()<CR>
+    nnoremap <buffer> <silent> <c-LeftMouse> <cmd>lua require'nvim-treesitter-refactor.navigation'.goto_definition_lsp_fallback()<CR>
     nnoremap <buffer> <silent> <leader>ld <cmd>lua vim.lsp.util.show_line_diagnostics()<cr>
 
     if &filetype != "tex" 
         inoremap <buffer><silent> (     <cmd>lua vim.lsp.buf.signature_help()<CR>(
     endif
 
-    autocmd BufEnter <buffer> :lua require'lsp-ext'.update_diagnostics()
+    " autocmd BufEnter <buffer> :lua require'lsp-extensions'.update_diagnostics()
 
     if &filetype == "java" 
         nnoremap <buffer><silent> <c-s> :w<cr><cmd>lua vim.lsp.buf.formatting();require'jdtls'.organize_imports()<cr>
