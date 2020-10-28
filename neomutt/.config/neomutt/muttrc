@@ -13,7 +13,7 @@
 set my_confdir='$HOME/.config/neomutt'
 
 # Default account
-`source  './default-muttrc'`
+source  ~/.config/neomutt/bin/default-muttrc|
 
 
 # Source GPG Configuration
@@ -87,16 +87,10 @@ set postpone="ask-yes"
 set sort = threads 
 set sort_aux = last-date-received
 
-
-
 #https://neomutt.org/guide/reference#3-208-%C2%A0new_mail_command
 # If set , NeoMutt will call this command after a new message is received. 
 # See the $status_format documentation for the values that can be formatted into this command.
-#set new_mail_command="notify-send 'New Email in %f' '%n new messages, %u unread.' &"
-#set new_mail_command=`bash -c "$my_confdir/new-mail \"%n new message, %u unread\" 'New Email in %f'"`
-# set new_mail_command = `osascript -e 'display notification "%f new messages and %u unread." with title "New Email in %f"'`
-set new_mail_command="terminal-notifier -title '%v' -subtitle 'New Mail in %f' -message '%n new messages, %u unread.' -activate 'io.alacritty' -sound 'default' &"
-#set new_mail_command=`/usr/local/bin/terminal-notifier -title 'title' -subtitle 'New Mail in'  -message 'new messages,  unread.' -activate 'io.alacritty' &`
+source ~/.config/neomutt/bin/new-mail|
 
 # Contacts Searching and AutoComplete 
 # https://neomutt.org/guide/reference#3-295-%C2%A0query_command
@@ -119,6 +113,7 @@ macro index,pager A \
 #############################
 # Credits to https://github.com/pigmonkey/dotfiles/blob/ef06f29de046ef14094eedabba343f8854f239ea/mutt/vim-keybindings.rc
 
+macro index <Space><Enter> "<enter-command>"
 #############################
 # Moving Around           {{{2 
 #############################
@@ -140,13 +135,37 @@ bind browser,pager              \Ce next-line
 bind browser,pager              \Cy previous-line
 bind index                      \Ce next-line
 bind index                      \Cy previous-line
-
+bind index <left> sidebar-prev          # got to previous folder in sidebar
+bind index <right> sidebar-next         # got to next folder in sidebar
 # Credits to https://github.com/ohthehugemanatee/personalize/blob/00649893973fe87a14988132a8df40a5656f5490/.mutt/muttrc#L126
 macro attach s <save-entry><bol>~/Downloads/
 
+# <Space>s prefix will show flagged messages
+#bind index . noop
+macro index <Space>sn  "<limit>(~N|~F)<Enter><enter-command>echo 'View new/flag'<Enter>"  "view new/flag"
+# .u will show all unread
+macro index <Space>su  "<limit>(~U|~F)<Enter><enter-command>echo 'View unread/flag'<Enter>"  "view unread/flag"
+# .a will show all again
+macro index <Space>sa  "<limit>~A<Enter><enter-command>'View all'<Enter>"       "view all"
+
 #############################
 # Notmuch Configuration {{{1 
-#############################
+
+# This variable specifies the default Notmuch database in format:
+# notmuch://<absolute path>
+#set nm_default_url = "" 
+
+# When set, NeoMutt will use the first virtual mailbox (see virtual-mailboxes)
+# as a spoolfile.
+# enable virtual folders
+#set virtual_spoolfile=yes                          
+
+
+ #    # sidebar
+ #    bind index <space> sidebar-open         # open selected folder from sidebar
+ #    # sidebar toggle
+ #    macro index ,@) "<enter-command> set sidebar_visible=no; macro index ~ ,@( 'Toggle sidebar'<Enter>"
+ #    macro index ,@( "<enter-command> set sidebar_visible=yes; macro index ~ ,@) 'Toggle sidebar'<Enter>"
 ## This variable allows you to customize the file browser display for virtual
 # folders to your personal taste.
 # %C   current folder number
@@ -165,6 +184,10 @@ set nm_query_window_timebase="week" # or "hour", "day", "week", "month", "year"
 
 macro index A "<modify-labels>+archive -unread -inbox\\n" "Archive message"
 macro index c "<change-vfolder>?" "Change to vfolder overview"
+macro index I "<modify-labels>-inbox -unread\\n" "Removed from inbox"
+macro index S "<modify-labels-then-hide>-inbox -unread +junk\\n" "Tag as junk"
+macro index + "<modify-labels>+*\\n<sync-mailbox>" "Tag as starred"
+macro index - "<modify-labels>-*\\n<sync-mailbox>" "Tag as unstarred"
 macro index \\\\ "<vfolder-from-query>" "Search mailbox"
 
 # open a different virtual folder
@@ -178,13 +201,6 @@ bind index < vfolder-window-backward
 bind index > vfolder-window-forward
 # toggle between mailboxes and virtual mai
 
-# <Space>s prefix will show flagged messages
-#bind index . noop
-macro index <Space>sn  "<limit>(~N|~F)<Enter><enter-command>echo 'View new/flag'<Enter>"  "view new/flag"
-# .u will show all unread
-macro index <Space>su  "<limit>(~U|~F)<Enter><enter-command>echo 'View unread/flag'<Enter>"  "view unread/flag"
-# .a will show all again
-macro index <Space>sa  "<limit>~A<Enter><enter-command>'View all'<Enter>"       "view all"
 
 
 # mark <flag> as read...
@@ -204,8 +220,6 @@ macro index gd "<change-folder>=Drafts<enter>" "Go to Drafts"
 macro index gs "<change-folder>=Sent<enter>" "Go to Sent"
 macro index gj "<change-folder>=Trash<enter>" "Go to Trash"
 macro index ga "<change-folder>=Archive<enter>" "Go to Archive"
-
-# Scrolling
 
 # Refreshing
 bind index                      \Cr imap-fetch-mail
@@ -242,7 +256,8 @@ bind pager,index                gT  previous-thread
 bind index                      za  collapse-thread
 bind index                      zA  collapse-all # Missing :folddisable/foldenableacro index gt "<change-folder>=INBOX.Trash<enter>" "Go to trash"
 
-# Toggle
+#############################
+# Toggle                  {{{3 
 # Reserve t for toggle on index
 bind index t  noop
 bind index                      tn toggle-new
@@ -256,7 +271,7 @@ bind index                      tr toggle-read
 #macro editor \af <forward-word>
 #macro editor \cd <delete-char>
 #macro editor \ce <eol>
-#macro editor \cu <kill-line>
+macro editor \cu <kill-line>
 macro editor \cn <history-up>
 macro editor \cp <history-down>
 #macro editor \cU <upcase-word>

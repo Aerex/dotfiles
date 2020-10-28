@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Default to use notify-send
+OS=$(uname -s)
+if [[ $OS == 'Linux' ]]; then
+  echo "set new_mail_command=\"notify-send 'New Email in %f' '%n new messages, %u unread.' &\""
+elif [[ $OS == 'Darwin' ]]; then
+  echo "set new_mail_command=\"terminal-notifier -title '%v' -subtitle 'New Mail in %f' -message '%n new messages, %u unread.' -activate 'io.alacritty' -sound 'default' &\""
+else
+  echo "set new_mail_command=\"notify-send 'New Email in %f' '%n new messages, %u unread.' &\""
+fi
+
+

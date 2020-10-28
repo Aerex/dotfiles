@@ -1,0 +1,9 @@
+#!/bin/bash
+
+OS=$(uname -s)
+
+if [ $OS == 'Darwin' ]; then
+  # TODO: Figure out how to show/limit only new and flag messages when on darwin
+fi
+
+  
