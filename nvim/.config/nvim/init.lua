@@ -1,3 +1,99 @@
+-- FIXME: E5113: Error while calling lua chunk: ...d/lsp_extensions.nvim/lua/lsp_extensions/inlay_hints.lua:65: bad argument #1 to 'ipairs' (table expected, got number)
+-- local ok = pcall(require, "lsp_extensions")
+
+-- if ok then
+--   vim.cmd [[
+--    autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require'lsp_extensions'.inlay_hints{}
+--    ]]
+--   require "lsp_extensions".inlay_hints {
+--     highlight = "Comment",
+--     prefix = " > ",
+--     aligned = false,
+--     only_current_line = false
+--   }
+-- end
+
+local completion_nvim_ok, completion_nvim = pcall(require, "completion")
+if completion_nvim_ok then
+  vim.cmd [[
+  autocmd BufEnter * lua require'completion'.on_attach()
+  ]]
+
+
+
+end
+local lsp_utils_ok, lsp_utils = pcall(require, "lsputil")
+  if lsp_utils then
+    vim.lsp.callbacks['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler
+    vim.lsp.callbacks['textDocument/references'] = require'lsputil.locations'.references_handler
+    vim.lsp.callbacks['textDocument/definition'] = require'lsputil.locations'.definition_handler
+    vim.lsp.callbacks['textDocument/declaration'] = require'lsputil.locations'.declaration_handler
+    vim.lsp.callbacks['textDocument/typeDefinition'] = require'lsputil.locations'.typeDefinition_handler
+    vim.lsp.callbacks['textDocument/implementation'] = require'lsputil.locations'.implementation_handler
+    vim.g.lsp_utils_location_opts = {
+      height = 0,
+      mode = 'editor',
+      list = {
+        border = true,
+        coloring = true
+      },
+      preview = {
+        title = 'Location Preview'
+      },
+      keymaps = {
+        n = {
+          ['<C-n>'] = 'j',
+          ['<C-p>'] = 'k'
+        }
+      }
+    }
+    vim.g.lsp_utils_symbols_opts = {
+      height = 0,
+      mode = 'editor',
+      list = {
+        border = true,
+        coloring = true
+      },
+      preview = {
+        title = 'Symbol Preview'
+      },
+      keymaps = {
+        n = {
+          ['<C-n>'] = 'j',
+          ['<C-p>'] = 'k'
+        }
+      }
+    }
+    vim.g.lsp_utils_codeactions_opts = {
+      height = 0,
+      mode = 'editor',
+      list = {
+        border = true,
+        coloring = true,
+        title = 'Code Action'
+      }
+
+    }
+end
+
+require 'lsp_overrides'
+local diagnostic_nvim_ok, diagnostic_nvim = pcall(require, "diagnostic")
+if diagnostic_nvim_ok then
+  vim.cmd [[
+  autocmd BufEnter * lua require'diagnostic'.on_attach()
+  ]]
+  vim.cmd [[
+  autocmd CursorHold * lua vim.lsp.util.show_line_diagnostics()
+  ]]
+  vim.fn.sign_define("LspDiagnosticsErrorSign", {text="✖", texthl="LspDiagnosticsError"})
+  vim.fn.sign_define("LspDiagnosticsWarningSign", {text="⚠", texthl="LspDiagnosticsWarning"})
+  vim.fn.sign_define("LspDiagnosticsInformationSign", {text="כֿ",texthl="LspDiagnosticsInformation"})
+  vim.fn.sign_define("LspDiagnosticsHintSign", {text="", texthl="LspDiagnosticsHint"})
+  vim.g.diagnostic_enable_virtual_text = 0
+  vim.g.diagnostic_auto_popup_while_jump = 1
+
+end
+
 local ok, _ = pcall(require, "nvim-treesitter.configs")
 if ok then
   vim.cmd("set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()")
@@ -15,16 +111,14 @@ if ok then
   }
   require "nvim-treesitter.configs".setup(
   {
+    -- https://github.com/nvim-treesitter/nvim-treesitter#highlight
     highlight = {
       enable = true, -- false will disable the whole extension
-      disable = {"html", "lua"} -- list of language that will be disabled
+      disable = {"html", "lua", "php"} -- list of language that will be disabled
     },
+    -- https://github.com/nvim-treesitter/nvim-tree-docs
     tree_docs = {
-      enable = true,
-      keymaps = {
-        doc_node_at_cursor = "<leader>GDD",
-        doc_all_in_range = "<leader>GDD"
-      }
+      enable = false
     },
     playground = {
       enable = true
@@ -39,6 +133,9 @@ if ok then
         scope_incremental = "Ts", -- increment to the upper scope (as defined in locals.scm)
         node_decremental = "<bs>"
       }
+    },
+    indent = {
+      disable = { "php" },
     },
     node_movement = {
       -- this enables incremental selection
@@ -106,16 +203,16 @@ if ok then
       move = {
         enable = true,
         goto_next_start = {
-          ["oo"] = "@function.inner",
+          ["øø"] = "@function.inner",
         },
         goto_next_end = {
-          ["OO"] = "@function.inner",
+          ["ØØ"] = "@function.inner",
         },
         goto_previous_start = {
-          ["uu"] = "@function.inner",
+          ["¥¥"] = "@function.inner",
         },
         goto_previous_end = {
-          ["UU"] = "@function.inner",
+          ["ÁÁ"] = "@function.inner",
         }
       }
     },
@@ -159,12 +256,48 @@ end
 local ok, nvim_lsp = pcall(require, 'nvim_lsp')
 if ok then
   local configs = require "nvim_lsp.configs"
-  nvim_lsp.tsserver.setup { }
+  local default_callback = vim.lsp.callbacks["textDocument/publishDiagnostics"]
+  vim.lsp.callbacks["textDocument/publishDiagnostics"] = function(...)
+    default_callback(...)
+    require "lsp-ext".update_diagnostics()
+  end
+  local function on_attach(...)
+    vim.fn.NvimLspKeyMapping()
+  end
+
+  nvim_lsp.tsserver.setup { 
+    on_attach = on_attach
+  }
   nvim_lsp.html.setup { }
   nvim_lsp.jsonls.setup { }
-  nvim_lsp.intelephense.setup { }
   -- php
-  -- nvm_lsp.intelephense.setup { }
+ nvim_lsp.intelephense.setup {
+   on_attach = on_attach
+ }
+--vue
+  nvim_lsp.vuels.setup {
+      on_attach = on_attach
+  }
+-- php
+-- if not nvim_lsp.php_lsp then
+--   configs.php_lsp = {
+--     default_config = {
+--       cmd = {'php ~/Documents/repos/git/php-language-server/bin/php-language-server.php'};
+--       filetypes = {'php'};
+--       root_dir = function(fname)
+--         local cwd  = vim.loop.cwd();
+--         local root = util.root_pattern("composer.json", ".git")(pattern);
+
+--         -- prefer cwd if root is a descendant
+--         return util.path.is_descendant(cwd, root) and cwd or root;
+--       end;
+--       settings = {};
+--     };
+--   }
+-- end
+-- nvim_lsp.php_lsp.setup {
+--   on_attach = on_attach
+-- }
 end
 
 -- local ok, colorizer = pcall(require, "colorizer")
@@ -220,12 +353,14 @@ if ok then
     }
   }
   )
-  vim.g.dap_virtual_text = true -- 'all frames'
+  --vim.g.dap_virtual_text = true -- 'all frames'
   vim.fn.sign_define("DapBreakpoint", {text = "●", texthl = "", linehl = "", numhl = ""})
   vim.fn.sign_define('DapStopped', {text='▶', texthl='', linehl='NvimDapStopped', numhl=''})
 end
---"internalConsole",
---"integratedTerminal",
---"externalTerminal",
+local ok, context = pcall(require, "treesitter-context")
+if ok then
+  context.enable()
+end
+
 
 

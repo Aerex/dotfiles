@@ -7,6 +7,7 @@ endif
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
 let g:coc_disable_startup_warning = 1
+let g:coc_enabled = 0
 set updatetime=300
 " Remap keys for gotos
 nmap <silent> gD :call CocVsplitJumpDefinition()<CR>
@@ -16,9 +17,12 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent><leader>k :call <SID>show_documentation()<CR>
 
+nmap <silent> <leader>lct :call CocToggle()<CR>
+
+
 
 " Show all diagnostics
-nnoremap <silent> <leader>ld  :<C-u>CocList diagnostics<cr>
+"nnoremap <silent> <leader>ld  :<C-u>CocList diagnostics<cr>
 " Edit config 
 nnoremap <silent> <leader>lce :call EditCocConfig()<CR> 
 
@@ -36,6 +40,13 @@ nmap <leader>lf  <Plug>(coc-fix-current)
 " Find symbol of current document
 "nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
 
+function! CocToggle()
+  if g:coc_enabled == 1
+    exec "CocDisable"
+  else
+    exec "CocEnable"
+  endif
+endfunction
 
 function! CocVsplitJumpDefinition()
   execute "vs | call CocActionAsync('jumpDefinition')"
@@ -54,9 +65,9 @@ function! s:show_documentation()
 endfunction
 
 " Highlight symbol under cursor on CursorHold
-if (executable('node'))
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-endif
+" if (executable('node'))
+"   autocmd CursorHold * silent call CocActionAsync('highlight')
+" endif
 "
 "" Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)

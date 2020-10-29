@@ -360,9 +360,13 @@ Plug 'rayburgemeestre/phpfolding.vim', { 'for': ['php'] }
 " Personal wiki for Vim -- a number of linked text files that have their own syntax highlighting.
 "Plug 'vimwiki/vimwiki'
 " Add icons to your vim
+
 Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/fzf'
+"Vim plugin for developers fighting against conflicts. 
+"All features are available if and only if an opened buffer contains a conflict marker.
+Plug 'rhysd/conflict-marker.vim'
 " A note-taking app where searching for a note and creating one are the same operation using FZF
 if executable('rg')
   Plug 'alok/notational-fzf-vim'
