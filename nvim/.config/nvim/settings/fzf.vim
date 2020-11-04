@@ -1,3 +1,4 @@
+let g:fzf_session_path = $HOME . '/.config/nvim/sessions'
 "let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " Border color
 " let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo' } }
@@ -8,14 +9,15 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo
 let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
-nnoremap <silent> <leader>p :GFiles<CR>
+nnoremap <silent> <leader>p  :GFiles<CR>
 nnoremap <silent> <leader>,p :Files<CR>
-nnoremap <silent> <leader>h :History<CR>
-nnoremap <silent> <leader>m :Marks<CR>
-nnoremap <silent> <leader>M :Maps<CR>
-nnoremap <silent> <leader>L :Lines<CR>
-nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>v :Commands<CR>
+nnoremap <silent> <leader>H  :History<CR>
+nnoremap <silent> <leader>m  :Marks<CR>
+nnoremap <silent> <leader>S  :Sessions<CR>
+nnoremap <silent> <leader>M  :Maps<CR>
+nnoremap <silent> <leader>L  :Lines<CR>
+nnoremap <silent> <leader>b  :Buffers<CR>
+nnoremap <silent> <leader>v  :Commands<CR>
 nnoremap <silent> <leader>yr :Registers<CR>
 
   command! -bang -nargs=* Rg

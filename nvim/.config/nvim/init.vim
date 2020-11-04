@@ -332,14 +332,12 @@ if has('nvim-0.5')
   "" LSP Extensions
   Plug 'nvim-lua/lsp_extensions.nvim'
 
-  "Very basic alternative to context.vim implemented with nvim-treesitter.
-  Plug 'romgrk/nvim-treesitter-context'
-
   "View treesitter information directly in Neovim
   Plug 'nvim-treesitter/playground'
 
   "Create your own textobjects using tree-sitter queries!
   Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+
 
   ""A context.vim clone using treesitter 
   "Plug 'vigoux/treesitter-context.nvim'
@@ -351,6 +349,11 @@ if has('nvim-0.5')
 
 endif
 "}}}
+
+" This plugin adds support for searching, saving, and deleting Vim sessions with fzf.vim. 
+Plug 'dominickng/fzf-session.vim'
+"A document generator which will generate a proper documentation skeleton based on certain expressions (mainly functions)
+Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 " Visually select increasingly larger regions of text using the same key combination.
 Plug 'terryma/vim-expand-region'
 " Allows you to use <Tab> for all your insert completion needs 
