@@ -1,6 +1,7 @@
-# ================ GENERAL  ==================== #1
+# GENERAL {{{1
 alias refub="osascript -e 'tell application \"'$(ps ax | grep sicht | awk '{print $5}' | head -1 | cut -d/ -f3 | cut -d. -f1)'\" to refresh'"
 alias cls="clear"
+alias btop="bpytop"
 alias cat="vimcat"
 alias ls="exa"
 alias wconf="nvim ~/.wuzz/config.toml"
@@ -12,13 +13,16 @@ alias mail="neomutt -d5"
 alias n="nnn"
 alias khdrc="nvim ~/.skhdrc"
 alias alconf="nvim ~/.config/alacritty/alacritty.yml"
+# }}}
 
-# ================ VAGRANT ==================== #1
+# VAGRANT {{{1
 alias vags="vagrant ssh -c 'bash'"
+# }}}
 
 
-# ================ YABAI ==================== #1
+# YABAI {{{1 
 alias ybmq="yabai -m query"
+# }}}
 
 # ================ HOME NIX  ==================== #1
 alias nixr="home-manager switch"
@@ -48,50 +52,62 @@ alias gcal="gcalcli"
 alias gcalw="gcalcli calw"
 alias gcalm="gcalcli calm"
 
-# ================ GIT ==================== #1
+# GIT {{{1
 alias g="git"
 #alias git-bug="$HOME/go/bin/git-bug"
-### add ### #3
+## ADD {{{2 
 alias gaa="git add -A"
 alias ga="git add"
-### branches ### #2
+#}}}
+# BRANCHES {{{2
 alias gb="git b"
 alias gnb="git checkout -b"
 alias gdB="git branch -d"
 alias gdb="git db"
 alias grnb="git branch -m"
 alias gRnb="git rename-branch"
-### tags ### #2
+#}}}
+# TAGS {{{2
 alias gta="git tag"
 alias gtd="git tag -d"
-### logs ### #2
+#}}}
+# LOGS {{{2
 alias gl="git log"
 alias grl="git reflog"
 alias grlr="git reflog | fzf --preview=\"echo {}\" | awk '{print \$2}' | sed \"s/://\" | xargs -I % bash -c 'git reset %'"
-### pull ### #2
+#}}}
+# PULL {{{2
 alias gpl="git pull"
 alias gpm="git pull origin master"
-alias gcz="git cz"
-alias gco="git checkout"
+#}}}
+## CHERRY PICK {{{2
 alias gcp="git cherry-pick"
 alias gcpc="git cherry-pick --continue"
+#}}}
+# MERGE {{{2
+alias gm="git merge"
+alias gmm="git merge master"
+alias gmd="git merge development"
+#}}}
+# REBASE {{{2
+alias gr="git rebase -i"
+alias grc="git rebase --continue"
+## COMMIT {{{2
+alias gcz="git cz"
+alias gcm="git commit"
+alias gam="git commit --amend"
+#}}}
+alias gco="git checkout"
 alias grsu="git remote set-url"
 alias gtr="git ls-tree HEAD"
 alias gh="git hist"
-alias gm="git merge"
-alias gr="git rebase -i"
 alias grmc="git rm --cached"
-alias gmm="git merge master"
-alias gmd="git merge development"
-alias grc="git rebase --continue"
 alias gd="git diff"
 alias gst="git stash"
 alias gsm="git stash create --message"
 alias gs="git status"
 alias gk="gitk --all&"
 alias gx="gitx --all"
-alias gcm="git commit"
-alias gam="git commit --amend"
 alias gpu="git pu"
 alias gp="gpu"
 alias gpd="git push --delete"
@@ -105,6 +121,7 @@ alias gcod="git checkout development"
 alias gmv="git mv"
 alias gconf="git config --global"
 alias gpr="git pull-request"
+#}}}
 
 # ================ NPM ==================== #1
 alias ns="npm start"
@@ -186,7 +203,9 @@ alias note="notes"
 
 # ================ VIM  ==================== #1
 alias v="nvim"
+alias vb="~/neovim/bin/nvim"
 alias vv="sudo nvim"
+alias vvb="sudo ~/neovim/bin/nvim"
 alias vconf="nvim ~/.config/nvim/init.vim"
 
 # ================ ZSH  ==================== #1
@@ -243,4 +262,4 @@ alias cals="vdirsyncer sync"
 #status --is-interactive; and . (rbenv init -|psub)
 
 
-# vim: nowrap fdm=marker fmr=#,#
+# vim: nowrap foldmethod=marker foldlevel=1

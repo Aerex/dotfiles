@@ -4,6 +4,9 @@ tail file
 # To show the last N lines of file
 tail -n N file
 
+# To skip the first N lines of a file
+tail -n (N+1) file
+
 # To show the last lines of file starting with the Nth
 tail -n +N file
 
