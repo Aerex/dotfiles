@@ -1,6 +1,8 @@
 let g:ackprg = 'rg --vimgrep'
-nmap <silent><leader>rg :RG<CR> 
-nmap <silent> <leader>ag :Rg <C-R><C-W><CR>
+if (!has('nvim-0.5')) 
+  nmap <silent> <leader>ag :Rg <C-R><C-W><CR>
+  nmap <silent><leader>rg :RG<CR> 
+endif
 nmap <silent> <leader>aG :call OpenAckFileVSplit()
 " nmap <silent> <leader>ag :call RGVisualSelect()<CR>
 " nmap <silent> <leader>aG :call RGVisualSelectVsplit()<CR>

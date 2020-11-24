@@ -100,7 +100,7 @@ font:
     #   - (macOS) Menlo
     #   - (Linux) monospace
     #   - (Windows) Consolas
-    family: MesloLGLDZ Nerd Font
+    family: MesloLGL Nerd Font
 
     # The `style` can be specified to pick a specific face.
     #style: Regular
@@ -111,7 +111,7 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: MesloLGLDZ Nerd Font
+    family: MesloLGL Nerd Font
 
     # The `style` can be specified to pick a specific face.
     #style: Bold
@@ -122,7 +122,7 @@ font:
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: MesloLGLDZ Nerd Font
+    family: MesloLGL Nerd Font
  
     # The `style` can be specified to pick a specific face.
     #style: Italic
@@ -483,8 +483,8 @@ key_bindings:
   - { key: W,      mods: Command, action: Quit             }
   - { key: N,      mods: Command,   action: SpawnNewInstance }
 
-  - { key: LBracket, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["prev"] } }
-  - { key: RBracket, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["next"] } }
+  # - { key: LBracket, mods: Command, charts: { program: "/usr/local/bin/tmux", args: ["prev"] } }
+  # - { key: RBracket, mods: Command, command: { program: "/usr/local/bin/tmux", args: ["next"] } }
   - { key: Paste,                   action: Paste                            }
   - { key: Copy,                    action: Copy                             }
   - { key: L,        mods: Control, action: ClearLogNotice                   }
@@ -531,7 +531,7 @@ key_bindings:
   - { key: Down,                    chars: "\x1b[B",        mode: ~AppCursor }
   - { key: Down,                    chars: "\x1bOB",        mode: AppCursor  }
   - { key: F1,                      chars: "\x1bOP"                          }
-  - { key: F2,                      chars: "\x1bOQ"                          }
+  - { key: F4,                      chars: "\x1bOQ"                          }
   - { key: F3,                      chars: "\x1bOR"                          }
   - { key: F4,                      chars: "\x1bOS"                          }
   - { key: F5,                      chars: "\x1b[15~"                        }
@@ -591,16 +591,17 @@ key_bindings:
   - { key: Left,     mods: Alt,     chars: "\x1b[1;3D"                       }
   - { key: F11,      mods: Alt,     chars: "\x1b[23;6~"                      }
   - { key: L,         mods: Alt,    chars: "\x1bl"                           }
+  - { key: I,         mods: Alt,    chars: "\x1bi"                           }
   - { key: P,         mods: Alt,    chars: "\x1bp"                           }
   - { key: Z,         mods: Alt,    chars: "\x1bz"                           }
   - { key: D,         mods: Alt,    chars: "\x1bd"                           }
+  - { key: U,        mods: Alt,   chars: "\x1bu"                           }
   - { key: F,         mods: Alt,    chars: "\x1bf"                           }
   - { key: B,         mods: Alt,    chars: "\x1bb"                       }
   - { key: J,        mods: Alt,     chars: "\x1bj"                       }
   - { key: K,        mods: Alt,     chars: "\x1bk"                       }
   - { key: H,        mods: Alt,     chars: "\x1bh"                       }
   - { key: F12,      mods: Alt,     chars: "\x1b[24;6~"                      }
-  - { key: Key1,    mods: Command,   chars: "\x1b1"                           }
   - { key: F1,       mods: Super,   chars: "\x1b[1;3P"                       }
   - { key: F2,       mods: Super,   chars: "\x1b[1;3Q"                       }
   - { key: F3,       mods: Super,   chars: "\x1b[1;3R"                       }

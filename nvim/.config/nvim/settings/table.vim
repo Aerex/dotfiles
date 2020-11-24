@@ -15,4 +15,6 @@ inoreabbrev <expr> __
 "Use this option to define the table corner character: >
 
 let g:table_mode_corner='|' 
-nnoremap <leader>t :TableModeEnable
+nnoremap <silent><leader>tm <cmd>TableModeToggle<CR>
+nnoremap <silent><leader>tr <cmd>TableModeRealign<CR> 
+
