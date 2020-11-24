@@ -39,6 +39,15 @@ set sort = date
 # This variable configures how often (in seconds) NeoMutt should look for new mail. Also see the $timeout variable.
 set mail_check = 120
 
+# http://www.mutt.org/doc/manual/manual.html#status-chars
+# Controls the characters used by the “%r” indicator in $status_format. 
+# The first character is used when the mailbox is unchanged. 
+# The second is used when the mailbox has been changed, and it needs to be resynchronized. 
+#The third is used if the mailbox is in read-only mode, or if the mailbox will not be written when exiting that mailbox 
+# (You can toggle whether to write changes to a mailbox with the <toggle-write> operation, bound by default to “%”).
+# The fourth is used to indicate that the current folder has been opened in attach- message mode (Certain operations like composing a new mail, replying, forwarding, etc. are not permitted in this mode).
+set status_chars = "-*A"
+
 auto_view text/html
 set mailcap_path='~/.config/neomutt/.mailcap'
 
