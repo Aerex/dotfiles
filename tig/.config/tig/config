@@ -1,7 +1,7 @@
-
+# vim: foldmethod=marker
 # Vim-style keybindings for ./tig
 #
-# ================  Navigation  ====================
+#  Navigation {{{1====================
 bind generic h scroll-left
 bind generic j move-down
 bind generic k move-up
@@ -20,9 +20,10 @@ bind generic G  move-last-line
 
 bind generic <C-f> move-page-down
 bind generic <C-b> move-page-up
+#}}}
 
 
-# ================ Copy  ====================
+# Copy  ====================
 
 
 # ================ Views  ====================
