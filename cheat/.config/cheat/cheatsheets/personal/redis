@@ -1,0 +1,2 @@
+# delete keys by pattern
+redis-cli --scan --pattern users:* | xargs redis-cli del

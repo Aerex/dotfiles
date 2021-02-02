@@ -32,14 +32,19 @@ Ctrl-b PageUp/PageDown
 # Reload configuation file
 Ctrl-b : source-file /path/to/file
 
-# Window management
+# Window management {{{{1
 # =================
 
 # Create window:
 Ctrl-b c
+tmux new-window -n <window-name>
+
+# Select window
+tmux select-window -t <window-name>
 
 # Destroy window:
 Ctrl-b x
+tmux kill-window -t <window-name>
 
 # Switch between windows:
 Ctrl-b [0-9]
@@ -51,7 +56,7 @@ Ctrl-b %
 
 # Split windows vertically:
 Ctrl-b "
-
+# }}}}
 # Find out if you are in zoom mode (will give a number greater than 0)
 tmux list-panes -F '#F' | grep Z | wc -l | sed 's/ //g'
 
@@ -69,3 +74,5 @@ tmux show-options -s
 
 # List global options
 tmux show-options -g
+
+# vim: nowrap foldmethod=marker foldlevel=1

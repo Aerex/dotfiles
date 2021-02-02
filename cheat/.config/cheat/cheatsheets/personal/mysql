@@ -1,11 +1,15 @@
+# CONNECTION {{{1
 # To connect to a database
 mysql -h localhost -u root -p
+#}}}
 
+# BACKUP/RESTORE {{{1
 # To backup all databases
 mysqldump --all-databases --all-routines -u root -p > ~/fulldump.sql
 
 # To restore all databases
 mysql -u root -p  < ~/fulldump.sql
+#}}}
 
 # To create a database in utf8 charset
 CREATE DATABASE owa CHARACTER SET utf8 COLLATE utf8_general_ci;
@@ -51,8 +55,6 @@ ALTER TABLE table_name MODIFY COLUMN column_name datatype;
 
 # Create index
 CREATE INDEX index_name ON table_name (column1, column2, ...);
-
-
 # Add a unique index to a table
 ALTER TABLE table_name ADD CONSTRAINT constraint_name UNIQUE KEY(column_1,column_2,...);
 
@@ -62,20 +64,17 @@ ALTER TABLE table_name ADD INDEX index_name (column_name);
 # Drop an index
 DROP INDEX index_name ON tbl_name.
 
-
 # Create a foreign key
 ALTER TABLE table_name_ref ADD CONSTRAINT FK_<foreign_key_name> FOREIGN KEY (<foreign_key>) REFERENCES table_name_2(column);
 # To create a FOREIGN KEY constraint on the "PersonID" column when the "Orders" table is already created, use the following SQL:
 ALTER TABLE Orders ADD CONSTRAINT FK_PersonOrder FOREIGN KEY (PersonID) REFERENCES Persons(PersonID);
 
+# TABLE {{{1
+# Create table
+CREATE TABLE 'Table Name' ( Column_Name1 Data_Type(Size) [NULL | NOT NULL], Column_Name2 Data_Type(Size) [NULL | NOT NULL], … Column_NameN Data_Type(Size) [NULL | NOT NULL]);
+# }}}
 
 # Truncate (clear) table
 TRUNCATE TABLE table_name
 
-L:
-ALTER TABLE Orders ADD CONSTRAINT FK_PersonOrder FOREIGN KEY (PersonID) REFERENCES Persons(PersonID);
-
-
-# Truncate (clear) table
-TRUNCATE TABLE table_name
-
+# vim: nowrap foldmethod=marker foldlevel=1
