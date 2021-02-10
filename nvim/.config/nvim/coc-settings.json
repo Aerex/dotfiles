@@ -57,20 +57,14 @@
   "diagnostic.checkCurrentLine": true,
   "coc.preferences.jumpCommand": "edit",
   "coc.preferences.useQuickfixForLocations": true,
-  "eslint.enable": true,
-  "eslint.codeAction.showDocumentation": true,
   "diagnostic-languageserver.filetypes": {
     "vim": "vint",
     "email": "languagetool",
-    "markdown": [ "write-good", "markdownlint" ],
     "sh": "shellcheck",
     "elixir": ["mix_credo", "mix_credo_compile"],
     "eelixir": ["mix_credo", "mix_credo_compile"]
   },
   "post.enable": true,
   "post.root": "~/.coc-post",
-  "j.url": "samcart.atlassian.net",
-  "j.user": "nana@samcart.com",
-  "j.password": "R1kBR8m2OQJ0hnFk5mn89EE7",
   "python.pythonPath": "/usr/bin/python3"
 }

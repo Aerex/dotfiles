@@ -35,7 +35,11 @@ if ok then
           ["<A-j>"] = require('telescope.actions').preview_scrolling_up,
           ["<A-k>"] = require('telescope.actions').preview_scrolling_up
         }
-      }
+      },
+      file_sorter = require('telescope.sorters').get_fzy_sorter,
+      file_previewer = require('telescope.previewers').vim_buffer_cat.new,
+      grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
+      qflist_previewer = require('telescope.previewers').vim_buffer_qflist.new,
     },
     extensions = {
       fzf_writer = {
@@ -46,10 +50,18 @@ if ok then
         -- I will work on this more later.
         use_highlighter = true
       },
-      ghcli = { },
+      fzy_native = {
+            override_generic_sorter = false,
+            override_file_sorter = true,
+      },
+      gh = { },
       dap = { }
     }
   }
+  require('telescope').load_extension('fzy_native')
+  require('telescope').load_extension('gh')
+  require('telescope').load_extension('dap')
+
   vim.g.telescope_cache_results = 1
   vim.g.telescope_prime_fuzzy_find = 1 
 end
@@ -117,7 +129,13 @@ if completion_nvim_ok then
   vim.g.completion_trigger_keyword_length = 2
   vim.o.completeopt = 'menuone,noinsert,noselect'
   vim.cmd [[set shortmess+=c]] -- Don't show match info.
-
+  -- vim.g.completion_chain_complete_list = {
+  --      sql =  {
+  --        ['complete_items'] =  'vim-dadbod-completion'
+  --   }
+  -- }
+  -- autocmd FileType sql let g:completion_trigger_character = ['.', '"', '`', '[']
+  vim.g.completion_matching_ignore_case = 1
 end
 -- Lsp Utils / TextDocument {{{2
 -- No longer working
@@ -212,166 +230,167 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
  vim.fn.sign_define("LspDiagnosticsSignInformation", {text="כֿ",texthl="LspDiagnosticsDefaultInformation"})
  vim.fn.sign_define("LspDiagnosticsSignHint", {text="", texthl="LspDiagnosticsDefaultHint"})
 -- Treesitter {{{1
-local ok, _ = pcall(require, "nvim-treesitter.configs")
-if ok then
-  vim.cmd [[
-  set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
-  ]]
-  require "nvim-treesitter.configs".setup(
-  {
-    -- https://github.com/nvim-treesitter/nvim-treesitter#highlight
-    -- highlight {{{2
-    highlight = {
-      enable = true, -- false will disable the whole extension
-      disable = {"html", "lua", "php", "python"} -- list of language that will be disabled
-    },
-    --}}}
-    -- tree_docs {{{2
-    -- https://github.com/nvim-treesitter/nvim-tree-docs
-    tree_docs = {
-      enable = false
-    },
-    --}}}
-    -- playground {{{2
-    playground = {
-      enable = true
-    },
-    --}}}
-    -- incremental_selection {{{2
-    incremental_selection = {
-      -- this enables incremental selection
-      enable = true,
-      disable = {},
-      keymaps = {
-        init_selection = "<enter>", -- maps in normal mode to init the node/scope selection
-        node_incremental = "<enter>", -- increment to the upper named parent
-        scope_incremental = "Ts", -- increment to the upper scope (as defined in locals.scm)
-        node_decremental = "<bs>"
-      }
-    },
-    indent = {
-      disable = { "php" },
-    },
-    node_movement = {
-      -- this enables incremental selection
-      enable = true,
-      highlight_current_node = true,
-      disable = {"python"},
-      keymaps = {
-        move_up = "<a-k>",
-        move_down = "<a-j>",
-        move_left = "<a-h>",
-        move_right = "<a-l>",
-        swap_up = "<s-a-k>",
-        swap_down = "<s-a-j>",
-        swap_left = "<s-a-h>",
-        swap_right = "<s-a-l>",
-        select_current_node = "<leader>ff"
-      }
-    },
-    textobjects = {
-      select = {
-        enable = true,
-        disable = {},
-        keymaps = {
-          ["af"] = "@function.outer",
-          ["if"] = "@function.inner",
-          ["aC"] = "@class.outer",
-          ["iC"] = "@class.inner",
-          ["ac"] = "@conditional.outer",
-          ["ic"] = "@conditional.inner",
-          ["ae"] = "@block.outer",
-          ["ie"] = "@block.inner",
-          ["al"] = "@loop.outer",
-          ["il"] = "@loop.inner",
-          ["is"] = "@statement.inner",
-          ["as"] = "@statement.outer",
-          ["ad"] = "@comment.outer",
-          ["id"] = "@comment.inner",
-          ["am"] = "@call.outer",
-          ["im"] = "@call.inner"
-        }
-      },
-      swap = {
-        enable = true,
-        swap_next = {
-          ["<a-l>"] = "@parameter.inner",
-          ["<a-f>"] = "@function.outer",
-          ["<a-s>"] = "@statement.outer"
-        },
-        swap_previous = {
-          ["<a-L>"] = "@parameter.inner",
-          ["<a-F>"] = "@function.outer",
-          ["<a-S>"] = "@statement.outer"
-        }
-      },
-      lsp_interop = {
-        enable = true,
-        peek_definition_code = {
-          ["<leader>df"] = "@function.outer",
-          ["<leader>dF"] = "@class.outer"
-        },
-        peek_type_definition_code = {
-          ["<leader>TF"] = "@class.outer"
-        }
-      },
-      move = {
-        enable = true,
-        goto_next_start = {
-          ["]]"] = "@function.outer",
-          ["]c"] = "@class.outer",
-        },
-        goto_next_end = {
-          ["]["] = "@function.outer",
-          ["]C"] = "@class.outer",
-        },
-        goto_previous_start = {
-          ["[["] = "@function.outer",
-          ["[m"] = "@class.outer",
-        },
-        goto_previous_end = {
-          ["[]"] = "@function.outer",
-          ["[M"] = "@class.outer",
-        }
-      }
-    },
-    fold = {
-      enable = true,
-      disable = { "html" }
-    },
-    refactor = {
-      highlight_current_scope = {
-        enable = false,
-        inverse_highlighting = true,
-        disable = {"python"}
-      },
-      highlight_definitions = {
-        enable = true
-      },
-      smart_rename = {
-        enable = true,
-        disable = {},
-        keymaps = {
-          smart_rename = "<leader>rn"
-        }
-      },
-      navigation = {
-        enable = true,
-        disable = {},
-        keymaps = {
-          goto_definition = "gd",
-          list_definitions = "gD",
-          list_definitions_toc = "gO",
-          goto_next_usage = "<a-*>",
-          goto_previous_usage = "<a-#>"
-        }
-      }
-    },
-    ensure_installed = "all",
-    update_strategy = 'newest'
-  }
-  )
-end
+require('nvim-treesitter.config')
+--local ok, _ = pcall(require, "nvim-treesitter.configs")
+--if ok then
+--  vim.cmd [[
+--  set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
+--  ]]
+--  require "nvim-treesitter.configs".setup(
+--  {
+--    -- https://github.com/nvim-treesitter/nvim-treesitter#highlight
+--    -- highlight {{{2
+--    highlight = {
+--      enable = true, -- false will disable the whole extension
+--      disable = {"html", "lua", "php", "python"} -- list of language that will be disabled
+--    },
+--    --}}}
+--    -- tree_docs {{{2
+--    -- https://github.com/nvim-treesitter/nvim-tree-docs
+--    tree_docs = {
+--      enable = false
+--    },
+--    --}}}
+--    -- playground {{{2
+--    playground = {
+--      enable = true
+--    },
+--    --}}}
+--    -- incremental_selection {{{2
+--    incremental_selection = {
+--      -- this enables incremental selection
+--      enable = true,
+--      disable = {},
+--      keymaps = {
+--        init_selection = "<enter>", -- maps in normal mode to init the node/scope selection
+--        node_incremental = "<enter>", -- increment to the upper named parent
+--        scope_incremental = "Ts", -- increment to the upper scope (as defined in locals.scm)
+--        node_decremental = "<bs>"
+--      }
+--    },
+--    indent = {
+--      disable = { "php" },
+--    },
+--    node_movement = {
+--      -- this enables incremental selection
+--      enable = true,
+--      highlight_current_node = true,
+--      disable = {"python"},
+--      keymaps = {
+--        move_up = "<a-k>",
+--        move_down = "<a-j>",
+--        move_left = "<a-h>",
+--        move_right = "<a-l>",
+--        swap_up = "<s-a-k>",
+--        swap_down = "<s-a-j>",
+--        swap_left = "<s-a-h>",
+--        swap_right = "<s-a-l>",
+--        select_current_node = "<leader>ff"
+--      }
+--    },
+--    textobjects = {
+--      select = {
+--        enable = true,
+--        disable = {},
+--        keymaps = {
+--          ["af"] = "@function.outer",
+--          ["if"] = "@function.inner",
+--          ["aC"] = "@class.outer",
+--          ["iC"] = "@class.inner",
+--          ["ac"] = "@conditional.outer",
+--          ["ic"] = "@conditional.inner",
+--          ["ae"] = "@block.outer",
+--          ["ie"] = "@block.inner",
+--          ["al"] = "@loop.outer",
+--          ["il"] = "@loop.inner",
+--          ["is"] = "@statement.inner",
+--          ["as"] = "@statement.outer",
+--          ["ad"] = "@comment.outer",
+--          ["id"] = "@comment.inner",
+--          ["am"] = "@call.outer",
+--          ["im"] = "@call.inner"
+--        }
+--      },
+--      swap = {
+--        enable = true,
+--        swap_next = {
+--          ["<a-l>"] = "@parameter.inner",
+--          ["<a-f>"] = "@function.outer",
+--          ["<a-s>"] = "@statement.outer"
+--        },
+--        swap_previous = {
+--          ["<a-L>"] = "@parameter.inner",
+--          ["<a-F>"] = "@function.outer",
+--          ["<a-S>"] = "@statement.outer"
+--        }
+--      },
+--      lsp_interop = {
+--        enable = true,
+--        peek_definition_code = {
+--          ["<leader>df"] = "@function.outer",
+--          ["<leader>dF"] = "@class.outer"
+--        },
+--        peek_type_definition_code = {
+--          ["<leader>TF"] = "@class.outer"
+--        }
+--      },
+--      move = {
+--        enable = true,
+--        goto_next_start = {
+--          ["]]"] = "@function.outer",
+--          ["]c"] = "@class.outer",
+--        },
+--        goto_next_end = {
+--          ["]["] = "@function.outer",
+--          ["]C"] = "@class.outer",
+--        },
+--        goto_previous_start = {
+--          ["[["] = "@function.outer",
+--          ["[m"] = "@class.outer",
+--        },
+--        goto_previous_end = {
+--          ["[]"] = "@function.outer",
+--          ["[M"] = "@class.outer",
+--        }
+--      }
+--    },
+--    fold = {
+--      enable = true,
+--      disable = { "html" }
+--    },
+--    refactor = {
+--      highlight_current_scope = {
+--        enable = false,
+--        inverse_highlighting = true,
+--        disable = {"python"}
+--      },
+--      highlight_definitions = {
+--        enable = true
+--      },
+--      smart_rename = {
+--        enable = true,
+--        disable = {},
+--        keymaps = {
+--          smart_rename = "<leader>rn"
+--        }
+--      },
+--      navigation = {
+--        enable = true,
+--        disable = {},
+--        keymaps = {
+--          goto_definition = "gd",
+--          list_definitions = "gD",
+--          list_definitions_toc = "gO",
+--          goto_next_usage = "<a-*>",
+--          goto_previous_usage = "<a-#>"
+--        }
+--      }
+--    },
+--    ensure_installed = "all",
+--    update_strategy = 'newest'
+--  }
+--  )
+--end
 
 local ok, lspconfig = pcall(require, 'lspconfig')
 if ok then
@@ -393,14 +412,10 @@ if ok then
   lspconfig.tsserver.setup { 
     on_attach = on_attach
   }
-  lspconfig.html.setup { }
   lspconfig.jsonls.setup { }
   -- php
  lspconfig.intelephense.setup {
    cmd = { '/Users/noamfo/.nvm/versions/node/v12.18.3/bin/intelephense', '--stdio' },
-   init_options = {
-     licenceKey = '0002LT9FKR8PD8H'
-   },
    on_attach = on_attach
  }
  -- vim
@@ -479,14 +494,14 @@ if ok then
     name = "vscode-php-debug",
     -- TODO: parameterize os path
     command = "node",
-    args = { os.getenv('HOME') .. '/bin/vscode-php-debug' }
+    args = { os.getenv('HOME') .. '/.vscode/extensions/felixfbecker.php-debug-1.14.5/out/phpDebug.js' }
     -- command = "node vscode-php-debug" -- symlink from built binary from repo
   }
   dap.configurations.php = {
     {
+      name = "Listen for XDebug (corev2)",
       type = "php",
-      name = "Listen for XDebug (core)",
-      request = "Launch file",
+      request = "launch",
       port = 9000,
       pathMappings = {
         ["/opt/samcart/samcart-core/current"] = "${workspaceRoot}"
@@ -502,6 +517,8 @@ if ok then
    }
  }
 }
+require('dap').set_log_level('TRACE')
+require('dap').defaults.fallback.exception_breakpoints = {}
 
   dap.repl.commands =
   vim.tbl_extend(
@@ -528,19 +545,14 @@ if ok then
     }
   }
   )
-  --vim.g.dap_virtual_text = true -- 'all frames'
+  vim.g.dap_virtual_text = true -- 'all frames'
   vim.fn.sign_define("DapBreakpoint", {text = "●", texthl = "", linehl = "", numhl = ""})
   vim.fn.sign_define('DapStopped', {text='▶', texthl='', linehl='NvimDapStopped', numhl=''})
 end
 
 -- Dashboard {{{1
-vim.g.dashboard_default_executive = 'fzf'
-vim.g.dashboard_custom_shortcut_icon = {}
-vim.g.dashboard_custom_shortcut_icon['last_session'] = ' '
-vim.g.dashboard_custom_shortcut_icon['find_history'] = 'ﭯ '
-vim.g.dashboard_custom_shortcut_icon['find_file'] = ' '
-vim.g.dashboard_custom_shortcut_icon['new_file'] = ' '
-vim.g.dashboard_custom_shortcut_icon['change_colorscheme'] = ' '
-vim.g.dashboard_custom_shortcut_icon['find_word'] = ' '
-vim.g.dashboard_custom_shortcut_icon['book_marks'] = ' '
+require('dashboard.config')
 
+--- Misc {{{1
+require('misc.config')
+--}}}

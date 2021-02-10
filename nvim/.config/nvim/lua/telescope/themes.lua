@@ -10,7 +10,6 @@ function themes.get_dropdown(opts)
     results_title = '';
     preview_title = '';
     borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰'};
-    set_env = { ['COLORTERM'] = 'truecolor' };
   }
   return vim.tbl_deep_extend("force", theme_opts, opts)
 end

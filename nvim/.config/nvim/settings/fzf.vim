@@ -1,4 +1,5 @@
 let g:fzf_session_path = $HOME . '/.config/nvim/sessions'
+let g:fzf_buffers_jump = 1
 "let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " Border color
 " let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo' } }
@@ -8,17 +9,29 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo
 " Shortcuts for opening up results in splits
 let g:fzf_action = {
   \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit' }
-nnoremap <silent> <leader>p  :GFiles<CR>
-nnoremap <silent> <leader>,p :Files<CR>
-nnoremap <silent> <leader>H  :History<CR>
-nnoremap <silent> <leader>m  :Marks<CR>
-nnoremap <silent> <leader>S  :Sessions<CR>
-nnoremap <silent> <leader>M  :Maps<CR>
-nnoremap <silent> <leader>L  :Lines<CR>
-nnoremap <silent> <leader>b  :Buffers<CR>
-nnoremap <silent> <leader>v  :Commands<CR>
-nnoremap <silent> <leader>yr :Registers<CR>
+  \ 'ctrl-v': 'vsplit', 
+  \ 'ctrl-t': 'tab split' }
+if (!has('nvim-0.5'))
+  nnoremap <silent> <leader>b   :Buffers<CR>
+endif
+"FIXME:
+nnoremap <silent> <leader>p   :GFiles<CR>
+nnoremap <silent> <leader>H   :History<CR>
+" if (OS == 'Darwin')
+"   nnoremap <silent> <leader>p   :FZFGFilesWithDevIcons<CR>
+" else
+"   nnoremap <silent> <leader>p   :GFiles<CR>
+" endif
+nnoremap <silent> <leader>,p  :Files<CR>
+nnoremap <silent> <leader>m   :Marks<CR>
+nnoremap <silent> <leader>eo  :Sessions<CR>
+nnoremap <silent> <leader>es  :Session<Space><Right>
+nnoremap <silent> <leader>eq  :SQuit<CR>
+nnoremap <silent> <leader>M   :Maps<CR>
+nnoremap <silent> <leader>L   :Lines<CR>
+nnoremap <silent> <leader>v   :Commands<CR>
+nnoremap <silent> <leader>yr  :Registers<CR>
+nnoremap <silent> <leader>PH  :PlugHelp<CR>
 
   command! -bang -nargs=* Rg
     \ call fzf#vim#grep(
@@ -38,14 +51,25 @@ command! -bang -nargs=? -complete=dir Files
  " command! -bang -nargs=? -complete=dir Files
  "       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({ 'op tions': ['--prompt', '> '],'source': 'rg --iglob !node_modules! ""'}), <bang>0)
 
+
 function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let command_fmt = 'rg --trim --fixed-strings --hidden --line-number --no-heading --color=always --smart-case -- %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
+" Credits to https://github.com/monsonjeremy/dotfiles/blob/5039445933b4ece66ebcb837a031fc38fdf3db84/config/nvim/fzf.vim#L73
+function! RipgrepFzfRegex(query, fullscreen)
+  let command_fmt = 'rg --column --multiline --line-number --hidden --no-heading --color=always --smart-case -- %s || true '
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RgRegex call RipgrepFzfRegex(<q-args>, <bang>0)
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
  function! s:setcwd()
@@ -91,16 +115,110 @@ function! s:yr_get_element_paste_handler(line)
   YRGetElem(l:clip)
 endfunction
 
-
 " Custom fzf functions
+" Credits to https://github.com/theHamsta/dotfiles/blob/ec424ae5ec1d4082169fa51235001729e19b123e/.config/nvim/init.vim#L1569
+" ripgrep
+if executable('rg')
+  let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
+  set grepprg=rg\ --vimgrep
+  command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+endif
+
+let g:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -'.&lines.'"'
+
+" Files + devicons
+function! Fzf_dev()
+  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -'.&lines.'"'
+
+  function! s:files()
+    let l:files = split(system($FZF_DEFAULT_COMMAND), '\n')
+    return s:prepend_icon(l:files)
+  endfunction
+
+  function! s:prepend_icon(candidates)
+    let l:result = []
+    for l:candidate in a:candidates
+      let l:filename = fnamemodify(l:candidate, ':p:t')
+      let l:icon = WebDevIconsGetFileTypeSymbol(l:filename, isdirectory(l:filename))
+      call add(l:result, printf('%s %s', l:icon, l:candidate))
+    endfor
+
+    return l:result
+  endfunction
+
+  function! s:edit_file(item)
+    let l:pos = stridx(a:item, ' ')
+    let l:file_path = a:item[pos+1:-1]
+    execute 'silent e' l:file_path
+  endfunction
+
+  call fzf#run({
+        \ 'source': <sid>files(),
+        \ 'sink':   function('s:edit_file'),
+        \ 'options': '-m ' . l:fzf_files_options,
+        \ 'down':    '40%' })
+endfunction
+" Credits to https://github.com/monsonjeremy/dotfiles/blob/5039445933b4ece66ebcb837a031fc38fdf3db84/config/nvim/fzf.vim#L31-L63
+" Credits to https://github.com/filipekiss/nvim/blob/67d2307d34b067ea2ab5a28b99e9776e7446e4e1/extensions/fzf.vim#L67
+ function! FZFFilesDevicons(command, options)
+        let l:fzf_files_options = a:options . ' --preview "bat --color always --style numbers {2..} | head -'.&lines.'"'
+        function! s:edit_devicon_prepended_file(name)
+            if len(a:name) < 2 | return | endif
+
+            let s:cmd = s:action_for(a:name[0])
+            for file in a:name[1:-1]
+                execute 'silent '.s:cmd.' '.s:handle_filename(file, 4)
+            endfor
+        endfunction
+
+        let l:fzf_options = {
+                    \ 'source': a:command.' | devicon-lookup',
+                    \ 'sink*':   function('s:edit_devicon_prepended_file'),
+                    \ 'options': '-m ' . l:fzf_files_options
+                    \}
+        if  exists('g:fzf_layout')
+            call extend(l:fzf_options, g:fzf_layout)
+        endif
+        call fzf#run(l:fzf_options)
+    endfunction
+function FZFGFilesWithDevIcons()
+  let options = '--expect=ctrl-t,ctrl-v,ctrl-s --multi --prompt "GitFiles> "'
+  let command = 'git ls-files --others --no-ignored --exclude-standard --cached|uniq'
+  if executable('devicon-lookup')
+      call FZFFilesDevicons(options, command)
+      return
+  else
+    exec "GFiles"
+  endif 
+endfunction
 function! FZFYankRing()
   call fzf#run({
   \ 'source':  s:get_yankring(),
   \ 'sink':    function('s:yr_get_element_paste_handler'),
   \ 'options': '--info=inline --ansi --prompt "Clipboard> " ',
-  \ 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo', 'border': 'sharp' } 
+  \ 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Todo', 'border': 'sharp' }
   \})
 endfunction
+function! s:plug_help_sink(line)
+  let dir = g:plugs[a:line].dir
+  for pat in ['doc/*.txt', 'README.md']
+    let match = get(split(globpath(dir, pat), "\n"), 0, '')
+    if len(match)
+      execute 'tabedit' match
+      return
+    endif
+  endfor
+  tabnew
+  execute 'Explore' dir
+endfunction
+
+function! FZFPlugHelp()
+  call fzf#run(fzf#wrap({
+  \ 'source': sort(keys(g:plugs)),
+  \ 'sink':   function('s:plug_help_sink')})
+  )
+endfunction
+
 "TODO: work on later
 " function! Settings()
 "   call fzf#run({
@@ -112,6 +230,8 @@ endfunction
 " endfunction
 
 command! -nargs=* -bang Registers call FZFYankRing()
+command! -nargs=* -bang FZFPlugHelp call FZFPlugHelp()
+command! -nargs=* -bang FZFGFilesWithDevIcons call FZFGFilesWithDevIcons()
 
 " Preview 1}}}
 " floating window size ratio
