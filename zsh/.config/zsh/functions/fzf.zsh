@@ -1,13 +1,15 @@
+# Opening Files {{{1
 function conf(){
   CONFIG_DIRS=(~/.wuzz/config.toml, ~/.tmux.conf, ~/.config/nvim/init.vim, ~/.jira.d/config.yml, ~/.chunkwmrc, ~/.skhdrc, ~/.kube/config,
   ~/.myclirc, ~/.qutebrowser/config.py, ~/.taskrc, ~/.config/bugwarrior/bugwarriorrc, ~/.config/vdirsyncer/config, ~/.config/tig/config, 
-  ~/tmux.powerline.conf, ~/.my.cnf, ~/.config/neomutt/muttrc, ~/.offlineimaprc, ~/.nixpkgs/darwin-configuration.nix, ~/.config/alacritty/alacritty.yml, ~/.zshrc, ~/.ssh/config)
+  ~/tmux.powerline.conf, ~/.my.cnf, ~/.config/neomutt/muttrc, ~/.offlineimaprc, ~/.nixpkgs/darwin-configuration.nix, ~/.config/alacritty/alacritty.yml, ~/.zshrc, ~/.ssh/config, ~/.yabairc)
   VERT_CONFIG_DIRS=$(echo $CONFIG_DIRS | awk -v RS=, '{ sub(" ", ""); print }')
 
   echo $VERT_CONFIG_DIRS | fzf --preview="highlight -O ansi -l --force {}" \
     --bind "enter:execute($EDITOR {})+abort"
 }
 
+# Open nvim config
 ve (){
 VIM_CONFIG_FILE=$1
 
@@ -39,9 +41,12 @@ vg() {
 
   if [[ -n $file ]]; then
      ${EDITOR:-vim} $file +$line
+
   fi
 }
+# }}}
 
+# Processes {{{1
 # fkill - kill processes - list only the ones you can kill. Modified the earlier script.
 fkill() {
     local pid 
@@ -56,6 +61,8 @@ fkill() {
         echo $pid | xargs kill -${1:-9}
     fi  
 }
+#}}}
+# Command History {{{1
 # fh - repeat history
 fh() {
   print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
@@ -74,7 +81,9 @@ fd() {
                   -o -type d -print 2> /dev/null | fzf +m) &&
   cd "$dir"
 }
+#}}}
 
+# Git {{{1
 # fcop - checkout git branch/tag, with a preview showing the commits between the tag/branch and HEAD
 fcop() {
   local tags branches target
@@ -91,13 +100,16 @@ sort -u | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
 }
 
 fdb(){
+# TODO: Need to figure out how to strip out digitis using sed
+# echo "feature/SA-13355-log-course-compleition" | sed -En "s/^feature\/\(SA-[0-9]+\).*$/\1/p"
 local branches target_branches
   branches=$(git --no-pager branch) 
   target_branches=$(echo "$branches" |
     fzf -m --no-hscroll \
     --bind "ctrl-m:toggle-in" \
+    --header "ctrl-d=delete" \
     --ansi --preview="echo {} | cut -d : -f 1 | xargs -I % sh -c 'jira view %'")\
-  echo $target_branches
+  echo $target_branches | xargs -I git branch -d {}
 }
 
 
@@ -109,3 +121,21 @@ fco() {
            fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
   git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
 }
+#}}}
+
+# Select a running docker container to stop
+function ds() {
+  local cid
+  cid=$(docker ps | sed 1d | fzf -q "$1" | awk '{print $1}')
+
+  [ -n "$cid" ] && docker stop "$cid"
+}
+
+# Vagrant {{{1
+vags(){
+  #List all vagrant boxes available in the system including its status, and try to access the selected one via ssh
+  cd $(cat ~/.vagrant.d/data/machine-index/index | jq '.machines[] | {name, vagrantfile_path, state}' | jq '.name + "," + .state  + "," + .vagrantfile_path'| sed 's/^"\(.*\)"$/\1/'| column -s, -t | sort -rk 2 | fzf | awk '{print $3}'); vagrant ssh
+}
+#}}}
+
+# vim: nowrap foldmethod=marker foldlevel=2

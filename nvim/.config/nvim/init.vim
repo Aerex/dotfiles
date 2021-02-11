@@ -326,6 +326,8 @@ call plug#begin('~/.config/nvim/plugged')
 
 " ================ LSP ======================= {{{2
 if has('nvim-0.5')
+  "Rainbow parentheses for neovim using tree-sitter. Needs nvim-treesitter.
+  Plug 'p00f/nvim-ts-rainbow'
   " A high-performance color highlighter for Neovim which has no external dependencies 
   Plug 'norcalli/nvim-colorizer.lua'
   "A dark neovim colorscheme written in lua and syntax based on nvim-treesitter

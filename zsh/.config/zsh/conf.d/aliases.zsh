@@ -24,33 +24,41 @@ alias vags="vagrant ssh -c 'bash'"
 alias ybmq="yabai -m query"
 # }}}
 
-# ================ HOME NIX  ==================== #1
+# HOME NIX {{{1
 alias nixr="home-manager switch"
 alias nixb="home-manager build"
 alias nixs="nix search -u"
+# }}}
 
-# ================ HUB  ==================== #1
+# HUB  {{{1
 alias hpr="hub pull-request -c" 
 alias hprd="hub pull-request -c development"
 alias hprm="hub pull-request -c master"
+# }}}
 
-# ================ DOCKER ==================== #1
+# DOCKER {{{1
 alias di="docker images"
+# }}}
 
-# ================ ALACRITTY  ==================== #1
+# ALACRITTY  {{{1
 alias aconf="nvim ~/.config/alacritty/alacritty.yml"
-#
-# ================ BUGWARRIOR  ==================== #1
+# }}}
+
+# BUGWARRIOR  {{{1
 alias bpl="bugwarrior-pull"
-# ================ PASS ==================== #1
+# }}}
+
+# PASS {{{1
 alias pgpl="pass git pull"
 alias pgp="pass git push"
+# }}}
 
-# ================ GCAL ==================== #1
+# GCAL {{{1
 alias gcal="gcalcli" 
 #alias gcalt="gcalcli agenda $(date +\"%m/%d\") $(date +\"%m/%d\" --date='tomorrow')"
 alias gcalw="gcalcli calw"
 alias gcalm="gcalcli calm"
+# }}}
 
 # GIT {{{1
 alias g="git"
@@ -220,7 +228,7 @@ alias zs="sz"
 alias zconf="nvim ~/.zshrc; source ~/.zshrc"
 alias zrc="nvim ~/.zshrc; source ~/.zshrc"
 
-# ================ JIRA  ==================== #1
+# JIRA  {{{1
 # Note: Anything prefix with a `j` is a jira alias
 alias j="jira"
 alias jtodo="jira mine \"To Do\""
@@ -246,6 +254,7 @@ alias jcr="jira create"
 alias jfbl="jira fzf-list-backlog"
 alias jlog="jira list-backlog-me"
 alias jloga="jira list-backlog"
+# }}}
 
 # ================ CHUNKWM  ==================== #1
 alias chconf="nvim ~/.chunkwmrc; brew services restart chunkwm"
@@ -261,5 +270,7 @@ alias cals="vdirsyncer sync"
 #status --is-interactive; and . (swiftenv init -|psub)
 #status --is-interactive; and . (rbenv init -|psub)
 
+alias gulpw="gulp watch --continue"
 
-# vim: nowrap foldmethod=marker foldlevel=1
+
+# vim: nowrap foldmethod=marker foldlevel=2

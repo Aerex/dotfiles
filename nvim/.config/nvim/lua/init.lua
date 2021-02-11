@@ -452,6 +452,15 @@ lspconfig.html.setup {
 lspconfig.pyls.setup {
   on_attach = on_attach
 }
+-- angular
+lspconfig.angularls.setup {
+  on_attach = on_attach,
+}
+-- sql
+lspconfig.sqlls.setup {
+  on_attach = on_attach
+}
+
 -- c++/c/objective-C/objective-C++
 lspconfig.clangd.setup {
   on_attach = on_attach
@@ -550,6 +559,11 @@ require('dap').defaults.fallback.exception_breakpoints = {}
   vim.fn.sign_define('DapStopped', {text='▶', texthl='', linehl='NvimDapStopped', numhl=''})
 end
 
+require'nvim-treesitter.configs'.setup {
+  rainbow = {
+    enable = true
+  }
+}
 -- Dashboard {{{1
 require('dashboard.config')
 
