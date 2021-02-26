@@ -1,6 +1,6 @@
 ---
 # The editor to use with 'cheat -e <sheet>'. Defaults to $EDITOR or $VISUAL.
-editor: nvim
+editor: nvim-beta
 
 # Should 'cheat' always colorize output?
 colorize: true
@@ -12,7 +12,7 @@ style: monokai
 
 # Which 'chroma' "formatter" should be applied?
 # One of: "terminal", "terminal256", "terminal16m"
-formatter: terminal16m
+formatter: terminal256
 
 # Through which pager should output be piped? (Unset this key for no pager.)
 pager: vimpager
