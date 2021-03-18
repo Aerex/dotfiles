@@ -357,7 +357,7 @@ macro index <Space>sn  "<limit>(~N|~F)<Enter><enter-command><collapse-all><Enter
 # .u will show all unread
 macro index <Space>su  "<limit>(~U|~F)<Enter><enter-command><collapse-all><Enter><enter-command>echo 'View unread/flag'<Enter>"  "view unread/flag"
 # .a will show all again
-macro index <Space>sa  "<limit>all<Enter><enter-command>echo 'View all'<Enter>"       "view all"
+macro index <Space>sa  "<limit>all<Enter><enter-command><collapse-all><Enter><enter-command>echo 'View all'<Enter>"       "view all"
 
 macro index <Space>ci   "<clear-flag>!<enter-command>echo 'Clear important flag'<Enter>" "Clear marked important flag"
 

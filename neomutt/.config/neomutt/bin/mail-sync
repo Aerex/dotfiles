@@ -1,5 +1,5 @@
 #!/bin/bash
 ACCOUNT={$1:-""}
 
-offlineimap -o -q -u basic $@
+offlineimap -1 -o -q -u basic $@
 
