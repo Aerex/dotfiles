@@ -170,7 +170,7 @@ bind index,pager B sidebar-toggle-visible
 # else if message has tags (notmuch) 
 # end
 #    
-set index_format='%4C %Z %<[y?%<[m?%<[d?%10[%I:%M %p  ]&%10[%a %b %d  ]>&%12[%b %d  ]>&%10[%b %d, %Y]> %-25.20L %?E?%2.e/%.E&   ?  %?Gi?%Gi &?%?Gt?%Gt &?%?Gr?%Gr &?%?Ga?%Ga &? %s'
+set index_format='%4C %Z %<[y?%<[m?%<[d?%10[%I:%M %p  ]&%10[%a %b %d  ]>&%12[%b %d  ]>&%10[%b %d, %Y]> %-25.20L %?E?%2.e/%.E&   ?  %?Gi?%Gi &?%?Gt?%Gt &?%?Gr?%Gr &?%?Ga?%Ga &?%?Gh?%Gh &? %s'
 
 
 # https://neomutt.org/guide/reference#3-240-%C2%A0pager_format
@@ -182,7 +182,8 @@ set pager_format = '%Z    %?E?Thread: %e/%E&Message: %C?    from: %-20.20n    su
 # https://neomutt.org/guide/reference#3-422-%C2%A0status_format
 # Controls the format of the status line displayed in the "index" menu. This string is similar to $index_format, but has its own set of printf(3)-like sequences:k
 # Default:  “ -%r-NeoMutt: %D [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]---(%s/%S)-%>-(%P)--- ”
-set status_format = '%r Neomutt(%D): [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?] (sort: %s/%S)%* (%P)'
+# %l	Approximate size (in bytes) of the current message (see formatstrings-size)
+set status_format = '%r Neomutt(%D): [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? Size:%l?] (sort: %s/%S)%* (%P)'
 
 
 # Macros for switching accounts
@@ -275,7 +276,6 @@ tag-transforms "inbox"   "" \
                "lists" "📜" \
                "github" "" \
                "archive" """ \
-               "samcart_dev" """ 
 
                # "patch" "" \
                # "debian" "" \
@@ -300,7 +300,8 @@ tag-transforms "inbox"   "" \
 #The formats must start with 'G' and the entire sequence is case sensitive.
 #tag-formats tag format-string { tag format-string ...}
 tag-formats "inbox"   "Gi" \
-             "jira"   "Gj"\
+            "jira"   "Gj"\
+            "attachment" "Gh"\
             "sent"    "GS" \
             "todo"    "Gt" \
             "reply"    "Gr" \
@@ -356,7 +357,7 @@ macro index <Space>sn  "<limit>(~N|~F)<Enter><enter-command><collapse-all><Enter
 # .u will show all unread
 macro index <Space>su  "<limit>(~U|~F)<Enter><enter-command><collapse-all><Enter><enter-command>echo 'View unread/flag'<Enter>"  "view unread/flag"
 # .a will show all again
-macro index <Space>sa  "<limit>all<Enter><enter-command><enter-command>echo 'View all'<Enter>"       "view all"
+macro index <Space>sa  "<limit>all<Enter><enter-command>echo 'View all'<Enter>"       "view all"
 
 macro index <Space>ci   "<clear-flag>!<enter-command>echo 'Clear important flag'<Enter>" "Clear marked important flag"
 
@@ -374,9 +375,9 @@ set nm_default_url = "notmuch://$HOME/.Mail"
 # When set, NeoMutt will use the first defined virtual mailbox (see virtual-mailboxes) as a spool file.
 # This command is now unnecessary. $spoolfile has been extended to support mailbox descriptions as a value.
 # Default: no
-# set virtual_spoolfile=yes
+set virtual_spoolfile=yes
 
-
+virtual-mailboxes "Archive" "notmuch://?query=tag:archive"
 
 ## This variable allows you to customize the file browser display for virtual
 # folders to your personal taste.
@@ -395,7 +396,7 @@ set query_command = "notmuch address %s"
 set nm_query_window_duration=0
 set nm_query_window_timebase="week" # or "hour", "day", "week", "month", "year"
 
-macro index A "<modify-labels>+archive -unread -inbox<enter>" "Archive message"
+macro index A "<modify-labels-then-hide>!archive !unread !inbox<enter>" "Archive message"
 macro index c "<change-vfolder>?" "Change to vfolder overview"
 macro index I "<modify-labels>-inbox -unread\\n" "Removed from inbox"
 macro index S "<modify-labels-then-hide>-inbox -unread +junk\\n" "Tag as junk"
@@ -428,6 +429,7 @@ macro index <Space>mu \
 #macro index gi "<change-folder>=Inbox<enter>" "Go to Inbox"
 macro index ,i "<change-vfolder>INBOX\n<collapse-all>\n" "Go to Inbox"
 macro index ,a "<change-vfolder>All\n<collapse-all>\n" "Go to All"
+macro index ,J "<change-vfolder>Archive\n<collapse-all>\n" "Go to Archive"
 macro index ,t "<change-vfolder>Today\n<enter-command><collapse-all><enter>\n" "Go to Today"
 macro index gd "<change-folder>=Drafts<enter>" "Go to Drafts"
 macro index gs "<change-folder>=Sent<enter>" "Go to Sent"
@@ -435,7 +437,8 @@ macro index gj "<change-folder>=Trash<enter>" "Go to Trash"
 macro index ga "<change-folder>=Archive<enter>" "Go to Archive"
 
 # Refreshing
-bind index                      \Cr imap-fetch-mail
+#bind index                      \Cr imap-fetch-mail
+macro index                      \Cr "<enter-command>unset wait_key<enter><shell-escape>$HOME/.config/neomutt/bin/mail-sync -a $my_offlineimap_account<enter>" "run Offlineimap on current account"
 
 bind attach,pager,browser,index d   noop
 
