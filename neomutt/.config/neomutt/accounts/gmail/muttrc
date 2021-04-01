@@ -1,15 +1,15 @@
 # vim: filetype=muttrc
 
 
-set my_smtp_domain       = `. $my_confdir/getcred Email/google smtp`
-set my_imap_domain       = `. $my_confdir/getcred Email/google imap`
+set my_smtp_domain       = `. $my_confdir/bin/getcred Email/google smtp`
+set my_imap_domain       = `. $my_confdir/bin/getcred Email/google imap`
 set editor            = "$EDITOR"
 set quit              = yes
-set imap_user         = `. $my_confdir/getcred Email/google login`
-set imap_pass         = `. $my_confdir/getcred Email/google pass`
+set imap_user         = `. $my_confdir/bin/getcred Email/google login`
+set imap_pass         = `. $my_confdir/bin/getcred Email/google pass`
 set smtp_url          = "smtp://$imap_user:$imap_pass@$my_smtp_domain"
 set realname          = "$MUTT_REAL_NAME"
-set from              = `. $my_confdir/getcred Email/google login`
+set from              = `. $my_confdir/bin/getcred Email/google login`
 set use_from          = yes
 set ssl_starttls      = yes
 set ssl_force_tls     = yes

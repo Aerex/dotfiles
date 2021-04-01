@@ -1,11 +1,11 @@
 # vim: filetype=muttrc
 
-set my_imap_domain    = `. $my_confdir/getcred Email/main imap_domain`
-set my_imap_port      = `. $my_confdir/getcred Email/main imap_port`
+set my_imap_domain    = `. $my_confdir/bin/getcred Email/main imap_domain`
+set my_imap_port      = `. $my_confdir/bin/getcred Email/main imap_port`
 set editor            = "$EDITOR" 
 set quit              = yes 
-set imap_user         = `./getcred Email/paperless login`
-set imap_pass         = "`./getcred Email/paperless pass`"
+set imap_user         = `. $my_confdir/bin/getcred Email/paperless login`
+set imap_pass         = "`. $my_confdir/bin/getcred Email/paperless pass`"
 set realname          =  "Paperless" 
 set mbox_type         = Maildir
 set folder            = "imaps://$my_imap_domain:$my_imap_port"

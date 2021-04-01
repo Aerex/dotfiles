@@ -1,12 +1,12 @@
 # vim: filetype=muttrc
 
-set my_smtp_domain        = `. $my_confdir/getcred Email/junk smtp_domain`
-set my_imap_domain        = `. $my_confdir/getcred Email/junk imap_domain`
-set my_imap_port          = `. $my_confdir/getcred Email/junk imap_port`
+set my_smtp_domain        = `. $my_confdir/bin/getcred Email/junk smtp_domain`
+set my_imap_domain        = `. $my_confdir/bin/getcred Email/junk imap_domain`
+set my_imap_port          = `. $my_confdir/bin/getcred Email/junk imap_port`
 set editor                = "$EDITOR" 
 set quit                  = yes 
-set imap_user             = `. $my_confdir/getcred Email/junk login`
-set imap_pass             = "`. $my_confdir/getcred Email/junk pass`"
+set imap_user             = `. $my_confdir/bin/getcred Email/junk login`
+set imap_pass             = "`. $my_confdir/bin/getcred Email/junk pass`"
 set smtp_url              = "smtp://$imap_user:$imap_pass@$my_smtp_domain"
 set realname              = "Junk"
 set record                = "~/.Mail/Aerex/Junk/Sent"
@@ -19,11 +19,7 @@ set folder                = "imaps://$imap_user@$my_imap_domain:$my_imap_port"
 set spoolfile             = +INBOX
 set ssl_starttls          = yes
 set ssl_force_tls         = yes
-#mailboxes                 = +INBOX
 set header_cache          = ~/.config/neomutt/accounts/aerex/junk/cache/headers
 set message_cachedir      = ~/.config/neomutt/accounts/aerex/junk/cache/bodies
-#set certificate_file      = ~/.config/neomutt/accounts/aerex/junk/certificates
 set record                = +INBOX.Sent
 set postponed             = +INBOX.Drafts
-
-
