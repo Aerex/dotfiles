@@ -12,7 +12,7 @@ if ok then
         'neovim/nvim-lspconfig',
         'onsails/lspkind-nvim',
         'nvim-lua/lsp-status.nvim',
-        'ray-x/lsp_signature.nvim'
+	      'ray-x/lsp_signature.nvim'
       }
 
       -- treesitter
@@ -22,16 +22,19 @@ if ok then
         'nvim-treesitter/playground'
       }
 
+      -- textobject 
+
       -- fuzzy pickers / file finders
       use {
         'vijaymarupudi/nvim-fzf',
         'vijaymarupudi/nvim-fzf-commands',
-        'vifm/vifm.vim'
+        'vifm/vifm.vim',
+	      'justinmk/vim-dirvish'
       }
 
       -- git
       use {
-        { 'tpope/vim-fugitive', cmd = {'Git', 'Gstatus', 'Gblame', 'Gpush', 'Gpull'} },
+        { 'tpope/vim-fugitive', cmd = {'Git', 'Gstatus', 'Gblame', 'Gpush', 'Gpull', 'Gwrite'} },
         { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'} },
         { 'TimUntersberger/neogit', opt = true },  -- still has some issues need to wait before using
         { 'pwntester/octo.nvim',
@@ -49,17 +52,16 @@ if ok then
         'chriskempson/base16-vim',
         'miyakogi/seiya.vim',  -- enable transparent background
         'sbdchd/neoformat',
+        { 'godlygeek/tabular', cmd = { 'Tabularize' } },
         { 'lukas-reineke/indent-blankline.nvim', branch = 'lua' }
       }
 
       -- debugger
-      use {'mfussenegger/nvim-dap'}
+      --use {'mfussenegger/nvim-dap'}
 
       -- statusline
       use {'glepnir/galaxyline.nvim', requires = {'kyazdani42/nvim-web-devicons', opt = true}}
 
-      -- languages
-      use { 'sheerun/vim-polyglot', opt = true }
       -- markdown
       use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
 

@@ -1,11 +1,18 @@
-local utils = require('lsp').utils
+-- TODO: Need to figure out why requiring modules creates a loop
+--local utils = require('nvim-lsp').utils
 local lsp_status = require('lsp-status')
 local lsp_signature = require('lsp_signature')
-local diagnostic = require('diagnostic')
 local completion = require('completion')
+local lsp_document_symbol_callback = require('nvim-fzf.lsp').lsp_document_symbol_callback
+--vim.g.completion_enable_auto_popup = 0
+-- configure lsp-status
+lsp_status.config({
+  status_symbol = ''
+})
+
 
 local on_attach = function(client, bufnr)
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   local function keymap(...)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
@@ -14,8 +21,9 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, ...)
   end
 
+
   -- Attach LSP Completion
-completion.on_attach(client)
+ completion.on_attach(client)
   -- Attach LSP status
  lsp_status.on_attach(client)
 
@@ -32,9 +40,11 @@ completion.on_attach(client)
     decorator = {'`', '`'}  -- or decorator = {'***', '***'}  decorator = {'**', '**'} see markdown help
   })
 
-  -- Attach LSP Diagnostic
-  diagnostic.on_attach(client)
-
+-- Set diagnostic symbols
+vim.fn.sign_define('LspDiagnosticsSignError', {text='✖', texthl='LspDiagnosticsDefaultError'})
+vim.fn.sign_define('LspDiagnosticsSignWarning', {text='⚠', texthl='LspDiagnosticsDefaultWarning'})
+vim.fn.sign_define('LspDiagnosticsSignInformation', {text='כֿ',texthl='LspDiagnosticsDefaultInformation'})
+vim.fn.sign_define('LspDiagnosticsSignHint', {text='', texthl='LspDiagnosticsDefaultHint'})
 
   -- LSP keymap
  local opts = { noremap=true, silent=true }
@@ -43,21 +53,39 @@ completion.on_attach(client)
   keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  keymap('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  keymap('n', '<leader>O', '<cmd>lua require(\'nvim-fzf.lsp\').document_symbols()<CR>', opts)
+  keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 end
 
 -- load lsp servers
+local get_system_name = function()
+  local system_name
+  if vim.fn.has("mac") == 1 then
+    system_name = "macOS"
+  elseif vim.fn.has("unix") == 1 then
+    system_name = "Linux"
+  elseif vim.fn.has('win32') == 1 then
+    system_name = "Windows"
+  else
+    print("Unsupported system for sumneko")
+  end
+  return system_name
+end
+-- set the path to the sumneko installation; if you previously installed via the now deprecated :LspInstall, use
+local sumneko_root_path = vim.fn.stdpath('cache') .. '/lspconfig/sumneko_lua/lua-language-server'
+local sumneko_binary = sumneko_root_path .. '/bin/Linux/lua-language-server'
 require'lspconfig'.sumneko_lua.setup {
-  cmd = {sumneko_binary, "-E", utils.sumneko_root_path .. "/main.lua"},
+  cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
+  on_attach = on_attach,
   settings = {
     Lua = {
       runtime = {
@@ -83,8 +111,7 @@ require'lspconfig'.sumneko_lua.setup {
     }
   }
 }
-
-require'lspconfig'pyls.setup{
+require'lspconfig'.pyls.setup{
   on_attach=on_attach,
   autostart = true,
   settings = {
@@ -99,7 +126,7 @@ require'lspconfig'pyls.setup{
   }
 }
 
-require'lspconfig'gopls.setup{
+require'lspconfig'.gopls.setup{
   on_attach=on_attach
 }
 
@@ -137,3 +164,5 @@ require('lspkind').init({
 
 -- Register the progress handle
 lsp_status.register_progress()
+vim.lsp.handlers['textDocument/documentSymbol'] = lsp_document_symbol_callback
+

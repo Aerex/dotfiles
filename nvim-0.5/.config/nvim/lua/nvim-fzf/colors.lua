@@ -32,7 +32,6 @@ coroutine.wrap(function ()
   local current_colorscheme = get_current_colorscheme()
   local current_background = vim.o.background
   local choices = fzf(get_colorschemes(), "--preview=" .. preview_function .. " --preview-window right:0")
-  print(inspect(choices))
   if not choices then
     vim.o.background = current_background
     vim.cmd("colorscheme " .. current_colorscheme)
