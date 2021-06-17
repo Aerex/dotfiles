@@ -8,6 +8,10 @@ return function()
       return vim.split(vim.fn.system('git rev-parse --show-toplevel'), '\n')[1]
     end
 
+    _.get_git_full_file_path = function(file_name)
+      return string.format('%s/%s', _.get_git_root_path(), file_name)
+    end
+
 
     local preview_files = action(function(lines)
       local root = _.get_git_root_path()
@@ -33,8 +37,7 @@ return function()
     end
 
     for i=2,#result do
-      vim.cmd(vimcmd .. ' ' .. vim.fn.fnameescape(_.get_git_file_path(result[i])))
+      vim.cmd(vimcmd .. ' ' .. vim.fn.fnameescape(_.get_git_full_file_path(result[i])))
     end
-
   end)()
 end

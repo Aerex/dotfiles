@@ -45,6 +45,11 @@ if ok then
       -- undo
       use { 'mbbill/undotree', cmd = 'UndotreeToggle',  config = [[vim.g.undotree_SetFocusWhenToggle = 1]] }
 
+      -- diagnostics
+      use { 'Aerex/trouble.nvim',
+        cmd = {'Trouble', 'TroubleToggle', 'TroubleClose', 'TroubleRefresh' }
+      }
+
       -- formatting / colors
       use {
         'norcalli/nvim-colorizer.lua',
