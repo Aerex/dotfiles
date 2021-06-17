@@ -16,29 +16,33 @@ vim.o.history         = 1000
 vim.o.termguicolors   = true
 vim.o.laststatus      = 2
 vim.g.mapleader       = ' '
+vim.o.shiftwidth      = 2
 vim.bo.shiftwidth     = 2
+vim.o.softtabstop     = 2
 vim.bo.softtabstop    = 2
+vim.o.tabstop         = 2
 vim.bo.tabstop        = 2
+vim.o.expandtab       = true
 vim.bo.expandtab      = true
 vim.o.undodir         = os.getenv('HOME') .. '/.cache/nvim/undodir/'
 vim.bo.undofile       = true
 vim.o.undofile        = true
 vim.o.hidden          = true
-vim.o.clipboard =  vim.o.clipboard .. 'unnamedplus' -- use clipboard on everything
-
+vim.o.clipboard       = vim.o.clipboard .. 'unnamedplus' -- use clipboard on everything
+--
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
-
---buffers
+--
+----buffers
 vim.cmd('autocmd VimResized * :wincmd =')
 vim.o.splitright = true
-
--- colors
+--
+---- colors
 vim.cmd('syntax on')
-
+--
 vim.cmd('colorscheme base16-nord')
 vim.g.seiya_auto_enable = 1
 vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and {'guibg'} or {'ctermbg'}
-
+--
 vim.g.vifm_embed_split = true
 
 -- Remove trailing spaces after saving
