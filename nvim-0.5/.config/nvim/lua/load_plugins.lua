@@ -3,7 +3,7 @@ local ok, _ = pcall(vim.cmd, [[packadd packer.nvim]])
 
 if ok then
   return require('packer').startup(
-    function()
+    function(use)
       -- Packer can manage itself as an optional plugin
       use {'wbthomason/packer.nvim', opt = true}
 
@@ -22,14 +22,13 @@ if ok then
         'nvim-treesitter/playground'
       }
 
-      -- textobject 
+      -- textobject
 
       -- fuzzy pickers / file finders
       use {
         'vijaymarupudi/nvim-fzf',
         'vijaymarupudi/nvim-fzf-commands',
-        'vifm/vifm.vim',
-	      'justinmk/vim-dirvish'
+        'vifm/vifm.vim'
       }
 
       -- git
@@ -42,11 +41,14 @@ if ok then
           requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}, {'nvim-telescope/telescope.nvim'} } }
       }
 
-      -- undo
-      use { 'mbbill/undotree', cmd = 'UndotreeToggle',  config = [[vim.g.undotree_SetFocusWhenToggle = 1]] }
+      -- yank/undo
+      use { 
+        { 'mbbill/undotree', cmd = 'UndotreeToggle',  config = [[vim.g.undotree_SetFocusWhenToggle = 1]] },
+        { 'bfredl/nvim-miniyank' }
+      }
 
       -- diagnostics
-      use { 'Aerex/trouble.nvim',
+      use { 'folke/trouble.nvim',
         cmd = {'Trouble', 'TroubleToggle', 'TroubleClose', 'TroubleRefresh' }
       }
 

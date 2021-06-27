@@ -2,15 +2,6 @@ local M = {}
 
 M.parse_vimgrep_line = function (line)
   local parsed_content = {string.match(line, "(.-):(%d+):(%d+):.*")}
-  return M.get_line_parts(parsed_content)
-end
-
-M.parse_line = function(line)
-  local parsed_content = {string.match(line, "(.+):(%d+):(.*)")}
-  return M.get_line_parts(parsed_content)
-end
-
-M.get_line_parts = function(parsed_content)
   local filename = parsed_content[1]
   local row = tonumber(parsed_content[2])
   local col = tonumber(parsed_content[3])
