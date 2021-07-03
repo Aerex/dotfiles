@@ -1,3 +1,18 @@
+local execute = vim.api.nvim_command
+local fn = vim.fn
+
+local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+
+if fn.empty(fn.glob(install_path)) > 0 then
+  execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+  execute 'packadd packer.nvim'
+end
+
+-- Auto compile when there are changes in plugins.lua
+vim.cmd 'autocmd BufWritePost plugins.lua PackerCompile'
+
+-- require('packer').init({display = {non_interactive = true}})
+require('packer').init({display = {auto_clean = false}})
 -- Only required if you have packer in your `opt` pack
 local ok, _ = pcall(vim.cmd, [[packadd packer.nvim]])
 
@@ -11,7 +26,7 @@ if ok then
       use {
         'neovim/nvim-lspconfig',
         'onsails/lspkind-nvim',
-        'nvim-lua/lsp-status.nvim',
+       'nvim-lua/lsp-status.nvim',
 	      'ray-x/lsp_signature.nvim'
       }
 
@@ -23,6 +38,9 @@ if ok then
       }
 
       -- textobject
+      use {
+        'blackCauldron7/surround.nvim'
+      }
 
       -- fuzzy pickers / file finders
       use {
@@ -35,14 +53,15 @@ if ok then
       use {
         { 'tpope/vim-fugitive', cmd = {'Git', 'Gstatus', 'Gblame', 'Gpush', 'Gpull', 'Gwrite'} },
         { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'} },
-        { 'TimUntersberger/neogit', opt = true },  -- still has some issues need to wait before using
+        -- still has some issues need to wait before using
+        { 'TimUntersberger/neogit', requires = { 'nvim-lua/plenary.nvim','sindrets/diffview.nvim' } },
         { 'pwntester/octo.nvim',
           cmd = { 'Octo' },
           requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}, {'nvim-telescope/telescope.nvim'} } }
       }
 
       -- yank/undo
-      use { 
+      use {
         { 'mbbill/undotree', cmd = 'UndotreeToggle',  config = [[vim.g.undotree_SetFocusWhenToggle = 1]] },
         { 'bfredl/nvim-miniyank' }
       }
@@ -83,11 +102,11 @@ if ok then
 
       -- marks
       use { 'kshenoy/vim-signature' }
-
-    -- notes
-    use {
-        'alok/notational-fzf-vim', cmd = 'NV', requires = { 'junegunn/fzf.vim' },
-      }
+      -- terminal
+      use {
+         'akinsho/nvim-toggleterm.lua',
+        config = function() require'toggleterm'.setup{ open_mapping = [[<C-t>]] } end
+       }
     end
     )
 end

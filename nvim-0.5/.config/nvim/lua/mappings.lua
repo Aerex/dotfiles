@@ -5,7 +5,6 @@ local maps = {
       -- misc
       ['<leader>w']  = 'write',
       ['<leader>fm'] = 'VsplitVifm',
-      ['<leader><enter>'] = ':',
       -- fzf
       ['<leader>ff'] = 'lua require(\'nvim-fzf.files\')()',
       ['<leader>fh'] = 'lua require(\'nvim-fzf.helptags\')()',
@@ -25,6 +24,7 @@ local maps = {
       -- TODO: create map for git push --set-upstream current branch
     }
 }
+
 local file_type_keymaps = {
   markdown = {
     nmap =  {
@@ -36,6 +36,7 @@ local file_type_keymaps = {
 
 }
 
+vim.api.nvim_set_keymap('n', '<leader><enter>', ':', { noremap = true, silent = true})
 -- @param {table} m
 -- @param {table|nil} opts
 M.set_keymap = function(m, opts)

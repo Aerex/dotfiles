@@ -1,10 +1,3 @@
--- install packer.nvim automatically
---local execute = vim.api.nvim_command
---local install_path = vim.fn.stdpath('data')..'/site/pack/packer/opt/packer.nvim'
---if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
---	execute('!git clone https://github.com/wbthomason/packer.nvim '..install_path)
---	execute 'packadd packer.nvim'
---end
 -- config options
 vim.o.relativenumber  = true
 vim.wo.relativenumber = true
@@ -29,6 +22,8 @@ vim.bo.undofile       = true
 vim.o.undofile        = true
 vim.o.hidden          = true
 vim.o.clipboard       = vim.o.clipboard .. 'unnamedplus' -- use clipboard on everything
+vim.o.showmode        = true
+vim.o.autoread        = true
 
 --
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
@@ -46,7 +41,7 @@ vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and {'guibg'} or {'ctermbg'}
 vim.g.vifm_embed_split = true
 
 vim.g.notes_dir = '~/Documents/repos/.private/notes'
-
+vim.g.surround_mappings_style = 'surround'
 -- Remove trailing spaces after saving
 --vim.api.nvim_exec([[
 --  autocmd BufWritePre * :%s/\s\+$//e)
@@ -57,7 +52,6 @@ vim.g.notes_dir = '~/Documents/repos/.private/notes'
 require('load_plugins')
 require('mappings')
 require('snippets')
-
 -- TODO: Find a cleaner way to load plugin configs
 require('nvim-completion')
 require('nvim-lsp')
