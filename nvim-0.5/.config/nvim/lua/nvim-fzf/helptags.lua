@@ -1,4 +1,9 @@
 -- Credits to https://github.com/vijaymarupudi/nvim-fzf-commands/blob/master/lua/fzf-commands/helptags.lua
+require('fzf').default_window_options = {
+  window_on_create = function()
+    vim.cmd('set winhl=Normal:Normal')
+  end
+}
 local uv = vim.loop
 local fzf = require('fzf').fzf
 
@@ -80,7 +85,7 @@ local get_help_docs = function (cb)
 
 return function()
   coroutine.wrap(function ()
-
+    -- TODO: Add a preview
       local choices = fzf(get_help_docs, '--nth 1 --ansi --expect=ctrl-t,ctrl-s,ctrl-v')
       local choice = vim.split(choices[2], '\t')[1]
       local key = choices[1]

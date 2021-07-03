@@ -1,3 +1,8 @@
+require('fzf').default_window_options = {
+  window_on_create = function()
+    vim.cmd('set winhl=Normal:Normal')
+  end
+}
 local fzf = require('fzf').fzf
 local M = {}
 

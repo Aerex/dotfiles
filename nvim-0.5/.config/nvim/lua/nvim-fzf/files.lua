@@ -1,4 +1,9 @@
 -- Credits to https://github.com/leisiji/fzf_utils/blob/634460ce779cbc5a55ed0b3a424612f1c5a0a316/lua/nvim_fzf_commands.lua
+require('fzf').default_window_options = {
+  window_on_create = function()
+    vim.cmd('set winhl=Normal:Normal')
+  end
+}
 local action = require('fzf.actions').action
 local fzf = require('fzf').fzf
 local FZF_CAHCE_FILES_DIR = vim.fn.stdpath('cache') .. '/fzf_files/'

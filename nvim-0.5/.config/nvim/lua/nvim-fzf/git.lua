@@ -1,3 +1,8 @@
+require('fzf').default_window_options = {
+  window_on_create = function()
+    vim.cmd('set winhl=Normal:Normal')
+  end
+}
 local fzf = require('fzf').fzf
 local action = require('fzf.actions').action
 
@@ -28,8 +33,8 @@ return function()
     local key = result[1]
 
     local vimcmd = 'e'
-    if key == 'ctrl-x' then
-      vimcmd = 'new'
+    if key == 'ctrl-x' or key == 'ctrl-s' then
+      vimcmd = 'vnew'
     elseif key == 'ctrl-v' then
       vimcmd = 'vnew'
     elseif key == 'ctrl-t' then
