@@ -40,7 +40,6 @@ return function()
     end
 
     local entry = history[choices[2]]
-    print(vim.inspect(entry))
     ---- retrieve current  content in 0 registe
     local current_reg_content = vim.fn.getreg('0')
     local current_reg_type = vim.fn.getregtype('0')
