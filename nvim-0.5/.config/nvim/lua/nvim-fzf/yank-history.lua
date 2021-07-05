@@ -40,14 +40,14 @@ return function()
     end
 
     local entry = history[choices[2]]
-    ---- retrieve current  content in 0 registe
+    ---- retrieve current content in 0 register
     local current_reg_content = vim.fn.getreg('0')
     local current_reg_type = vim.fn.getregtype('0')
     ---- yank to 0 register
     vim.fn.setreg('0', entry[1][1], entry[2])
     ---- paste 0 register
     vim.cmd(string.format('normal! "0%s', vimcmd))
-    ---- restore original
+    ---- restore original 0 register
     vim.fn.setreg('0', current_reg_content, current_reg_type)
   end)()
 end
