@@ -19,7 +19,14 @@ local colors = {
     red = '#ec5f67'
 }
 
-function get_diagnostic_info()
+local remote_ip = function()
+  local ssh_client_info = vim.split(vim.env.SSH_CLIENT, ' ')
+    if #ssh_client_info > 0 then
+      return ssh_client_info[1]
+    end
+    return ''
+end
+local get_diagnostic_info = function()
   if #vim.lsp.buf_get_clients() > 0 then
     return require'lsp-status'.status()
   end
@@ -37,8 +44,9 @@ end
 
 LSPStatus = get_diagnostic_info
 TrailingWhiteSpace = trailing_whitespace
+RemoteIP = remote_ip
 
-function has_file_type()
+local has_file_type = function()
     local f_type = vim.bo.filetype
     if not f_type or f_type == '' then
         return false
@@ -66,7 +74,6 @@ gls.left[2] = {
       local alias = {
           n = 'NORMAL',
           i = 'INSERT',
-          c= 'COMMAND',
           V= 'VISUAL',
           [''] = 'VISUAL',
           v ='VISUAL',
@@ -84,8 +91,14 @@ gls.left[2] = {
       }
       local mode_color = {
           n = colors.green,
-          i = colors.blue,v=colors.magenta,[''] = colors.blue,V=colors.blue,
-          c = colors.red,no = colors.magenta,s = colors.orange,S=colors.orange,
+          i = colors.blue,
+          v=colors.magenta,
+          [''] = colors.blue,
+          V=colors.blue,
+          c = colors.red,
+          no = colors.magenta,
+          s = colors.orange,
+          S=colors.orange,
           [''] = colors.orange,ic = colors.yellow,R = colors.purple,Rv = colors.purple,
           cv = colors.red,ce=colors.red, r = colors.cyan,rm = colors.cyan, ['r?'] = colors.cyan,
           ['!']  = colors.green,t = colors.green,
@@ -218,7 +231,13 @@ gls.left[13] = {
     }
 }
 
-gls.right[1]= {
+gls.right[1] = {
+    RemoteIP = {
+     provider = RemoteIP,
+     highlight = {colors.yellow,colors.bg},
+    }
+}
+gls.right[2]= {
   FileFormat = {
     provider = 'FileFormat',
     separator = ' ',
@@ -226,7 +245,7 @@ gls.right[1]= {
     highlight = {colors.fg,colors.line_bg,'bold'},
   }
 }
-gls.right[4] = {
+gls.right[3] = {
   LineInfo = {
     provider = 'LineColumn',
     separator = ' | ',
@@ -234,7 +253,7 @@ gls.right[4] = {
     highlight = {colors.fg,colors.line_bg},
   },
 }
-gls.right[5] = {
+gls.right[4] = {
   PerCent = {
     provider = 'LinePercent',
     separator = ' ',

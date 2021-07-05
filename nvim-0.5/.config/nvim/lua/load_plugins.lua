@@ -5,7 +5,6 @@ local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 
 if fn.empty(fn.glob(install_path)) > 0 then
   execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
-  execute 'packadd packer.nvim'
 end
 
 -- Auto compile when there are changes in plugins.lua
@@ -32,8 +31,8 @@ if ok then
 
       -- treesitter
       use {
-        { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
-        'Aerex/nvim-treesitter-textobjects',
+        { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', setup = [[require('treesitter')]] },
+        'nvim-treesitter/nvim-treesitter-textobjects',
         'nvim-treesitter/playground'
       }
 
@@ -54,7 +53,7 @@ if ok then
         { 'tpope/vim-fugitive', cmd = {'Git', 'Gstatus', 'Gblame', 'Gpush', 'Gpull', 'Gwrite'} },
         { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'} },
         -- still has some issues need to wait before using
-        { 'TimUntersberger/neogit', requires = { 'nvim-lua/plenary.nvim','sindrets/diffview.nvim' } },
+        { 'TimUntersberger/neogit', cmd = {'Neogit'}, requires = { 'nvim-lua/plenary.nvim','sindrets/diffview.nvim' }, opt = true },
         { 'pwntester/octo.nvim',
           cmd = { 'Octo' },
           requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}, {'nvim-telescope/telescope.nvim'} } }
@@ -79,23 +78,23 @@ if ok then
         'miyakogi/seiya.vim',  -- enable transparent background
         'sbdchd/neoformat',
         { 'godlygeek/tabular', cmd = { 'Tabularize' } },
-        { 'lukas-reineke/indent-blankline.nvim', branch = 'lua' }
+        { 'lukas-reineke/indent-blankline.nvim' }
       }
 
       -- debugger
       --use {'mfussenegger/nvim-dap'}
 
       -- statusline
-      use {'glepnir/galaxyline.nvim', requires = {'kyazdani42/nvim-web-devicons', opt = true}}
+      use {'glepnir/galaxyline.nvim', requires = {'kyazdani42/nvim-web-devicons', opt = true}, setup = [[require('statusline')]]}
 
       -- markdown
       use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
 
       -- completions
-      use { 'nvim-lua/completion-nvim' }
+      use { 'hrsh7th/nvim-compe', setup = [[require('completion')]], event = 'InsertEnter' }
 
       -- snippets
-      use { 'SirVer/ultisnips', requires = {{'honza/vim-snippets' }} }
+      use { 'SirVer/ultisnips', requires = {{'honza/vim-snippets' }}, setup = [[require('snippets')]] }
 
       -- profiling
       use { 'tweekmonster/startuptime.vim' }

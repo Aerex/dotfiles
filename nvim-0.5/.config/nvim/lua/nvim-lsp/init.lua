@@ -2,13 +2,24 @@
 --local utils = require('nvim-lsp').utils
 local lsp_status = require('lsp-status')
 local lsp_signature = require('lsp_signature')
-local completion = require('completion')
-local lsp_document_symbol_callback = require('nvim-fzf.lsp').lsp_document_symbol_callback
+local lsp_document_symbol_callback = require('nvim-fzf.lsp').document_symbols
+local lsp_references_callback = require('nvim-fzf.lsp').references
 --vim.g.completion_enable_auto_popup = 0
 -- configure lsp-status
 lsp_status.config({
   status_symbol = ''
 })
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = {
+    'documentation',
+    'detail',
+    'additionalTextEdits',
+  }
+}
+
 
 
 local on_attach = function(client, bufnr)
@@ -21,9 +32,6 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, ...)
   end
 
-
-  -- Attach LSP Completion
- completion.on_attach(client)
   -- Attach LSP status
  lsp_status.on_attach(client)
 
@@ -86,6 +94,7 @@ local sumneko_binary = sumneko_root_path .. '/bin/Linux/lua-language-server'
 require'lspconfig'.sumneko_lua.setup {
   cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
   on_attach = on_attach,
+  capabilities = capabilities,
   settings = {
     Lua = {
       runtime = {
@@ -114,6 +123,7 @@ require'lspconfig'.sumneko_lua.setup {
 require'lspconfig'.pyls.setup{
   on_attach=on_attach,
   autostart = true,
+  capabilities = capabilities,
   settings = {
     pyls = {
       plugins = {
@@ -127,15 +137,23 @@ require'lspconfig'.pyls.setup{
 }
 
 require'lspconfig'.gopls.setup{
-  on_attach=on_attach
+  on_attach=on_attach,
+  capabilities = capabilities
 }
 
 require'lspconfig'.vimls.setup {
-  on_attach=on_attach
+  on_attach=on_attach,
+  capabilities = capabilities
+}
+
+require'lspconfig'.intelephense.setup {
+  on_attach=on_attach,
+  capabilities = capabilities
 }
 
 require'lspconfig'.bashls.setup {
-  on_attach=on_attach
+  on_attach=on_attach,
+  capabilities = capabilities
 }
 
 require('lspkind').init({
@@ -165,4 +183,5 @@ require('lspkind').init({
 -- Register the progress handle
 lsp_status.register_progress()
 vim.lsp.handlers['textDocument/documentSymbol'] = lsp_document_symbol_callback
+vim.lsp.handlers['textDocument/references'] = lsp_references_callback
 
