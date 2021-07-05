@@ -3,6 +3,7 @@
   user = Aerex
 	name = Aerex
 [core]
+	autocrlf =  false
 	excludesfile = ~/.gitignore
 	commentChar = %
 
