@@ -34,7 +34,7 @@ local maps = {
 
 local file_type_keymaps = {
   markdown = {
-    nmap =  {
+    nnoremap =  {
       ['<leader>mp'] = 'MarkdownPreview',
       ['<leader>ms'] = 'MarkdownPreviewStop',
       ['<leader>mt'] = 'MarkdownPreviewToggle'
@@ -64,8 +64,8 @@ M.set_filetype_keymap = function(m)
   for filetype, filetype_bindings in pairs(m) do
     for mode, modebindings in pairs(filetype_bindings) do
       for lhs, rhs in pairs (modebindings) do
-        vim.api.nvim_exec(string.format('autocmd FileType %s <silent>%s  %s <cmd>%s<cr>',
-          filetype, mode, lhs, rhs), '')
+        local cmd = string.format('autocmd FileType %s %s  %s <cmd>%s<cr>', filetype, mode, lhs, rhs)
+        vim.api.nvim_exec(cmd, '')
       end
     end
   end

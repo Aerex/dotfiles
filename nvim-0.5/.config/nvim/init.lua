@@ -42,9 +42,10 @@ vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and {'guibg'} or {'ctermbg'}
 vim.g.vifm_embed_split = true
 vim.g.notes_dir = '~/Documents/repos/.private/notes'
 vim.g.surround_mappings_style = 'surround'
+vim.g.miniyank_filename = vim.fn.stdpath('cache') .. '/.miniyank.mpack'
 
 -- Remove trailing spaces after saving for certain file types
-vim.api.nvim_exec([[autocmd BufWritePre *.php %s/\s\+$//e ]], '')
+vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md %s/\s\+$//e ]], '')
 
 -- load plugins
 require('load_plugins')
