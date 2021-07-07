@@ -20,6 +20,9 @@ local colors = {
 }
 
 local remote_ip = function()
+  if not vim.env.SSH_CLIENT then
+    return ''
+  end
   local ssh_client_info = vim.split(vim.env.SSH_CLIENT, ' ')
     if #ssh_client_info > 0 then
       return ssh_client_info[1]
@@ -131,8 +134,9 @@ gls.left[4] = {
   }
 }
 gls.left[5] = {
-  Space = {
-    provider = function () return ' ' end,
+  BlankSpace = {
+    provider = function() return ' ' end,
+    separator_highlight = {colors.blue,colors.line_bg},
     highlight = {colors.fg,colors.line_bg}
   }
 }
@@ -162,30 +166,38 @@ local checkwidth = function()
 end
 
 gls.left[8] = {
-  DiffAdd = {
-    provider = 'DiffAdd',
+  BlankSpace = {
+    provider = function() return ' ' end,
     condition = checkwidth,
-    icon = ' ',
-    highlight = {colors.green,colors.line_bg},
+    separator_highlight = {colors.blue,colors.line_bg},
+    highlight = {colors.fg,colors.line_bg}
   }
 }
 gls.left[9] = {
-  DiffModified = {
-    provider = 'DiffModified',
+  DiffAdd = {
+    provider = 'DiffAdd',
     condition = checkwidth,
-    icon = ' ',
-    highlight = {colors.orange,colors.line_bg},
+    icon = '  ',
+    highlight = {colors.green,colors.line_bg},
   }
 }
 gls.left[10] = {
-  DiffRemove = {
-    provider = 'DiffRemove',
+  DiffModified = {
+    provider = 'DiffModified',
     condition = checkwidth,
-    icon = ' ',
-    highlight = {colors.red,colors.line_bg},
+    icon = '  ',
+    highlight = {colors.orange,colors.line_bg},
   }
 }
 gls.left[11] = {
+  DiffRemove = {
+    provider = 'DiffRemove',
+    condition = checkwidth,
+    icon = '  ',
+    highlight = {colors.red,colors.line_bg},
+  }
+}
+gls.left[12] = {
   LeftEnd = {
     provider = function() return '' end,
     separator = '',
@@ -194,7 +206,7 @@ gls.left[11] = {
   }
 }
 
-gls.left[12] = {
+gls.left[13] = {
     TrailingWhiteSpace = {
      provider = TrailingWhiteSpace,
      icon = '  ',
@@ -202,32 +214,11 @@ gls.left[12] = {
     }
 }
 
---gls.left[12] = {
---  DiagnosticError = {
---    provider = 'DiagnosticError',
---    icon = '  ',
---    highlight = {colors.red,colors.bg}
---  }
---}
---gls.left[13] = {
---  Space = {
---    provider = function () return ' ' end
---  }
---}
---gls.left[14] = {
---  DiagnosticWarn = {
---    provider = 'DiagnosticWarn',
---    icon = '  ',
---    highlight = {colors.yellow,colors.bg},
---  }
---}
-
-
-gls.left[13] = {
+gls.left[14] = {
     LSPStatus = {
      provider = LSPStatus,
     highlight = {colors.yellow,colors.bg},
-    icon = '  λ ',
+    icon = ' λ ',
     }
 }
 
@@ -262,22 +253,6 @@ gls.right[4] = {
   }
 }
 
--- gls.right[4] = {
---   ScrollBar = {
---     provider = 'ScrollBar',
---     highlight = {colors.blue,colors.purple},
---   }
--- }
---
--- gls.right[3] = {
---   Vista = {
---     provider = VistaPlugin,
---     separator = ' ',
---     separator_highlight = {colors.bg,colors.line_bg},
---     highlight = {colors.fg,colors.line_bg,'bold'},
---   }
--- }
-
 gls.short_line_left[1] = {
   BufferType = {
     provider = 'FileTypeName',
@@ -295,4 +270,5 @@ gls.short_line_right[1] = {
     separator_highlight = {colors.fg,colors.line_bg},
     highlight = {colors.fg,colors.line_bg}
   }
+
 }
