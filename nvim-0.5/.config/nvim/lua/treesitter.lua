@@ -3,6 +3,12 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
     disable = {"html", "php"} -- list of language that will be disabled
   },
+  smart_rename = {
+    enable = true,
+    keymaps = {
+      smart_rename = '<leader>rn'
+    }
+  },
   rainbow = {
     enable = true
   },
