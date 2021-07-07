@@ -156,6 +156,11 @@ require'lspconfig'.bashls.setup {
   capabilities = capabilities
 }
 
+require'lspconfig'.efm.setup {
+  on_attach=on_attach,
+  capabilities = capabilities
+}
+
 require('lspkind').init({
   with_text = true,
   symbol_map = {
