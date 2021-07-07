@@ -20,7 +20,9 @@ local noremaps = {
       ['<leader>gd'] = 'Gdiff',
       ['<leader>gb'] = 'Git blame',
       ['<leader>gw'] = 'Gwrite',
-      ['<leader>gp'] = 'Git push'
+      ['<leader>gp'] = 'Git push',
+      -- neogit variant
+      ['<leader>gS'] = 'Neogit kind=splitabove'
       -- TODO: create map for git push --set-upstream current branch
     }
 }
