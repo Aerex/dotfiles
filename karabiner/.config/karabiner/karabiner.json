@@ -380,6 +380,30 @@
                                 "type": "basic"
                             }
                         ]
+                    },
+                    {
+                      "description": "FZF-Nova is a spotlight/alfred terminal launcher replacement",
+                      "manipulators": [
+                        {
+                          "type": "basic",
+                          "from": {
+                            "key_code": "k",
+                            "modifiers": {
+                              "mandatory": ["command"]
+                            }
+                          },
+                          "to_if_alone": [
+                            {
+                              "key_code": "k"
+                            }
+                          ],
+                          "to_if_held_down": [
+                            {
+                              "shell_command": "alacritty -t fzf-nova --dimensions 90 20 --position 350 200 -e $HOME/.config/fzf-nova/fzf-nova"
+                            }
+                          ]
+                        }
+                      ]
                     }
                 ]
             },
