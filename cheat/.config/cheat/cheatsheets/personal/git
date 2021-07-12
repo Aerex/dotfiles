@@ -30,6 +30,7 @@ git stash pop
 
 # To apply any stash from the list of stashes. This does not remove the stash
 # from the stash list
+# If you accidently use git stash drop you can use this to recover
 git stash apply stash@{6}
 
 # To commit staged changes
