@@ -71,3 +71,5 @@ Editing:
  
 done
 
+# Set default variables
+FOO="${VARIABLE:-default}
