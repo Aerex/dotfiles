@@ -60,6 +60,8 @@ DATE_SUB(<date>, interval <unit> <DAY/MONTH/YEAR>)
 # Add a unique index to a table
   ALTER TABLE table_name ADD CONSTRAINT constraint_name UNIQUE KEY(column_1,column_2,...);
 
+# Drop constraint
+
 # Add column to index
   ALTER TABLE table_name ADD INDEX index_name (column_name);
 
@@ -86,5 +88,26 @@ DATE_SUB(<date>, interval <unit> <DAY/MONTH/YEAR>)
       WHERE `key` = 'default_custom_domain'
       GROUP BY product_id
       ) custom_domain_product_property ON custom_domain_product_property.product_id = products.id
+
+# Joining with subqueries
+  SELECT y.CategoryID,
+  y.CategoryName,
+  ROUND(x.actual_unit_price, 2) AS "Actual Avg Unit Price",
+  ROUND(y.planned_unit_price, 2) AS "Would-Like Avg Unit Price"
+  FROM
+  (
+   SELECT AVG(a.UnitPrice) AS actual_unit_price, c.CategoryID
+   FROM order_details AS a
+   INNER JOIN products AS b on b.ProductID = a.ProductID
+   INNER JOIN categories AS c on b.CategoryID = c.CategoryID
+   GROUP BY c.CategoryID
+  ) AS x
+  INNER JOIN
+  (
+   SELECT a.CategoryID, b.CategoryName, AVG(a.UnitPrice) AS planned_unit_price
+   FROM products AS a
+   INNER JOIN categories AS b ON b.CategoryID = a.CategoryID
+   GROUP BY a.CategoryID
+  ) AS y ON x.CategoryID = y.CategoryID
 
 # vim: nowrap foldmethod=marker foldlevel=1
