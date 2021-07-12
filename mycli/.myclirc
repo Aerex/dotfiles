@@ -84,6 +84,7 @@ keyword_casing = auto
 enable_pager = True
 audit_log = ~/.mycli-audit.log
 pager = less -SR
+
 [colors]
 completion-menu.completion.current = "bg:#ffffff #000000"
 completion-menu.completion = "bg:#008888 #ffffff"
