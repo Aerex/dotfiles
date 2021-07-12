@@ -123,7 +123,7 @@ font:
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
     family: MesloLGL Nerd Font
- 
+
     # The `style` can be specified to pick a specific face.
     #style: Italic
 
@@ -171,7 +171,7 @@ draw_bold_text_with_bright_colors: true
 # Colors (Tomorrow Night Bright)
 colors:
   # Default colors
-  primary: 
+  primary:
     background: '0x1a1a1a'
     foreground: '0xe6e7e6'
 
@@ -267,7 +267,8 @@ bell:
 #
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 0.80
+background_opacity: 0.97
+#background_opacity: 1.0
 
 # Mouse bindings
 #
@@ -353,13 +354,13 @@ live_config_reload: true
 #shell:
 #  program: /usr/local/bin/tmux
 #  args:
-#    - attach 
-#    - -t 
+#    - attach
+#    - -t
 #    - da
 
 #  program: tmux
 #  args:
-#    - start  
+#    - start
 #    - da
 #
 # Windows 10 ConPTY backend (Windows only)
@@ -617,6 +618,6 @@ key_bindings:
   - { key: NumpadEnter,             chars: "\n"                              }
   - { key: Comma,     mods: Super,      command:
     {program: "/usr/local/bin/nvim", args: ["~/.config/alacritty/alacritty.yml"]}     }
-  - { key: T,         mods: Super,      command: 
-    {program: "/usr/local/bin/nvim", args: ["~/.tmux.conf"]} } 
+  - { key: T,         mods: Super,      command:
+    {program: "/usr/local/bin/nvim", args: ["~/.tmux.conf"]} }
 
