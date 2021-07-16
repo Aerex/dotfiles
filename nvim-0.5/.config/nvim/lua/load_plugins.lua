@@ -15,7 +15,7 @@ vim.cmd[[autocmd BufEnter load_plugins.lua noremap <leader>ps <cmd>PackerSync<cr
 vim.cmd[[autocmd BufEnter load_plugins.lua noremap <leader>pc <cmd>PackerCompile<cr>]]
 vim.cmd[[autocmd BufEnter load_plugins.lua noremap <leader>pS <cmd>PackerStatus<cr>]]
 
--- require('packer').init({display = {non_interactive = true}})
+-- Do not remove unusued plugins
 require('packer').init({display = {auto_clean = false}})
 -- Only required if you have packer in your `opt` pack
 local ok, _ = pcall(vim.cmd, [[packadd packer.nvim]])
@@ -28,7 +28,7 @@ if ok then
 
     -- lsp
     use {
-      'neovim/nvim-lspconfig',
+      { 'neovim/nvim-lspconfig', config = function() require('nvim-lsp') end },
       'onsails/lspkind-nvim',
       'nvim-lua/lsp-status.nvim',
       'ray-x/lsp_signature.nvim'
@@ -40,6 +40,7 @@ if ok then
       requires = {
         'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects', 'nvim-treesitter/playground'
       },
+      config = function() require('treesitter') end,
       run = ':TSUpdate'
     }
     -- textobject
@@ -57,7 +58,7 @@ if ok then
     -- git
     use {
       { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush'} },
-      { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}, config = function() require('nvim-git').setup_signs() end },
+      { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}, event = {'BufRead'}, config = function() require('nvim-git').setup_signs() end },
       { 'Aerex/neogit', branch = 'feat/config-split-direction', cmd = {'Neogit'}, config = function() require('nvim-git').setup_neogit() end,
         requires = { 'nvim-lua/plenary.nvim','sindrets/diffview.nvim' }},
       { 'pwntester/octo.nvim',
@@ -84,7 +85,7 @@ if ok then
     }
     -- colors
     use {
-      'norcalli/nvim-colorizer.lua',
+      { 'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup() end },
       'chriskempson/base16-vim',
       'miyakogi/seiya.vim',  -- enable transparent background
       { 'p00f/nvim-ts-rainbow', requires = { 'nvim-treesitter/nvim-treesitter' } }
@@ -92,6 +93,11 @@ if ok then
 
     -- debugger
     --use {'mfussenegger/nvim-dap'}
+    use {
+      'rcarriga/vim-ultest',
+      requires = {'vim-test/vim-test'}, run = ':UpdateRemotePlugins' ,
+      cmd = { 'TestNearest', 'TestFile', 'TestSuite', 'TestLast', 'TestVisit' }
+    }
 
     -- statusline
     use {'glepnir/galaxyline.nvim', requires = {'kyazdani42/nvim-web-devicons', opt = true},
@@ -117,6 +123,10 @@ if ok then
     use {
       'akinsho/nvim-toggleterm.lua',
      config = function() require'toggleterm'.setup{ open_mapping = [[<C-t>]], shading_factor = 1 } end
+    }
+    use {
+      'AndrewRadev/bufferize.vim',
+      cmd = {'Bufferize'}
     }
   end
   )
