@@ -1,4 +1,10 @@
+local t = require('utils').t
 local M = {}
+
+function _G.smart_carrier_return()
+  return vim.v.hlsearch == 1 and ':noh' .. t'<cr>' or t'<CR>'
+end
+
 local noremaps = {
     -- misc
     n = {
@@ -22,15 +28,21 @@ local noremaps = {
       ['<leader>gw'] = 'Gwrite',
       ['<leader>gp'] = 'Git push',
       -- neogit variant
-      ['<leader>gS'] = 'Neogit kind=splitabove'
+      ['<leader>gS'] = 'Neogit kind=splitabove',
       -- TODO: create map for git push --set-upstream current branch
+      -- test
+      ['<leader>tf'] = 'TestFile',
+      ['<leader>tn'] = 'TestNearest',
+      ['<leader>ts'] = 'TestSuite',
+      ['<leader>tv'] = 'TestVisit'
+
     }
 }
 
 local maps = {
   n = {
     p = '<Plug>(miniyank-autoput)',
-    P = '<Plug>(miniyank-autoPut)'
+    P = '<Plug>(miniyank-autoPut)',
   }
 }
 
@@ -46,6 +58,7 @@ local file_type_keymaps = {
 }
 
 vim.api.nvim_set_keymap('n', '<leader><enter>', ':', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = true })
 -- @param {table} m
 -- @param {table|nil} opts
 M.set_keymap = function(m, opts)
