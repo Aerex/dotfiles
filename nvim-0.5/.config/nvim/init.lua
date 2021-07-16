@@ -29,15 +29,15 @@ vim.o.autoread        = true
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
 vim.cmd('autocmd VimResized * :wincmd =')
 
-----buffers
+--buffers
 vim.o.splitright = true
 
----- colors
+--- colors
 vim.cmd('syntax on')
 vim.cmd('colorscheme base16-nord')
 vim.g.seiya_auto_enable = 1
 vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and {'guibg'} or {'ctermbg'}
-
+vim.cmd('hi rainbowcol7 guifg=#D8DEE9')
 -- misc
 vim.g.vifm_embed_split = true
 vim.g.notes_dir = '~/Documents/repos/.private/notes'
@@ -50,5 +50,3 @@ vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md %s/\s\+$//e ]], '')
 -- load plugins
 require('load_plugins')
 require('mappings')
-require('nvim-lsp')
-require('nvim-git')
