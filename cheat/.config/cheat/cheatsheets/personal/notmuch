@@ -1,0 +1,6 @@
+# search terms
+## To search for messages using dates
+notmuch search date:<since>..<until>
+
+## To search for messages for this week
+notmuch search date:this_week
