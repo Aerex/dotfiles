@@ -170,3 +170,8 @@ cr.
 cr<space>
 #TO change to TItle Case
 crt 
+
+# Regexp matches
+'hello' =~ 'xx*'
+'hello' !~ 'xx*'
+'hello' =~ '\v<\d+>'
