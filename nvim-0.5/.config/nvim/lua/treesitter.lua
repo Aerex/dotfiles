@@ -1,7 +1,7 @@
 require'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true,
-    disable = {"html", "php"} -- list of language that will be disabled
+    disable = {'html', 'php'} -- list of language that will be disabled
   },
   smart_rename = {
     enable = true,
@@ -28,6 +28,7 @@ require'nvim-treesitter.configs'.setup {
   textobjects = {
     select = {
       enable = true,
+      lookahead = true,
       disable = {},
       keymaps = {
         ["af"] = "@function.outer",
@@ -45,7 +46,16 @@ require'nvim-treesitter.configs'.setup {
         ["ad"] = "@comment.outer",
         ["id"] = "@comment.inner",
         ["am"] = "@call.outer",
-        ["im"] = "@call.inner"
+        ["im"] = "@call.inner",
+        ["iS"] = {
+          ledger = "@status"
+        },
+        ["aE"] = {
+          ledger = "@entry.outer"
+        },
+        ["iE"] = {
+          ledger = "@entry.inner"
+        }
       }
     },
     swap = {
@@ -74,21 +84,28 @@ require'nvim-treesitter.configs'.setup {
     move = {
       enable = true,
       goto_next_start = {
-        ["øø"] = "@function.inner",
+        ["]m"] = "@function.outer",
+        ["]]"] = "@class.outer",
+        ["]e"] = "@entry.outer",
       },
       goto_next_end = {
         ["ØØ"] = "@function.inner",
+        ["]E"] = "@entry.outer",
       },
       goto_previous_start = {
-        ["¥¥"] = "@function.inner",
+        ["[m"] = "@function.outer",
+        ["[["] = "@class.outer",
+        ["[e"] = "@entry.outer",
       },
       goto_previous_end = {
-        ["ÁÁ"] = "@function.inner",
+        ["[M"] = "@function.outer",
+        ["[]"] = "@class.outer",
+        ["[E"] = "@entry.outer",
       }
     }
   },
   indent = {
     enable = true
   },
-  ensure_installed = {}
+  ensure_installed = { 'javascript', 'ledger', 'python', 'c', 'query', 'go', 'bash', 'json', 'php'}
 }
