@@ -4,6 +4,7 @@ local lsp_status = require('lsp-status')
 local lsp_signature = require('lsp_signature')
 local lsp_document_symbol_callback = require('nvim-fzf.lsp').document_symbols
 local lsp_references_callback = require('nvim-fzf.lsp').references
+local utils = require('nvim-lsp.utils')
 --vim.g.completion_enable_auto_popup = 0
 -- configure lsp-status
 lsp_status.config({
@@ -57,7 +58,7 @@ vim.fn.sign_define('LspDiagnosticsSignHint', {text='', texthl='LspDiagnostics
   -- LSP keymap
  local opts = { noremap=true, silent=true }
   keymap('n', 'gd', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  keymap('n', 'gD', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  keymap('n', '<c-]>', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
@@ -120,14 +121,14 @@ require'lspconfig'.sumneko_lua.setup {
     }
   }
 }
-require'lspconfig'.pyls.setup{
+require'lspconfig'.pylsp.setup{
   on_attach=on_attach,
   autostart = true,
   capabilities = capabilities,
   settings = {
     pyls = {
       plugins = {
-        pycodestyle =  { enabled = false },
+        pycodestyle =  {enabled = false},
         pylint =  { enabled = false },
         black = {enabled = true},
         pyflakes = {enabled = false}
@@ -156,8 +157,11 @@ require'lspconfig'.bashls.setup {
   capabilities = capabilities
 }
 
+local efm_settings, efm_filetypes = utils.get_efm_configs()
 require'lspconfig'.efm.setup {
   on_attach=on_attach,
+  filetypes = efm_filetypes,
+  settings = efm_settings,
   capabilities = capabilities
 }
 
@@ -189,4 +193,3 @@ require('lspkind').init({
 lsp_status.register_progress()
 vim.lsp.handlers['textDocument/documentSymbol'] = lsp_document_symbol_callback
 vim.lsp.handlers['textDocument/references'] = lsp_references_callback
-
