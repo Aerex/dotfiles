@@ -1,0 +1,62 @@
+echo Parsing config file
+"<C-M> is like <C-R> in vim"
+
+
+" Display id numbers next to songs in the browse window
+set browsenumbers 
+
+" Set the default tab
+set window playlist
+
+" Whether or not to show the progress bar 
+set progressbar
+
+" Automatically reconnect if the connection drops
+set reconnect 
+" Set the windows to show at startup
+set windows help,library,browse,playlist
+
+" Download all meta information to constrcut the library
+set listallmeta
+
+" Highlight search results
+set hlsearch
+
+"Tab {{{1
+"map ]t  gt
+"map [t  gT
+"}}}
+
+" Goto {{{1
+map B :browse<C-M>
+map L :library<C-M>
+map P :playlist<C-M>
+map H :help<C-M>
+" }}}
+
+" Playback {{{1
+"map ,s  :seek<Right>
+"map (         :seek- 00:10<C-M>
+"map )         :seek+ 00:10<C-M>
+"}}}
+
+" Stop playing music when we quit
+"set stoponquit
+
+" A silly example of an alias
+"alias smiths deleteall; findartist! The Smiths; play 1
+
+" Example maps
+" map the F key to change to the browse window, go to the first line and enter search mode
+"map F :browse<C-M>gg/
+" map @ to switch to add next, add a song, then change back
+"map @ :set add next<C-M>a:set add end<C-M>
+
+" Ensure that the database is up to date each connect
+"update
+
+" Color the statusline and tabs
+" highlight status blackbg
+" highlight tab blackbg
+
+echo Config File Complete
