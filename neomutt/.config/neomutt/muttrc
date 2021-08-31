@@ -1,15 +1,15 @@
-# vim: filetype=muttrc foldmethod=marker 
+# vim: filetype=muttrc foldmethod=marker
 
 #███╗   ███╗██╗   ██╗████████╗████████╗██████╗  ██████╗
 #████╗ ████║██║   ██║╚══██╔══╝╚══██╔══╝██╔══██╗██╔════╝
-#██╔████╔██║██║   ██║   ██║      ██║   ██████╔╝██║     
-#██║╚██╔╝██║██║   ██║   ██║      ██║   ██╔══██╗██║     
+#██╔████╔██║██║   ██║   ██║      ██║   ██████╔╝██║
+#██║╚██╔╝██║██║   ██║   ██║      ██║   ██╔══██╗██║
 #██║ ╚═╝ ██║╚██████╔╝   ██║      ██║   ██║  ██║╚██████╗
 #╚═╝     ╚═╝ ╚═════╝    ╚═╝      ╚═╝   ╚═╝  ╚═╝ ╚═════╝
 
 
 #############################
-# Generation Configuration {{{1 
+# Generation Configuration {{{1
 set my_confdir='$HOME/.config/neomutt'
 
 # Default account
@@ -20,10 +20,45 @@ source  ~/.config/neomutt/bin/default-muttrc|
 #source ~/.config/neomutt/gpgrc
 
 # @See https://neomutt.org/guide/reference#3-359-%C2%A0sleep_time
-# Specifies time, in seconds, to pause while displaying certain informational messages, while moving from folder to folder 
-# and after expunging messages from the current folder. The default is to pause one second, so a value of zero for this option 
+# Specifies time, in seconds, to pause while displaying certain informational messages, while moving from folder to folder
+# and after expunging messages from the current folder. The default is to pause one second, so a value of zero for this option
 # suppresses the pause.
 set sleep_time = 0
+
+# https://neomutt.org/guide/reference#3-452-%C2%A0wait_key
+# Controls whether NeoMutt will ask you to press a key after an external command has been invoked by these functions: <shell-escape>, <pipe-message>, <pipe-entry>, <print-message>, and <print-entry>commands.
+# It is also used when viewing attachments with " auto_view", provided that the corresponding mailcap entry has a needsterminal flag, and the external program is interactive.
+# When set , NeoMutt will always ask for a key. When unset , NeoMutt will wait for a key only if the external command returned a non-zero status.
+# Defaults: yes
+set wait_key = no
+
+# https://neomutt.org/guide/reference#3-436-%C2%A0ts_enabled
+# Controls whether NeoMutt tries to set the terminal status line and icon name. Most terminal emulators emulate the status line in the window title.
+# Default: no
+set ts_enabled = yes
+
+# https://neomutt.org/guide/reference#3-174-%C2%A0mail_check
+# This variable configures how often (in seconds) NeoMutt should look for new mail. Also see the $timeout variable.
+# Default: 5
+set mail_check = 0
+
+# https://neomutt.org/guide/reference#3-184-%C2%A0mark_old
+# Controls whether or not NeoMutt marks new unread messages as old if you exit a mailbox without reading them.
+# With this option set , the next time you start NeoMutt, the messages will show up with an "O" next to them in the index menu, indicating that they are old.
+# Default: yes
+set mark_old = no
+
+# https://neomutt.org/guide/reference#3-277-%C2%A0pipe_decode
+# Used in connection with the <pipe-message>function.
+# When unset , NeoMutt will pipe the messages without any preprocessing. When set , NeoMutt will attempt to decode the messages first.
+# Strip headers and eval mimes when piping
+# Default: no
+set pipe_decode = yes
+
+# https://neomutt.org/guide/reference#3-429-%C2%A0tilde
+# When set , the internal-pager will pad blank lines to the bottom of the screen with a tilde ("~").
+# Default: no
+set tilde = yes
 
 # @See https://neomutt.org/guide/reference#3-165-%C2%A0ispell
 # How to invoke ispell (GNU's spell-checking software).
@@ -33,9 +68,9 @@ set ispell  = "aspell -e -c"
 # Specifies how to sort messages in the "index" menu. Valid values are: date or date-sent, date-received, from, mailbox-order (unsorted)
 # score, size, spam, subject, threads, to
 # You may optionally use the "reverse-" prefix to specify reverse sorting order.
-set sort = date 
+set sort = date
 
-# https://neomutt.org/guide/reference#3-167-%C2%A0mail_check 
+# https://neomutt.org/guide/reference#3-167-%C2%A0mail_check
 # This variable configures how often (in seconds) NeoMutt should look for new mail. Also see the $timeout variable.
 set mail_check = 120
 
@@ -45,10 +80,10 @@ set implicit_autoview = no
 #Default: no
 
 # http://www.mutt.org/doc/manual/manual.html#status-chars
-# Controls the characters used by the “%r” indicator in $status_format. 
-# The first character is used when the mailbox is unchanged. 
-# The second is used when the mailbox has been changed, and it needs to be resynchronized. 
-#The third is used if the mailbox is in read-only mode, or if the mailbox will not be written when exiting that mailbox 
+# Controls the characters used by the “%r” indicator in $status_format.
+# The first character is used when the mailbox is unchanged.
+# The second is used when the mailbox has been changed, and it needs to be resynchronized.
+#The third is used if the mailbox is in read-only mode, or if the mailbox will not be written when exiting that mailbox
 # (You can toggle whether to write changes to a mailbox with the <toggle-write> operation, bound by default to “%”).
 # The fourth is used to indicate that the current folder has been opened in attach- message mode (Certain operations like composing a new mail, replying, forwarding, etc. are not permitted in this mode).
 set status_chars = " *A"
@@ -71,7 +106,7 @@ set to_chars = " ›»C‹L"
 
 # Sidebar
 #https://neomutt.org/guide/reference#3-349-%C2%A0sidebar_format
-#This variable allows you to customize the sidebar display. 
+#This variable allows you to customize the sidebar display.
 #This string is similar to $index_format, but has its own set of printf(3)-like sequences:
 #%B		Name of the mailbox
 #%d	* @	Number of deleted messages in the mailbox
@@ -97,20 +132,20 @@ set sidebar_format = '%D %?F?[%F]? %?N?%N/ %?n?%n? %?S?%S?'
 set sidebar_visible = no
 
 # https://neomutt.org/guide/reference#3-358-%C2%A0sidebar_width
-# This controls the width of the sidebar. It is measured in screen columns. 
+# This controls the width of the sidebar. It is measured in screen columns.
 # For example: sidebar_width=20 could display 20 ASCII characters, or 10 Chinese characters.
 # Defaults: 30
 set sidebar_width = 20
 
 # https://neomutt.org/guide/reference#3-355-%C2%A0sidebar_short_path
-# By default the sidebar will show the mailbox's path, relative to the $folder variable. 
+# By default the sidebar will show the mailbox's path, relative to the $folder variable.
 # Setting sidebar_shortpath=yes will shorten the names relative to the previous name. Here's an example:
 # Defaults: no
 set sidebar_short_path = yes
 
 
 # https://neomutt.org/guide/reference#3-352-%C2%A0sidebar_next_new_wrap
-# When set, the <sidebar-next-new>command will not stop and the end of the list of mailboxes, but wrap around to the beginning. 
+# When set, the <sidebar-next-new>command will not stop and the end of the list of mailboxes, but wrap around to the beginning.
 # The <sidebar-prev-new>command is similarly affected, wrapping around to the end of the list.
 # Default: no
 set sidebar_next_new_wrap = yes
@@ -133,48 +168,48 @@ bind index,pager B sidebar-toggle-visible
 # %E Number of messages in current thread
 
 # https://neomutt.org/feature/cond-date#2-%C2%A0introduction
-# Use conditional dates to format dates 
-# If message is on this month use format Dec 10 - %[%b %d] ELSE use 2015-04-23 %[%Y-%m-%d]	
+# Use conditional dates to format dates
+# If message is on this month use format Dec 10 - %[%b %d] ELSE use 2015-04-23 %[%Y-%m-%d]
 # ? TEST ? TRUE & FALSE ?
 # Date codes
-# %[d   Today       
+# %[d   Today
 # %[%H:%M ]      12:34
-# %[m   This month 
+# %[m   This month
 # %[%a %d]       Thu 12
-# %[y   This year   
+# %[y   This year
 # %[%b %d]       Dec 10
 # %[%m/%y ]      06/15
 #%?<sequence_char>?<if_string>&<else_string>?
 #%?<sequence_char>?<optional_string>?
 # ? TEST ? TRUE & FALSE ?
-# - Display Number of message 
+# - Display Number of message
 # - Display Message Status
 # - Display Date
 # if a message arrived this year thread is folded (%[y)
 #   if a message arrive this month (%[m)
 #    if a message arrive today  (%[d)
 #     display datetime using format "%[%I:%M %p]" "04:23 PM"
-#    else 
+#    else
 #     display datetime using format "%[%a %b %d]" "Mon Mar 11"
 #    end
 #   else
 #     display datetime using format "%[%b %d]" "Mar 11"
 #   end
-# else  
-#   display datetime using format "%[%b %d, %y]" "Mar 11, 2020" 
+# else
+#   display datetime using format "%[%b %d, %y]" "Mar 11, 2020"
 # end
 # Display the To address left justified and trim by 30 chars (see man printf for formatting)
 # (Optional) Display number of messages in thread
-# if this is a thread 
+# if this is a thread
 #   display message thread number / number of messages in thread
-# else if message has tags (notmuch) 
+# else if message has tags (notmuch)
 # end
-#    
+#
 set index_format='%4C %Z %<[y?%<[m?%<[d?%10[%I:%M %p  ]&%10[%a %b %d  ]>&%12[%b %d  ]>&%10[%b %d, %Y]> %-25.20L %?E?%2.e/%.E&   ?  %?Gi?%Gi &?%?Gt?%Gt &?%?Gr?%Gr &?%?Ga?%Ga &?%?Gh?%Gh &? %s'
 
 
 # https://neomutt.org/guide/reference#3-240-%C2%A0pager_format
-# This variable controls the format of the one-line message "status" displayed before each message in either the internal or an external pager. 
+# This variable controls the format of the one-line message "status" displayed before each message in either the internal or an external pager.
 # The valid sequences are listed in the $index_format section.
 # Default:  “ -%Z- %C/%m: %-20.20n   %s%*  -- (%P) ”
 set pager_format = '%Z    %?E?Thread: %e/%E&Message: %C?    from: %-20.20n    subject: %25.25s%* %g (%P)'
@@ -204,7 +239,7 @@ folder-hook . exec collapse-all
 
 # TODO: Figure out how to show/limit only new and flag messages when on darwin
 #startup-hook 'echo `./bin/startup`'
- 
+
 
 # Colors
 color index yellow default '.*'
@@ -216,7 +251,7 @@ color progress white red
 color normal default default
 
 # https://neomutt.org/guide/reference#3-284-%C2%A0postpone
-# Controls whether or not messages are saved in the $postponed mailbox when you elect not to send immediately. 
+# Controls whether or not messages are saved in the $postponed mailbox when you elect not to send immediately.
 # If set to ask-yes or ask-no , you will be prompted with "Save (postpone) draft message?" when quitting from the "compose" screen.
 # Also see the $recall variable.
 set postpone="ask-yes"
@@ -224,23 +259,23 @@ set postpone="ask-yes"
 
 # http://www.mutt.org/doc/manual/manual.html#sort-aux
 # This provides a secondary sort for messages in the “index” menu, used when the $sort value is equal for two messages.
-# When sorting by threads, this variable controls how threads are sorted in relation to other threads, and how the branches of the thread trees are sorted. 
+# When sorting by threads, this variable controls how threads are sorted in relation to other threads, and how the branches of the thread trees are sorted.
 # This can be set to any value that $sort can, except “threads” (in that case, mutt will just use “date-sent”).
-# You can also specify the “last-” prefix in addition to the “reverse-” prefix, but “last-” must come after “reverse-”. 
+# You can also specify the “last-” prefix in addition to the “reverse-” prefix, but “last-” must come after “reverse-”.
 # The “last-” prefix causes messages to be sorted against its siblings by which has the last descendant, using the rest of $sort_aux as an ordering. For instance, set sort_aux=last-date-received
 # would mean that if a new message is received in a thread, that thread becomes the last one displayed (or the first, if you have “set sort=reverse-threads”.)
-set sort = threads 
+set sort = threads
 set sort_aux = last-date-received
 
 #https://neomutt.org/guide/reference#3-208-%C2%A0new_mail_command
-# If set , NeoMutt will call this command after a new message is received. 
+# If set , NeoMutt will call this command after a new message is received.
 # See the $status_format documentation for the values that can be formatted into this command.
 source ~/.config/neomutt/bin/new-mail|
 
-# Contacts Searching and AutoComplete 
+# Contacts Searching and AutoComplete
 # https://neomutt.org/guide/reference#3-295-%C2%A0query_command
-# This specifies the command NeoMutt will use to make external address queries. 
-# The string may contain a "%s", which will be substituted with the query string the user types. 
+# This specifies the command NeoMutt will use to make external address queries.
+# The string may contain a "%s", which will be substituted with the query string the user types.
 # NeoMutt will add quotes around the string substituted for "%s" automatically according to shell quoting rules,
 # so you should avoid adding your own. If no "%s" is found in the string, NeoMutt will append the user's query to the end of the string. See " query" for more information.
 set query_command= "khard email --parsable %s"
@@ -254,11 +289,11 @@ macro index,pager A \
 # https://neomutt.org/feature/custom-tags#5-%C2%A0commands
 # tag-transforms tag transformed-string { tag transformed-string ...}
 tag-transforms "inbox"   "" \
-                "jira" " " \
+               "jira" " " \
                "unread"  "📧"   \
                "replied" "💬"  \
                "reply" "🔄reply" \
-               "todo" "📅" \
+               "todo" "" \
                "interesting" "💡" \
                "sent"    "👉"  \
                "spam"    "🏭"  \
@@ -272,9 +307,9 @@ tag-transforms "inbox"   "" \
                "errnot" "📣" \
                "work" "💼" \
                "personal" "👤" \
-               "familie" "👪" \
+               "family" "👪" \
                "lists" "📜" \
-               "github" "" \
+               "github" ""\
                "archive" """ \
 
                # "patch" "" \
@@ -320,13 +355,13 @@ tag-formats "inbox"   "Gi" \
 
 
 #############################
-# Key Binding             {{{1 
+# Key Binding             {{{1
 #############################
 # Credits to https://github.com/pigmonkey/dotfiles/blob/ef06f29de046ef14094eedabba343f8854f239ea/mutt/vim-keybindings.rc
 
 macro index <Space><Enter> "<enter-command>"
 #############################
-# Moving Around           {{{2 
+# Moving Around           {{{2
 #############################
 
 bind attach,pager,browser,index g   noop
@@ -361,11 +396,15 @@ macro index <Space>sa  "<limit>all<Enter><enter-command><collapse-all><Enter><en
 
 macro index <Space>ci   "<clear-flag>!<enter-command>echo 'Clear important flag'<Enter>" "Clear marked important flag"
 
-
 macro index <Space>tia "<enter-command> set implicit_autoview=(if (equal $implicit_autoview yes) no yes);<enter>"  "Toggle implicit_autoview"
 
+macro index <Space>\r "<enter-command>"
+
+macro index <Space>rc "<enter-command>source ~/.config/neomutt/muttrc<Enter>" "Reload muttrc"
+
+
 #############################
-# Notmuch Configuration {{{1 
+# Notmuch Configuration {{{1
 
 # This variable specifies the default Notmuch database in format:
 # notmuch://<absolute path>
@@ -378,6 +417,7 @@ set nm_default_url = "notmuch://$HOME/.Mail"
 set virtual_spoolfile=yes
 
 virtual-mailboxes "Archive" "notmuch://?query=tag:archive"
+virtual-mailboxes "Junk" "notmuch://?query=tag:junk"
 
 ## This variable allows you to customize the file browser display for virtual
 # folders to your personal taste.
@@ -396,13 +436,15 @@ set query_command = "notmuch address %s"
 set nm_query_window_duration=0
 set nm_query_window_timebase="week" # or "hour", "day", "week", "month", "year"
 
-macro index A "<modify-labels-then-hide>!archive !unread !inbox<enter>" "Archive message"
+macro index A "<modify-labels-then-hide>!archive !unread !inbox<enter><enter-command>exec sync-mailbox<enter><enter-command>echo 'Archived message'<enter>" "Archive message"
+macro index E "<modify-labels>!todo<enter>" "Todo message"
 macro index c "<change-vfolder>?" "Change to vfolder overview"
 macro index I "<modify-labels>-inbox -unread\\n" "Removed from inbox"
-macro index S "<modify-labels-then-hide>-inbox -unread +junk\\n" "Tag as junk"
-macro index + "<modify-labels>starred*\\n<sync-mailbox>" "Tag as starred"
-macro index - "<modify-labels>-*\\n<sync-mailbox>" "Tag as unstarred"
+macro index S "<modify-labels-then-hide>-inbox -unread +junk<enter><enter-command>exec sync-mailbox<enter><enter-command>echo 'Moved to Junk'<enter>" "Tag as junk"
+macro index + "<modify-labels>starred*<enter><enter-command> exec <sync-mailbox><enter>" "Tag as starred"
+macro index - "<modify-labels>-*<sync-mailbox><enter>" "Tag as unstarred"
 macro index \\\\ "<vfolder-from-query>" "Search mailbox"
+macro index \Cf "<enter-command><enter><shell-escape>read -p 'notmuch query: ' x; echo \$x >~/.cache/neomutt_terms<enter><limit>~i \"\`notmuch search --output=messages \$(cat ~/.cache/neomutt_terms) | head -n 600 | perl -le '@a=<>;chomp@a;s/\^id:// for@a;$,=\"|\";print@a'\`\"<enter>" "show only messages matching a notmuch pattern in a virtual folder"
 
 # open a different virtual folder
 bind index,pager X change-vfolder
@@ -410,9 +452,6 @@ bind index,pager X change-vfolder
 bind index,pager + entire-thread
 # generate virtual folder from query
 bind index,pager \eX vfolder-from-query
-# generate virtual folder from query with time window
-bind index < vfolder-window-backward
-bind index > vfolder-window-forward
 
 # mark <flag> as read...
 macro index <Space>mn \
@@ -423,14 +462,17 @@ macro index <Space>mu \
     "mark all unread messages as read"
 
 #############################
-# Custom movements        {{{2 
+# Custom movements        {{{2
 #############################
 
 #macro index gi "<change-folder>=Inbox<enter>" "Go to Inbox"
 macro index ,i "<change-vfolder>INBOX\n<collapse-all>\n" "Go to Inbox"
 macro index ,a "<change-vfolder>All\n<collapse-all>\n" "Go to All"
-macro index ,J "<change-vfolder>Archive\n<collapse-all>\n" "Go to Archive"
+macro index ,J "<change-vfolder>Archive\n<enter-command><collapse-all><enter>\n" "Go to Archive"
 macro index ,t "<change-vfolder>Today\n<enter-command><collapse-all><enter>\n" "Go to Today"
+macro index ,T "<change-vfolder>Todo\n<enter-command><collapse-all><enter>\n" "Go to Todo"
+macro index ,w "<change-vfolder>Week\n<enter-command><collapse-all><enter>\n" "Go to Week"
+macro index ,s "<change-vfolder>Junk\n<enter-command><collapse-all><enter>\n" "Go to Junk"
 macro index gd "<change-folder>=Drafts<enter>" "Go to Drafts"
 macro index gs "<change-folder>=Sent<enter>" "Go to Sent"
 macro index gj "<change-folder>=Trash<enter>" "Go to Trash"
@@ -438,24 +480,29 @@ macro index ga "<change-folder>=Archive<enter>" "Go to Archive"
 
 # Refreshing
 #bind index                      \Cr imap-fetch-mail
-macro index                      \Cr "<enter-command>unset wait_key<enter><shell-escape>$HOME/.config/neomutt/bin/mail-sync -a $my_offlineimap_account<enter>" "run Offlineimap on current account"
+macro index                      \Cr "<enter-command><enter><shell-escape>$HOME/.config/neomutt/bin/mail-sync -a $my_offlineimap_account<enter>" "run Offlineimap on current account"
 
 bind attach,pager,browser,index d   noop
 
 # unbinding x and i because only one key is enough
-bind generic,compose,attach,pager,index i noop    
-bind generic,compose,attach,pager,index q noop    
-                                                  
-# binding q for exiting all menus                 
-bind generic,compose,attach,pager q exit          
-                                                  
-# making q do nothing in index                    
-bind index x noop                                 
+bind generic,compose,attach,pager,index i noop
+bind generic,compose,attach,pager,index q noop
 
-                                                  
-# binding ZZ like in vim to quit, only in index   
-bind index zz quit                                
-                                                  
+# binding q for exiting all menus
+bind generic,compose,attach,pager q exit
+
+# making q do nothing in index
+bind index x noop
+
+
+# binding ZZ like in vim to quit, only in index
+bind index zz quit
+
+# Attachment
+bind index,pager V  noop  ## Unbinds V from version
+macro index,pager V "<view-attachments><search>html<enter><view-mailcap><exit>" "Open html email in browser"
+macro compose ,V "<shell-escape>bash $HOME/.config/neomutt/bin/filepick<enter><enter-command>source $HOME/.config/neomutt/tmpfile<enter><shell-escape>bash $HOME/.config/neomutt/bin/filepick clean<enter>" "Attach with your file manager"
+
 # Mail & Reply
 bind index                      f forward-message
 bind index                      r reply
@@ -468,22 +515,25 @@ bind index                      R group-reply
 # bind pager,index                dt  delete-subthread
 bind pager,index                dm  delete-message
 bind pager,index                gt  next-thread
+bind pager,index                ]t  next-thread
 bind pager,index                gT  previous-thread
+bind pager,index                [t  previous-thread
 bind index                      zc  collapse-thread
-bind index                      zC  collapse-all # Missing :folddisable/foldenableacro index gt "<change-folder>=INBOX.Trash<enter>" "Go to trash"
+bind index                      zC  collapse-all
+# Missing :folddisable/foldenableacro index gt "<change-folder>=INBOX.Trash<enter>" "Go to trash"
 
 #############################
-# Toggle                  {{{3 
+# Toggle                  {{{3
 # Reserve t for toggle on index
-bind index t  noop
+bind index                      t  noop
 bind index                      tn toggle-new
 bind index                      tr toggle-read
 
 # Macro to edit main muttrc
 
 # Editor
-#macro editor \C0 <bol> 
-#macro editor  \ab <backward-word> 
+#macro editor \C0 <bol>
+#macro editor  \ab <backward-word>
 #macro editor \af <forward-word>
 #macro editor \cd <delete-char>
 #macro editor \ce <eol>
