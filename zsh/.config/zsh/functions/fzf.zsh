@@ -1,8 +1,8 @@
 # Opening Files {{{1
 function conf(){
-  CONFIG_DIRS=(~/.wuzz/config.toml, ~/.tmux.conf, ~/.config/nvim/init.vim, ~/.jira.d/config.yml, ~/.chunkwmrc, ~/.skhdrc, ~/.kube/config,
-  ~/.myclirc, ~/.qutebrowser/config.py, ~/.taskrc, ~/.config/bugwarrior/bugwarriorrc, ~/.config/vdirsyncer/config, ~/.config/tig/config, 
-  ~/tmux.powerline.conf, ~/.my.cnf, ~/.config/neomutt/muttrc, ~/.offlineimaprc, ~/.nixpkgs/darwin-configuration.nix, ~/.config/alacritty/alacritty.yml, ~/.zshrc, ~/.ssh/config, ~/.yabairc)
+  CONFIG_DIRS=(~/.w3m/keymap, ~/.wuzz/config.toml, ~/.tmux.conf, ~/.config/nvim/init.vim, ~/.jira.d/config.yml,  ~/.skhdrc, ~/.kube/config,
+  ~/.myclirc, ~/.qutebrowser/config.py, ~/.taskrc, ~/.config/bugwarrior/bugwarriorrc, ~/.config/vdirsyncer/config, ~/.config/tig/config,
+  ~/tmux.powerline.conf, ~/.my.cnf, ~/.config/neomutt/muttrc, ~/.offlineimaprc, ~/.nixpkgs/darwin-configuration.nix, ~/.config/alacritty/alacritty.yml, ~/.zshrc, ~/.ssh/config, ~/.yabairc, ~/.config/notmuch/notmuch-config, ~/.config/wtf/config.yml)
   VERT_CONFIG_DIRS=$(echo $CONFIG_DIRS | awk -v RS=, '{ sub(" ", ""); print }')
 
   echo $VERT_CONFIG_DIRS | fzf --preview="highlight -O ansi -l --force {}" \
@@ -17,7 +17,7 @@ if [ -z $VIM_CONFIG_FILE ]; then
   nvim $HOME/.config/nvim/init.vim
 else
   case "${VIM_CONFIG_FILE}" in
-    notes|note|no)  
+    notes|note|no)
       nvim $HOME/.config/nvim/settings/notes.vim
       ;;
   esac
@@ -49,17 +49,17 @@ vg() {
 # Processes {{{1
 # fkill - kill processes - list only the ones you can kill. Modified the earlier script.
 fkill() {
-    local pid 
+    local pid
     if [ "$UID" != "0" ]; then
         pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
     else
         pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-    fi  
+    fi
 
     if [ "x$pid" != "x" ]
     then
         echo $pid | xargs kill -${1:-9}
-    fi  
+    fi
 }
 #}}}
 # Command History {{{1
@@ -96,14 +96,14 @@ sort -u | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
   target=$(
 (echo "$tags"; echo "$branches") |
     fzf --no-hscroll --no-multi --delimiter="\t" -n 2 \
-    --ansi --preview="jira view {+2..}") 
+    --ansi --preview="jira view {+2..}")
 }
 
 fdb(){
 # TODO: Need to figure out how to strip out digitis using sed
 # echo "feature/SA-13355-log-course-compleition" | sed -En "s/^feature\/\(SA-[0-9]+\).*$/\1/p"
 local branches target_branches
-  branches=$(git --no-pager branch) 
+  branches=$(git --no-pager branch)
   target_branches=$(echo "$branches" |
     fzf -m --no-hscroll \
     --bind "ctrl-m:toggle-in" \
@@ -123,6 +123,7 @@ fco() {
 }
 #}}}
 
+# Docker {{{1
 # Select a running docker container to stop
 function ds() {
   local cid
@@ -130,11 +131,38 @@ function ds() {
 
   [ -n "$cid" ] && docker stop "$cid"
 }
+# Select a docker container to start and attach to
+function da() {
+  local cid
+  cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
+
+  [ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
+}
+
+# Select a docker container to stop and remove
+function drmc() {
+  docker ps -a | sed 1d | fzf -q "$1" --no-sort -m --tac | awk '{ print $1 }' | xargs -I % bash -c "docker stop %; docker rm %"
+}
+# Select a docker image or images to remove
+function drmi() {
+  docker images | sed 1d | fzf -q "$1" --no-sort -m --tac | awk '{ print $3 }' | xargs -r docker rmi
+}
+#}}}
 
 # Vagrant {{{1
 function vags(){
   #List all vagrant boxes available in the system including its status, and try to access the selected one via ssh
   cd $(cat ~/.vagrant.d/data/machine-index/index | jq '.machines[] | {name, vagrantfile_path, state}' | jq '.name + "," + .state  + "," + .vagrantfile_path'| sed 's/^"\(.*\)"$/\1/'| column -s, -t | sort -rk 2 | fzf | awk '{print $3}'); vagrant ssh
+}
+#}}}
+
+# MPC {{{1
+fmpc() {
+  local song_position
+  song_position=$(mpc -f "%position%) %artist% - %title%" playlist | \
+    fzf-tmux --query="$1" --reverse --select-1 --exit-0 | \
+    sed -n 's/^\([0-9]\+\)).*/\1/p') || return 1
+  [ -n "$song_position" ] && mpc -q play $song_position
 }
 #}}}
 
