@@ -1,7 +1,7 @@
 # vim: foldmethod=marker
 # Vim-style keybindings for ./tig
 #
-#  Navigation {{{1====================
+#  Navigation {{{1
 bind generic h scroll-left
 bind generic j move-down
 bind generic k move-up
@@ -15,18 +15,14 @@ bind generic gp parent
 bind generic gP back
 bind generic gn view-next
 
-bind main    G  none
+bind generic G  none
 bind generic G  move-last-line
 
 bind generic <C-f> move-page-down
 bind generic <C-b> move-page-up
 #}}}
 
-
-# Copy  ====================
-
-
-# ================ Views  ====================
+# Views  {{{1 
 bind generic v  none
 bind generic vm view-main
 bind generic vd view-diff
@@ -41,6 +37,7 @@ bind generic vy view-stash
 bind generic vg view-grep
 bind generic vp view-pager
 bind generic vh view-help
+#}}}
 
 # ================ Toggle  ====================
 bind generic o  none
@@ -96,7 +93,6 @@ bind main Tp !git push origin %(tag)
 
 # Fixup with parent commit
 bind main <Ctrl-f> !./tig-rebase.sh fixup %(commit)
-bind diff <Ctrl-f> !./tig-rebase.sh fixup %(commit)
 
 # Rebase to move commit up
 bind main <Ctrl-k> !./tig-rebase.sh ascend %(commit)
