@@ -207,3 +207,7 @@ git checkout --orphan master
 
 # Delete git ref
 git update-ref -d <ref-tags>
+
+# Create a worktree (think git-clone into a temp folder using a branch (optional))
+git worktree add -b <branch> <folder-name>
+

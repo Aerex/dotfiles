@@ -13,3 +13,11 @@ db.col.find().pretty()
 
 # Filter documents by field value condition
 db.books.find({"title":"Treasure Island"})
+
+# Update document by field (where item = paper)
+db.books.updateOne({"item": "paper"},
+  {
+    $set: { "size.uom": "cm", status: "P" },
+    $currentDate: { lastModified: true }
+  }
+})

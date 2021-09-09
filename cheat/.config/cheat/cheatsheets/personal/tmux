@@ -57,9 +57,18 @@ Ctrl-b %
 # Split windows vertically:
 Ctrl-b "
 # }}}}
+
+
+# Pane management {{{{1
+# Create a pane 
+tmux split-window <options> <shell-command> 
+# alias: splitw
+
 # Find out if you are in zoom mode (will give a number greater than 0)
 tmux list-panes -F '#F' | grep Z | wc -l | sed 's/ //g'
+#}}}
 
+# Options {{{{1
 # List keys / bindings
 tmux list-keys
 
@@ -74,5 +83,5 @@ tmux show-options -s
 
 # List global options
 tmux show-options -g
-
+#}}}
 # vim: nowrap foldmethod=marker foldlevel=1

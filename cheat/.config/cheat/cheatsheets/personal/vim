@@ -171,7 +171,9 @@ cr<space>
 #TO change to TItle Case
 crt 
 
-# Regexp matches
+# Vimscript   
+## Regexp matches
+# \v enables “extended” regex mode which allows word boundary (<>), +, and more.
 'hello' =~ 'xx*'
 'hello' !~ 'xx*'
 'hello' =~ '\v<\d+>'
