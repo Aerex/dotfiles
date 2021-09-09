@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd ~/Documents/repos/git/neovim
+git pull # get lastest changes
+rm -r build/  # clear the CMake cache
+ADDIT_FLAGS=""
+if [ $(uname) == "Darwin" ]; then
+  ADDIT_FLAGS="CMAKE_BUILD_TYPE=Release MACOSX_DEPLOYMENT_TARGET=10.15 DEPS_CMAKE_FLAGS=\"-DCMAKE_CXX_COMPILER=$(xcrun -find c++)\""
+fi
+make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$HOME/neovim" $ADDIT_FLAGS
+make install
+export PATH="$HOME/neovim/bin:$PATH"
