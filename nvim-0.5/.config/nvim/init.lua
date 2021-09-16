@@ -38,6 +38,9 @@ vim.cmd('colorscheme base16-nord')
 vim.g.seiya_auto_enable = 1
 vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and {'guibg'} or {'ctermbg'}
 vim.cmd('hi rainbowcol7 guifg=#D8DEE9')
+
+vim.cmd('autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"')
+
 -- misc
 vim.g.vifm_embed_split = true
 vim.g.notes_dir = '~/Documents/repos/.private/notes'

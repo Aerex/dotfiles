@@ -36,7 +36,8 @@ if ok then
 
      -- treesitter
     use {
-      'nvim-treesitter/nvim-treesitter',
+         'nvim-treesitter/nvim-treesitter',
+         branch = '0.5-compat',
       requires = {
         'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects', 'nvim-treesitter/playground'
       },
@@ -81,7 +82,7 @@ if ok then
     use {
       'sbdchd/neoformat',
       { 'godlygeek/tabular', cmd = { 'Tabularize' } },
-      { 'lukas-reineke/indent-blankline.nvim' },
+      { 'lukas-reineke/indent-blankline.nvim', config = function() require('indentlines') end },
     }
     -- colors
     use {
@@ -92,7 +93,11 @@ if ok then
     }
 
     -- debugger
-    --use {'mfussenegger/nvim-dap'}
+    use {
+      'mfussenegger/nvim-dap',
+      requires = { 'rcarriga/nvim-dap-ui', 'mfussenegger/nvim-dap-python'},
+    }
+
     use {
       'rcarriga/vim-ultest',
       requires = {'vim-test/vim-test'}, run = ':UpdateRemotePlugins' ,
@@ -110,24 +115,38 @@ if ok then
     }
 
    -- completions / snippets
-   use {
-     { 'hrsh7th/nvim-compe', event = 'InsertEnter *', config = function() require('completion') end },
-     {'SirVer/ultisnips', requires = {{'honza/vim-snippets' }}, setup = [[require('snippets')]] }
-   }
+  use({ -- nvim-cmp
+      'hrsh7th/nvim-cmp',
+      requires = {
+        'hrsh7th/cmp-buffer',
+        'hrsh7th/cmp-path',
+        'hrsh7th/cmp-nvim-lua',
+        'hrsh7th/cmp-nvim-lsp',
+        'hrsh7th/cmp-look', -- dictionary source
+        {
+          'SirVer/ultisnips',
+          'quangnguyen30192/cmp-nvim-ultisnips',
+          'honza/vim-snippets',
+        }
+      },
+      config = function()
+        require('completion')
+      end,
+    })
     -- profiling
-    use { 'tweekmonster/startuptime.vim' }
+  use { 'tweekmonster/startuptime.vim' }
 
-    -- marks
-    use { 'kshenoy/vim-signature' }
-    -- terminal
-    use {
-      'akinsho/nvim-toggleterm.lua',
-     config = function() require'toggleterm'.setup{ open_mapping = [[<C-t>]], shading_factor = 1 } end
-    }
-    use {
-      'AndrewRadev/bufferize.vim',
-      cmd = {'Bufferize'}
-    }
+  -- marks
+  use { 'kshenoy/vim-signature' }
+  -- terminal
+  use {
+    'akinsho/nvim-toggleterm.lua',
+   config = function() require'toggleterm'.setup{ open_mapping = [[<C-t>]], shading_factor = 1 } end
+  }
+  use {
+    'AndrewRadev/bufferize.vim',
+    cmd = {'Bufferize'}
+  }
   end
   )
 end
