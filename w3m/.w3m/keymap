@@ -123,6 +123,8 @@ keymap C-t NULL
 keymap d NULL
 keymap gt NULL
 keymap gT NULL
+keymap gb NULL
+keymap gB NULL
 keymap ESC-t NULL
 keymap C-wL NULL
 keymap C-wH NULL
@@ -200,6 +202,8 @@ keymap C-p PREV_LINK
 keymap :l PEEK_LINK
 keymap C-o PREV
 keymap C-i NEXT
+keymap gb EXTERN
+keymap gB EXTERN_LINK
 
 # reload
 keymap r RELOAD
