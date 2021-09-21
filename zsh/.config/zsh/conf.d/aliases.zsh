@@ -20,7 +20,7 @@ alias vags="vagrant ssh -c 'bash'"
 # }}}
 
 
-# YABAI {{{1 
+# YABAI {{{1
 alias ybmq="yabai -m query"
 # }}}
 
@@ -31,7 +31,7 @@ alias nixs="nix search -u"
 # }}}
 
 # HUB  {{{1
-alias hpr="hub pull-request -c" 
+alias hpr="hub pull-request -c"
 alias hprd="hub pull-request -c development"
 alias hprm="hub pull-request -c master"
 # }}}
@@ -48,13 +48,37 @@ alias aconf="nvim ~/.config/alacritty/alacritty.yml"
 alias bpl="bugwarrior-pull"
 # }}}
 
+# TASKWARRIOR {{{1
+alias t="task" # for work
+alias trm="task rm"
+alias tm="task modify"
+alias tn="task annotate"
+alias ta="task add"
+alias td="task done"
+alias to="taskopen"
+alias ts="task sync"
+alias tc="task context"
+alias tls="task ls"
+alias tlsn="task ls +next"
+alias tin="task in"
+alias tcc="task context none"
+alias tw="task context work"
+alias tww="task context workall"
+alias tu="task undo"
+alias te="task edit"
+alias tn="task note"
+alias tst="task start"
+alias tsp="task stop"
+alias tun="task denotate"
+#}}}
+
 # PASS {{{1
 alias pgpl="pass git pull"
 alias pgp="pass git push"
 # }}}
 
 # GCAL {{{1
-alias gcal="gcalcli" 
+alias gcal="gcalcli"
 #alias gcalt="gcalcli agenda $(date +\"%m/%d\") $(date +\"%m/%d\" --date='tomorrow')"
 alias gcalw="gcalcli calw"
 alias gcalm="gcalcli calm"
@@ -63,7 +87,7 @@ alias gcalm="gcalcli calm"
 # GIT {{{1
 alias g="git"
 #alias git-bug="$HOME/go/bin/git-bug"
-## ADD {{{2 
+## ADD {{{2
 alias gaa="git add -A"
 alias ga="git add"
 #}}}
@@ -120,7 +144,7 @@ alias gpu="git pu"
 alias gp="gpu"
 alias gpd="git push --delete"
 alias gpuf="git pu -f"
-alias gpus="git push --set-upstream" 
+alias gpus="git push --set-upstream"
 alias gpufm="export OVERRIDE_MASTER_PUSH=1; git push origin master -f"
 alias gpum="export OVERRIDE_MASTER_PUSH=1; git push origin master"
 alias gpuso="git push --set-upstream origin"
@@ -131,10 +155,23 @@ alias gconf="git config --global"
 alias gpr="git pull-request"
 #}}}
 
+# ZSH {{{1
+alias zae="nvim-beta ~/.config/zsh/conf.d/aliases.zsh; source ~/.config/zsh/conf.d/aliases.zsh"
+alias zpconf="nvim ~/.zprofile; source ~/.zprofile"
+alias zase="nvim ~/.config/zsh/conf.d/aliases.sec.zsh; source ~/.config/zsh/conf.d/aliases.sec.zsh"
+alias zse="nvim ~/.config/zsh/conf.d/env.sec.zsh; source ~/.config/zsh/conf.d/env.sec.zsh"
+alias sz="source ~/.zshrc"
+alias zev="nvim ~/.zshenv; source ~/.zshenv"
+alias zh="cat ~/.zsh_history | less"
+alias history="zh"
+alias zs="sz"
+alias zconf="nvim-beta ~/.zshrc; source ~/.zshrc"
+alias zrc="nvim-beta ~/.zshrc; source ~/.zshrc"
+#}}}
 # ================ NPM ==================== #1
 alias ns="npm start"
 alias nw="npm run watch"
-alias nb="npm run build"
+#alias nb="npm run build"
 alias nbp="npm run build:prod"
 alias nv="npm version"
 alias nt="npm test"
@@ -162,35 +199,13 @@ alias tmi="tmux attach -t misc"
 alias tmu="tmux attach -t music"
 alias tmc="tmux attach -t chat"
 alias tconf="nvim ~/.tmux.conf"
-alias mux="tmuxinator"
+#alias mux="tmuxinator"
 
 # ================ VIFM ==================== #
 alias f='vifm .'
 alias ff='sudo vifm .'
 
 
-# ================ TASKWARRIOR ==================== #
-alias t="task" # for work
-alias trm="task rm"
-alias tm="task modify"
-alias tn="task annotate"
-alias ta="task add"
-alias td="task done"
-alias to="taskopen"
-alias ts="task sync"
-alias tc="task context"
-alias tls="task ls"
-alias tlsn="task ls +next" 
-alias tin="task in"
-alias tcc="task context none"
-alias tw="task context work"
-alias tww="task context workall"
-alias tu="task undo"
-alias te="task edit"
-alias tn="task note"
-alias tst="task start"
-alias tsp="task stop"
-alias tun="task denote"
 
 # ================ RANGER  ==================== #1
 alias r="ranger"
@@ -216,17 +231,6 @@ alias vv="sudo nvim"
 alias vvb="sudo ~/neovim/bin/nvim"
 alias vconf="nvim ~/.config/nvim/init.vim"
 
-# ================ ZSH  ==================== #1
-alias zae="nvim ~/.config/zsh/conf.d/aliases.zsh; source ~/.config/zsh/conf.d/aliases.zsh"
-alias zpconf="nvim ~/.zprofile; source ~/.zprofile"
-alias zase="nvim ~/.config/zsh/conf.d/aliases.sec.zsh; source ~/.config/zsh/conf.d/aliases.sec.zsh"
-alias zse="nvim ~/.config/zsh/conf.d/env.sec.zsh; source ~/.config/zsh/conf.d/env.sec.zsh"
-alias sz="source ~/.zshrc"
-alias zeconf="nvim ~/.zshenv; source ~/.zshenv"
-alias history="cat ~/.zsh_history | less"
-alias zs="sz"
-alias zconf="nvim ~/.zshrc; source ~/.zshrc"
-alias zrc="nvim ~/.zshrc; source ~/.zshrc"
 
 # JIRA  {{{1
 # Note: Anything prefix with a `j` is a jira alias
@@ -242,6 +246,7 @@ alias jcr="jira create"
 #alias jqa="jira mine-under-review"
 alias jqam="jira mine-under-review"
 #alias jqaa="jira lqaa"
+alias jl="jira list --query"
 alias jmd="jira list-merge-deploy"
 alias jmdm="jira list-merge-deploy-me"
 alias jconf="nvim ~/.jira.d/config.yml"
@@ -272,5 +277,6 @@ alias cals="vdirsyncer sync"
 
 alias gulpw="gulp watch --continue"
 
+alias mpva="mpv --no-video"
 
-# vim: nowrap foldmethod=marker foldlevel=2
+# vim: nowrap foldmethod=marker foldlevel=1

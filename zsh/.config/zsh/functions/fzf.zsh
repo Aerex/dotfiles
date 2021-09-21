@@ -139,6 +139,14 @@ function da() {
   [ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
 }
 
+# Select a docker container to exec into a tty bash shell
+function de() {
+  local cid
+  cid=$(docker ps | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
+
+  [ -n "$cid" ] && docker exec -ti "$cid" bash
+}
+
 # Select a docker container to stop and remove
 function drmc() {
   docker ps -a | sed 1d | fzf -q "$1" --no-sort -m --tac | awk '{ print $1 }' | xargs -I % bash -c "docker stop %; docker rm %"
