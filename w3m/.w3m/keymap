@@ -1,7 +1,7 @@
 # w3m vim-like keymap file
 #   by @sansna
 
-########## invalidate defaults ##########
+# Invalidate defaults {{{1
 keymap K NULL
 keymap J NULL
 keymap SPC NULL
@@ -35,10 +35,13 @@ keymap ( NULL
 keymap ) NULL
 keymap C-j NULL
 keymap C-m NULL
+keymap SPCo NULL
+keymap SPCzz NULL
 keymap ESC-C-j NULL
 keymap ESC-C-m NULL
 keymap ESC-w NULL
 keymap ESC-W NULL
+keymap C-g NULL
 keymap C-s NULL
 keymap = NULL
 keymap ESC-l NULL
@@ -70,8 +73,6 @@ keymap j NULL
 keymap DOWN NULL
 keymap k NULL
 keymap UP NULL
-keymap C-e NULL
-keymap C-y NULL
 keymap 0 NULL
 keymap $ NULL
 keymap Z NULL
@@ -86,6 +87,7 @@ keymap C-p NULL
 keymap ESC-TAB NULL
 keymap f NULL
 keymap C-o NULL
+keymap C-i NULL
 keymap TAB NULL
 keymap C-j NULL
 keymap C-] NULL
@@ -148,7 +150,9 @@ keymap \\ NULL
 keymap ! NULL
 keymap C-z NULL
 keymap ZZ NULL
+keymap qq NULL
 keymap ZQ NULL
+# }}}
 
 
 ########## command ##########
@@ -156,6 +160,7 @@ keymap :: COMMAND
 keymap :H HELP
 keymap :O OPTIONS
 keymap :d DOWNLOAD_LIST
+keymap SPCo OPTIONS
 
 ########## history navigation ##########
 keymap L NEXT
@@ -185,18 +190,19 @@ keymap $ LINE_END
 keymap w NEXT_WORD
 keymap b PREV_WORD
 ########## cursor history ##########
-keymap C-i REDO
-keymap C-o UNDO
+keymap C-r REDO
+keymap u UNDO
 ########## navigation ##########
 keymap f MOVE_LIST_MENU
 keymap F LIST_MENU
 keymap C-n NEXT_LINK
 keymap C-p PREV_LINK
 keymap :l PEEK_LINK
+keymap C-o PREV
+keymap C-i NEXT
 
 # reload
 keymap r RELOAD
-keymap C-r RELOAD
 
 # save/load
 keymap :w SAVE
@@ -227,8 +233,8 @@ keymap :b VIEW_BOOKMARK
 
 ########## tab ##########
 keymap d CLOSE_TAB
-keymap gh GOTO http://www.google.com/en
-keymap gH TAB_GOTO http://www.google.com/en
+keymap gh GOTO $WWW_HOME
+keymap gH TAB_GOTO $WWW_HOME
 keymap C-t NEW_TAB
 keymap gt NEXT_TAB
 keymap gT PREV_TAB
@@ -239,6 +245,15 @@ keymap T TAB_MENU
 
 ########## quit ##########
 keymap ZZ EXIT
+keymap qq EXIT
 keymap C-Q EXIT
+keymap SPCzz QUIT
 keymap ZQ QUIT
 keymap :q QUIT
+
+########## misc ##########
+keymap C-g INTERRUPT
+
+
+
+# vim: nowrap foldmethod=marker foldlevel=1
