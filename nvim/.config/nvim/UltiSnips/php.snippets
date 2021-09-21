@@ -1,10 +1,16 @@
+snippet logn "echo line number"
+echo("\n`!v line(".")`\n");
+endsnippet
+snippet ptr "Add print_r statement"
+print_r($$0);
+endsnippet 
+
 snippet todo "Create TODO comment"
 // TODO: $0
 endsnippet
 
 snippet logcn "echo with line number ref"
-echo('#`!v line(".")`');
-echo('$$2: ' . $$2);
+echo("\n" . '$$2#L`!v line(".")` => ' . "$$2" . "\n");
 endsnippet
 
 
@@ -38,4 +44,10 @@ Bugsnag::notifyError(
 				]);
 		}
 );
+endsnippet
+snippet div "Add div tag"
+<div class="$1">
+	$2
+</div>
+$0
 endsnippet
