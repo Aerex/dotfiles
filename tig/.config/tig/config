@@ -16,7 +16,9 @@ bind generic gP back
 bind generic gn view-next
 
 bind generic G  none
+bind main    G  none
 bind generic G  move-last-line
+bind main G move-last-line
 
 bind generic <C-f> move-page-down
 bind generic <C-b> move-page-up
@@ -27,6 +29,7 @@ bind generic v  none
 bind generic vm view-main
 bind generic vd view-diff
 bind generic vl view-log
+bind generic vL view-reflog
 bind generic vt view-tree
 bind generic vb view-blob
 bind generic vx view-blame
