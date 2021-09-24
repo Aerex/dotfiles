@@ -1,27 +1,28 @@
 {
     "segments": {
         "right": [
-          {
-                "function": "powerline.segments.tmux.attached_clients",
-                "args": {
-                  "minimum": 1
-                }
-          },
             {
                 "function": "powerline.segments.common.vcs.branch",
+                "priority": 40
+            },
+            {
+                "function": "powerline.segments.common.sys.cpu_load_percent",
                 "priority": 50,
-                "args": {
-                  "status_colors": true
+                "args":  {
+                  "format": "{0:.0f}%"
                 }
             },
             {
+                "function": "powerline.segments.common.vcs.stash"
+            },
+            {
                 "args": {
-                    "format": "%I:%M %p",
+                    "format": "%m/%d/%y %a %I:%M %p",
                     "istime": true
                 },
                 "function": "powerline.segments.common.time.date"
             }
-            
+
         ]
     }
 }
