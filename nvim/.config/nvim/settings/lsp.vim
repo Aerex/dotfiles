@@ -41,8 +41,8 @@ function! NvimLspKeyMapping()
     "nnoremap <silent> <leader>p                                                                  <cmd> lua require('telescope.builtin').git_files(require('telescope.themes').get_dropdown{ prompt_prefix = 'GitFiles>', set_env = {} })<CR>
     nnoremap <silent> <leader>Gs                                                                 <cmd> lua require('neogit').open({ kind = 'split' })<CR>
     nnoremap <silent> <leader>,p                                                                 <cmd> lua require('telescope.builtin').find_files()<CR>
-    nnoremap <silent> <leader>ag                                                                 <cmd> lua require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }<CR>
-    noremap <silent> <leader>rg                                                                  <cmd> lua require('telescope').extensions.fzf_writer.staged_grep()<CR>
+    nnoremap <silent> <leader>ag                                                                 :Rg <C-R><C-W><CR>
+    noremap <silent> <leader>rg                                                                  :Rg<CR>
     noremap <silent> <leader>b                                                                   <cmd> Telescope buffers<CR>
 
     nnoremap <silent> <leader>lof                                                                <cmd> lua require'telescope.builtin'.oldfiles{}<CR>
@@ -53,7 +53,7 @@ function! NvimLspKeyMapping()
     nnoremap <silent><leader>M                                                                   <cmd> lua require('telescope.builtin').keymaps()<CR>
     nnoremap <buffer><silent> gr                                                                 <cmd> Telescope lsp_references<CR>
     nnoremap <buffer><silent> xr                                                                 <cmd> Trouble lsp_references<CR>
-    nnoremap <silent> <c-]>                                                                      <cmd> lua vim.lsp.buf.definition()<CR>
+    nnoremap <silent> <c-]>                                                                      <cmd> Telescope lsp_definitions<CR>
     nnoremap <buffer><silent> gi                                                                 <cmd> Trouble lsp_implementations<CR>
     nnoremap <buffer><silent> gt                                                                 <cmd> lua vim.lsp.buf.type_definition()<CR>
     nnoremap <buffer><silent> 1gD                                                                <cmd> lua vim.lsp.buf.type_definition()<CR>
