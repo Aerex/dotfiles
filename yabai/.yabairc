@@ -1,0 +1,81 @@
+#!/usr/bin/env sh
+
+# global settings
+yabai -m config mouse_follows_focus          on
+yabai -m config focus_follows_mouse          off
+yabai -m config window_placement             second_child
+yabai -m config window_topmost               off
+yabai -m config window_shadow                off
+yabai -m config window_opacity               off
+# Cannot be change on macOS Catalina because of an Apple bug in the Window Server
+yabai -m config window_opacity_duration      0.0
+yabai -m config active_window_opacity        1.0
+yabai -m config normal_window_opacity        0.90
+yabai -m config window_border                on
+yabai -m config window_border_width          6
+yabai -m config active_window_border_color   0xffCE9161
+yabai -m config normal_window_border_color   0xffA5A4A6
+yabai -m config insert_feedback_color        0xffd75f5f
+yabai -m config split_ratio                  0.50
+yabai -m config auto_balance                 off
+yabai -m config mouse_modifier               fn
+yabai -m config mouse_action1                resize
+yabai -m config mouse_action2                move
+#yabai -m configmouse_drop_action            swap
+
+# general space settings
+yabai -m config layout                       bsp
+yabai -m config top_padding                  36
+yabai -m config bottom_padding               10
+yabai -m config left_padding                 10
+yabai -m config right_padding                10
+yabai -m config window_gap                   10
+yabai -m config --space 2 layout stack
+yabai -m config debug_output                 on
+
+yabai -m rule --add label="qutebrowser" app="^qutebrowser$" space=^2
+yabai -m rule --add label="Slack Call" title="Slack call" manage=off
+#yabai -m rule --add label="Google Chrome" app="^Google" space=^3
+yabai -m rule --add label="Activity Monitor" app="^Activity Monitor$" manage=off
+yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
+yabai -m rule --add label="System Preferences" app="^System Preferences$" manage=off
+yabai -m rule --add label="App Store" app="^App Store$" manage=off
+#yabai -m rule --add label="Snagit" app="^Snagit" space=^5
+yabai -m rule --add label="Calculator" app="^Calculator$" manage=off
+yabai -m rule --add label="Dictionary" app="^Dictionary$" manage=off
+yabai -m rule --add label="mpv" app="^mpv$" manage=off
+#yabai -m rule --add label="Slack" app="^Slack$" manage=off
+yabai -m rule --add label="VirtualBox" app="^VirtualBox$" manage=off
+#yabai -m rule --add label="Postman" app="^Postman$" space=^3
+#yabai -m signal --add event=application_terminated  action="yabai -m window --focus last"
+#yabai -m signal --add event=space_changed  action="yabai -m window --focus last"
+echo "yabai configuration loaded.."
+# STACKLINE_EVENTS="\
+#          application_activated \
+#          application_front_switched \
+#          application_hidden \
+#          application_launched \
+#          application_terminated \
+#          application_visible \
+#          window_created \
+#          window_deminimized \
+#          window_focused \
+#          window_minimized \
+#          window_resized"
+
+#          yabai -m signal --add \
+#          event="window_destroyed" \
+#          label="stackline_window_destroyed" \
+#          action="echo ':window_destroyed' | /usr/local/bin/hs -m stackline-events"
+
+#          for event in $STACKLINE_EVENTS
+#          do
+#              yabai -m signal --add \
+#                event="$event" \
+#                label="stackline_$event" \
+#                app!="Hammerspoon" \
+#                action="echo ':$event' | /usr/local/bin/hs -m stackline-events"
+#          done
+# yabai -m signal --add event=space_changed \
+#   action="osascript -e 'tell application \"'$(ps ax | grep sicht | awk '{print $5}'| head -1 | cut -d/ -f3 | cut -d. -f1)'\" to refresh"'
