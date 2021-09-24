@@ -7,14 +7,13 @@ let g:lightline = {
       \   'right': [ ['percent', 'filepath'], ['lineinfo'], ['gitgutter'] ]
       \ },
       \ 'component_function': {
-      \    'cwd': 'getcwd', 
+      \    'cwd': 'getcwd',
       \    'filename_treesitter': 'TreesitterFilenameStatus',
       \   'gitbranch': 'LightlineFugitive',
-      \   'gitgutter': 'GitGutterStatus',
-      \   'filepath': 'LightLineFilepath',  
-      \   'fileformat': 'LightLineFileformat', 
-      \   'filetype': 'LightLineFiletype', 
-      \   'fileencoding': 'LightLineFileencoding', 
+      \   'filepath': 'LightLineFilepath',
+      \   'fileformat': 'LightLineFileformat',
+      \   'filetype': 'LightLineFiletype',
+      \   'fileencoding': 'LightLineFileencoding',
       \   'lineinfo': 'LightLineInfo'
       \ }
       \ }
@@ -23,7 +22,7 @@ function! LightLineFilepath()
   let s:file_path = expand('%t')
     if(s:file_path =~ "ranger")
 			return "Ranger"
- 		endif 
+ 		endif
     return '' != expand('%t') ? expand('%t') : '[No Name]'
 endfunction
 function! s:set_lightline_colorscheme(name) abort
@@ -33,10 +32,18 @@ function! s:set_lightline_colorscheme(name) abort
   call lightline#update()
 endfunction
 
-function! GitGutterStatus()
-  let [a,m,r] = GitGutterGetHunkSummary()
-  return printf('+%d ~%d -%d', a, m, r)
+function! LspStatus() abort
+  if luaeval('#vim.lsp.buf_get_clients() > 0')
+    return luaeval("require('lsp-status').status()")
+  endif
+
+  return ''
 endfunction
+
+" function! GitGutterStatus()
+"   let [a,m,r] = GitGutterGetHunkSummary()
+"   return printf('+%d ~%d -%d', a, m, r)
+" endfunction
 "set statusline+=%{GitStatus()}
 
 function! LightlineFilename()
@@ -45,7 +52,7 @@ function! LightlineFilename()
 		      \ expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
 	endfunction
 
-function! TreesitterFilenameStatus() 
+function! TreesitterFilenameStatus()
   let l:status = LightlineFilename()
   if exists('g:loaded_nvim_treesitter')
     let l:status = nvim_treesitter#statusline(90)

@@ -10,35 +10,37 @@ let g:coc_disable_startup_warning = 1
 let g:coc_enabled = 0
 set updatetime=300
 " Remap keys for gotos
-nmap <silent> gD :call CocVsplitJumpDefinition()<CR>
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gr <Plug>(coc-references)
-nmap <silent><leader>k :call <SID>show_documentation()<CR>
+if (!has('nvim-0.5')) 
+  nmap <silent> gD :call CocVsplitJumpDefinition()<CR>
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gr <Plug>(coc-references)
+  nmap <silent><leader>k :call <SID>show_documentation()<CR>
 
-nmap <silent> <leader>lct :call CocToggle()<CR>
+  nmap <silent> <leader>lct :call CocToggle()<CR>
 
 
 
-" Show all diagnostics
-"nnoremap <silent> <leader>ld  :<C-u>CocList diagnostics<cr>
-" Edit config 
-nnoremap <silent> <leader>lce :call EditCocConfig()<CR> 
+  " Show all diagnostics
+  "nnoremap <silent> <leader>ld  :<C-u>CocList diagnostics<cr>
+  " Edit config 
+  nnoremap <silent> <leader>lce :call EditCocConfig()<CR> 
 
-" Show symbols in current file
-nnoremap <silent> <leader><S-o> :<C-u>CocList outline<CR>
-" Manage extensions
-nnoremap <silent> <leader>lex  :<C-u>CocList extensions<cr>
-map <leader>led  :<C-u>CocUninstall 
-" Show commands
-nnoremap <silent> <leader>lcm  :<C-u>CocList commands<CR>
-" Install extension from coc markertplace
-nnoremap <silent> <leader>lm :CocList marketplace<CR>
-" Fix autofix problem of current line
-nmap <leader>lf  <Plug>(coc-fix-current)
-" Find symbol of current document
-"nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
+  " Show symbols in current file
+  nnoremap <silent> <leader><S-o> :<C-u>CocList outline<CR>
+  " Manage extensions
+  nnoremap <silent> <leader>lex  :<C-u>CocList extensions<cr>
+  map <leader>led  :<C-u>CocUninstall 
+  " Show commands
+  nnoremap <silent> <leader>lcm  :<C-u>CocList commands<CR>
+  " Install extension from coc markertplace
+  nnoremap <silent> <leader>lm :CocList marketplace<CR>
+  " Fix autofix problem of current line
+  nmap <leader>lf  <Plug>(coc-fix-current)
+  " Find symbol of current document
+  "nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
+endif
 
 function! CocToggle()
   if g:coc_enabled == 1
@@ -103,14 +105,16 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
+if (!has('nvim-0.5'))
+  xmap if <Plug>(coc-funcobj-i)
+  omap if <Plug>(coc-funcobj-i)
+  xmap af <Plug>(coc-funcobj-a)
+  omap af <Plug>(coc-funcobj-a)
+  xmap ic <Plug>(coc-classobj-i)
+  omap ic <Plug>(coc-classobj-i)
+  xmap ac <Plug>(coc-classobj-a)
+  omap ac <Plug>(coc-classobj-a)
+endif
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 " inoremap <silent><expr> <TAB>
