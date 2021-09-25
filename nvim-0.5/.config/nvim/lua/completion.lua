@@ -1,4 +1,5 @@
 local send_keys = require('utils').send_keys
+local get_packer_path = require('utils').get_packer_path
 local check_back_space = require('utils').check_back_space
 local ultisnips = require('utils').ultisnips
 local ok, cmp = pcall(require,'cmp')
@@ -7,7 +8,11 @@ if ok then
   -- UltiSnip was auto-removing tab mappings for select mode,
   -- that leads to we cannot jump through snippet stops so we need to disable here
   -- Credits to https://github.com/quangnguyen30192/cmp-nvim-ultisnips/issues/5
+  vim.g.UltiSnipsExpandTrigger = '<c-S>'
   vim.g.UltiSnipsRemoveSelectModeMappings = 0
+  vim.g.UltiSnipsSnippetsDir = os.getenv('HOME') ..'/.config/nvim/UltiSnips/'
+  vim.g.UltiSnipsEditSplit = 'vertical'
+  vim.g.UltiSnipsSnippetDirectories = { os.getenv('HOME') .. '/.config/nvim/UltiSnips', get_packer_path().start ..'/vim-snippets/UltiSnips' }
 
   local ok_cmp_look, _ = pcall(require, 'cmp_look')
   if ok_cmp_look then
@@ -20,7 +25,7 @@ if ok then
     },
     snippet = {
       expand = function(args)
-        vim.fn['UltiSnips#Anon'](args.body)
+        vim.fn["UltiSnips#Anon"](args.body)
       end,
     },
     mapping = {
@@ -46,9 +51,10 @@ if ok then
         end
       end, {'i','s',}),
       ['<C-Space>'] = cmp.mapping(function(fallback)
-        if ultisnips.can_expand_snippet() then
-          send_keys('<C-R>=UltiSnips#ExpandSnippet()<CR>', 'n')
-        elseif vim.fn.pumvisible() == 1 then
+        if vim.fn.pumvisible() == 1 then
+          if ultisnips.can_expand_snippet() then
+            return ultisnips.expand_snippet()
+          end
           send_keys('<C-n>', 'n')
         elseif check_back_space() then
           send_keys('<CR>', 'n')
@@ -86,11 +92,11 @@ if ok then
     },
     sources = {
       { name = 'nvim_lsp' },
-      { name = 'ultisnips' },
-      { name = 'path' },
       { name = 'buffer' },
       { name = 'nvim_lua' },
-      { name = 'look' }
+      { name = 'path' },
+      { name = 'look' },
+      { name = 'ultisnips' },
     },
   }
 end

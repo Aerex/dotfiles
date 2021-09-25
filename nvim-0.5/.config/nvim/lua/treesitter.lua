@@ -18,16 +18,16 @@ require'nvim-treesitter.configs'.setup {
   query_linter = {
     enable = true,
     use_virtual_text = true,
-    lint_events = {"BufWrite", "CursorHold"},
+    lint_events = {'BufWrite', 'CursorHold'},
   },
   incremental_selection = {
     enable = true,
     disable = {},
     keymaps = {
-      init_selection = "<leader>n",
-      node_incremental = "n",
-      scope_incremental = "<leader>n",
-      node_decremental = "m"
+      init_selection = '<leader>n',
+      node_incremental = 'n',
+      scope_incremental = '<leader>n',
+      node_decremental = 'm'
     }
   },
   textobjects = {
@@ -36,76 +36,76 @@ require'nvim-treesitter.configs'.setup {
       lookahead = true,
       disable = {},
       keymaps = {
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["aC"] = "@class.outer",
-        ["iC"] = "@class.inner",
-        ["ac"] = "@conditional.outer",
-        ["ic"] = "@conditional.inner",
-        ["ae"] = "@block.outer",
-        ["ie"] = "@block.inner",
-        ["al"] = "@loop.outer",
-        ["il"] = "@loop.inner",
-        ["is"] = "@statement.inner",
-        ["as"] = "@statement.outer",
-        ["ad"] = "@comment.outer",
-        ["id"] = "@comment.inner",
-        ["am"] = "@call.outer",
-        ["im"] = "@call.inner",
-        ["iS"] = {
-          ledger = "@status"
+        ['af'] = '@function.outer',
+        ['if'] = '@function.inner',
+        ['aC'] = '@class.outer',
+        ['iC'] = '@class.inner',
+        ['ac'] = '@conditional.outer',
+        ['ic'] = '@conditional.inner',
+        ['ae'] = '@block.outer',
+        ['ie'] = '@block.inner',
+        ['al'] = '@loop.outer',
+        ['il'] = '@loop.inner',
+        ['is'] = '@statement.inner',
+        ['as'] = '@statement.outer',
+        ['ad'] = '@comment.outer',
+        ['id'] = '@comment.inner',
+        ['am'] = '@call.outer',
+        ['im'] = '@call.inner',
+        ['iS'] = {
+          ledger = '@status'
         },
-        ["aE"] = {
-          ledger = "@entry.outer"
+        ['aE'] = {
+          ledger = '@entry.outer'
         },
-        ["iE"] = {
-          ledger = "@entry.inner"
+        ['iE'] = {
+          ledger = '@entry.inner'
         }
       }
     },
     swap = {
       enable = true,
       swap_next = {
-        ["<a-l>"] = "@parameter.inner",
-        ["<a-f>"] = "@function.outer",
-        ["<a-s>"] = "@statement.outer"
+        ['<a-l>'] = '@parameter.inner',
+        ['<a-f>'] = '@function.outer',
+        ['<a-s>'] = '@statement.outer'
       },
       swap_previous = {
-        ["<a-L>"] = "@parameter.inner",
-        ["<a-F>"] = "@function.outer",
-        ["<a-S>"] = "@statement.outer"
+        ['<a-L>'] = '@parameter.inner',
+        ['<a-F>'] = '@function.outer',
+        ['<a-S>'] = '@statement.outer'
       }
     },
     lsp_interop = {
       enable = true,
       peek_definition_code = {
-        ["<leader>df"] = "@function.outer",
-        ["<leader>dF"] = "@class.outer"
+        ['<leader>df'] = '@function.outer',
+        ['<leader>dF'] = '@class.outer'
       },
       peek_type_definition_code = {
-        ["<leader>TF"] = "@class.outer"
+        ['<leader>TF'] = '@class.outer'
       }
     },
     move = {
       enable = true,
       goto_next_start = {
-        ["]m"] = "@function.outer",
-        ["]]"] = "@class.outer",
-        ["]e"] = "@entry.outer",
+        [']m'] = '@function.outer',
+        [']]'] = '@class.outer',
+        [']e'] = '@entry.outer',
       },
       goto_next_end = {
-        ["ØØ"] = "@function.inner",
-        ["]E"] = "@entry.outer",
+        ['ØØ'] = '@function.inner',
+        [']E'] = '@entry.outer',
       },
       goto_previous_start = {
-        ["[m"] = "@function.outer",
-        ["[["] = "@class.outer",
-        ["[e"] = "@entry.outer",
+        ['[m'] = '@function.outer',
+        ['[['] = '@class.outer',
+        ['[e'] = '@entry.outer',
       },
       goto_previous_end = {
-        ["[M"] = "@function.outer",
-        ["[]"] = "@class.outer",
-        ["[E"] = "@entry.outer",
+        ['[M'] = '@function.outer',
+        ['[]'] = '@class.outer',
+        ['[E'] = '@entry.outer',
       }
     }
   },

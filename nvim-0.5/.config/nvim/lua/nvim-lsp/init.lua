@@ -66,29 +66,18 @@ vim.fn.sign_define('LspDiagnosticsSignHint', {text='', texthl='LspDiagnostics
   keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  keymap('n', '<leader>rb', '<cmd>LspRestart<CR>', opts)
   keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   keymap('n', '<leader>O', '<cmd>lua require(\'nvim-fzf.lsp\').document_symbols()<CR>', opts)
   keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  keymap('n', '<leader>,d', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
   keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 end
 
 -- load lsp servers
-local get_system_name = function()
-  local system_name
-  if vim.fn.has("mac") == 1 then
-    system_name = "macOS"
-  elseif vim.fn.has("unix") == 1 then
-    system_name = "Linux"
-  elseif vim.fn.has('win32') == 1 then
-    system_name = "Windows"
-  else
-    print("Unsupported system for sumneko")
-  end
-  return system_name
-end
 -- set the path to the sumneko installation; if you previously installed via the now deprecated :LspInstall, use
 local sumneko_root_path = vim.fn.stdpath('cache') .. '/lspconfig/sumneko_lua/lua-language-server'
 local sumneko_binary = sumneko_root_path .. '/bin/Linux/lua-language-server'
@@ -139,8 +128,14 @@ require'lspconfig'.pylsp.setup{
 
 require'lspconfig'.gopls.setup{
   on_attach=on_attach,
-  capabilities = capabilities
+  capabilities = capabilities,
+    settings = {
+      gopls = {
+        staticcheck = true
+      },
+    }
 }
+vim.cmd[[autocmd BufWritePre *.go lua require('nvim-lsp.utils').goimports(1000)]]
 
 require'lspconfig'.vimls.setup {
   on_attach=on_attach,
@@ -167,26 +162,7 @@ require'lspconfig'.efm.setup {
 
 require('lspkind').init({
   with_text = true,
-  symbol_map = {
-    Text = '',
-    Method = 'ƒ',
-    Function = '',
-    Constructor = '',
-    Variable = '',
-    Class = '',
-    Interface = 'ﰮ',
-    Module = '',
-    Property = '',
-    Enum = '了',
-    Keyword = '',
-    Snippet = '﬌',
-    Color = '',
-    File = '',
-    Folder = '',
-    EnumMember = '',
-    Constant = '',
-    Struct = ''
-  },
+  symbol_map = utils.symbol_map,
 })
 
 -- Register the progress handle

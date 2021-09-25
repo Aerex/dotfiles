@@ -1,4 +1,3 @@
-local M = {}
 local dap = require('dap')
 local dapui = require('dapui')
 dap.adapters.go = function(callback, config)

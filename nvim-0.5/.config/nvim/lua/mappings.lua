@@ -18,7 +18,7 @@ local noremaps = {
       ['<leader>rg'] = 'lua require(\'nvim-fzf.rg\')()',
       ['<leader>rG'] = 'lua require(\'nvim-fzf.rg\')(vim.fn.expand("<cword>"))',
       ['<leader>nv'] = 'lua require(\'nvim-fzf.notes\')()',
-      ['<leader>yp'] = 'lua require(\'nvim-fzf.yank-history\')()',
+      ['<leader>yr'] = 'lua require(\'nvim-fzf.yank-history\')()',
       -- snippets
       ['<leader>ue'] = 'UltiSnipsEdit',
       -- git
@@ -34,15 +34,27 @@ local noremaps = {
       ['<leader>tf'] = 'TestFile',
       ['<leader>tn'] = 'TestNearest',
       ['<leader>ts'] = 'TestSuite',
-      ['<leader>tv'] = 'TestVisit'
-
+      ['<leader>tv'] = 'TestVisit',
+      -- debugger
+      ['<F5>']       = 'lua require\'dap\'.continue()',
+      ['<F10>']      = 'lua require\'dap\'.step_over()',
+      ['<F3>']      = 'lua require\'dap\'.disconnect({terminateDebuggee = true })',
+      ['<F4>']      = 'lua require\'dap\'.disconnect({restart = true })',
+      ['<F11>']      = 'lua require\'dap\'.step_into()',
+      ['<F12>']      = 'lua require\'dap\'.step_out()',
+      ['<leader>b']  = 'lua require\'dap\'.toggle_breakpoint()',
+      ['<leader>B']  = 'lua require\'dap\'.set_breakpoint(vim.fn.input(\'Breakpoint condition: \'))',
+      ['<leader>lb'] = 'lua require\'dap\'.set_breakpoint(nil, nil, vim.fn.input(\'Log point message: \'))'
     }
-}
+  }
+
+     --['<leader>dr :lua require'dap'.repl.open()<CR>
+     --['leader>dl :lua require'dap'.run_last()<CR>
 
 local maps = {
   n = {
     p = '<Plug>(miniyank-autoput)',
-    P = '<Plug>(miniyank-autoPut)',
+    P = '<Plug>(miniyank-autoPut)'
   }
 }
 
@@ -54,11 +66,13 @@ local file_type_keymaps = {
       ['<leader>mt'] = 'MarkdownPreviewToggle'
     }
   }
-
 }
 
+-- misc
 vim.api.nvim_set_keymap('n', '<leader><enter>', ':', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = true })
+vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
+
 -- @param {table} m
 -- @param {table|nil} opts
 M.set_keymap = function(m, opts)

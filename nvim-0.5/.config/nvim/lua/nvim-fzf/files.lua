@@ -35,7 +35,7 @@ local _ = {}
     local vimcmd = 'e'
     local key = choices[1]
     if key == 'ctrl-x' then
-      vimcmd = 'new'
+      vimcmd = 'split'
     elseif key ==  'ctrl-v' then
       vimcmd = 'vnew'
     elseif key == 'ctrl-t' then

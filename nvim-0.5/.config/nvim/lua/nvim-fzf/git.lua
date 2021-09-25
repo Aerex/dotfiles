@@ -29,12 +29,12 @@ return function()
     local git_ls_files = 'git ls-files --full-name --cached --others --exclude-standard'
     local command = string.format('%s %s', git_ls_files, _.get_git_root_path())
     local result = fzf(command,
-    '--multi --ansi --expect=ctrl-v,ctrl-x,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="GitFiles> "')
+    '--multi --ansi --expect=ctrl-v,ctrl-x,ctrl-s,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="GitFiles> "')
     local key = result[1]
 
     local vimcmd = 'e'
     if key == 'ctrl-x' or key == 'ctrl-s' then
-      vimcmd = 'vnew'
+      vimcmd = 'split'
     elseif key == 'ctrl-v' then
       vimcmd = 'vnew'
     elseif key == 'ctrl-t' then

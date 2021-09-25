@@ -1,6 +1,13 @@
 local gl = require('galaxyline')
 local gls = gl.section
-gl.short_line_list = { 'fugitive', 'fugitiveblame' }
+gl.short_line_list = {
+  'fugitive',
+  'fugitiveblame',
+  'dapui-watches',
+  'dapui-stacks',
+  'dapui-scopes',
+  'dap-repl'
+}
 
 local colors = {
     bg = '#282c34',
@@ -45,9 +52,6 @@ local function trailing_whitespace()
     end
 end
 
-LSPStatus = get_diagnostic_info
-TrailingWhiteSpace = trailing_whitespace
-RemoteIP = remote_ip
 
 local has_file_type = function()
     local f_type = vim.bo.filetype
@@ -57,12 +61,25 @@ local has_file_type = function()
     return true
 end
 
+local get_fcitx_status = function()
+  if vim.fn.executable('fcitx-remote') then
+    return tonumber(vim.fn.system('fcitx-remote')) > 1 and ' ' or ''
+  else
+    return ''
+  end
+end
+
 local buffer_not_empty = function()
   if vim.fn.empty(vim.fn.expand('%:t')) ~= 1 then
     return true
   end
   return false
 end
+
+LSPStatus = get_diagnostic_info
+TrailingWhiteSpace = trailing_whitespace
+RemoteIP = remote_ip
+FCITXStatus = get_fcitx_status
 
 gls.left[1] = {
   FirstElement = {
@@ -215,20 +232,26 @@ gls.left[13] = {
 }
 
 gls.left[14] = {
-    LSPStatus = {
-     provider = LSPStatus,
+  LSPStatus = {
+    provider = LSPStatus,
     highlight = {colors.yellow,colors.bg},
     icon = ' λ ',
-    }
+  }
 }
 
 gls.right[1] = {
-    RemoteIP = {
-     provider = RemoteIP,
-     highlight = {colors.yellow,colors.bg},
-    }
+  RemoteIP = {
+    provider = RemoteIP,
+    highlight = {colors.yellow,colors.bg},
+  }
 }
-gls.right[2]= {
+gls.right[2] = {
+  FCITXStatus = {
+    provider = FCITXStatus,
+    highlight = {colors.yellow,colors.bg},
+  }
+}
+gls.right[3]= {
   FileFormat = {
     provider = 'FileFormat',
     separator = ' ',
@@ -236,7 +259,7 @@ gls.right[2]= {
     highlight = {colors.fg,colors.line_bg,'bold'},
   }
 }
-gls.right[3] = {
+gls.right[4] = {
   LineInfo = {
     provider = 'LineColumn',
     separator = ' | ',
@@ -244,7 +267,7 @@ gls.right[3] = {
     highlight = {colors.fg,colors.line_bg},
   },
 }
-gls.right[4] = {
+gls.right[5] = {
   PerCent = {
     provider = 'LinePercent',
     separator = ' ',
@@ -270,5 +293,4 @@ gls.short_line_right[1] = {
     separator_highlight = {colors.fg,colors.line_bg},
     highlight = {colors.fg,colors.line_bg}
   }
-
 }
