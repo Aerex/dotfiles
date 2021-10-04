@@ -9,46 +9,59 @@ local noremaps = {
     -- misc
     n = {
       -- misc
-      ['<leader>w']  = 'write',
-      ['<leader>fm'] = 'VsplitVifm',
+      ['<leader>w']                                                  = 'write',
+      ['<leader>fm']                                                 = 'VsplitVifm',
       -- fzf
-      ['<leader>ff'] = 'lua require(\'nvim-fzf.files\')()',
-      ['<leader>fh'] = 'lua require(\'nvim-fzf.helptags\')()',
-      ['<leader>p']  = 'lua require(\'nvim-fzf.git\')()',
-      ['<leader>rg'] = 'lua require(\'nvim-fzf.rg\')()',
-      ['<leader>rG'] = 'lua require(\'nvim-fzf.rg\')(vim.fn.expand("<cword>"))',
-      ['<leader>nv'] = 'lua require(\'nvim-fzf.notes\')()',
-      ['<leader>yr'] = 'lua require(\'nvim-fzf.yank-history\')()',
+      ['<leader>ff']                                                 = 'lua require(\'nvim-fzf.files\')()',
+      ['<leader>fh']                                                 = 'lua require(\'nvim-fzf.helptags\')()',
+      ['<leader>p']                                                  = 'lua require(\'nvim-fzf.git\')()',
+      ['<leader>rg']                                                 = 'lua require(\'nvim-fzf.rg\')()',
+      ['<leader>rG']                                                 = 'lua require(\'nvim-fzf.rg\')(vim.fn.expand("<cword>"))',
+      ['<leader>nv']                                                 = 'lua require(\'nvim-fzf.notes\')()',
+      ['<leader>yr']                                                 = 'lua require(\'nvim-fzf.yank-history\')()',
+      -- docs
+      ['<leader>dg'] = 'DogeGenerate',
       -- snippets
-      ['<leader>ue'] = 'UltiSnipsEdit',
+      ['<leader>ue']                                                 = 'UltiSnipsEdit',
       -- git
-      ['<leader>gs'] = 'Git',
-      ['<leader>gd'] = 'Gdiff',
-      ['<leader>gb'] = 'Git blame',
-      ['<leader>gw'] = 'Gwrite',
-      ['<leader>gp'] = 'Git push',
+      ['<leader>gs']                                                 = 'Git',
+      ['<leader>gd']                                                 = 'Gdiff',
+      ['<leader>gb']                                                 = 'Git blame',
+      ['<leader>gw']                                                 = 'Gwrite',
+      ['<leader>gp']                                                 = 'Git push',
+      ['<leader>gz']                                                 = 'lua require\'terminals\'.lazygit_toggle()',
       -- neogit variant
-      ['<leader>gS'] = 'Neogit kind=splitabove',
+      ['<leader>gS']                                                 = 'Neogit kind=splitabove',
       -- TODO: create map for git push --set-upstream current branch
       -- test
-      ['<leader>tf'] = 'TestFile',
-      ['<leader>tn'] = 'TestNearest',
-      ['<leader>ts'] = 'TestSuite',
-      ['<leader>tv'] = 'TestVisit',
+      ['<leader>tf']                                                 = 'Ultest',
+      ['<leader>tn']                                                 = 'UltestNearest',
+      ['<leader>ts']                                                 = 'UltestSummary!',
+      ['<leader>tc']                                                 = 'UltestClear',
+      ['<leader>to']                                                 = 'UltestOutput',
       -- debugger
-      ['<F5>']       = 'lua require\'dap\'.continue()',
-      ['<F10>']      = 'lua require\'dap\'.step_over()',
-      ['<F3>']      = 'lua require\'dap\'.disconnect({terminateDebuggee = true })',
-      ['<F4>']      = 'lua require\'dap\'.disconnect({restart = true })',
-      ['<F11>']      = 'lua require\'dap\'.step_into()',
-      ['<F12>']      = 'lua require\'dap\'.step_out()',
-      ['<leader>b']  = 'lua require\'dap\'.toggle_breakpoint()',
-      ['<leader>B']  = 'lua require\'dap\'.set_breakpoint(vim.fn.input(\'Breakpoint condition: \'))',
-      ['<leader>lb'] = 'lua require\'dap\'.set_breakpoint(nil, nil, vim.fn.input(\'Log point message: \'))'
+      ['<leader>dd']                                                 = 'lua require\'dap\'.continue()',
+      ['<leader>db']                                                 = 'lua require\'dap\'.toggle_breakpoint()',
+      ['<leader>dj']                                                 = 'lua require\'dap\'.step_over()',
+      ['<leader>dk']                                                 = 'lua require\'dap\'.step_out()',
+      ['<leader>dl']                                                 = 'lua require\'dap\'.step_into()',
+      ['<leader>dR']  = 'lua require\'dap\'.disconnect({restart = true })',
+      ['<leader>drc'] = 'lua require\'dap\'.run_to_cursor()',
+      ['<leader>dK']  = 'lua require\'dap.ui.variables\'.hover()',
+      ['<leader>dv']  = 'lua require\'dapui\'.float_element(\'scopes\', { width = 75, enter = true })',
+      ['<leader>tdd']  = 'UltestDebug',
+      ['<leader>tdn']  = 'UltestDebugNearest',
+      ['<leader>du']  = 'lua require\'dapui\'.toggle()',
+      -- TODO: Need to make a method to only call method if running debugger (might set a global variable on debug session)
+      ['<leader>drp']  = 'lua require\'dap\'.repl.toggle()',
+      ['<leader>drP']  = 'lua require\'dapui\'.float_element(\'repl\', { width = 75, enter = true })',
+      ['<leader>de']    = 'lua require\'dap\'.disconnect({terminateDebuggee = true })',
+      ['<leader>dcb']   = 'lua require\'dap\'.set_breakpoint(vim.fn.input(\'Breakpoint condition: \'))',
+      ['<leader>dLb'] = 'lua require\'dap\'.set_breakpoint(nil, nil, vim.fn.input(\'Log point message: \'))',
+      ['<leader>d;'] = 'lua require\'dap\'.list_breakpoints()'
     }
   }
 
-     --['<leader>dr :lua require'dap'.repl.open()<CR>
      --['leader>dl :lua require'dap'.run_last()<CR>
 
 local maps = {
@@ -71,7 +84,10 @@ local file_type_keymaps = {
 -- misc
 vim.api.nvim_set_keymap('n', '<leader><enter>', ':', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = true })
+vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
+vim.cmd('autocmd! TermOpen *toggleterm#* lua require\'terminals\'.set_terminal_keymaps()')
+
 
 -- @param {table} m
 -- @param {table|nil} opts

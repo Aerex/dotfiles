@@ -26,6 +26,8 @@ if ok then
     -- Packer can manage itself as an optional plugin
     use {'wbthomason/packer.nvim'}
 
+      use {'folke/which-key.nvim', config = function() require'which-key' end }
+
     -- lsp
     use {
       { 'neovim/nvim-lspconfig', config = function() require('nvim-lsp') end },
@@ -96,12 +98,14 @@ if ok then
     use {
       'mfussenegger/nvim-dap',
       requires = { 'rcarriga/nvim-dap-ui', 'mfussenegger/nvim-dap-python'},
+      config = function() require('debugger') end
     }
 
     use {
       'rcarriga/vim-ultest',
-      requires = {'vim-test/vim-test'}, run = ':UpdateRemotePlugins' ,
-      cmd = { 'TestNearest', 'TestFile', 'TestSuite', 'TestLast', 'TestVisit' }
+        run = ':UpdateRemotePlugins',
+        requires = {'vim-test/vim-test'},
+        config = function() require('test') end
     }
 
     -- statusline
@@ -147,6 +151,8 @@ if ok then
     'AndrewRadev/bufferize.vim',
     cmd = {'Bufferize'}
   }
+      use {'kkoomen/vim-doge', run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
+
   end
   )
 end

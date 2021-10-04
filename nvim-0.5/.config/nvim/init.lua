@@ -24,6 +24,7 @@ vim.o.hidden          = true
 vim.o.clipboard       = vim.o.clipboard .. 'unnamedplus' -- use clipboard on everything
 vim.o.showmode        = true
 vim.o.autoread        = true
+vim.o.timeoutlen = 500
 
 -- autocommands
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
