@@ -1,0 +1,36 @@
+[bar/full]
+; Dimensions
+;width = ${sizes.bar-width}
+height = ${sizes.bar-height}
+
+; Colors
+foreground = ${colors.foreground}
+background = ${colors.background}
+
+; Round corners
+radius = 3.0
+
+; Fonts
+font-0 = Wuncon Siji:pixelsize=10;0
+font-1 = NotoSans-Regular:size=11;2
+font-2 = FontAwesome:size=13;3
+font-3 = MaterialIcons-Regular:size=13;3
+
+
+; Center column isn't affected by other column positions
+;fixed-center = true
+
+; Cheat to center the bar
+;border-left-size = ${sizes.bar-offset-x}
+;border-left-color = #00000000
+
+; Padding
+;padding-left = 3
+padding-right = 6
+
+; Space modules
+module-margin-right = 5
+
+; Declare modules
+modules-left = i3
+modules-right = input-mode pulseaudio vpn wlan bluetooth battery memory filesystem date
