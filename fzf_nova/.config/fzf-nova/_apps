@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# AUTHOR: gotbletu (@gmail|twitter|youtube|github|lbry)
-#         https://www.youtube.com/user/gotbletu
+# AUTHOR: gotbletu | Aerex
 # DESC:   launch app(s) with fzf like dmenu/rofi
-# DEPEND: fzf sed coreutils findutils xdg-utils util-linux
+# DEPEND: fzf sed coreutils findutils xdg-utils util-linux dx
 
 desktop_file() {
   find /usr/share/applications -name "*.desktop" 2>/dev/null \
