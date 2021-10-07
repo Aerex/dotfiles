@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# AUTHOR: gotbletu | Aerex
+# DESC:   launch app(s) with fzf like dmenu/rofi
+# DEPEND: fzf sed coreutils findutils xdg-utils util-linux dx
+
+desktop_file() {
+  find /usr/share/applications -name "*.desktop" 2>/dev/null \
+  && find /usr/local/share/applications -name "*.desktop" 2>/dev/null \
+  && find "$HOME/.local/share/applications" -name "*.desktop" 2>/dev/null \
+  && find /var/lib/flatpak/exports/share/applications -name "*.desktop" 2>/dev/null \
+  && find "$HOME/.local/share/flatpak/exports/share/applications" -name "*.desktop" 2>/dev/null \
+  && find "$HOME/.applications" -name "*.desktop" 2>/dev/null
+}
+
+if [ ! -d $HOME/.cache/fzf-nova ]; then
+  mkdir $HOME/.cache/fzf-nova
+fi
+
+
+declare -A name_hash
+if [ ! -f $HOME/.cache/fzf-nova/desktop-files ]; then
+  for file in $(desktop_file); do
+    name=$(dex $file -p Name)
+    if [ -z ${name_hash[$file]} ]; then
+      name_hash[$file]=$file
+      echo $name:$file >> $HOME/.cache/fzf-nova/desktop-files
+    fi
+  done
+fi
+selected="$(cat $HOME/.cache/fzf-nova/desktop-files | sort | fzf -e -i -m --reverse --delimiter : --with-nth 1)"
+selected=$(echo $selected | cut -d : -f2 -)
+[ -z "$selected" ] && exit
+cd || return
+echo "$selected" | while read -r line ; do setsid dex $selected; done

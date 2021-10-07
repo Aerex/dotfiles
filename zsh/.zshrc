@@ -1,50 +1,55 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$HOME/go/bin:$PATH
+export PATH=$HOME/bin:$HOME/.bin:/usr/local/bin:$HOME/go/bin:$PATH
 
 export ZLE_REMOVE_SUFFIX_CHARS=""
-export XDG_CONFIG_PATH=$HOME/.config
 
-. $HOME/bin/z.sh
 
 OS=$(uname -s)
-if [ "$OS" = "Darwin" ]; then 
+if [ "$OS" = "Darwin" ]; then
   PYTHON_ROOT_37=/Library/Frameworks/Python.framework/Versions/3.7
   PYTHON_PATH_27=$HOME/Library/Python/2.7
   PYTHON_PATH_37=$HOME/Library/Python/3.7
   export GOROOT=/usr/local/Cellar/go/1.10.3/libexec
-  export RTV_BROWSER=$(which qutebrowser)
 fi
 
-export PATH=$PATH:/usr/local/bin
-export PATH=$PATH:$HOME/.local/bin
-export PATH=$PATH:/usr/local/sbin 
-# Python
-export PATH=$PATH:$PYTHON_PATH_27/bin 
-export PATH=$PYTHON_PATH_37/bin:$PATH
-export PATH=$PATH:$PYTHON_ROOT_37/bin 
+# FZF
+export FZF_DEFAULT_OPTS="--bind ctrl-g:jump --bind alt-j:preview-down --bind alt-k:preview-up"
+
+export PATH=$PATH:/usr/local/sbin
+[ -d $HOME/.local/bin ] && export PATH=$PATH:$HOME/.local/bin
+[ -d $HOME/.gem/ruby/2.6.0/bin ] && export PATH=$PATH:$HOME/.gem/ruby/2.6.0/bin
 
 # Go
+export GOROOT=/usr/lib/go
 export GOPATH=$HOME/go
-export GOROOT=/usr/local/opt/go/libexec
-export PATH=$PATH:$GOPATH/bin 
-export PATH=$PATH:$GOROOT/bin
+export PATH=$PATH:$GOPATH/bin
 
-export PYTHONWARNINGS="ignore:Unverified HTTPS request"
+# Android
+export PATH=$PATH:/opt/android-sdk/tools/bin
 
 # Powerline
-export POWERLINE_NO_ZSH_PROMPT=1 
-. /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
-
-# FASD Bootstrap
-# set fish_function_path $fish_function_path "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/powerline/bindings/fish"
-eval "$(fasd --init auto)"
+if [ "$OS" = "Darwin" ]; then
+  export POWERLINE_NO_ZSH_PROMPT=1
+  . /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
+fi
 
 # Misc
-export EDITOR=/usr/local/bin/nvim
+if [ -f ~/neovim/bin/nvim ]; then
+  export EDITOR=~/neovim/bin/nvim
+elif [ -f /usr/bin/nvim ]; then
+  export EDITOR=/usr/bin/nvim
+else
+  export EDITOR=/usr/local/bin/nvim
+fi
+
+[[ $TMUX = "" ]] && export TERM="xterm-256color"
 export NOTES_DIRECTORY=~/Documents/notes
-export PAGER=less
-export BROWSER=qutebrowser
-export RTV_EDITOR=$(which nvim)
+export EDITOR=~/neovim/bin/nvim
+#export EDITOR=/bin/nvim
+export NOTES_EXT=""
+export PAGER=vimpager
+export BROWSER=$(which qutebrowser)
+
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -65,7 +70,7 @@ export RTV_EDITOR=$(which nvim)
 HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -98,24 +103,38 @@ ENABLE_CORRECTION="true"
 # Would you like to use another custom folder than $ZSH/custom?
 
 
+# Credits to https://github.com/Tuurlijk/dotfiles/blob/master/.zshrc
+# Load zgen only if a user types a zgen command
+zgen () {
+	if [[ ! -s ${ZDOTDIR:-${HOME}}/.zgen/zgen.zsh ]]; then
+		git clone --recursive https://github.com/tarjoilija/zgen.git ${ZDOTDIR:-${HOME}}/.zgen
+	fi
+	source ${ZDOTDIR:-${HOME}}/.zgen/zgen.zsh
+	zgen "$@"
+}
+
+# Generate zgen init script if needed
+# Credits to https://github.com/Tuurlijk/dotfiles/blob/master/.zshrc
+if [[ ! -s ${ZDOTDIR:-${HOME}}/.zgen/init.zsh ]]; then
+	zgen save
+fi
+
 # Load the oh-my-zsh's library.
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-ANTIGEN_LOG=$HOME/.antigen/antigen.log
+#ANTIGEN_LOG=$HOME/.antigen/antigen.log
 # Load Antigen ZSH Plugin Manager
-ANTIGEN_PATH=~/dotfiles
-source $ANTIGEN_PATH/antigen/antigen.zsh
+#ANTIGEN_PATH=~/dotfiles
+#source $ANTIGEN_PATH/antigen.zsh
 
-# Load User functions
 if [ -d $HOME/.config/zsh/functions ]; then
   for file in $HOME/.config/zsh/functions/**/*.zsh; do
       source $file
   done
 fi
-
 
 # Load ZLE Widgets and Functions
 if [ -d $HOME/.config/zsh/widgets ]; then
@@ -138,15 +157,18 @@ export __GIT_PROMPT_DIR=~/.zsh/bundles/olivierverdier/zsh-git-prompt
 # use Haskell's version of zsh-git-prompt (if available)
 if [[ -f $__GIT_PROMPT_DIR/src/.bin/gitstatus ]]; then GIT_PROMPT_EXECUTABLE="haskell"; fi
 
-antigen bundle olivierverdier/zsh-git-prompt
-#antigen bundle zsh-users/zsh-completions
-#antigen bundle pjg/zsh-vim-plugin
-# antigen bundle lukechilds/zsh-better-npm-completion
-# antigen bundle brew
-antigen bundle $HOME/.config/zsh/themes theunraveler-mod.zsh-theme  --no-local-clone
-antigen bundle $HOME/.config/zsh/plugins/vim-mode-redux vim-mode-redux.zsh --no-local-clone
-antigen apply
-
+zgen load zsh-users/zsh-autosuggestions
+zgen load olivierverdier/zsh-git-prompt
+zgen oh-my-zsh plugins/ssh-agent
+zgen oh-my-zsh plugins/shrink-path
+zgen load zsh-users/zsh-completions
+zgen load pjg/zsh-vim-plugin
+zgen load taskwarrior
+[ "$OS" = "Darwin" ] && zgen load brew
+zgen load tmux
+zgen load $HOME/.config/zsh/themes/theunraveler-mod.zsh-theme
+zgen load $HOME/.config/zsh/plugins/vim-mode-redux
+zgen save
 #ZSH_THEME="theunraveler-mod"
 #ZSH_THEME="theunraveler"
 
@@ -167,7 +189,7 @@ setopt nohup
 
 # History
 export HISTFILE="$HOME/.zsh_history"
-export HISTSIZE=10000
+export HISTSIZE=30000
 export SAVEHIST=${HISTSIZE}
 
 
@@ -181,14 +203,18 @@ ZSH_CUSTOM=$HOME/.config/zsh
 
 # User configuration
 if [ -d $ZSH_CUSTOM/conf.d ]; then
-  for file in $ZSH_CUSTOM/conf.d/*.zsh; do
+  for file in $ZSH_CUSTOM/conf.d/**.zsh; do
+    source $file
+  done
+fi
+
+if [ -d $ZSH_CUSTOM/functions ]; then
+  for file in $ZSH_CUSTOM/functions/*.zsh; do
     source $file
   done
 fi
 # export MANPATH="/usr/local/man:$MANPATH"
 #
-#
-export FZF_DEFAULT_OPTS="--bind \"K:preview-up,J:preview-down,ctrl-g:jump\""
 
 # make backward-word and forward-word move to each word separated by a '/'
 export WORDCHARS=''
@@ -199,16 +225,22 @@ setopt correct
 # When offering typo corrections, do not propose anything which starts with an underscore (such as many of Zsh's shell functions)
 CORRECT_IGNORE='_*'
 
-
-# general exceptions
-#for i in {'cp','git','gist','man','mv','mysql','mkdir'}; do
-#  alias $i="nocorrect $i"
-#done
-#
-source ~/.bin/tmuxinator.zsh
-
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-[[ -s "$HOME/.local/share/marker/marker.sh" ]] && source "$HOME/.local/share/marker/marker.sh"
+export ANDROID_HOME=/opt/android-sdk
+
+export JA_GTC_SOURCE='ja' # your preferred source language code
+export JA_GTC_TARGET='en' # your preferred target language code
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+source ~/tmuxinator.zsh
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH=$PATH:/$PYENV_ROOT
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+if command -v zoxide 1>/dev/null 2>&1; then 
+   eval "$(zoxide init zsh)" 
+fi
+
