@@ -1,6 +1,6 @@
 local send_keys = require('utils').send_keys
 local get_packer_path = require('utils').get_packer_path
-local check_back_space = require('utils').check_back_space
+local has_any_words_before = require('utils').has_any_words_before
 local ultisnips = require('utils').ultisnips
 local ok, cmp = pcall(require,'cmp')
 
@@ -13,11 +13,6 @@ if ok then
   vim.g.UltiSnipsSnippetsDir = os.getenv('HOME') ..'/.config/nvim/UltiSnips/'
   vim.g.UltiSnipsEditSplit = 'vertical'
   vim.g.UltiSnipsSnippetDirectories = { os.getenv('HOME') .. '/.config/nvim/UltiSnips', get_packer_path().start ..'/vim-snippets/UltiSnips' }
-
-  local ok_cmp_look, _ = pcall(require, 'cmp_look')
-  if ok_cmp_look then
-    cmp.register_source('look', require('cmp_look').new())
-  end
 
   cmp.setup {
     completion = {
@@ -42,10 +37,10 @@ if ok then
           ultisnips.expand_snippet()
         elseif ultisnips.can_jump_forward() then
           ultisnips.jump_forward()
-        elseif vim.fn.pumvisible() == 1 then
-          send_keys('<C-n>', 'n')
-        elseif check_back_space() then
-          send_keys('<tab>', 'n')
+        elseif cmp.visible() then
+          cmp.select_next_item()
+        elseif has_any_words_before() then
+          send_keys('<tab>', '')
         else
           fallback()
         end
@@ -56,7 +51,7 @@ if ok then
             return ultisnips.expand_snippet()
           end
           send_keys('<C-n>', 'n')
-        elseif check_back_space() then
+        elseif has_any_words_before() then
           send_keys('<CR>', 'n')
         else
           fallback()
@@ -95,7 +90,6 @@ if ok then
       { name = 'buffer' },
       { name = 'nvim_lua' },
       { name = 'path' },
-      { name = 'look' },
       { name = 'ultisnips' },
     },
   }
