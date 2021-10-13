@@ -6,3 +6,25 @@ line('$')
 
 # Indent current line 
 indent('$')
+
+# Get directory/name of file (relative to the current working directory of /abc)
+ echo @% 	def/my.txt	
+
+# Get name of file (ie: my.txt)
+expand('%:t')
+
+# Get full path (ie: /abc/def/my.txt)
+expand('%:p') 	
+
+# Get full path directory containing file ('head')
+expand('%:p:h')	/abc/def	
+
+# Get folder's name containing file	
+## First get the full path with :p (/abc/def/my.txt), then get the head of that with :h (/abc/def), then get the tail of that with :t (def)
+expand('%:p:h:t')	
+
+# Get name of file w/o extension (ie: my)
+expand('%:r') 	
+
+# Get file's extension (ie: txt)
+expand('%:e') 	
