@@ -29,6 +29,7 @@ vim.o.timeoutlen = 500
 -- autocommands
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
 vim.cmd('autocmd VimResized * :wincmd =')
+vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
 
 --buffers
 vim.o.splitright = true
@@ -49,7 +50,7 @@ vim.g.surround_mappings_style = 'surround'
 vim.g.miniyank_filename = vim.fn.stdpath('cache') .. '/.miniyank.mpack'
 
 -- Remove trailing spaces after saving for certain file types
-vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md %s/\s\+$//e ]], '')
+vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md,*.go %s/\s\+$//e ]], '')
 
 -- load plugins
 require('load_plugins')
