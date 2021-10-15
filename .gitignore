@@ -23,5 +23,7 @@ neomutt/.config/neomutt/**/cache/**
 
 zsh/.config/zsh/functions/jenkins
 zsh/.config/zsh/functions/jira
+.local**
+local/
 
 nvim/.config/nvim/spell

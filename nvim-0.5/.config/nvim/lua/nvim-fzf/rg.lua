@@ -32,7 +32,7 @@ return function(pattern)
   coroutine.wrap(function ()
     local rgcmd = "rg --vimgrep --no-heading " ..
       "--color ansi " .. vim.fn.shellescape(pattern or '')
-    local choices = fzf(rgcmd, "--multi --ansi --expect=ctrl-t,ctrl-s,ctrl-v " .. "--preview " .. preview_action)
+    local choices = fzf(rgcmd, "--multi --ansi --expect=ctrl-t,ctrl-s,ctrl-x,ctrl-v " .. "--preview " .. preview_action)
     if not choices then return end
 
     local window_cmd
@@ -43,7 +43,7 @@ return function(pattern)
       window_cmd = "vsp"
     elseif choices[1] == "ctrl-t" then
       window_cmd = "tabnew"
-    elseif choices[1] == "ctrl-x" then
+    elseif choices[1] == "ctrl-x" or choices[1] == "ctrl-s" then
       window_cmd = "sp"
     end
 

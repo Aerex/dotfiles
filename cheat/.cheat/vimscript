@@ -1,8 +1,0 @@
-# Get the current line number
-line('.')
-
-# Get the number of lines in a file
-line('$')
-
-# Indent current line 
-indent('$')

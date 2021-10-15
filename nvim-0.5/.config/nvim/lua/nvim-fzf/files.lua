@@ -1,4 +1,4 @@
--- Credits to https://github.com/leisiji/fzf_utils/blob/634460ce779cbc5a55ed0b3a424612f1c5a0a316/lua/nvim_fzf_commands.lua
+-- Credits to https://github.com/vijaymarupudi/nvim-fzf-commands/blob/master/lua/fzf-commands/files.lua
 require('fzf').default_window_options = {
   window_on_create = function()
     vim.cmd('set winhl=Normal:Normal')
@@ -29,12 +29,12 @@ local _ = {}
   end
   local command  = string.format('%s %s | tee ', find_cmd, find_opts) .. cache_file
   coroutine.wrap(function ()
-    local choices = fzf(command, '--multi --ansi --expect=ctrl-v,ctrl-r,ctrl-t,ctrl-s --preview '
+    local choices = fzf(command, '--multi --ansi --expect=ctrl-v,ctrl-r,ctrl-t,ctrl-s,ctrl-x --preview '
       .. preview_files .. ' --prompt="Files> "', {
    })
     local vimcmd = 'e'
     local key = choices[1]
-    if key == 'ctrl-x' then
+    if key == 'ctrl-x' or key == 'ctrl-s' then
       vimcmd = 'split'
     elseif key ==  'ctrl-v' then
       vimcmd = 'vnew'
