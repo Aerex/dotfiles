@@ -40,25 +40,25 @@ local noremaps = {
       ['<leader>tc']                                                 = 'UltestClear',
       ['<leader>to']                                                 = 'UltestOutput',
       -- debugger
-      ['<leader>dd']                                                 = 'lua require\'dap\'.continue()',
-      ['<leader>db']                                                 = 'lua require\'dap\'.toggle_breakpoint()',
-      ['<leader>dj']                                                 = 'lua require\'dap\'.step_over()',
-      ['<leader>dk']                                                 = 'lua require\'dap\'.step_out()',
-      ['<leader>dl']                                                 = 'lua require\'dap\'.step_into()',
-      ['<leader>dR']  = 'lua require\'dap\'.disconnect({restart = true })',
-      ['<leader>drc'] = 'lua require\'dap\'.run_to_cursor()',
-      ['<leader>dK']  = 'lua require\'dap.ui.variables\'.hover()',
-      ['<leader>dv']  = 'lua require\'dapui\'.float_element(\'scopes\', { width = 75, enter = true })',
-      ['<leader>tdd']  = 'UltestDebug',
-      ['<leader>tdn']  = 'UltestDebugNearest',
-      ['<leader>du']  = 'lua require\'dapui\'.toggle()',
-      -- TODO: Need to make a method to only call method if running debugger (might set a global variable on debug session)
-      ['<leader>drp']  = 'lua require\'dap\'.repl.toggle()',
-      ['<leader>drP']  = 'lua require\'dapui\'.float_element(\'repl\', { width = 75, enter = true })',
-      ['<leader>de']    = 'lua require\'dap\'.disconnect({terminateDebuggee = true })',
-      ['<leader>dcb']   = 'lua require\'dap\'.set_breakpoint(vim.fn.input(\'Breakpoint condition: \'))',
-      ['<leader>dLb'] = 'lua require\'dap\'.set_breakpoint(nil, nil, vim.fn.input(\'Log point message: \'))',
-      ['<leader>d;'] = 'lua require\'dap\'.list_breakpoints()'
+      --['<leader>dd']                                                 = 'lua require\'dap\'.continue()',
+      --['<leader>db']                                                 = 'lua require\'dap\'.toggle_breakpoint()',
+      --['<leader>dj']                                                 = 'lua require\'dap\'.step_over()',
+      --['<leader>dk']                                                 = 'lua require\'dap\'.step_out()',
+      --['<leader>dl']                                                 = 'lua require\'dap\'.step_into()',
+      --['<leader>dR']  = 'lua require\'dap\'.disconnect({restart = true })',
+      --['<leader>drc'] = 'lua require\'dap\'.run_to_cursor()',
+      --['<leader>dK']  = 'lua require\'dap.ui.variables\'.hover()',
+      --['<leader>dv']  = 'lua require\'dapui\'.float_element(\'scopes\', { width = 75, enter = true })',
+      --['<leader>tdd']  = 'UltestDebug',
+      --['<leader>tdn']  = 'UltestDebugNearest',
+      --['<leader>du']  = 'lua require\'dapui\'.toggle()',
+      ---- TODO: Need to make a method to only call method if running debugger (might set a global variable on debug session)
+      --['<leader>drp']  = 'lua require\'dap\'.repl.toggle()',
+      --['<leader>drP']  = 'lua require\'dapui\'.float_element(\'repl\', { width = 75, enter = true })',
+      --['<leader>de']    = 'lua require\'dap\'.disconnect({terminateDebuggee = true })',
+      --['<leader>dcb']   = 'lua require\'dap\'.set_breakpoint(vim.fn.input(\'Breakpoint condition: \'))',
+      --['<leader>dLb'] = 'lua require\'dap\'.set_breakpoint(nil, nil, vim.fn.input(\'Log point message: \'))',
+      --['<leader>d;'] = 'lua require\'dap\'.list_breakpoints()'
     }
   }
 
@@ -119,5 +119,8 @@ end
 M.set_keymap(noremaps, { silent = true, noremap = true })
 M.set_keymap(maps)
 M.set_filetype_keymap(file_type_keymaps)
+
+require('which_key')
+
 
 return M
