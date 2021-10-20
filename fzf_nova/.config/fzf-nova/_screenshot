@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# AUTHOR: Aerex
+# DESC:   Capture a screenshot of the screen
+
+if command -v gnome-screenshot >/dev/null; then
+  gnome-screenshot -i
+elif command -v scrot >/dev/null; then
+  echo "scrot impl not yet added"
+  # TODO: Provide options to either capture window, whole screen, timed, etc
+fi

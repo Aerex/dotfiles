@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# AUTHOR: gotbletu (@gmail|twitter|youtube|github|lbry)
+#         https://www.youtube.com/user/gotbletu
+# DESC:   Get definition for a word
+# DEMO:   
+# DEPEND: translate-shell
+
+set -o vi
+while true
+do
+  read -rep ">>> Dictionary: " INPUT
+  history -s "$INPUT"
+  if command -v trans >/dev/null; then
+    trans -d -v -no-ansi "$INPUT"
+  fi
+  printf "\n"
+done
+
