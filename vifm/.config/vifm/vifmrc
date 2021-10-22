@@ -107,9 +107,9 @@ set nohlsearch
 " Use increment searching (search while typing)
 set incsearch
 
-" Try to leave some space from cursor to upper/lower border in lists
+" Remove cursor offset when moving to the bottom of the window (see vifm-L)
 
-set scrolloff=4
+set scrolloff=0
 
 " Don't do too many requests to slow file systems
 
@@ -120,9 +120,12 @@ set slowfs=curlftpfs
 " set statusline="  Hint: %z%= %A %10u %-7g %15s %20d  "
  set statusline="%A %u %g %E %d"
 
+set relativenumber
+
+set number
+
 " ------------------------------------------------------------------------------ }}}
-" Marks
-" ------------------------------------------------------------------------------ 
+" Marks ------------------------------------------------------------------------------ {{{1
 
 " :mark mark /full/directory/path [filename]
 
@@ -130,6 +133,8 @@ mark b ~/bin/
 mark z ~/.config/zsh
 mark c ~/.config
 mark h ~/
+mark n ~/.nb/notes/
+mark l ~/.local
 
 " Commands ------------------------------------------------------------------------------ {{{1
 " ------------------------------------------------------------------------------
@@ -152,11 +157,10 @@ command! zip zip -r %f.zip %f
 command! run !! ./%f
 command! make !!make %a
 command! mkcd :mkdir %a | cd %a
-command! mkd :mkdir %a
+command! md :mkdir %a
 command! reload :write | restart
 command! unarchive :!atool -x %c
 command! archive :!atool -a %a %f
-
 " Files ------------------------------------------------------------------------------ {{{1
 
 " The file type is for the default programs to be used with
@@ -186,29 +190,62 @@ command! archive :!atool -a %a %f
 " You can also add %CLEAR if you want to clear screen before running FUSE
 " program.
 
-" Json
-filetype *.json 
-      \ {Open in Neovim}
-      \ nvim 
-
-fileviewer  *.json cat %f
-
-" Pdf
+" Pdf {{{2
+fileviewer *.pdf
+    \ vifmimg pdf %px %py %pw %ph %c
+    \ %pc
+    \ vifmimg clear
 filetype *.pdf
+       \ {Open in Zathura}
+       \ zathura %f,
        \ {Open in Preview}
        \ open -a Preview.app,
        \ {Open in Skim}
        \ open -a Skim.app,
+"}}}
 
-fileviewer *.pdf pdftotext -nopgbrk %c -
+" Djvu {{{2
+fileviewer *.djvu
+    \ vifmimg djvu %px %py %pw %ph %c
+    \ %pc
+    \ vifmimg clear
+fileviewer *.djvu
+    \ vifmimg djvu %px %py %pw %ph %c
+    \ %pc
+    \ vifmimg clear
+"}}}
 
-" PostScript
-filetype *.ps,*.eps open -a Preview.app
+" Video {{{2
+fileviewer <video/*>
+    \ vifmimg video %px %py %pw %ph %c
+    \ %pc
+    \ vifmimg clear
+filetype *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
+        \*.fl[icv],*.m2v,*.mov,*.webm,*.mts,*.m4v,*.r[am],*.qt,*.divx,
+        \*.as[fx]
+       \ {Open in QuickTime Player}
+       \ open -a QuickTime\ Player.app,
+       \ {Open in MPlayerX}
 
-" Djvu
-filetype *.djvu open -a MacDjView.app
+" Image {{{2
+fileviewer <image/*>
+    \ vifmimg draw %px %py %pw %ph %c
+    \ %pc
+    \ vifmimg clear
+filetype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm,
+         \ {Open in feh}
+         \ feh %f,
+"}}}
 
-" Audio
+fileviewer *.epub
+    \ vifmimg epub %px %py %pw %ph %c
+    \ %pc
+
+" Audio {{{2
+fileviewer <audio/*>
+    \ vifmimg audio %px %py %pw %ph %c
+    \ %pc
+    \ vifmimg clear
 filetype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
        \ {Play using MPlayerX}
        \ open -a MPlayerX.app,
@@ -216,23 +253,22 @@ filetype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
        \ open -a iTunes.app,
        \ {Open in QuickTime Player}
        \ open -a QuickTime\ Player.app,
-fileviewer *.mp3 mp3info
-fileviewer *.flac soxi
-fileviewer *.m4a echo ""
+"}}}
 
-" Video
-filetype *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
-        \*.fl[icv],*.m2v,*.mov,*.webm,*.mts,*.m4v,*.r[am],*.qt,*.divx,
-        \*.as[fx]
-       \ {Open in QuickTime Player}
-       \ open -a QuickTime\ Player.app,
-       \ {Open in MPlayerX}
-       \ open -a MPlayerX.app,
-fileviewer *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
-          \*.fl[icv],*.m2v,*.webm,*.mts,*.m4v,*.r[am],*.qt,*.divx,
-          \*.as[fx]
-         \ ffprobe -pretty %c 2>&1
-fileviewer *.mov echo ""
+fileviewer <font/*>
+    \ vifmimg font %px %py %pw %ph %c
+    \ %pc
+    \ vifmimg clear
+
+" Json
+filetype *.json 
+      \ {Open in Neovim}
+      \ nvim 
+
+fileviewer  *.json cat %f
+
+" PostScript
+filetype *.ps,*.eps open -a Preview.app
 
 " Web
 filetype *.html,*.htm
@@ -255,12 +291,6 @@ filetype *.o nm %f | less
 " Man page
 filetype *.[1-8] man ./%c
 fileviewer *.[1-8] man ./%c | col -b
-
-" Image
-filetype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm,
-       \ open -a Preview.app,
-fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
-         \ convert -identify %f -verbose /dev/null
 
 " MD5
 filetype *.md5
@@ -375,24 +405,22 @@ set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
 " Mapping ------------------------------------------------------------------------------ {{{1
 " ------------------------------------------------------------------------------
 " leader = space
-map m :mark<space>
 map <space> nop
-map <space><cr> :
-map <silent> mkd :mkd<space> 
-map <silent> <space>n :!touch <space>
-map <silent> <space>v :!nvim<space>
-map <silent> <space>mv :set millerview<cr>
-map <silent> <space>nmv :set nomillerview<cr>
-map <silent> q :q!<cr>
-map <silent> X :unarchive<cr>
-map <silent> x :archive<space>
+map <space><cr>         :
+map m                   : mark<space>
+map <silent> mkd        : mkd<space>
+map <silent> <space>n   : !touch <space>
+map <silent> <space>v   : !nvim<space>
+nmap <silent> md        : mkdir<space>
+nmap <silent> mf        : touch<space>
+map <silent> <space>mv  : set millerview<cr>
+map <silent> <space>nmv : set nomillerview<cr>
+map <silent> q          : q!<cr>
+map <silent> X          : unarchive<cr>
+map <silent> x          : archive<space>
 
-
-map <silent> =ux :!chmod u+x %c<cr>
+"
 nnoremap <space>ce :write | edit $MYVIFMRC | restart<cr>
-
-nnoremap <silent><space>s :split<cr>
-nnoremap <silent><space><space>s :split!<cr>
 
 " Start shell in current directory
 nnoremap S :shell<cr>
@@ -402,20 +430,27 @@ nnoremap S :shell<cr>
 " Easier mapping for windows
 nnoremap <silent> <space>l <c-w>l
 nnoremap <silent> <space>h <c-w>h
+" Easier spliting windows
+nmap <silent> s <nop>
+nmap <silent> sv :vs<cr>
+nmap <silent> ss :only<cr>
+nmap <silent> sh :sp<cr>
+" Start shell in current directory
 
 
 " GOTO ------------------------------------------------------------------------------ {{{2
-map <silent> g. :cd ~/dotfiles<cr>
-map <silent> gC :cd ~/.config<cr>
-map <silent> gT :cd ~/.Trash<cr>
-map <silent> gt :cd /tmp<cr>
-map <silent> ghh :cd~<cr>
-map <silent> cd :cd <space>
-map <silent> gl :cd ~/Downloads<cr>
-map <silent> gn :cd ~/Documents/notes<cr>
-map <silent> gp :cd ~/Pictures<cr>
-map <silent> gd :cd ~/Documents<cr>
-map <silent> gj :cd ~/.jira.d<cr>
+map <silent> g.  :cd ~/.dotfiles<cr>
+map <silent> gC  :cd ~/.config<cr>
+map <silent> gT  :cd ~/.Trash<cr>
+map <silent> gtt :cd /tmp<cr>
+map <silent> ghh :cd ~<cr>
+map <silent> cd  :cd <space>
+map <silent> gq  :cd ~/.config/qutebrowser<cr>
+map <silent> gdl :cd ~/Downloads<cr>
+map <silent> gnv :cd ~/.config/nvim<cr>
+map <silent> gp  :cd ~/Pictures<cr>
+map <silent> gdo :cd ~/Documents<cr>
+map <silent> gz  :cd ~/.config/zsh<cr>
 map <silent> gvi :cd ~/.config/vifm<cr>
 map <silent> gtw :cd ~/.task<cr>
 
@@ -450,6 +485,8 @@ nnoremap <silent> DD :!trash %c<cr>
 vnoremap <silent> D :!trash %f<cr>
 nnoremap yf :!printf %c:p | pbcopy<cr>
 
+" Create files/directories
+
 " Mappings for faster renaming
 nnoremap I cw<c-a>
 nnoremap cc cw<c-u>
@@ -476,8 +513,8 @@ nnoremap <f8> :delete<cr>
 
 " Use ag (the silver searcher) instead of grep
 "
-set grepprg='ag --line-numbers %i %a %s --ignore-dir ./dist'
-set locateprg="find | ag -i %a | fzf +s 2> /dev/tty"
+set grepprg='rg --line-number %i %a %s -g !./dist'
+set locateprg="find | rg -i %a | fzf +s 2> /dev/tty"
 nnoremap <silent> // :locate<space>
 
 " Add additional place to look for executables
@@ -496,3 +533,4 @@ let $PATH = $HOME.'/.config/vifm/scripts:'.$PATH
 "     vifm --server-name "$VIFM_SERVER_NAME" --remote +"cd '$PWD'"
 "
 " let $VIFM_SERVER_NAME = v:servername
+source ~/.config/vifm/local.vim

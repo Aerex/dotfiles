@@ -1,0 +1,14 @@
+#!/bin/bash
+local target_dir
+
+FILE_SEARCH=$1
+
+if [ ! -z $FILE_SEARCH ]; then
+  echo "No search provided"
+  exit 1
+fi
+
+target_dir=$(find | grep -i $FILE_SEARCH | fzf 2> /dev/tty)
+
+cd $target_dir
+
