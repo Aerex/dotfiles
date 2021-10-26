@@ -33,6 +33,7 @@ vim.o.signcolum       = "auto:3"
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
 vim.cmd('autocmd VimResized * :wincmd =')
 vim.cmd('autocmd BufEnter qutebrowser-editor* set spell wrap')
+vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
 
 --buffers
 vim.o.splitright = true

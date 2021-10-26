@@ -13,5 +13,9 @@
 # "alacritty -t fzf-nova --dimensions 90 20 --position 350 200 -e /path/to/script/fzf-nova"
 #   Mod4+space
 
-DIR="${0%/*}"
-"$DIR"/"$(find "$DIR/" -type f -exec basename {} \; | grep '^_' | sort | fzf -e -i --delimiter _ --with-nth='2..' --reverse --prompt='fzf-nova: ')"
+# Only execute if there is not one instance already running
+IS_RUNNING=$(pgrep -f prompt=fzf-nova)
+if [[ -z $IS_RUNNING ]]; then
+  DIR="${0%/*}"
+  "$DIR"/"$(find "$DIR/" -type f -exec basename {} \; | grep '^_' | sort | fzf -e -i --delimiter _ --with-nth='2..' --reverse --prompt='fzf-nova: ')"
+fi
