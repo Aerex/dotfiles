@@ -24,11 +24,15 @@ vim.o.hidden          = true
 vim.o.clipboard       = vim.o.clipboard .. 'unnamedplus' -- use clipboard on everything
 vim.o.showmode        = true
 vim.o.autoread        = true
-vim.o.timeoutlen = 500
+vim.o.timeoutlen      = 500
+vim.o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
+vim.o.foldlevel       = 5
+vim.o.signcolum       = "auto:3"
 
 -- autocommands
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
 vim.cmd('autocmd VimResized * :wincmd =')
+vim.cmd('autocmd BufEnter qutebrowser-editor* set spell wrap')
 
 --buffers
 vim.o.splitright = true
@@ -49,8 +53,12 @@ vim.g.surround_mappings_style = 'surround'
 vim.g.miniyank_filename = vim.fn.stdpath('cache') .. '/.miniyank.mpack'
 
 -- Remove trailing spaces after saving for certain file types
-vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md %s/\s\+$//e ]], '')
+vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md,*.go %s/\s\+$//e ]], '')
 
 -- load plugins
 require('load_plugins')
 require('mappings')
+
+-- load local config if any
+-- local configs can override configs above
+pcall(require, 'local')
