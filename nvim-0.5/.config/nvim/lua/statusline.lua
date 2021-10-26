@@ -62,7 +62,7 @@ local has_file_type = function()
 end
 
 local get_fcitx_status = function()
-  if vim.fn.executable('fcitx-remote') then
+  if vim.fn.executable('fcitx-remote') == 1 then
     return tonumber(vim.fn.system('fcitx-remote')) > 1 and ' ' or ''
   else
     return ''

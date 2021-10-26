@@ -27,7 +27,7 @@ vim.o.autoread        = true
 vim.o.timeoutlen      = 500
 vim.o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
 vim.o.foldlevel       = 5
-vim.o.signcolum       = "auto:3"
+vim.o.signcolumn      = "auto:3"
 
 -- autocommands
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
