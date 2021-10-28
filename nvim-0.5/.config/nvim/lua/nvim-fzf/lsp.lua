@@ -46,7 +46,7 @@ M.references = function()
       end)
 
       local choices = fzf(vim.tbl_keys(items_by_name),
-       '--ansi --expect=ctrl-v,ctrl-x,ctrl-s,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="References> "')
+       '--multi --ansi --expect=ctrl-v,ctrl-x,ctrl-s,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="References> "')
        local vimcmd = 'e'
        local key = choices[1]
        if key == 'ctrl-x' or key == 'ctrl-s' then
@@ -88,7 +88,7 @@ M.document_symbols = function()
     end)
 
     local choices = fzf(vim.tbl_keys(items_by_name),
-     '--ansi --expect=ctrl-v,ctrl-x,ctrl-s,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="Document Symbols> "')
+     '--multi --ansi --expect=ctrl-v,ctrl-x,ctrl-s,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="Document Symbols> "')
      local vimcmd = 'e'
      local key = choices[1]
      if key == 'ctrl-x' or key == 'ctrl-s' then

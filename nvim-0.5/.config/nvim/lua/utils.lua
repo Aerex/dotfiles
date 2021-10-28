@@ -4,6 +4,10 @@ M.t = function(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
+M.send_keys = function(key, mode)
+  vim.api.nvim_feedkeys(M.t(key), mode, true)
+end
+
 M.get_packer_path = function()
   local root_packer_path =  vim.fn.stdpath('data') .. '/site/pack/packer'
   return {

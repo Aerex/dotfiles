@@ -25,11 +25,14 @@ vim.o.clipboard       = vim.o.clipboard .. 'unnamedplus' -- use clipboard on eve
 vim.o.showmode        = true
 vim.o.autoread        = true
 vim.o.timeoutlen      = 500
-vim.o.signcolum       = "auto:2"
+vim.o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
+vim.o.foldlevel       = 5
+vim.o.signcolumn      = "auto:2"
 
 -- autocommands
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
 vim.cmd('autocmd VimResized * :wincmd =')
+vim.cmd('autocmd BufEnter qutebrowser-editor* set spell wrap')
 vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
 
 --buffers
@@ -56,3 +59,7 @@ vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md,*.go %s/\s\+$//e ]], ''
 -- load plugins
 require('load_plugins')
 require('mappings')
+
+-- load local config if any
+-- local configs can override configs above
+pcall(require, 'local')
