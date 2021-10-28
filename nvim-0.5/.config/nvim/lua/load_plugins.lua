@@ -76,9 +76,17 @@ if ok then
       }
 
       -- diagnostics
-      use { 'folke/trouble.nvim',
-      cmd = {'Trouble', 'TroubleToggle', 'TroubleClose', 'TroubleRefresh' }
-    }
+      use {
+          {'folke/trouble.nvim',
+              cmd = {'Trouble', 'TroubleToggle', 'TroubleClose', 'TroubleRefresh' }
+          },
+          {
+              'folke/todo-comments.nvim',
+              requires = 'nvim-lua/plenary.nvim',
+              config = function() require('todo') end
+          }
+
+      }
 
     -- formatting
     use {
@@ -101,6 +109,7 @@ if ok then
       config = function() require('debugger') end
     }
 
+    -- test
     use {
       'rcarriga/vim-ultest',
         run = ':UpdateRemotePlugins',
@@ -113,46 +122,48 @@ if ok then
       config = function() require('statusline') end
     }
 
-    -- markdown
+   -- completions / snippets
+    use({ -- nvim-cmp
+        'hrsh7th/nvim-cmp',
+        requires = {
+          'hrsh7th/cmp-buffer',
+          'hrsh7th/cmp-path',
+          'hrsh7th/cmp-nvim-lua',
+          'hrsh7th/cmp-nvim-lsp',
+          'hrsh7th/cmp-look', -- dictionary source
+          {
+            'SirVer/ultisnips',
+            'quangnguyen30192/cmp-nvim-ultisnips',
+            'honza/vim-snippets',
+          }
+        },
+        config = function()
+          require('completion')
+        end,
+      })
+      -- profiling
+    use { 'tweekmonster/startuptime.vim' }
+
+    -- marks
+    use { 'kshenoy/vim-signature' }
+    -- terminal
+    use {
+      'akinsho/nvim-toggleterm.lua',
+     config = function() require'toggleterm'.setup{ open_mapping = [[<C-t>]], shading_factor = 1 } end
+    }
+    use {
+      'AndrewRadev/bufferize.vim',
+      cmd = {'Bufferize'}
+    }
+    -- misc
+    use {'kkoomen/vim-doge', run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
+    use {
+      'voldikss/vim-translator', cmd = {'Translate', 'TranslateR', 'TranslateW', 'TranslateL'}, ft = {"trans"}
+    }
+    use { 'ledger/vim-ledger', ft = {'ledger'} }
     use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install',
       cmd = {'MarkdownPreview', 'MarkdownPreviewStop'} , ft = {'markdown'}
     }
-
-   -- completions / snippets
-  use({ -- nvim-cmp
-      'hrsh7th/nvim-cmp',
-      requires = {
-        'hrsh7th/cmp-buffer',
-        'hrsh7th/cmp-path',
-        'hrsh7th/cmp-nvim-lua',
-        'hrsh7th/cmp-nvim-lsp',
-        'hrsh7th/cmp-look', -- dictionary source
-        {
-          'SirVer/ultisnips',
-          'quangnguyen30192/cmp-nvim-ultisnips',
-          'honza/vim-snippets',
-        }
-      },
-      config = function()
-        require('completion')
-      end,
-    })
-    -- profiling
-  use { 'tweekmonster/startuptime.vim' }
-
-  -- marks
-  use { 'kshenoy/vim-signature' }
-  -- terminal
-  use {
-    'akinsho/nvim-toggleterm.lua',
-   config = function() require'toggleterm'.setup{ open_mapping = [[<C-t>]], shading_factor = 1 } end
-  }
-  use {
-    'AndrewRadev/bufferize.vim',
-    cmd = {'Bufferize'}
-  }
-      use {'kkoomen/vim-doge', run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
-
   end
   )
 end
