@@ -40,7 +40,7 @@ kubectl config set-context gce --user=cluster-admin --namespace=foo \
 # delete user foo
 kubectl config unset users.foo                       
 
-# create resource(s)
+# create / deploy resource(s)
 kubectl apply -f ./my-manifest.yaml           
 # create from multiple files
 kubectl apply -f ./my1.yaml -f ./my2.yaml     
