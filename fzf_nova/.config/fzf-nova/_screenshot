@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if command -v scrot 1>/dev/null; then
+  scrot -s -l style=dash,width=3,color='#BFA45C' 'Screenshot_%Y%m%d.png' -e 'mv $f ~/Pictures/screenshots'  
+  exit 0
+elif command -v gnome-screenshot; then
+  gnome-screenshot -i &
+fi
+
+# vim: ft=sh
