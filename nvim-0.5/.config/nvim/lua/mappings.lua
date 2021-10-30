@@ -1,4 +1,6 @@
 local t = require('utils').t
+-- slower to access vim.api direct
+local api = vim.api
 local M = {}
 
 function _G.smart_carrier_return()
@@ -10,13 +12,22 @@ local noremaps = {
     n = {
       -- misc
       ['<leader>w']                                                  = 'write',
+      -- trouble
+      ['<leader>xx']                                                 = 'TroubleToggle',
+      ['<leader>xw']                                                 = 'TroubleToggle lsp_workspace_diagnostics',
+      ['<leader>xd']                                                 = 'TroubleToggle lsp_document_diagnostics',
+      ['<leader>xq']                                                 = 'TroubleToggle quickfix',
+      ['<leader>xl']                                                 = 'TroubleToggle loclist',
+      -- vifm
       ['<leader>fm']                                                 = 'VsplitVifm',
+      ['<leader>Fm']                                                 = 'Vifm',
       -- fzf
       ['<leader>ff']                                                 = 'lua require(\'nvim-fzf.files\')()',
       ['<leader>fh']                                                 = 'lua require(\'nvim-fzf.helptags\')()',
+      ['<leader>fM']                                                 = 'lua require(\'nvim-fzf.manpages\')()',
       ['<leader>p']                                                  = 'lua require(\'nvim-fzf.git\')()',
       ['<leader>rg']                                                 = 'lua require(\'nvim-fzf.rg\')()',
-      ['<leader>rG']                                                 = 'lua require(\'nvim-fzf.rg\')(vim.fn.expand("<cword>"))',
+      ['\\rg']                                                        = 'lua require(\'nvim-fzf.rg\')(vim.fn.expand("<cword>"))',
       ['<leader>nv']                                                 = 'lua require(\'nvim-fzf.notes\')()',
       ['<leader>yr']                                                 = 'lua require(\'nvim-fzf.yank-history\')()',
       -- docs
@@ -41,8 +52,11 @@ local noremaps = {
       ['<leader>to']                                                 = 'UltestOutput',
       -- debugger
       ['<leader>dd']                                                 = 'lua require\'dap\'.continue()',
+      ['<F5>']                                                       = 'lua require\'dap\'.continue()',
       ['<leader>db']                                                 = 'lua require\'dap\'.toggle_breakpoint()',
+      ['<F9>']                                                       = 'lua require\'dap\'.toggle_breakpoint()',
       ['<leader>dso']                                                 = 'lua require\'dap\'.step_over()',
+      ['<F10>']                                                      = 'lua require\'dap\'.step_over()',
       ['<leader>dsO']                                                 = 'lua require\'dap\'.step_out()',
       ['<leader>dsi']                                                 = 'lua require\'dap\'.step_into()',
       ['<leader>dR']  = 'lua require\'dap\'.disconnect({restart = true })',
@@ -50,15 +64,19 @@ local noremaps = {
       ['<leader>dK']  = 'lua require\'dap.ui.variables\'.hover()',
       ['<leader>dv']  = 'lua require\'dapui\'.float_element(\'scopes\', { width = 75, enter = true })',
       ['<leader>tdd']  = 'UltestDebug',
-      ['<leader>tdn']  = 'UltestDebugNearest',
+      ['<leader>tdn']  = 'UltestDebug:Nearest',
       ['<leader>du']  = 'lua require\'dapui\'.toggle()',
-      ---- TODO: Need to make a method to only call method if running debugger (might set a global variable on debug session)
+      -- TODO: Need to make a method to only call method if running debugger (might set a global variable on debug session)
       ['<leader>drp']  = 'lua require\'dap\'.repl.toggle()',
       ['<leader>drP']  = 'lua require\'dapui\'.float_element(\'repl\', { width = 75, enter = true })',
       ['<leader>de']    = 'lua require\'dap\'.disconnect({terminateDebuggee = true })',
       ['<leader>dcb']   = 'lua require\'dap\'.set_breakpoint(vim.fn.input(\'Breakpoint condition: \'))',
       ['<leader>dLb'] = 'lua require\'dap\'.set_breakpoint(nil, nil, vim.fn.input(\'Log point message: \'))',
-      ['<leader>d;'] = 'lua require\'dap\'.list_breakpoints()'
+      ['<leader>d;'] = 'lua require\'dap\'.list_breakpoints()',
+      ['<leader>d,l'] = 'lua require\'dap\'.set_log_level("TRACE")'
+    },
+    v = {
+      ['<leader>yg']                                                 = 'GBrowse!',
     }
   }
 
@@ -87,6 +105,8 @@ vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = tr
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
 vim.cmd('autocmd! TermOpen *toggleterm#* lua require\'terminals\'.set_terminal_keymaps()')
+vim.cmd('command! -nargs=1 Rg call luaeval(\'require("nvim-fzf.rg")(_A)\', <f-args>)')
+api.nvim_set_keymap('n', ',rg', ':<c-u>Rg<space>', { noremap = true, silent = true})
 
 
 -- @param {table} m

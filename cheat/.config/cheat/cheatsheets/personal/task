@@ -22,3 +22,6 @@ task modify <id> '/old/new/'
 
 # Remove note starting with "ABC"
 task denote "ABC"
+
+# To filter by a tag that starts with a number or is a number
+task tag:1234

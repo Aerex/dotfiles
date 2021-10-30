@@ -90,6 +90,14 @@ if ok then
           --w = {'Watches window'},
           --s = {'Stack trace window'},
         },
+        x = {
+          name = 'Diagnostics',
+          x = {'Toggle Trouble window'},
+          w = {'Show workspace diagnostics'},
+          d = {'Show document diagnostics'},
+          q = {'Show quickfix window'},
+          l = {'Show location window'}
+        }
       }
     }, opts
   )

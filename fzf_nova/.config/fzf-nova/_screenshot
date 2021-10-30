@@ -1,10 +1,15 @@
-#!/bin/sh
+#!/usr/bin/env bash
+# AUTHOR: Aerex
+# DESC:   Capture a screenshot of the screen
 
-if command -v scrot 1>/dev/null; then
-  scrot -s -l style=dash,width=3,color='#BFA45C' 'Screenshot_%Y%m%d.png' -e 'mv $f ~/Pictures/screenshots'  
-  exit 0
-elif command -v gnome-screenshot; then
-  gnome-screenshot -i &
+# TODO: Need to figure out why flameshot gui 
+# changes the cursor style after closing app
+if command -v flameshot >/dev/null; then
+  setsid flameshot gui -d 500 -p $HOME/Pictures
+elif command -v gnome-screenshot >/dev/null; then
+  setsid gnome-screenshot -i 
+  pkill --full st\ -t\ fzfnova
+elif command -v scrot >/dev/null; then
+  scrot -s
 fi
-
-# vim: ft=sh
+pkill --full st\ -t\ fzfnova

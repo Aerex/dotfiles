@@ -73,17 +73,24 @@ if ok then
       requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}, {'nvim-telescope/telescope.nvim'} } }
     }
 
-    -- yank/undo
-    use {
-      { 'mbbill/undotree', cmd = 'UndotreeToggle',  config = [[vim.g.undotree_SetFocusWhenToggle = 1]] },
-      { 'bfredl/nvim-miniyank', as = 'miniyank' }
-    }
+      -- yank/undo
+      use {
+        { 'mbbill/undotree', cmd = 'UndotreeToggle',  config = [[vim.g.undotree_SetFocusWhenToggle = 1]] },
+        { 'bfredl/nvim-miniyank', as = 'miniyank' }
+      }
 
-    -- diagnostics
-    use {
-      'folke/trouble.nvim',
-      cmd = {'Trouble', 'TroubleToggle', 'TroubleClose', 'TroubleRefresh' }
-    }
+      -- diagnostics
+      use {
+          {'folke/trouble.nvim',
+              cmd = {'Trouble', 'TroubleToggle', 'TroubleClose', 'TroubleRefresh' }
+          },
+          {
+              'folke/todo-comments.nvim',
+              requires = 'nvim-lua/plenary.nvim',
+              config = function() require('todo') end
+          }
+
+      }
 
     -- formatting
     use {
@@ -106,6 +113,7 @@ if ok then
       config = function() require('debugger') end
     }
 
+    -- test
     use {
       'rcarriga/vim-ultest',
         run = ':UpdateRemotePlugins',
@@ -160,7 +168,6 @@ if ok then
     use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install',
       cmd = {'MarkdownPreview', 'MarkdownPreviewStop'} , ft = {'markdown'}
     }
-
   end
   )
 end
