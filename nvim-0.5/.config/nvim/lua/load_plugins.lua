@@ -35,6 +35,10 @@ if ok then
       'nvim-lua/lsp-status.nvim',
       'ray-x/lsp_signature.nvim'
     }
+    use {
+        'weilbith/nvim-code-action-menu',
+        cmd = 'CodeActionMenu'
+    }
 
      -- treesitter
     use {
@@ -148,7 +152,7 @@ if ok then
       cmd = {'Bufferize'}
     }
     -- misc
-    use {'kkoomen/vim-doge', run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
+    use {'kkoomen/vim-doge', opt = true, run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
     use {
       'voldikss/vim-translator', cmd = {'Translate', 'TranslateR', 'TranslateW', 'TranslateL'}, ft = {"trans"}
     }
