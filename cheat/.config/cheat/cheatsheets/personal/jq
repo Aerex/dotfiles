@@ -16,3 +16,29 @@ jq '.[-2:]'
 while IFS= read -r config; do
     apws dynamodb put-item --table-name "xxx" --item "$config"
 done< <(jq -c '.[]' < app-cnfg.json)
+
+## Consider the example 
+```
+{
+    "timestamp": 1234567890,
+    "report": "Age Report",
+    "results": [
+        { "name": "John", "age": 43, "city": "TownA" },
+        { "name": "Joe",  "age": 10, "city": "TownB" }
+    ]
+}
+```
+# To extract top level attributes “timestamp” and “report”
+jq '. | {timestamp,report}'
+
+# To extract name and age of each “results” item
+jq '.results[] | {name, age}'
+
+# To extract name and age as text values instead of JSON
+jq -r '.results[] | {name, age} | join(" ")'
+
+# Filter this by attribute
+jq '.results[] | select(.name == "John") | {age}'          # Get age for 'John'
+jq '.results[] | select((.name == "Joe") and (.age = 10))' # Get complete records for all 'Joe' aged 10
+jq '.results[] | select(.name | contains("Jo"))'           # Get complete records for all names with 'Jo'
+jq '.results[] | select(.name | test("Joe\s+Smith"))'      # Get complete records for all names matching PCRE regex 'Joe\+Smith'
