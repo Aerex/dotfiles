@@ -11,7 +11,5 @@ elif command -v gnome-screenshot >/dev/null; then
   pkill --full st\ -t\ fzfnova
 elif command -v scrot >/dev/null; then
   scrot -s
-  echo "scrot impl not yet added"
-  # TODO: Provide options to either capture window, whole screen, timed, etc
 fi
 pkill --full st\ -t\ fzfnova
