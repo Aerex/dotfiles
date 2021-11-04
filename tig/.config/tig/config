@@ -28,11 +28,11 @@ bind generic <C-b> move-page-up
 
 
 # ================ Edit  ====================
-bind generic E  !>sh -c "nvim ~/.tigrc"
+bind generic E  !>sh -c "nvim ~/.config/tig/config"
 
 # ================ Copy  ====================
 bind generic y none
-bind generic yc <@sh -c "echo -n %(commit) |xsel --clipboard --input"
+bind generic yc <@sh -c "echo -n %(commit) | xsel --clipboard --input"
 
 # ================ Views  ====================
 bind generic v  none
@@ -123,4 +123,19 @@ bind diff <Ctrl-r> !./tig-rebase.sh reword %(commit)
 bind main <Ctrl-x> !./tig-rebase.sh abort
 bind diff <Ctrl-x> !./tig-rebase.sh abort
 
-bind generic <Space>ce !>sh -c "nvim ~/.config/tig/config"
+# ================ Browser ====================
+bind main    <Space> none
+bind blame    <Space> none
+bind diff    <Space> none
+bind tree    <Space> none
+bind blob    <Space> none
+bind main    <Space>b      @gh browse -b %(commit)
+bind blame   <Space>b      @gh browse -b %(commit)
+bind diff    <Space>b      @gh browse -b %(commit)
+bind tree    <Space>b      @gh browse -- blob/%(branch)/%(file)
+bind tree    <Space>B      @gh browse -- blob/"%(prompt Enter branch name: )"/%(file)
+bind blob    <Space>b      @gh browse -- blob/%(branch)/%(file)
+bind blob    <Space>B      @gh browse -- blob/"%(prompt Enter branch name: )"/%(file)
+bind grep    <Space>b      @gh browse -- blob/%(branch)/%(file)
+bind grep    <Space>B      @gh browse -- blob/"%(prompt Enter branch name: )"/%(file)
+
