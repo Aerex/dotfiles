@@ -1,4 +1,6 @@
 local gl = require('galaxyline')
+local devicons = require('nvim-web-devicons')
+local u = require('utils').u
 local gls = gl.section
 gl.short_line_list = {
   'fugitive',
@@ -8,6 +10,16 @@ gl.short_line_list = {
   'dapui-scopes',
   'dap-repl'
 }
+local icons = {
+    locker = u 'f023',
+    unsaved = u 'f693',
+    dos = u 'e70f',
+    unix = u 'f17c',
+    mac = u 'f179',
+    lsp_warn = u 'f071',
+    lsp_error = u 'f46e'
+}
+
 
 local colors = {
     bg = '#282c34',
@@ -74,6 +86,26 @@ local buffer_not_empty = function()
     return true
   end
   return false
+end
+
+local get_file_name = function()
+  local fname = vim.fn.expand('%:p')
+  if vim.startswith(fname, vim.env.HOME) then
+    fname = vim.fn.substitute(fname, vim.env.HOME, "~", "")
+  end
+  local parts = vim.split(fname, '/')
+  local sname = ""
+  if #parts > 4 then
+    sname = vim.fn.join(vim.list_slice(parts, #parts-2, #parts), "/")
+    sname = parts[1] .. "/../" .. sname
+    elseif #parts == 3 then
+      sname = vim.fn.expand('%:t')
+    else
+      sname = fname
+  end
+
+  if not #sname then return '' end
+  return ' ' .. sname .. ' '
 end
 
 LSPStatus = get_diagnostic_info
@@ -145,7 +177,7 @@ gls.left[3] ={
 }
 gls.left[4] = {
   FileName = {
-    provider = {'FileName'},
+    provider = get_file_name,
     condition = buffer_not_empty,
     highlight = {colors.fg,colors.line_bg,'bold'}
   }
