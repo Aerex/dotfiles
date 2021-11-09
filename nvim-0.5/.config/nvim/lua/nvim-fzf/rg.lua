@@ -30,8 +30,12 @@ end)
 
 return function(pattern)
   coroutine.wrap(function ()
+    local workspace = vim.lsp.buf.list_workspace_folders()[1]
     local rgcmd = "rg --vimgrep --no-heading " ..
-      "--color ansi " .. vim.fn.shellescape(pattern or '')
+      "--color ansi ".. vim.fn.shellescape(pattern or ' ')
+    if workspace then
+      rgcmd = rgcmd .. " -g '!.git/' " .. workspace
+    end
     local choices = fzf(rgcmd, "--multi --ansi --expect=ctrl-t,ctrl-s,ctrl-x,ctrl-v " .. "--preview " .. preview_action)
     if not choices then return end
 
