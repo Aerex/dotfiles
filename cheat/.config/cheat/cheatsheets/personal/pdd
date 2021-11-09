@@ -1,0 +1,54 @@
+# Calculate diff from today:
+pdd 2014 Jan 15
+
+# Calculate diff from now:
+pdd 24:00:00
+pdd 0
+
+# Calculate date diff:
+pdd -d 1983 jul 3 2014 1 15
+
+# Calculate time diff:
+pdd -t 45:50 6:17:33
+
+# Show current date, time and timezone:
+pdd
+
+# Specify time with roll-over:
+pdd -t 5:80:75 6:17:33
+
+# Add a duration (3 years, 2 months, 1 day) to 28 Feb, 2000:
+pdd -d 2000 FEB 28 3 2 1 --add
+
+# Add a timeslice (1 hour 2 mins 3 secs) to 23:45:37:
+pdd -t 23:45:37 1:2:3 --add
+
+# Add a duration (3 years, 2 months, 1 day) to today:
+pdd 3 2 1 --add
+
+# Add a timeslice (1 hour 2 minutes 3 seconds) to now:
+pdd 1:2:3 --add
+
+# Subtract a duration (1 day) from 1 Mar, 2000:
+pdd -d 2000 Mar 01 0 0 1 --sub
+
+# Subtract a timeslice (1 sec) from midnight:
+pdd -t 00:00:00 0:0:1 --sub
+
+# Subtract a duration (3 years, 2 months, 1 day) from today:
+pdd 3 2 1 --sub
+
+# Subtract a timeslice (1 hour 2 minutes 3 seconds) from now:
+pdd 1:2:3 --sub
+
+# Show the day of the week on 15 Jan 2014:
+pdd --day 2014 Jan 15
+
+# Start a countdown timer or stopwatch in quiet mode in the background:
+pdd -qs &
+pdd -qc 3:0:0 &
+## To see the final counter run fg and press Ctrl-C.
+
+# Run a command when countdown timer reaches 0
+pdd -c 00:00:5 -r 'ps -aux'
+pdd -c 00:00:5 -r 'notify-send pdd "timer expired"'
