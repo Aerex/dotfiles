@@ -25,3 +25,55 @@ function gup(){
   fi
 
 }
+
+function _gh_exists() { 
+  if [[ -z $(command -v gh) ]]; then
+    printf "gh not installed"
+    exit 1
+  fi
+}
+
+function ghv() { 
+  _gh_exists
+
+  REPO_OPT=""
+  if [ ! -z $GH_ISSUE_REPO ]; then
+    gh issue view -R $GH_ISSUE_REPO $@
+  else
+    gh issue view $@
+  fi
+
+}
+
+function ghvd() { 
+  ISSUE=$1
+  _gh_exists
+  if [[ $(command -v fx) ]] && [[ $(command -v mdv) ]]; then
+    gh issue view $ISSUE --json body | fx '.body' | mdv - 
+  else _ghv $1
+  fi
+  
+}
+
+function ghpv() { 
+  _gh_exists
+
+  gh pr view $@
+
+}
+
+function ghpm() { 
+  _gh_exists
+
+  gh pr list --assignee @me
+
+}
+
+function ghb() { 
+  _gh_exists
+
+  BROWSE=$(which google-chrome) gh issue view $@ --web
+
+}
+
+
