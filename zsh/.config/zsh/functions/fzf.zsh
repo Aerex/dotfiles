@@ -1,7 +1,7 @@
 function conf(){
   CONFIG_DIRS=(~/.wuzz/config.toml, ~/.tmux.conf, ~/.config/nvim/init.vim, ~/.jira.d/config.yml, ~/.chunkwmrc, ~/.skhdrc, ~/.kube/config,
   ~/.myclirc, ~/.qutebrowser/config.py, ~/.taskrc, ~/.config/bugwarrior/bugwarriorrc, ~/.config/vdirsyncer/config, ~/.config/tig/config, 
-  ~/tmux.powerline.conf, ~/.my.cnf, ~/.config/neomutt/muttrc, ~/.offlineimaprc)
+  ~/tmux.powerline.conf, ~/.my.cnf, ~/.config/neomutt/muttrc, ~/.offlineimaprc, ~/.config/i3/config, ~/.Xresources)
   VERT_CONFIG_DIRS=$(echo $CONFIG_DIRS | awk -v RS=, '{ sub(" ", ""); print }')
 
   echo $VERT_CONFIG_DIRS | fzf --preview="highlight -O ansi -l --force {}" \
@@ -86,6 +86,12 @@ local branches target_branches
   echo $target_branches
 }
 
+_get_branches() { 
+  local branches branch
+  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)")
+  echo $branches
+}
+  
 
 # fco - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
 fco() {
@@ -94,4 +100,36 @@ fco() {
   branch=$(echo "$branches" |
            fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
   git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+
+# fdb - delete branch 
+fdb() {
+  local branch
+  branches="$(_get_branches)"
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git branch -d $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+
+# fdeskl - Manage desktop files
+function _edit_desktop_file() { 
+  if [[ ! -z $(command -v desktop-file-edit) ]]; then
+    desktop-file-edit $1
+  else
+    $EDITOR $1
+  fi
+}
+fdeskl() { 
+  local desktop_files
+  desktop_files=$(find /usr/share/applications -name "*.desktop" 2>/dev/null \
+    && find /usr/local/share/applications -name "*.desktop" 2>/dev/null \
+    && find "$HOME/.local/share/applications" -name "*.desktop" 2>/dev/null \
+    && find /var/lib/flatpak/exports/share/applications -name "*.desktop" 2>/dev/null \
+    && find "$HOME/.local/share/flatpak/exports/share/applications" -name "*.desktop" 2>/dev/null \
+    && find "$HOME/.applications" -name "*.desktop" 2>/dev/null) 
+  echo $desktop_files | fzf --prompt="Desktop Files> "\
+      --preview="highlight -O ansi -l --force {}" \
+      --header="enter=Open desktop file ctrl-space=Print file path" \
+      --bind="enter:execute($EDITOR {})+abort"\
+      --bind="ctrl-space:execute(echo {})+abort"
 }

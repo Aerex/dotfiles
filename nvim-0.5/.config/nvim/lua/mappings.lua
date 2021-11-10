@@ -31,6 +31,7 @@ local noremaps = {
       ['<leader>p']                                                  = 'lua require(\'nvim-fzf.git\')()',
       ['<leader>rg']                                                 = 'lua require(\'nvim-fzf.rg\')()',
       ['\\rg']                                                        = 'lua require(\'nvim-fzf.rg\')(vim.fn.expand("<cword>"))',
+      [',rg']                                                        = 'lua require(\'nvim-fzf.rg\')(vim.fn.input("Search term: "))',
       ['<leader>nv']                                                 = 'lua require(\'nvim-fzf.notes\')()',
       ['<leader>yr']                                                 = 'lua require(\'nvim-fzf.yank-history\')()',
       -- docs
@@ -108,8 +109,6 @@ vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = tr
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
 vim.cmd('autocmd! TermOpen *toggleterm#* lua require\'terminals\'.set_terminal_keymaps()')
-vim.cmd('command! -nargs=1 Rg call luaeval(\'require("nvim-fzf.rg")(_A)\', <f-args>)')
-api.nvim_set_keymap('n', ',rg', ':<c-u>Rg<space>', { noremap = true, silent = true})
 
 
 -- @param {table} m

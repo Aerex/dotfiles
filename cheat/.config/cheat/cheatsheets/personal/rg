@@ -1,0 +1,2 @@
+# Search in dir src/ recursively
+rg image src/
