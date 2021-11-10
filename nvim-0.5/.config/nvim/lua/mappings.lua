@@ -18,6 +18,9 @@ local noremaps = {
       ['<leader>xd']                                                 = 'TroubleToggle lsp_document_diagnostics',
       ['<leader>xq']                                                 = 'TroubleToggle quickfix',
       ['<leader>xl']                                                 = 'TroubleToggle loclist',
+      ['<leader>xtq']                                                 = 'TodoQuickFix',
+      ['<leader>xtl']                                                 = 'TodoLocList',
+      ['<leader>xtx']                                                 = 'TodoTrouble',
       -- vifm
       ['<leader>fm']                                                 = 'VsplitVifm',
       ['<leader>Fm']                                                 = 'Vifm',
