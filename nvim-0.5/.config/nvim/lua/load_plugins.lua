@@ -161,11 +161,12 @@ if ok then
     }
     -- misc
     use {'kkoomen/vim-doge', opt = true, run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
+    use {'dhruvasagar/vim-table-mode', cmd = {'TableModeToggle', 'TableModeEnable', 'TableModeDisable', 'Tabelize', 'TableModeRealign'}}
     use {
       'voldikss/vim-translator', cmd = {'Translate', 'TranslateR', 'TranslateW', 'TranslateL'}, ft = {"trans"}
     }
     use { 'ledger/vim-ledger', ft = {'ledger'} }
-    use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install',
+    use {'iamcco/markdown-preview.nvim', run = 'cd app && npm install',
       cmd = {'MarkdownPreview', 'MarkdownPreviewStop'} , ft = {'markdown'}
     }
   end
