@@ -32,7 +32,7 @@ vim.o.autoread        = true
 vim.o.timeoutlen      = 500
 vim.o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
 vim.o.foldlevel       = 5
-vim.o.signcolumn      = "auto:2"
+vim.wo.signcolumn     = "auto:2"
 
 -- autocommands
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
@@ -45,7 +45,7 @@ vim.o.splitright = true
 
 --- colors
 vim.cmd('syntax on')
-vim.cmd('colorscheme base16-nord')
+-- vim.cmd('colorscheme base16-nord')
 vim.g.seiya_auto_enable = 1
 vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and {'guibg'} or {'ctermbg'}
 vim.cmd('hi rainbowcol7 guifg=#D8DEE9')
@@ -68,6 +68,7 @@ vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md,*.go %s/\s\+$//e ]], ''
 -- load plugins
 require('load_plugins')
 require('mappings')
+require('colors').setup()
 
 -- load local config if any
 -- local configs can override configs above

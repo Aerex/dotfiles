@@ -23,6 +23,8 @@ local ok, _ = pcall(vim.cmd, [[packadd packer.nvim]])
 if ok then
   return require('packer').startup(
   function(use)
+      -- a faster replacement of the included filetype.vim
+      use("nathom/filetype.nvim")
     -- Packer can manage itself as an optional plugin
     use {'wbthomason/packer.nvim'}
 
@@ -87,7 +89,7 @@ if ok then
           {
               'folke/todo-comments.nvim',
               requires = 'nvim-lua/plenary.nvim',
-              config = function() require('todo') end
+              config = function() require('todo-comments').setup{} end
           }
 
       }
@@ -102,7 +104,8 @@ if ok then
     use {
       { 'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup() end },
       'chriskempson/base16-vim',
-      'miyakogi/seiya.vim',  -- enable transparent background
+        'rmehri01/onenord.nvim', config = function() require('colors').setup() end,
+        'miyakogi/seiya.vim',  -- enable transparent background
       { 'p00f/nvim-ts-rainbow', requires = { 'nvim-treesitter/nvim-treesitter' } }
     }
 
