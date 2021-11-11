@@ -44,15 +44,21 @@ vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
 vim.o.splitright = true
 
 --- colors
-vim.cmd('syntax on')
 vim.cmd('colorscheme base16-nord')
-vim.g.seiya_auto_enable = 1
-vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and {'guibg'} or {'ctermbg'}
+vim.cmd[[syntax on]]
+--vim.g.seiya_auto_enable = 1
+--vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and {'guibg'} or {'ctermbg'}
 vim.cmd('hi rainbowcol7 guifg=#D8DEE9')
 vim.cmd[[hi GitGutterAdd guifg=#4ca64c guibg=none]]
+vim.cmd[[hi GitSignAdd guifg=#4ca64c guibg=none]]
 vim.cmd[[hi DiffAdd guifg=#4ca64c guibg=none]]
+vim.cmd[[hi SpellBad guibg=#FF0000]]
 vim.cmd[[hi DiffAdded guifg=#4ca64c guibg=none]]
 vim.cmd[[hi DiffRemoved guifg=#BF616A guibg=none]]
+vim.cmd[[hi Folded guifg=#D8DEE9]]
+vim.cmd[[hi SignatureMarkText guifg=#ffa500]]
+vim.cmd[[hi LineNr guifg=None]]
+vim.cmd[[hi SignColumn guifg=None]]
 
 vim.cmd('autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"')
 
@@ -71,7 +77,9 @@ require('mappings')
 
 -- load local config if any
 -- local configs can override configs above
+-- FIXME: Can't run cmd when after require check using pcall
+vim.api.nvim_exec([[autocmd BufEnter *.go lua set_local_config()]], '')
 local ok, _ = pcall(require, 'local')
 if ok then
-  vim.api.nvim_exec([[ autocmd BufEnter *.go lua set_local_config() ]], '')
+  vim.api.nvim_exec([[autocmd BufEnter *.go lua set_local_config()]], '')
 end
