@@ -12,43 +12,43 @@
 status_path = "~/.vdirsyncer/status/"
 
 # CARDDAV
-[pair contacts]
+#[pair contacts]
 # A `[pair <name>]` block defines two storages `a` and `b` that should be
 # synchronized. The definition of these storages follows in `[storage <name>]`
 # blocks. This is similar to accounts in OfflineIMAP.
-a = "contacts_local"
-b = "contacts_remote"
-
-# Synchronize all collections that can be found.
-# You need to run `vdirsyncer discover` if new calendars/addressbooks are added
-# on the server.
-
-collections = null
-
-# Synchronize the "display name" property into a local file (~/.contacts/displayname).
-#metadata = ["Nana"]
-
-# To resolve a conflict the following values are possible:
-#   `null` - abort when collisions occur (default)
-#   `"a wins"` - assume a's items to be more up-to-date
-#   `"b wins"` - assume b's items to be more up-to-date
-conflict_resolution = "b wins"
-
-[storage contacts_local]
-# A storage references actual data on a remote server or on the local disk.
-# Similar to repositories in OfflineIMAP.
-type = "filesystem"
-path = "~/.contacts"
-fileext = ".vcf"
-
-[storage contacts_remote]
-type = "carddav"
-url = "https://cal.aerex.me/card.php/addressbooks/Aerex/default"  
-auth = "digest"
-username = "Aerex"
-# The password can also be fetched from the system password storage, netrc or a
-# custom command. See http://vdirsyncer.pimutils.org/en/stable/keyring.html
-password.fetch = ["command", "~/.config/vdirsyncer/getpass.sh", "Baikal/Aerex"]
+#a = "contacts_local"
+#b = "contacts_remote"
+#
+## Synchronize all collections that can be found.
+## You need to run `vdirsyncer discover` if new calendars/addressbooks are added
+## on the server.
+#
+#collections = null
+#
+## Synchronize the "display name" property into a local file (~/.contacts/displayname).
+##metadata = ["Nana"]
+#
+## To resolve a conflict the following values are possible:
+##   `null` - abort when collisions occur (default)
+##   `"a wins"` - assume a's items to be more up-to-date
+##   `"b wins"` - assume b's items to be more up-to-date
+#conflict_resolution = "b wins"
+#
+#[storage contacts_local]
+## A storage references actual data on a remote server or on the local disk.
+## Similar to repositories in OfflineIMAP.
+#type = "filesystem"
+#path = "~/.contacts"
+#fileext = ".vcf"
+#
+#[storage contacts_remote]
+#type = "carddav"
+#url = "https://cal.aerex.me/card.php/addressbooks/Aerex/default"  
+#auth = "digest"
+#username = "Aerex"
+## The password can also be fetched from the system password storage, netrc or a
+## custom command. See http://vdirsyncer.pimutils.org/en/stable/keyring.html
+#password.fetch = ["command", "~/.config/vdirsyncer/getpass.sh", "Baikal/Aerex"]
 
 # Default Calendar
 [pair calendar_default]
@@ -73,11 +73,12 @@ auth = "digest"
 password.fetch = ["command", "~/.config/vdirsyncer/getpass.sh", "Baikal/Aerex"]
 
 #
-[pair calendar_work]
-a = "calendar_remote_google_da"
-b = "calendar_work"
-collections = [["calendar", "nana@drayalliance.com", "work"]]
-conflict_resolution = "a wins"
+[pair calendar_ibm]
+a = "calendar_remote_ibm"
+b = "calendar_local_ibm"
+
+collections = ["IBM"]
+conflict_resolution = "b wins"
 # conflict_resolution = ["command", "nvim", "-d"]
 
 
@@ -89,14 +90,14 @@ conflict_resolution = "a wins"
 ###
 ### Calendars also have a color property
 #
-#[storage calendar_local_da]
-#type = "filesystem"
-#path = "~/.calendars/drayalliance"
-#fileext = ".ics"
+[storage calendar_local_ibm]
+type = "filesystem"
+path = "~/.calendars/ibm"
+fileext = ".ics"
 #
-[storage calendar_baikal_da]
+[storage calendar_remote_ibm]
 type = "caldav"
-url = "https://cal.aerex.me/cal.php/calendars/Aerex/drayalliance"
+url = "https://cal.aerex.me/cal.php/calendars/Aerex/932c3638-5fde-4929-97d3-4eea9572e782"
 username = "Aerex"
 auth = "digest"
 password.fetch = ["command", "~/.config/vdirsyncer/getpass.sh", "Baikal/Aerex"]
