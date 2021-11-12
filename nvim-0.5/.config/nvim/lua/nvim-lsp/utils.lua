@@ -45,7 +45,8 @@ M.get_efm_configs = function()
 end
 
 M.goimports = function(timeout_ms)
-  local context = { only = { 'source.organizeImports' } }
+  -- Credits to https://github.com/neovim/neovim/blob/release-0.5/runtime/lua/vim/lsp/handlers.lua#L113
+  local context = {source = {organizeImports = true}}
   vim.validate { context = { context, 't', true } }
 
   local params = vim.lsp.util.make_range_params()
@@ -54,25 +55,18 @@ M.goimports = function(timeout_ms)
   -- See the implementation of the textDocument/codeAction callback
   -- (lua/vim/lsp/handler.lua) for how to do this properly.
   local result = vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params, timeout_ms)
-  if not result or result == nil or next(result) == nil or #result == 0 then return end
-  local actions = result[1].result
-  if not actions then return end
-  local action = actions[1]
-
-  -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
-  -- is a CodeAction, it can have either an edit, a command or both. Edits
-  -- should be executed first.
-  if action.edit or type(action.command) == 'table' then
-    if action.edit then
-      vim.lsp.util.apply_workspace_edit(action.edit)
+  for _, res in pairs(result or {}) do
+    for _, r in pairs(res.result or {}) do
+      if r.edit then
+        vim.lsp.util.apply_workspace_edit(r.edit)
+      else
+        vim.lsp.buf.execute_command(r.command)
+      end
     end
-    if type(action.command) == 'table' then
-      vim.lsp.buf.execute_command(action.command)
-    end
-  else
-    vim.lsp.buf.execute_command(action)
   end
 end
+
+--vim.lsp.handlers["textDocument/definition"] = goto_definition('split')
 --M.get_system_name = function()
 --  local system_name
 --  if vim.fn.has("mac") == 1 then
