@@ -1,3 +1,30 @@
+--local wk = require('which-key')
+--local dap = require('dap')
+--local dapui = require('dapui')
+--
+--wk.register({
+--  d = {
+--    name = 'Debugger',
+--    b =  {
+--      name = 'Breakpoints',
+--      p = { function() dap.toggle_breakpoint() end, 'Toggle Breakpoint' },
+--    },
+--    s = {
+--      name = 'Step',
+--      o = { function() dap.step_over() end, 'Step Over' },
+--      O = { function() dap.step_out() end, 'Step Out' },
+--      i = { function() dap.step_into() end, 'Step In' },
+--    },
+--    x = {
+--      name = 'Connection',
+--      r = { function() dap.disconnect({restart = true}) end, 'Restart' }
+--      e = { function() dap.disconnect({terminateDebuggee = true}) end, 'Terminate and Disconnect' }
+--    }
+--    c = { function() dap.continue() end, 'Continue' }
+--  {
+--    prefix = '<Leader>'
+--  }
+--})
 local dap = require('dap')
 local dapui = require('dapui')
 dap.adapters.go = function(callback, config)
@@ -39,7 +66,10 @@ dap.configurations.go = {
     type = "go",
     name = "Debug",
     request = "launch",
-    program = "${file}"
+    program = "./${relativeFileDirname}",
+    args = {"account"},
+    stopOnEntry = true,
+    mode = "debug"
   },
   {
     type = "go",
@@ -63,7 +93,7 @@ dap.repl.commands =
     dap.repl.commands,
     {
       continue = {".continue", "c"},
-      next_ = {".next", "n"},
+      next_ = {".next", ".n"},
       into = {".into", "s"},
       out = {".out", "r"},
       scopes = {".scopes", "a"},
@@ -85,8 +115,11 @@ dap.repl.commands =
 vim.g.dap_virtual_text = true -- 'all frames'
 vim.fn.sign_define("DapBreakpoint", {text = "●", texthl = "", linehl = "", numhl = ""})
 vim.fn.sign_define('DapStopped', {text='▶', texthl='', linehl='NvimDapStopped', numhl=''})
+vim.fn.sign_define('DapBreakpointCondition', {text='', texthl='ErrorMsg', linehl='', numhl=''})
+vim.fn.sign_define('DapBreakpointRejected',  {text='', texthl='WarningMsg', linehl='', numhl=''})
+vim.fn.sign_define('DapLogPoint',            {text='', texthl='ErrorMsg', linehl='', numhl=''})
 dapui.setup({
-  icons = {expanded = '⯆', collapsed = '⯈'},
+  icons = { expanded = "▾", collapsed = "▸" },
   mappings = {
     -- Use a table to apply multiple mappings
     expand = { '<CR>', '<2-LeftMouse>' },
@@ -127,4 +160,11 @@ dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() 
 dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end
 dap.listeners.before.event_exited['dapui_config'] = function() dapui.close() end
 
+require('dap.ext.vscode').load_launchjs()
+dap.set_log_level('TRACE')
+
 vim.cmd("au FileType dap-repl lua require('dap.ext.autocompl').attach()")
+
+function debug_cli()
+  --vim.fn.input
+end
