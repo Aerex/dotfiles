@@ -6,4 +6,6 @@ function change-in {
   zle delete-in
   zle vi-insert
 }
-zle -N change-in
+if [ -z $ZVM_NAME ]; then
+  zle -N change-in
+fi

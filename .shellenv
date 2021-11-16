@@ -1,0 +1,54 @@
+
+# Add extra path to the list only if the directory exists
+EXTRAPATH=""
+for d in \
+    $HOME/.bin \
+    $HOME/go/bin \
+    /opt/android-skd/tools/bin \
+    $HOME/.pyenv \
+    /usr/local/sbin \
+    $HOME/.local/bin \
+    /usr/local/go/bin \
+    $HOME/.gem/ruby/2.6.0/bin \
+    $HOME/.rbenv/bin \
+  ; do
+  test -d "$d" && EXTRAPATH="$d:$EXTRAPATH"
+done
+export PATH=$EXTRAPATH:$PATH
+
+# Set go environment variables if golang installed
+NEWGOROOT=""
+for d in \
+  /usr/lib/golang \
+  /usr/local/go  \
+  ; do
+  test -d "$d" && NEWGOROOT="$d"
+done
+export GOROOT=$NEWGOROOT
+export GOPATH=$HOME/go
+
+export ANDROID_HOME=/opt/android-sdk
+
+export JA_GTC_SOURCE='ja' # your preferred source language code
+export JA_GTC_TARGET='en' # your preferred target language code
+
+export TERM=screen-256color
+
+# History
+if [[ $SHELL = 'zsh' ]]; then
+  export HISTFILE="$HOME/.zsh_history"
+  export HISTSIZE=30000
+  export SAVEHIST=${HISTSIZE}
+fi
+
+# make backward-word and forward-word move to each word separated by a '/'
+export WORDCHARS=''
+
+export PASSWORD_STORE_ENABLE_EXTENSIONS=true
+export PASSWORD_STORE_EXTENSIONS_DIR=$HOME/.password-store/.extensions
+
+[[ -f $HOME.cargo/env ]] && . "$HOME/.cargo/env"
+
+[[ -f ~/.shellenv.local ]] && source ~/.shellenv.local
+
+# vim:ft=sh

@@ -1,37 +1,9 @@
-# If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:$HOME/.bin:/usr/local/bin:$HOME/go/bin:$PATH
-
 export ZLE_REMOVE_SUFFIX_CHARS=""
 
-
 OS=$(uname -s)
-if [ "$OS" = "Darwin" ]; then
-  PYTHON_ROOT_37=/Library/Frameworks/Python.framework/Versions/3.7
-  PYTHON_PATH_27=$HOME/Library/Python/2.7
-  PYTHON_PATH_37=$HOME/Library/Python/3.7
-  export GOROOT=/usr/local/Cellar/go/1.10.3/libexec
-fi
 
 # FZF
 export FZF_DEFAULT_OPTS="--bind ctrl-g:jump --bind alt-j:preview-down --bind alt-k:preview-up"
-
-export PATH=$PATH:/usr/local/sbin
-[ -d $HOME/.local/bin ] && export PATH=$PATH:$HOME/.local/bin
-[ -d $HOME/.gem/ruby/2.6.0/bin ] && export PATH=$PATH:$HOME/.gem/ruby/2.6.0/bin
-
-# Go
-export GOROOT=/usr/lib/go
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
-
-# Android
-export PATH=$PATH:/opt/android-sdk/tools/bin
-
-# Powerline
-if [ "$OS" = "Darwin" ]; then
-  export POWERLINE_NO_ZSH_PROMPT=1
-  . /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
-fi
 
 # Misc
 if [ -f ~/neovim/bin/nvim ]; then
@@ -42,10 +14,8 @@ else
   export EDITOR=/usr/local/bin/nvim
 fi
 
-[[ $TMUX = "" ]] && export TERM="xterm-256color"
 export NOTES_DIRECTORY=~/Documents/notes
-export EDITOR=~/neovim/bin/nvim
-#export EDITOR=/bin/nvim
+export EDITOR=nvim
 export NOTES_EXT=""
 export PAGER=vimpager
 export BROWSER=$(which qutebrowser)
@@ -105,19 +75,21 @@ ENABLE_CORRECTION="true"
 
 # Credits to https://github.com/Tuurlijk/dotfiles/blob/master/.zshrc
 # Load zgen only if a user types a zgen command
-zgen () {
-	if [[ ! -s ${ZDOTDIR:-${HOME}}/.zgen/zgen.zsh ]]; then
-		git clone --recursive https://github.com/tarjoilija/zgen.git ${ZDOTDIR:-${HOME}}/.zgen
-	fi
-	source ${ZDOTDIR:-${HOME}}/.zgen/zgen.zsh
-	zgen "$@"
-}
+source ${ZDOTDIR:-${HOME}}/.zgen/zgen.zsh
+#	zgen "$@"
+#zgen () {
+#	if [[ ! -s ${ZDOTDIR:-${HOME}}/.zgen/zgen.zsh ]]; then
+#		git clone --recursive https://github.com/tarjoilija/zgen.git ${ZDOTDIR:-${HOME}}/.zgen
+#	fi
+#	source ${ZDOTDIR:-${HOME}}/.zgen/zgen.zsh
+#	zgen "$@"
+#}
 
 # Generate zgen init script if needed
 # Credits to https://github.com/Tuurlijk/dotfiles/blob/master/.zshrc
-if [[ ! -s ${ZDOTDIR:-${HOME}}/.zgen/init.zsh ]]; then
-	zgen save
-fi
+#if [[ ! -s ${ZDOTDIR:-${HOME}}/.zgen/init.zsh ]]; then
+#	zgen save
+#fi
 
 # Load the oh-my-zsh's library.
 # Which plugins would you like to load?
@@ -144,31 +116,31 @@ if [ -d $HOME/.config/zsh/widgets ]; then
 fi
 
   # Zsh's history-beginning-search-backward is very close to Vim's C-x C-l
-  history-beginning-search-backward-then-append() {
-    zle history-beginning-search-backward
-    zle vi-add-eol
-  }
-  zle -N history-beginning-search-backward-then-append
+#  history-beginning-search-backward-then-append() {
+#    zle history-beginning-search-backward
+#    zle vi-add-eol
+#  }
+#  zle -N history-beginning-search-backward-then-append
 
 
 # [zsh-git-prompt] location
-export __GIT_PROMPT_DIR=~/.zsh/bundles/olivierverdier/zsh-git-prompt
+export __GIT_PROMPT_DIR=~/.zgen/olivierverdier/zsh-git-prompt-master
 
 # use Haskell's version of zsh-git-prompt (if available)
 if [[ -f $__GIT_PROMPT_DIR/src/.bin/gitstatus ]]; then GIT_PROMPT_EXECUTABLE="haskell"; fi
 
-zgen load zsh-users/zsh-autosuggestions
-zgen load olivierverdier/zsh-git-prompt
-zgen oh-my-zsh plugins/ssh-agent
-zgen oh-my-zsh plugins/shrink-path
-zgen load zsh-users/zsh-completions
-zgen load pjg/zsh-vim-plugin
-zgen load taskwarrior
-[ "$OS" = "Darwin" ] && zgen load brew
-zgen load tmux
-zgen load $HOME/.config/zsh/themes/theunraveler-mod.zsh-theme
-zgen load $HOME/.config/zsh/plugins/vim-mode-redux
-zgen save
+export ZSH_THEME_GIT_PROMPT_CACHE=1
+
+if ! zgen saved; then
+  zgen load zsh-users/zsh-autosuggestions
+  zgen load olivierverdier/zsh-git-prompt
+  zgen oh-my-zsh plugins/ssh-agent
+  zgen oh-my-zsh plugins/shrink-path
+  zgen load zsh-users/zsh-completions
+  zgen load jeffreytse/zsh-vi-mode
+  [ "$OS" = "Darwin" ] && zgen load brew
+  zgen save
+fi
 #ZSH_THEME="theunraveler-mod"
 #ZSH_THEME="theunraveler"
 
@@ -186,14 +158,6 @@ setopt noflowcontrol
 stty -ixon -ixoff
 # Do not kill background processes when closing the shell.
 setopt nohup
-
-# History
-export HISTFILE="$HOME/.zsh_history"
-export HISTSIZE=30000
-export SAVEHIST=${HISTSIZE}
-
-
-# LOCALE
 
 # ensure we have correct locale set (this is mostly for MacOS)
 export LC_ALL=en_US.UTF-8
@@ -213,11 +177,7 @@ if [ -d $ZSH_CUSTOM/functions ]; then
     source $file
   done
 fi
-# export MANPATH="/usr/local/man:$MANPATH"
-#
 
-# make backward-word and forward-word move to each word separated by a '/'
-export WORDCHARS=''
 
 # limit correction only to commands
 setopt correct
@@ -225,22 +185,24 @@ setopt correct
 # When offering typo corrections, do not propose anything which starts with an underscore (such as many of Zsh's shell functions)
 CORRECT_IGNORE='_*'
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
-export ANDROID_HOME=/opt/android-sdk
-
-export JA_GTC_SOURCE='ja' # your preferred source language code
-export JA_GTC_TARGET='en' # your preferred target language code
-#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-source ~/tmuxinator.zsh
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH=$PATH:/$PYENV_ROOT
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
 fi
 if command -v zoxide 1>/dev/null 2>&1; then 
    eval "$(zoxide init zsh)" 
 fi
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
+if command -v rbenv 1>/dev/null 2>&1; then
+  eval "$(rbenv init - zsh)"
+fi
