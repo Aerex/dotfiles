@@ -12,6 +12,7 @@ lsp_status.config({
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
   properties = {
@@ -21,16 +22,10 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
   }
 }
 
-
-
 local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   local function keymap(...)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
-  end
-
-  local function set_option(...)
-    vim.api.nvim_buf_set_option(bufnr, ...)
   end
 
   -- Attach LSP status
@@ -44,8 +39,9 @@ local on_attach = function(client, bufnr)
     hint_prefix = ' ',
     hint_scheme = 'String',
     handler_opts = {
-      border = 'shadow'   -- double, single, shadow, none
+      border = 'rounded'   -- double, single, shadow, none
     },
+    auto_close_after = 10,
     decorator = {'`', '`'}  -- or decorator = {'***', '***'}  decorator = {'**', '**'} see markdown help
   })
 
@@ -59,6 +55,7 @@ vim.fn.sign_define('LspDiagnosticsSignHint', {text='', texthl='LspDiagnostics
  local opts = { noremap=true, silent=true }
   keymap('n', 'gd', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   keymap('n', '<c-]>', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
   keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
@@ -69,7 +66,8 @@ vim.fn.sign_define('LspDiagnosticsSignHint', {text='', texthl='LspDiagnostics
   keymap('n', '<leader>rb', '<cmd>LspRestart<CR>', opts)
   keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   keymap('n', '<M-O>', '<cmd>lua require(\'nvim-fzf.lsp\').document_symbols()<CR>', opts)
-  keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  keymap('n', '<leader>ca', '<cmd>CodeActionMenu<CR>', opts)
+  keymap('v', '<leader>ca', '<cmd>CodeActionMenu<CR>', opts)
   keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
@@ -131,11 +129,29 @@ require'lspconfig'.gopls.setup{
   capabilities = capabilities,
     settings = {
       gopls = {
-        staticcheck = true
+        staticcheck = true,
+        usePlaceholders = false
       },
     }
 }
-vim.cmd[[autocmd BufWritePre *.go lua require('nvim-lsp.utils').goimports(1000)]]
+vim.cmd[[
+augroup GOPLS
+	autocmd!
+	autocmd BufWritePre *.go :silent! lua vim.lsp.buf.formatting()
+	autocmd BufWritePre *.go :silent! lua org_imports(3000)
+augroup END
+]]
+
+require'lspconfig'.jsonls.setup {
+  capabilities = capabilities,
+  commands = {
+    Format = {
+      function()
+        vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+      end
+    }
+  }
+}
 
 require'lspconfig'.vimls.setup {
   on_attach=on_attach,
