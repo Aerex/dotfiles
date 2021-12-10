@@ -3,3 +3,25 @@ func(cmd *cobra.Command, args []string) {
 	$0
 }
 endsnippet
+
+snippet Describe "Add Describe function block"
+Describe("$1", func() {
+	$0
+})
+endsnippet
+
+snippet BeforeEach "Add BeforeEach function block"
+BeforeEach(func() {
+	$0
+})
+endsnippet
+
+snippet It "Add It function block"
+It("$1", func() {
+	$0
+})
+endsnippet
+
+snippet todo "Add TODO block"
+// TODO(me): $1 $0
+endsnippet
