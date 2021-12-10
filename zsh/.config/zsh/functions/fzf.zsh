@@ -53,13 +53,15 @@ fe() {
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
-# fd - cd to selected directory
-fd() {
-  local dir
-  dir=$(find ${1:-.} -path '*/\.*' -prune \
-                  -o -type d -print 2> /dev/null | fzf +m) &&
-  cd "$dir"
-}
+# fd - cd to selected directory (use only if fd is not installed)
+if [ ! -f $HOME/.cargo/bin/fd ]; then
+  fd() {
+    local dir
+    dir=$(find ${1:-.} -path '*/\.*' -prune \
+                    -o -type d -print 2> /dev/null | fzf +m) &&
+    cd "$dir"
+  }
+fi
 
 # fcop - checkout git branch/tag, with a preview showing the commits between the tag/branch and HEAD
 fcop() {
