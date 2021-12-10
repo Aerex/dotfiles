@@ -9,4 +9,7 @@ function change-around {
   zle vi-delete-char
   zle vi-insert
 }
-zle -N change-around
+
+if [ -z $ZVM_NAME ]; then 
+  zle -N change-around
+fi

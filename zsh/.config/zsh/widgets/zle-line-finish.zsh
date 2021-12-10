@@ -3,4 +3,7 @@
 function zle-line-finish {
   vim_mode=$vim_ins_mode
 }
-zle -N zle-line-finish
+
+if [ -z $ZVM_NAME ]; then 
+  zle -N zle-line-finish
+fi

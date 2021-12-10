@@ -93,7 +93,6 @@ function delete-in {
   RBUFFER="$RBUFFER[$RSEARCH,${#RBUFFER}]"
   LBUFFER="$LBUFFER[1,$LSEARCH]"
 }
-zle -N delete-in
 # Credit to pjg
 # https://github.com/pjg/dotfiles/blob/master/.zshrc#L419
 # Delete all characters between a pair of characters as well as the surrounding
@@ -104,5 +103,9 @@ function delete-around {
   zle vi-delete-char
   zle vi-delete-char
 }
-zle -N delete-around
+
+if [ -z $ZVM_NAME ]; then 
+  zle -N delete-around
+  zle -N delete-in
+fi
 
