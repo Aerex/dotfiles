@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# AUTHOR: gotbletu (@gmail|twitter|youtube|github|lbry)
+#         https://www.youtube.com/user/gotbletu
+# DESC:   translate text
+# DEMO:   
+# DEPEND: translate-shell
+
+set -o vi
+while true
+do
+  read -rep ">>> Define: " INPUT
+  history -s "$INPUT"
+  trans -d --no-ansi -v "$INPUT"
+  printf "\n"
+done
+

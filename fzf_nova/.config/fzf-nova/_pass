@@ -19,8 +19,9 @@ function copy_pass_safe() {
 }
 USERNAME_PREFIX="login:"
 URL_PREFIX="url:"
-tree -fia ~/.password-store | grep '.gpg' | sed 's/^.\///' | sed "s|$HOME/.password-store/||g" | sed 's/.gpg//' | fzf -e -i -m --reverse --header="enter=copy password, alt-u=copy username, alt-l=copy url"  \
+tree -fia ~/.password-store | grep '.gpg' | sed 's/^.\///' | sed "s|$HOME/.password-store/||g" | sed 's/.gpg//' | fzf -e -i -m --reverse --header="enter=copy password, alt-o=copy otp alt-u=copy username, alt-l=copy url"  \
     --bind="alt-u:execute-silent[pass {} | grep ^$USERNAME_PREFIX | sed \"s/$USERNAME_PREFIX//\" | tr -d ' '  | xsel --clipboard --input]+abort" \
     --bind="alt-l:execute-silent[pass {} | grep ^$URL_PREFIX | sed \"s/$URL_PREFIX//\" | tr -d ' '  | xsel --clipboard --input]+abort" \
-    --bind="enter:execute-silent[pass {} | head -n 1 | xsel --clipboard --input]+abort" 
-
+    --bind="alt-o:execute-silent[pass otp {} | xsel --clipboard --input]+abort" \
+    --bind="enter:execute-silent[pass {} | head -n 1 | tr -d '\n' | xsel --clipboard --input]+abort" 
+  
