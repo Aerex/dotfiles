@@ -1,4 +1,9 @@
-" vim: filetype=vifm foldmethod=marker
+" __     _____ _____ __  __ 
+" \ \   / /_ _|  ___|  \/  |
+"  \ \ / / | || |_  | |\/| |
+"   \ V /  | ||  _| | |  | |
+"    \_/  |___|_|   |_|  |_|
+"                           
 " Sample configuration file for vifm (last updated: 20 July, 2018)
 " You can edit this file by hand.
 " The " character at the beginning of a line comments out the line.
@@ -119,6 +124,21 @@ set statusline="%A %u %g %15s %20d  %="
 set number
 
 set relativenumber
+
+let &statusline  = "%2* %4*%1*"  " initial separator and first segment colour
+let &statusline .= " %-16t "     	" file name
+let &statusline .= "%7*%2*"     	" left separator
+let &statusline .= "%3*%2*"     	" left dark separator
+let &statusline .= "%="          	" fill the whole status line
+let &statusline .= "%3*%2*"     	" right dark separator
+let &statusline .= "%7*%5*"     	" right separator
+let &statusline .= "  %A "      	" file attributes
+let &statusline .= "%4*%6*"     	 " right separator
+let &statusline .= " %7u:%-7g  "	" user and group owners of the file
+let &statusline .= "%3*%2*" 	    	" right separator
+let &statusline .= "  %-5s "      	" human readable file size
+let &statusline .= "%3*%2*"     	" right dark separator
+let &statusline .= "%7*%5*"     	" right separator
 
 " Marks
 " ------------------------------------------------------------------------------ }}}
@@ -449,6 +469,7 @@ set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
 " Filter-out build and temporary files
 "
 " filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/
+let &statusline .= "  %d %4*%2* "        	" file modification date and time
 
 " ------------------------------------------------------------------------------ }}}
 " Mappings ------------------------------------------------------------------------------ {{{1
@@ -573,3 +594,4 @@ noremap <silent> <c-f> :FZFfind<Cr>
 "     vifm --server-name "$VIFM_SERVER_NAME" --remote +"cd '$PWD'"
 "
 " let $VIFM_SERVER_NAME = v:servername
+" vim: filetype=vifm foldmethod=marker
