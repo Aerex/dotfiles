@@ -32,18 +32,21 @@ vim.o.autoread        = true
 vim.o.timeoutlen      = 500
 vim.o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
 vim.o.foldlevel       = 5
-vim.o.signcolumn      = "auto:2"
+vim.wo.signcolumn     = "auto:2"
 
 -- autocommands
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
 vim.cmd('autocmd VimResized * :wincmd =')
-vim.cmd('autocmd BufEnter qutebrowser-editor* set spell wrap')
+-- FIXME(me): Figure out why set spell is being enabled in all buffers
+--vim.cmd('autocmd BufEnter qutebrowser-editor* set spell wrap')
 vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
+-- FIXME(me): Same as line 40
+--vim.cmd('autocmd FileType markdown set spell')
 
 --buffers
 vim.o.splitright = true
-
---- colors
+vim.g.seiya_auto_enable = 1
+vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and {'guibg'} or {'ctermbg'}
 vim.cmd('hi rainbowcol7 guifg=#D8DEE9')
 vim.cmd[[hi GitGutterAdd guifg=#4ca64c guibg=none]]
 vim.cmd[[hi GitSignAdd guifg=#4ca64c guibg=none]]
