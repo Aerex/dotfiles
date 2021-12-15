@@ -1,0 +1,8 @@
+{
+  "javascript.suggestionActions.enabled": false,
+  "javascript.suggest.autoImports": false,
+  "javascript.updateImportsOnFileMove.enable": false,
+  "javascript.suggest.paths": false,
+  "coc.preferences.watchmanPath": "/usr/local/bin/watchman",
+  "javascript.suggest.completeFunctionCalls": false
+}
