@@ -27,3 +27,6 @@ zsh/.config/zsh/functions/jira
 local/
 
 nvim/.config/nvim/spell
+
+nvim-local/
+local.vim

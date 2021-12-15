@@ -63,7 +63,6 @@ vim.fn.sign_define('LspDiagnosticsSignHint', {text='', texthl='LspDiagnostics
   keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   keymap('n', '<M-D>', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  keymap('n', '<leader>rb', '<cmd>LspRestart<CR>', opts)
   keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   keymap('n', '<M-O>', '<cmd>lua require(\'nvim-fzf.lsp\').document_symbols()<CR>', opts)
   keymap('n', '<leader>ca', '<cmd>CodeActionMenu<CR>', opts)
@@ -73,41 +72,42 @@ vim.fn.sign_define('LspDiagnosticsSignHint', {text='', texthl='LspDiagnostics
   keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   keymap('n', '<leader>,d', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
   keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  keymap('n', '<leader>lr', '<cmd>LspRestart<CR>', opts)
 end
 
 -- load lsp servers
 -- set the path to the sumneko installation; if you previously installed via the now deprecated :LspInstall, use
-local sumneko_root_path = vim.fn.stdpath('cache') .. '/lspconfig/sumneko_lua/lua-language-server'
-local sumneko_binary = sumneko_root_path .. '/bin/Linux/lua-language-server'
-require'lspconfig'.sumneko_lua.setup {
-  cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-        -- Setup your lua path
-        path = vim.split(package.path, ';'),
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = {
-          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-        },
-      },
-      telemetry = {
-        enable = false
-      }
-    }
-  }
-}
+--local sumneko_root_path = vim.fn.stdpath('cache') .. '/lspconfig/sumneko_lua/lua-language-server'
+--local sumneko_binary = sumneko_root_path .. '/bin/Linux/lua-language-server'
+--require'lspconfig'.sumneko_lua.setup {
+--  cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
+--  on_attach = on_attach,
+--  capabilities = capabilities,
+--  settings = {
+--    Lua = {
+--      runtime = {
+--        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+--        version = 'LuaJIT',
+--        -- Setup your lua path
+--        path = vim.split(package.path, ';'),
+--      },
+--      diagnostics = {
+--        -- Get the language server to recognize the `vim` global
+--        globals = {'vim'},
+--      },
+--      workspace = {
+--        -- Make the server aware of Neovim runtime files
+--        library = {
+--          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+--          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+--        },
+--      },
+--      telemetry = {
+--        enable = false
+--      }
+--    }
+--  }
+--}
 require'lspconfig'.pylsp.setup{
   on_attach=on_attach,
   autostart = true,
@@ -135,23 +135,12 @@ require'lspconfig'.gopls.setup{
     }
 }
 vim.cmd[[
-augroup GOPLS
+augroup gopls
 	autocmd!
 	autocmd BufWritePre *.go :silent! lua vim.lsp.buf.formatting()
-	autocmd BufWritePre *.go :silent! lua org_imports(3000)
+	autocmd BufWritePre *.go :silent! lua require'nvim-lsp.utils'.goimports(3000)
 augroup END
 ]]
-
-require'lspconfig'.jsonls.setup {
-  capabilities = capabilities,
-  commands = {
-    Format = {
-      function()
-        vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
-      end
-    }
-  }
-}
 
 require'lspconfig'.vimls.setup {
   on_attach=on_attach,
@@ -174,6 +163,17 @@ require'lspconfig'.efm.setup {
   filetypes = efm_filetypes,
   settings = efm_settings,
   capabilities = capabilities
+}
+
+require'lspconfig'.jsonls.setup {
+  capabilities = capabilities,
+    commands = {
+      Format = {
+        function()
+          vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+        end
+      }
+    }
 }
 
 require('lspkind').init({

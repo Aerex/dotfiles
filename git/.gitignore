@@ -1,1 +1,4 @@
 tags
+.vscode
+.ruby-version
+__debug_bin
