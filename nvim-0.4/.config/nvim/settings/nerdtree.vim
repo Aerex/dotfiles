@@ -14,14 +14,9 @@
 "    endif
 "endfunction
 "
-"map <Leader>n :NERDTreeToggle<CR>
-"map <Leader>'n :NERDTreeFocus<CR>
+"map <Leader>n :call OpenNerdTree()<CR>
+"map <Leader><Leader>n :NERDTreeFocus<CR>
 "
-"au VimEnter * call NERDTreeAddKeyMap({
-"      \ 'key': 'h',
-"      \ 'callback': 'NERDTreeMapOpenSplit',
-"      \ 'quickhelpText': 'Opens the selected file in a new split (horizontal) window and puts the cursor in the new window',
-"      \ 'scope': 'FileNode' })
 "au VimEnter * call NERDTreeAddKeyMap({
 "      \ 'key': 'yy',
 "      \ 'callback': 'NERDTreeMapYankHandler',

@@ -45,8 +45,6 @@ vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
 
 --buffers
 vim.o.splitright = true
-
---- colors
 vim.g.seiya_auto_enable = 1
 vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and {'guibg'} or {'ctermbg'}
 vim.cmd('hi rainbowcol7 guifg=#D8DEE9')
@@ -62,6 +60,8 @@ vim.cmd[[hi LineNr guifg=None]]
 vim.cmd[[hi SignColumn guifg=None]]
 
 vim.cmd('autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"')
+-- FIXME: Workaround for enabling synax
+--vim.cmd('autocmd BufEnter * :syntax on')
 
 -- misc
 vim.g.vifm_embed_split = true
@@ -76,9 +76,9 @@ vim.api.nvim_exec([[autocmd FileType vimwiki,markdown setlocal spell]], '')
 -- load plugins
 require('load_plugins')
 require('mappings')
-require('colors').setup()
+require('colors')
 
--- load local config if any
--- local configs can override configs above
--- FIXME: Can't run cmd when after require check using pcall
-vim.api.nvim_exec([[autocmd BufEnter *.go,*.json lua set_local_config()]], '')
+local ok, _ = pcall(require, 'local')
+if ok then
+  vim.api.nvim_exec([[autocmd BufEnter *.go lua set_local_config()]], '')
+end
