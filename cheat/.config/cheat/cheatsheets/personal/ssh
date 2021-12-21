@@ -8,7 +8,7 @@ ssh -p 2222 user@example.com
 ssh -A user@example.com
 
 # To execute a command on a remote server:
-ssh -t user@example.com 'the-remote-command'
+ssh -t user@example.com 'tmux attach -t main'
 
 # To tunnel an x session over SSH:
 ssh -X user@example.com
