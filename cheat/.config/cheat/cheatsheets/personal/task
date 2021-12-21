@@ -16,6 +16,9 @@ task config alias.<name> <filter>
 # Show task added in the last hour 
 task entry.after:now-1hour list
 
+# Show task added yesterday
+task entry:yesterday list
+
 # Replace description
 # Note the quotes are important
 task modify <id> '/old/new/'
@@ -25,3 +28,6 @@ task denote "ABC"
 
 # To filter by a tag that starts with a number or is a number
 task tag:1234
+
+# Shows a graphical report of task status by year.
+task ghistory.(annual|monthly|weekly|daily)
