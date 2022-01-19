@@ -3,7 +3,6 @@ from subprocess import check_output
 
 def get_pass(account):
     output = check_output('pass Email/' + account, shell=True).splitlines()[0]
-    print('output {}'.format(output))
     return output
 
 def get_user(account):
@@ -19,5 +18,5 @@ def get_imap_host(account):
 def get_imap_port(account):
     output = check_output('pass Email/' + account, shell=True).splitlines()
     imap_port = output[5].replace('imap_port:', '').replace(' ', '')
-    return imap_port
-
+    # has to return a number
+    return int(imap_port) 
