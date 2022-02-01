@@ -1,7 +1,20 @@
 local M = {}
 M.setup = function()
-  vim.cmd [[ syntax enable ]]
-  vim.cmd [[ syntax on ]]
+  print('hello')
+  local hl_cfg = {
+    LineNr = { fg = "#7a966c" },
+    Label = { fg = "#cec6cc"},
+    Comment = { gui = "bold"},
+    TSComment = { gui = "bold"},
+    Folded = { bg = "#4c566a", fg="black"}
+  }
+
+  local ok, lcfg = pcall(require, 'nvim-local')
+  if ok then
+    custom_hl_config = vim.tbl_deep_extend("force", hl_cfg, lcfg.get_hl_config())
+  else
+    custom_hl_config = hl_cfg
+  end
   require('onenord').setup({
     borders = true, -- Split window borders
     italics = {
@@ -16,16 +29,21 @@ M.setup = function()
       cursorline = false, -- Disable the cursorline
       eob_lines = true, -- Hide the end-of-buffer lines
     },
-    custom_highlights = {
-      LineNr = { fg = "#7a966c" },
-      Label = { fg = "#cec6cc"},
-      Comment = { gui = "bold"},
-      TSComment = { gui = "bold"},
-      Folded = { bg = "#4c566a", fg="black"}
-
-    }, -- Overwrite default highlight groups
+    custom_highlights = custom_hl_config
   })
   vim.cmd [[ colorscheme onenord ]]
+  vim.cmd('hi rainbowcol7 guifg=#D8DEE9')
+  vim.cmd[[hi GitGutterAdd guifg=#4ca64c guibg=none]]
+  vim.cmd[[hi GitSignAdd guifg=#4ca64c guibg=none]]
+  vim.cmd[[hi DiffAdd guifg=#4ca64c guibg=none]]
+  vim.cmd[[hi SpellBad guibg=#FF0000]]
+  vim.cmd[[hi DiffAdded guifg=#4ca64c guibg=none]]
+  vim.cmd[[hi DiffRemoved guifg=#BF616A guibg=none]]
+  vim.cmd[[hi Folded guifg=#D8DEE9]]
+  vim.cmd[[hi SignatureMarkText guifg=#ffa500]]
+  vim.cmd[[hi LineNr guifg=None]]
+  vim.cmd[[hi SignColumn guifg=None]]
 end
+
 
 return M

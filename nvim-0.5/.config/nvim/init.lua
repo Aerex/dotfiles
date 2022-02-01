@@ -76,9 +76,10 @@ vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md,*.go %s/\s\+$//e ]], ''
 vim.api.nvim_exec([[autocmd FileType vimwiki,markdown setlocal spell]], '')
 
 -- load plugins
-require('colors')
 require('load_plugins')
 require('mappings')
+require('colors').setup()
+vim.api.nvim_exec([[autocmd BufEnter * syntax on]], '')
 
 local ok, _ = pcall(require, 'nvim-local')
 if ok then
