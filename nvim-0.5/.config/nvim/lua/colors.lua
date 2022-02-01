@@ -1,6 +1,5 @@
 local M = {}
 M.setup = function()
-  print('hello')
   local hl_cfg = {
     LineNr = { fg = "#7a966c" },
     Label = { fg = "#cec6cc"},
