@@ -40,6 +40,8 @@ vim.cmd('autocmd VimResized * :wincmd =')
 -- FIXME(me): Figure out why set spell is being enabled in all buffers
 --vim.cmd('autocmd BufEnter qutebrowser-editor* set spell wrap')
 vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
+vim.o.grepprg="rg --vimgrep --no-heading --smart-case"
+vim.o.grepformat="%f:%l:%c:%m"
 -- FIXME(me): Same as line 40
 --vim.cmd('autocmd FileType markdown set spell')
 
@@ -74,11 +76,11 @@ vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md,*.go %s/\s\+$//e ]], ''
 vim.api.nvim_exec([[autocmd FileType vimwiki,markdown setlocal spell]], '')
 
 -- load plugins
+require('colors')
 require('load_plugins')
 require('mappings')
-require('colors')
 
-local ok, _ = pcall(require, 'local')
+local ok, _ = pcall(require, 'nvim-local')
 if ok then
   vim.api.nvim_exec([[autocmd BufEnter *.go lua set_local_config()]], '')
 end
