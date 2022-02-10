@@ -23,8 +23,6 @@ local ok, _ = pcall(vim.cmd, [[packadd packer.nvim]])
 if ok then
   return require('packer').startup(
   function(use)
-      -- a faster replacement of the included filetype.vim
-      use("nathom/filetype.nvim")
     -- Packer can manage itself as an optional plugin
     use {'wbthomason/packer.nvim'}
 
@@ -45,7 +43,6 @@ if ok then
      -- treesitter
     use {
          'nvim-treesitter/nvim-treesitter',
-         branch = '0.5-compat',
       requires = {
         'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects', 'nvim-treesitter/playground'
       },
@@ -65,15 +62,11 @@ if ok then
     }
 
     -- git
-    use {
-      { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush'} },
-      { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}, event = {'BufRead'}, config = function() require('nvim-git').setup_signs() end },
-      { 'Aerex/neogit', branch = 'feat/config-split-direction', cmd = {'Neogit'}, config = function() require('nvim-git').setup_neogit() end,
-        requires = { 'nvim-lua/plenary.nvim','sindrets/diffview.nvim' }},
-      { 'pwntester/octo.nvim',
-      cmd = { 'Octo' },
-      requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}, {'nvim-telescope/telescope.nvim'} } }
-    }
+    use { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush'} }
+    use { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}, event = {'BufRead'}, config = function() require('nvim-git').setup_signs() end }
+    use { 'Aerex/neogit', branch = 'feat/config-split-direction', cmd = {'Neogit'}, config = function() require('nvim-git').setup_neogit() end,
+      requires = { 'nvim-lua/plenary.nvim','sindrets/diffview.nvim' }}
+    use { 'pwntester/octo.nvim', cmd = { 'Octo' }, requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}, {'Aerex/telescope.nvim'  } } }
 
       -- yank/undo
       use {
@@ -82,17 +75,8 @@ if ok then
       }
 
       -- diagnostics
-      use {
-          {'folke/trouble.nvim',
-              cmd = {'Trouble', 'TroubleToggle', 'TroubleClose', 'TroubleRefresh' }
-          },
-          {
-              'folke/todo-comments.nvim',
-              requires = 'nvim-lua/plenary.nvim',
-              config = function() require('todo-comments').setup{} end
-          }
-
-      }
+      use {'folke/trouble.nvim', cmd = {'Trouble', 'TroubleToggle', 'TroubleClose', 'TroubleRefresh' } }
+      use {'folke/todo-comments.nvim', requires = 'nvim-lua/plenary.nvim', config = function() require('todo').setup() end }
 
     -- formatting
     use {
@@ -103,7 +87,7 @@ if ok then
     -- colors
     use {
       { 'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup() end },
-      'chriskempson/base16-vim',
+      { opt = true,  'chriskempson/base16-vim' },
         'rmehri01/onenord.nvim', config = function() require('colors').setup() end,
         'miyakogi/seiya.vim',  -- enable transparent background
       { 'p00f/nvim-ts-rainbow', requires = { 'nvim-treesitter/nvim-treesitter' } }
@@ -112,7 +96,7 @@ if ok then
     -- debugger
     use {
       'mfussenegger/nvim-dap',
-      requires = { 'rcarriga/nvim-dap-ui', 'mfussenegger/nvim-dap-python'},
+      requires = { 'rcarriga/nvim-dap-ui', 'mfussenegger/nvim-dap-python', 'theHamsta/nvim-dap-virtual-text'},
       config = function() require('debugger') end
     }
 
@@ -128,6 +112,7 @@ if ok then
     use {'glepnir/galaxyline.nvim', requires = {'kyazdani42/nvim-web-devicons', opt = true},
       config = function() require('statusline') end
     }
+    use {'tpope/vim-dispatch'}
 
    -- completions / snippets
     use({ -- nvim-cmp
@@ -138,6 +123,7 @@ if ok then
           'hrsh7th/cmp-nvim-lua',
           'hrsh7th/cmp-nvim-lsp',
           'hrsh7th/cmp-look', -- dictionary source
+          'https://github.com/f3fora/cmp-spell', -- spell source
           {
             'SirVer/ultisnips',
             'quangnguyen30192/cmp-nvim-ultisnips',
@@ -164,13 +150,42 @@ if ok then
     }
     -- misc
     use {'kkoomen/vim-doge', opt = true, run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
+    use {'vimwiki/vimwiki', ft = {'vimwiki', 'markdown'}, config = function()
+        vim.g.vimwiki_global_vars.key_mappings = { headers = 0, html = 0, global  = 0   }
+      end }
     use {'dhruvasagar/vim-table-mode', cmd = {'TableModeToggle', 'TableModeEnable', 'TableModeDisable', 'Tabelize', 'TableModeRealign'}}
     use {
       'voldikss/vim-translator', cmd = {'Translate', 'TranslateR', 'TranslateW', 'TranslateL'}, ft = {"trans"}
     }
+    use {  'NTBBloodbath/rest.nvim',  requires = { "nvim-lua/plenary.nvim" }, ft = {'http'},
+    config = function()
+      require("rest-nvim").setup({
+      -- Open request results in a horizontal split
+      result_split_horizontal = false,
+      -- Skip SSL verification, useful for unknown certificates
+      skip_ssl_verification = false,
+      -- Highlight request on run
+      highlight = {
+        enabled = true,
+        timeout = 150,
+      },
+      result = {
+        -- toggle showing URL, HTTP info, headers at top the of result window
+        show_url = true,
+        show_http_info = true,
+        show_headers = true,
+      },
+      -- Jump to request line on run
+      jump_to_request = false,
+      env_file = '.env',
+      custom_dynamic_variables = {},
+    })
+  end
+}
     use { 'ledger/vim-ledger', ft = {'ledger'} }
     use {'iamcco/markdown-preview.nvim', run = 'cd app && npm install',
-      cmd = {'MarkdownPreview', 'MarkdownPreviewStop'} , ft = {'markdown'}
+      cmd = {'MarkdownPreview', 'MarkdownPreviewStop'} , ft = {'markdown'},
+      config = function() vim.g.mkdp_filetypes = { 'markdown', 'vimwiki' } end
     }
   end
   )
