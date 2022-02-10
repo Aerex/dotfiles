@@ -23,8 +23,6 @@ local ok, _ = pcall(vim.cmd, [[packadd packer.nvim]])
 if ok then
   return require('packer').startup(
   function(use)
-      -- a faster replacement of the included filetype.vim
-      use("nathom/filetype.nvim")
     -- Packer can manage itself as an optional plugin
     use {'wbthomason/packer.nvim'}
 
@@ -102,7 +100,7 @@ if ok then
     }
     -- colors
     use {
-      { 'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup() end },
+      { 'norcalli/nvim-colorizer.lua'},
       'chriskempson/base16-vim',
         'rmehri01/onenord.nvim', config = function() require('colors').setup() end,
         'miyakogi/seiya.vim',  -- enable transparent background
@@ -137,6 +135,9 @@ if ok then
           'hrsh7th/cmp-path',
           'hrsh7th/cmp-nvim-lua',
           'hrsh7th/cmp-nvim-lsp',
+          'hrsh7th/cmp-cmdline',
+          'uga-rosa/cmp-dictionary',
+          'lukas-reineke/cmp-rg',
           'hrsh7th/cmp-look', -- dictionary source
           {
             'SirVer/ultisnips',
@@ -164,11 +165,12 @@ if ok then
     }
     -- misc
     use {'kkoomen/vim-doge', opt = true, run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
-    use {'dhruvasagar/vim-table-mode', cmd = {'TableModeToggle', 'TableModeEnable', 'TableModeDisable', 'Tabelize', 'TableModeRealign'}}
+    use {'dhruvasagar/vim-table-mode', cmd = {'TableModeToggle', 'TableModeEnable', 'TableModeDisable', 'Tabelize', 'TableModeRealign',
+      config = 'vim.table_mode_auto_align = 1'}}
     use {
       'voldikss/vim-translator', cmd = {'Translate', 'TranslateR', 'TranslateW', 'TranslateL'}, ft = {"trans"}
     }
-    use { 'ledger/vim-ledger', ft = {'ledger'} }
+    use { 'ledger/vim-ledger', ft = {'ledger'}, config = function() require'ledger' end }
     use {'iamcco/markdown-preview.nvim', run = 'cd app && npm install',
       cmd = {'MarkdownPreview', 'MarkdownPreviewStop'} , ft = {'markdown'}
     }
