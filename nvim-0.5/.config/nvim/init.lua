@@ -20,7 +20,8 @@ vim.o.softtabstop     = 2
 vim.bo.softtabstop    = 2
 vim.o.tabstop         = 2
 vim.bo.tabstop        = 2
-vim.o.expandtab       = true
+vim.o.expandtab       =  true
+vim.o.dictionary      = "/usr/share/dict/eng"
 vim.bo.expandtab      = true
 vim.o.undodir         = vim.fn.stdpath('cache') .. '/undodir/'
 vim.bo.undofile       = true
@@ -39,7 +40,6 @@ vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
 vim.cmd('autocmd VimResized * :wincmd =')
 -- FIXME(me): Figure out why set spell is being enabled in all buffers
 --vim.cmd('autocmd BufEnter qutebrowser-editor* set spell wrap')
-vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
 -- FIXME(me): Same as line 40
 --vim.cmd('autocmd FileType markdown set spell')
 
