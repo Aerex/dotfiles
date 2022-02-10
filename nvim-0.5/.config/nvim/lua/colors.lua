@@ -3,8 +3,8 @@ M.setup = function()
   local hl_cfg = {
     LineNr = { fg = "#7a966c" },
     Label = { fg = "#cec6cc"},
-    Comment = { gui = "bold"},
-    TSComment = { gui = "bold"},
+    Comment = { gui = "bold", fg="#4C566A"},
+    TSComment = { gui = "bold", fg="#4C566A"},
     Folded = { bg = "#4c566a", fg="black"}
   }
 

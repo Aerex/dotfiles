@@ -1,22 +1,25 @@
 #! /usr/bin/env python2
 from subprocess import check_output
+import re
 
 def get_pass(account):
     output = check_output('pass Email/' + account, shell=True).splitlines()[0]
     return output
 
 def get_user(account):
-    output = check_output('pass Email/' + account, shell=True).splitlines()
-    user = output[1].replace('login:', '').replace(' ', '')
-    return user
+    lines = check_output('pass Email/' + account, shell=True).splitlines()
+    for line in lines:
+        if re.search('login:', line):
+            return line.replace('login:', '').replace(' ', '')
 
 def get_imap_host(account):
-    output = check_output('pass Email/' + account, shell=True).splitlines()
-    imap_host = output[3].replace('imap_domain:', '').replace(' ', '')
-    return imap_host
+    lines = check_output('pass Email/' + account, shell=True).splitlines()
+    for line in lines:
+        if re.search('imap_domain:', line):
+            return line.replace('imap_domain:', '').replace(' ', '')
 
 def get_imap_port(account):
-    output = check_output('pass Email/' + account, shell=True).splitlines()
-    imap_port = output[5].replace('imap_port:', '').replace(' ', '')
-    # has to return a number
-    return int(imap_port) 
+    lines = check_output('pass Email/' + account, shell=True).splitlines()
+    for line in lines:
+        if re.search('imap_port:', line):
+            return line.replace('imap_port:', '').replace(' ', '')
