@@ -40,6 +40,9 @@ vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
 vim.cmd('autocmd VimResized * :wincmd =')
 -- FIXME(me): Figure out why set spell is being enabled in all buffers
 --vim.cmd('autocmd BufEnter qutebrowser-editor* set spell wrap')
+vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
+vim.o.grepprg="rg --vimgrep --no-heading --smart-case"
+vim.o.grepformat="%f:%l:%c:%m"
 -- FIXME(me): Same as line 40
 --vim.cmd('autocmd FileType markdown set spell')
 
@@ -71,13 +74,15 @@ vim.g.miniyank_filename = vim.fn.stdpath('cache') .. '/.miniyank.mpack'
 
 -- Remove trailing spaces after saving for certain file types
 vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md,*.go %s/\s\+$//e ]], '')
+vim.api.nvim_exec([[autocmd FileType vimwiki,markdown setlocal spell]], '')
 
 -- load plugins
 require('load_plugins')
 require('mappings')
-require('colors')
+require('colors').setup()
+vim.api.nvim_exec([[autocmd BufEnter * syntax on]], '')
 
-local ok, _ = pcall(require, 'local')
+local ok, _ = pcall(require, 'nvim-local')
 if ok then
   vim.api.nvim_exec([[autocmd BufEnter *.go lua set_local_config()]], '')
 end
