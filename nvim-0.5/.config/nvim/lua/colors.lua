@@ -35,7 +35,6 @@ M.setup = function()
   vim.cmd[[hi GitGutterAdd guifg=#4ca64c guibg=none]]
   vim.cmd[[hi GitSignAdd guifg=#4ca64c guibg=none]]
   vim.cmd[[hi DiffAdd guifg=#4ca64c guibg=none]]
-  vim.cmd[[hi SpellBad guibg=#FF0000]]
   vim.cmd[[hi DiffAdded guifg=#4ca64c guibg=none]]
   vim.cmd[[hi DiffRemoved guifg=#BF616A guibg=none]]
   vim.cmd[[hi Folded guifg=#D8DEE9]]
