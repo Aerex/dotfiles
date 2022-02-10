@@ -7,6 +7,9 @@ openssl req -new -key server.key -out server.csr
 # To sign a certificate using a private key and CSR:
 openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
 
+# To generated a signed certificate with no passphase
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 365 --nodes
+
 # (The above commands may be run in sequence to generate a self-signed SSL certificate.)
 
 # To show certificate information for a certificate signing request
