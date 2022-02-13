@@ -37,13 +37,13 @@ if ok then
     }
     use {
         'weilbith/nvim-code-action-menu',
-        cmd = 'CodeActionMenu'
+        cmd = 'CodeActionMenu',
+        config = function() vim.g.code_action_menu_show_details = false end
     }
 
      -- treesitter
     use {
          'nvim-treesitter/nvim-treesitter',
-         branch = '0.5-compat',
       requires = {
         'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects', 'nvim-treesitter/playground'
       },
@@ -165,6 +165,7 @@ if ok then
     }
     -- misc
     use {'kkoomen/vim-doge', opt = true, run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
+    use { 'NTBBloodbath/rest.nvim',  ft= {'http'}, requires = { 'nvim-lua/plenary.nvim', config = function() require'rest' end }}
     use {'dhruvasagar/vim-table-mode', cmd = {'TableModeToggle', 'TableModeEnable', 'TableModeDisable', 'Tabelize', 'TableModeRealign',
       config = 'vim.table_mode_auto_align = 1'}}
     use {
