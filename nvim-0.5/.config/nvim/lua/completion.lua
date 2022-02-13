@@ -5,14 +5,11 @@ local ultisnips = require('utils').ultisnips
 local ok, cmp = pcall(require,'cmp')
 
 if ok then
-  -- UltiSnip was auto-removing tab mappings for select mode,
-  -- that leads to we cannot jump through snippet stops so we need to disable here
-  -- Credits to https://github.com/quangnguyen30192/cmp-nvim-ultisnips/issues/5
-  vim.g.UltiSnipsExpandTrigger = '<c-S>'
+  vim.g.UltiSnipsExpandTrigger = 'None'
   vim.g.UltiSnipsRemoveSelectModeMappings = 0
   vim.g.UltiSnipsSnippetsDir = os.getenv('HOME') ..'/.config/nvim/UltiSnips/'
   vim.g.UltiSnipsEditSplit = 'vertical'
-  vim.g.UltiSnipsSnippetDirectories = { os.getenv('HOME') .. '/.config/nvim/UltiSnips', get_packer_path().start ..'/vim-snippets/UltiSnips' }
+  vim.g.UltiSnipsSnippetDirectories = {  get_packer_path().start ..'/vim-snippets/UltiSnips', os.getenv('HOME') .. '/.config/nvim/UltiSnips' }
 
   cmp.setup {
     completion = {
@@ -29,30 +26,29 @@ if ok then
       ['<C-u'] = cmp.mapping.scroll_docs(4),
       ['<C-d>'] = cmp.mapping.scroll_docs(-4),
       ['<CR>'] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Replace,
+        behavior = cmp.ConfirmBehavior.INSERT,
         select = true,
       },
       ['<Tab>'] = cmp.mapping(function(fallback)
-        if ultisnips.can_expand_snippet() then
+        if cmp.get_selected_entry() == nil and ultisnips.can_expand_snippet() then
           ultisnips.expand_snippet()
         elseif ultisnips.can_jump_forward() then
           ultisnips.jump_forward()
         elseif cmp.visible() then
           cmp.select_next_item()
-        elseif has_any_words_before() then
-          send_keys('<tab>', '')
         else
           fallback()
         end
       end, {'i','s',}),
       ['<C-Space>'] = cmp.mapping(function(fallback)
-        if vim.fn.pumvisible() == 1 then
+        if cmp.visible() then
           if ultisnips.can_expand_snippet() then
+            print('expanding snippet on c-space')
             return ultisnips.expand_snippet()
           end
-          send_keys('<C-n>', 'n')
+          cmp.select_next_item()
         elseif has_any_words_before() then
-          send_keys('<CR>', 'n')
+          send_keys('<Space>', 'n')
         else
           fallback()
         end
@@ -60,8 +56,8 @@ if ok then
       ['<S-Tab>'] = cmp.mapping(function(fallback)
         if ultisnips.can_jump_forward() then
           ultisnips.jump_backwards()
-        elseif vim.fn.pumvisible() == 1 then
-          send_keys('<C-p>', 'n')
+        elseif cmp.visible() then
+          cmp.select_prev_item()
         else
           fallback()
         end
@@ -80,6 +76,8 @@ if ok then
           nvim_lsp = '[LSP]',
           nvim_lua = '[Lua]',
           buffer = '[BUF]',
+          dictionary = '[DICT]',
+          rg = '[RG]',
         })[entry.source.name]
 
         return vim_item
@@ -87,10 +85,40 @@ if ok then
     },
     sources = {
       { name = 'nvim_lsp' },
-      { name = 'buffer' },
       { name = 'nvim_lua' },
+      { name = 'rg' },
+      { name = 'buffer' },
       { name = 'path' },
       { name = 'ultisnips' },
+      { name = 'dictionary', keyword_length = 2  }
     },
   }
+  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline('/', {
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+      sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+  local okd, cmp_dictionary = pcall(require, 'cmp_dictionary')
+  if okd then
+    cmp_dictionary.setup({
+      dic = {
+          ["*"] = { "/usr/share/dict/eng" },
+      },
+      -- The following are default values, so you don't need to write them if you don't want to change them
+      exact = 2,
+      first_case_insensitive = false,
+      async = false,
+      capacity = 5,
+      debug = false,
+    })
+  end
 end
