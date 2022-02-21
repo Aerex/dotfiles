@@ -25,16 +25,13 @@ if ok then
   function(use)
     -- Packer can manage itself as an optional plugin
     use {'wbthomason/packer.nvim'}
-
-      use {'folke/which-key.nvim', config = function() require'which-key' end }
-
+    use {'lewis6991/impatient.nvim' }
+    use {'folke/which-key.nvim', config = function() require'which-key' end }
     -- lsp
-    use {
-      { 'neovim/nvim-lspconfig', config = function() require('nvim-lsp') end },
-      'onsails/lspkind-nvim',
-      'nvim-lua/lsp-status.nvim',
-      'ray-x/lsp_signature.nvim'
-    }
+    use {'neovim/nvim-lspconfig', config = function() require('nvim-lsp') end }
+    use { 'onsails/lspkind-nvim' }
+    use { 'nvim-lua/lsp-status.nvim' }
+    use { 'ray-x/lsp_signature.nvim' }
     use {
         'weilbith/nvim-code-action-menu',
         cmd = 'CodeActionMenu'
@@ -50,10 +47,7 @@ if ok then
       run = ':TSUpdate'
     }
     -- textobject
-    use {
-      'blackCauldron7/surround.nvim', config = function() require('surround').setup{} end
-    }
-
+    use {'tpope/vim-surround'}
     -- fuzzy pickers / file finders
     use {
       'vijaymarupudi/nvim-fzf',
@@ -62,7 +56,7 @@ if ok then
     }
 
     -- git
-    use { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush'} }
+    use { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush', 'GBrowse'} }
     use { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}, event = {'BufRead'}, config = function() require('nvim-git').setup_signs() end }
     use { 'Aerex/neogit', branch = 'feat/config-split-direction', cmd = {'Neogit'}, config = function() require('nvim-git').setup_neogit() end,
       requires = { 'nvim-lua/plenary.nvim','sindrets/diffview.nvim' }}
@@ -76,7 +70,7 @@ if ok then
 
       -- diagnostics
       use {'folke/trouble.nvim', cmd = {'Trouble', 'TroubleToggle', 'TroubleClose', 'TroubleRefresh' } }
-      use {'folke/todo-comments.nvim', requires = 'nvim-lua/plenary.nvim', config = function() require('todo').setup() end }
+      use {'folke/todo-comments.nvim', event = "BufRead", requires = 'nvim-lua/plenary.nvim', config = function() require('todo').setup() end }
 
     -- formatting
     use {
@@ -87,7 +81,7 @@ if ok then
     -- colors
     use {
       { 'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup() end },
-      { opt = true,  'chriskempson/base16-vim' },
+      'chriskempson/base16-vim',
         'rmehri01/onenord.nvim', config = function() require('colors').setup() end,
         'miyakogi/seiya.vim',  -- enable transparent background
       { 'p00f/nvim-ts-rainbow', requires = { 'nvim-treesitter/nvim-treesitter' } }
@@ -122,6 +116,9 @@ if ok then
           'hrsh7th/cmp-path',
           'hrsh7th/cmp-nvim-lua',
           'hrsh7th/cmp-nvim-lsp',
+          'hrsh7th/cmp-cmdline',
+          'uga-rosa/cmp-dictionary',
+          'lukas-reineke/cmp-rg',
           'hrsh7th/cmp-look', -- dictionary source
           'https://github.com/f3fora/cmp-spell', -- spell source
           {
@@ -144,45 +141,18 @@ if ok then
       'akinsho/nvim-toggleterm.lua',
      config = function() require'toggleterm'.setup{ open_mapping = [[<C-t>]], shading_factor = 1 } end
     }
-    use {
-      'AndrewRadev/bufferize.vim',
-      cmd = {'Bufferize'}
-    }
-    -- misc
+    use {'AndrewRadev/bufferize.vim', cmd = {'Bufferize'}}
+    use {'kevinhwang91/nvim-bqf', ft = 'qf'}
     use {'kkoomen/vim-doge', opt = true, run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
-    use {'vimwiki/vimwiki', ft = {'vimwiki', 'markdown'}, config = function()
-        vim.g.vimwiki_global_vars.key_mappings = { headers = 0, html = 0, global  = 0   }
-      end }
-    use {'dhruvasagar/vim-table-mode', cmd = {'TableModeToggle', 'TableModeEnable', 'TableModeDisable', 'Tabelize', 'TableModeRealign'}}
+    use {'vimwiki/vimwiki', ft = {'vimwiki', 'markdown'},
+      config = function() vim.g.vimwiki_global_vars = {headers = 0,html = 0, global = 0 } end }
+    use {'dhruvasagar/vim-table-mode', cmd = {'TableModeToggle', 'TableModeEnable', 'TableModeDisable', 'Tabelize', 'TableModeRealign',
+      config = 'vim.table_mode_auto_align = 1'}}
     use {
       'voldikss/vim-translator', cmd = {'Translate', 'TranslateR', 'TranslateW', 'TranslateL'}, ft = {"trans"}
     }
-    use {  'NTBBloodbath/rest.nvim',  requires = { "nvim-lua/plenary.nvim" }, ft = {'http'},
-    config = function()
-      require("rest-nvim").setup({
-      -- Open request results in a horizontal split
-      result_split_horizontal = false,
-      -- Skip SSL verification, useful for unknown certificates
-      skip_ssl_verification = false,
-      -- Highlight request on run
-      highlight = {
-        enabled = true,
-        timeout = 150,
-      },
-      result = {
-        -- toggle showing URL, HTTP info, headers at top the of result window
-        show_url = true,
-        show_http_info = true,
-        show_headers = true,
-      },
-      -- Jump to request line on run
-      jump_to_request = false,
-      env_file = '.env',
-      custom_dynamic_variables = {},
-    })
-  end
-}
-    use { 'ledger/vim-ledger', ft = {'ledger'} }
+    use {  'NTBBloodbath/rest.nvim',  requires = { "nvim-lua/plenary.nvim" }, ft = {'http'},  config = function() require'rest' end  }
+    use { 'ledger/vim-ledger', ft = {'ledger'}, config = function() require'ledger' end }
     use {'iamcco/markdown-preview.nvim', run = 'cd app && npm install',
       cmd = {'MarkdownPreview', 'MarkdownPreviewStop'} , ft = {'markdown'},
       config = function() vim.g.mkdp_filetypes = { 'markdown', 'vimwiki' } end
