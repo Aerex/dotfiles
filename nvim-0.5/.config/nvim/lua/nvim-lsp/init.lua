@@ -10,6 +10,14 @@ lsp_status.config({
   status_symbol = ''
 })
 
+vim.diagnostic.config({
+  virtual_text = true,
+  float = false,
+  underline = true,
+  signs = true,
+  update_in_insert = false,
+})
+
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -27,8 +35,24 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
 
+  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics, {
+      -- Enable underline, use default values
+      underline = true,
+      -- Enable virtual text, override spacing to 4
+      virtual_text = {
+        spacing = 4,
+      },
+      -- Use a function to dynamically turn signs off
+      -- and on, using buffer local variables
+      signs = true,
+      -- Disable a feature
+      update_in_insert = false,
+    }
+  )
+
   -- Attach LSP status
- lsp_status.on_attach(client)
+  lsp_status.on_attach(client)
 
  -- Attach LSP Signature
  lsp_signature.on_attach({

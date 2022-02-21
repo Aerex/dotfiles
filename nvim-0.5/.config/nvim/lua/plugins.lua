@@ -34,7 +34,8 @@ if ok then
     use { 'ray-x/lsp_signature.nvim' }
     use {
         'weilbith/nvim-code-action-menu',
-        cmd = 'CodeActionMenu'
+        cmd = 'CodeActionMenu',
+        config = function() vim.g.code_action_menu_show_details = false end
     }
 
      -- treesitter
@@ -120,7 +121,7 @@ if ok then
           'uga-rosa/cmp-dictionary',
           'lukas-reineke/cmp-rg',
           'hrsh7th/cmp-look', -- dictionary source
-          'https://github.com/f3fora/cmp-spell', -- spell source
+          'f3fora/cmp-spell', -- spell source
           {
             'SirVer/ultisnips',
             'quangnguyen30192/cmp-nvim-ultisnips',
