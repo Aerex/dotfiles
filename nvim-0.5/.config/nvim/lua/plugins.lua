@@ -60,7 +60,7 @@ if ok then
     -- git
     use { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush', 'GBrowse'} }
     use { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}, event = {'BufRead'}, config = function() require('nvim-git').setup_signs() end }
-    use { 'Aerex/neogit', branch = 'feat/config-split-direction', cmd = {'Neogit'}, config = function() require('nvim-git').setup_neogit() end,
+    use { 'TimUntersberger/neogit', cmd = {'Neogit'}, config = function() require('nvim-git').setup_neogit() end,
       requires = { 'nvim-lua/plenary.nvim','sindrets/diffview.nvim' }}
     use { 'pwntester/octo.nvim', cmd = { 'Octo' }, requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}, {'Aerex/telescope.nvim'  } } }
 
