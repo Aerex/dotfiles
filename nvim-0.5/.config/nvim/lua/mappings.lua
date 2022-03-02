@@ -8,14 +8,14 @@ function _G.smart_carrier_return()
 end
 
 local noremaps = {
-    -- misc
     n = {
       -- misc
       ['<leader>w']                                                  = 'write',
+      ['<leader>rb']                                                 = 'edit',
       -- trouble
       ['<leader>xx']                                                 = 'TroubleToggle',
-      ['<leader>xw']                                                 = 'TroubleToggle lsp_workspace_diagnostics',
-      ['<leader>xd']                                                 = 'TroubleToggle lsp_document_diagnostics',
+      ['<leader>xw']                                                 = 'TroubleToggle workspace_diagnostics',
+      ['<leader>xd']                                                 = 'TroubleToggle document_diagnostics',
       ['<leader>xq']                                                 = 'TroubleToggle quickfix',
       ['<leader>xl']                                                 = 'TroubleToggle loclist',
       ['<leader>xtq']                                                 = 'TodoQuickFix',
@@ -46,7 +46,7 @@ local noremaps = {
       ['<leader>gp']                                                 = 'Git push',
       ['<leader>gz']                                                 = 'lua require\'terminals\'.lazygit_toggle()',
       -- neogit variant
-      ['<leader>gS']                                                 = 'Neogit kind=splitabove',
+      ['<leader>gS']                                                 = 'Neogit kind=split_above',
       -- TODO: create map for git push --set-upstream current branch
       -- test
       ['<leader>tf']                                                 = 'Ultest',
@@ -81,6 +81,8 @@ local noremaps = {
     },
     v = {
       ['<leader>yg']                                                 = 'GBrowse!',
+      ['<leader>dk']  = 'lua require\'dap.ui.variables\'.visual_hover()',
+
     }
   }
 
@@ -100,6 +102,18 @@ local file_type_keymaps = {
       ['<leader>ms'] = 'MarkdownPreviewStop',
       ['<leader>mt'] = 'MarkdownPreviewToggle'
     }
+  },
+  vimwiki = {
+    nmap = {
+      ['\\w='] = '<Plug>VimwikiAddHeaderLevel',
+      ['\\wx'] = '<Plug>VimwikiIndex'
+    }
+  },
+  http = {
+    nmap = {
+      ['<cr>'] = 'lua require\'rest-nvim\'.run()',
+      ['K'] = 'lua require\'rest-nvim\'.run(true)'
+    }
   }
 }
 
@@ -109,6 +123,7 @@ vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = tr
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
 vim.cmd('autocmd! TermOpen *toggleterm#* lua require\'terminals\'.set_terminal_keymaps()')
+vim.cmd('autocmd! FileType vimwiki lua require\'wiki\'.remap()')
 
 
 -- @param {table} m
