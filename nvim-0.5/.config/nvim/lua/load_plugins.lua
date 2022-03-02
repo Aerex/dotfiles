@@ -16,7 +16,7 @@ vim.cmd[[autocmd BufEnter load_plugins.lua noremap <leader>pc <cmd>PackerCompile
 vim.cmd[[autocmd BufEnter load_plugins.lua noremap <leader>pS <cmd>PackerStatus<cr>]]
 
 -- Do not remove unusued plugins
-require('packer').init({display = {auto_clean = false}})
+require('packer').init({display = {auto_clean = true}})
 -- Only required if you have packer in your `opt` pack
 local ok, _ = pcall(vim.cmd, [[packadd packer.nvim]])
 
@@ -51,9 +51,7 @@ if ok then
       run = ':TSUpdate'
     }
     -- textobject
-    use {
-      'blackCauldron7/surround.nvim', config = function() require('surround').setup{} end
-    }
+    use { 'tpope/vim-surround'}
 
     -- fuzzy pickers / file finders
     use {
@@ -165,7 +163,7 @@ if ok then
     }
     -- misc
     use {'kkoomen/vim-doge', opt = true, run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
-    use { 'NTBBloodbath/rest.nvim',  ft= {'http'}, requires = { 'nvim-lua/plenary.nvim', config = function() require'rest' end }}
+    use { 'NTBBloodbath/rest.nvim',  ft = {'http'}, requires = { 'nvim-lua/plenary.nvim', config = function() require'rest' end }}
     use {'dhruvasagar/vim-table-mode', cmd = {'TableModeToggle', 'TableModeEnable', 'TableModeDisable', 'Tabelize', 'TableModeRealign',
       config = 'vim.table_mode_auto_align = 1'}}
     use {
