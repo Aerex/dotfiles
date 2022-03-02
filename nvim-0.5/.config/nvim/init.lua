@@ -20,8 +20,8 @@ vim.o.softtabstop     = 2
 vim.bo.softtabstop    = 2
 vim.o.tabstop         = 2
 vim.bo.tabstop        = 2
-vim.o.expandtab       =  true
-vim.o.dictionary      = "/usr/share/dict/eng"
+vim.o.expandtab       = true
+vim.o.dictionary      = "/usr/share/dict/words"
 vim.bo.expandtab      = true
 vim.o.undodir         = vim.fn.stdpath('cache') .. '/undodir/'
 vim.bo.undofile       = true
@@ -34,6 +34,9 @@ vim.o.timeoutlen      = 500
 vim.o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
 vim.o.foldlevel       = 5
 vim.wo.signcolumn     = "auto:2"
+vim.o.smartindent     = true
+vim.opt.spell         = false
+vim.opt.spelllang     = { 'en_us' }
 
 -- autocommands
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
@@ -51,7 +54,7 @@ vim.o.splitright = true
 vim.g.seiya_auto_enable = 1
 vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and {'guibg'} or {'ctermbg'}
 vim.cmd('hi rainbowcol7 guifg=#D8DEE9')
-vim.cmd[[hi GitGutterAdd guifg=#4ca64c guibg=none]]
+--vim.cmd[[hi GitGutterAdd guifg=#4ca64c guibg=none]]
 vim.cmd[[hi GitSignAdd guifg=#4ca64c guibg=none]]
 vim.cmd[[hi DiffAdd guifg=#4ca64c guibg=none]]
 vim.cmd[[hi SpellBad guibg=#FF0000]]
@@ -74,7 +77,7 @@ vim.g.miniyank_filename = vim.fn.stdpath('cache') .. '/.miniyank.mpack'
 
 -- Remove trailing spaces after saving for certain file types
 vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md,*.go %s/\s\+$//e ]], '')
-vim.api.nvim_exec([[autocmd FileType vimwiki,markdown setlocal spell]], '')
+vim.api.nvim_exec([[autocmd FileType vimwiki,markdown set spell]], '')
 
 -- load plugins
 require('load_plugins')
@@ -82,7 +85,9 @@ require('mappings')
 require('colors').setup()
 vim.api.nvim_exec([[autocmd BufEnter * syntax on]], '')
 
-local ok, _ = pcall(require, 'nvim-local')
-if ok then
-  vim.api.nvim_exec([[autocmd BufEnter *.go lua set_local_config()]], '')
+  local ok, _ = pcall(require, 'nvim-local')
+  if ok then
+    -- FIXME(me): Find a better event to fire this function
+    vim.api.nvim_exec([[autocmd BufEnter *.go,*.feature,*.ts lua set_local_config()]], '')
+  end
 end
