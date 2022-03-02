@@ -46,7 +46,7 @@ local noremaps = {
       ['<leader>gp']                                                 = 'Git push',
       ['<leader>gz']                                                 = 'lua require\'terminals\'.lazygit_toggle()',
       -- neogit variant
-      ['<leader>gS']                                                 = 'Neogit kind=splitabove',
+      ['<leader>gS']                                                 = 'Neogit kind=split_above',
       -- TODO: create map for git push --set-upstream current branch
       -- test
       ['<leader>tf']                                                 = 'Ultest',
@@ -65,8 +65,9 @@ local noremaps = {
       ['<leader>dsi']                                                 = 'lua require\'dap\'.step_into()',
       ['<leader>dR']  = 'lua require\'dap\'.disconnect({restart = true })',
       ['<leader>drc'] = 'lua require\'dap\'.run_to_cursor()',
-      ['<leader>dK']  = 'lua require\'dap.ui.variables\'.hover()',
-      ['<leader>dv']  = 'lua require\'dapui\'.float_element(\'scopes\', { width = 75, enter = true })',
+      ['<leader>dK']  = 'lua require\'dap.ui.widgets\'.hover()',
+      ['<leader>dv']  = 'lua require\'debugger\'.toggle_dap_ele(\'scopes\', \'float\')',
+
       ['<leader>tdd']  = 'UltestDebug',
       ['<leader>tdn']  = 'UltestDebug:Nearest',
       ['<leader>du']  = 'lua require\'dapui\'.toggle()',
@@ -100,6 +101,11 @@ local file_type_keymaps = {
       ['<leader>ms'] = 'MarkdownPreviewStop',
       ['<leader>mt'] = 'MarkdownPreviewToggle'
     }
+  },
+  http = {
+    nnoremap = {
+      ['<CR>'] = 'lua require\'rest-nvim\'.run()'
+    }
   }
 }
 
@@ -109,6 +115,7 @@ vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = tr
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
 vim.cmd('autocmd! TermOpen *toggleterm#* lua require\'terminals\'.set_terminal_keymaps()')
+vim.api.nvim_set_keymap('', '<F2>', ":echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, \"name\")')<CR>", { silent = true})
 
 
 -- @param {table} m
