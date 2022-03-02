@@ -2,11 +2,9 @@
 --local utils = require('nvim-lsp').utils
 local lsp_status = require('lsp-status')
 local lsp_signature = require('lsp_signature')
-local lsp_document_symbol_callback = require('nvim-fzf.lsp').document_symbols
-local lsp_references_callback = require('nvim-fzf.lsp').references
+local lsp_document_symbol_callback = require('nvim-fzf.lsp').document_symbols local lsp_references_callback = require('nvim-fzf.lsp').references
 local utils = require('nvim-lsp.utils')
-
---vim.g.completion_enable_auto_popup = 0
+--
 -- configure lsp-status
 lsp_status.config({
   status_symbol = ''
@@ -72,8 +70,8 @@ local on_attach = function(client, bufnr)
 
 -- Set diagnostic symbols
 vim.fn.sign_define('DiagnosticSignError', {text='✖', texthl='DiagnosticSignError'})
-vim.fn.sign_define('DiagnosticSignWarning', {text='⚠', texthl='DiagnosticSignWarning'})
-vim.fn.sign_define('DiagnosticSignInformation', {text='כֿ',texthl='DiagnosticSignInformation'})
+vim.fn.sign_define('DiagnosticSignWarn', {text='⚠', texthl='DiagnosticSignWarn'})
+vim.fn.sign_define('DiagnosticSignInfo', {text='כֿ',texthl='DiagnosticSignInfo'})
 vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint'})
 
   -- LSP keymap
@@ -95,9 +93,8 @@ vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint
   keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  keymap('n', '<leader>ldh', '<cmd>lua vim.diagnostic.hide()<CR>', opts)
   keymap('n', '<leader>,d', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+  keymap('n', '<leader>xD', '<cmd>lua vim.diagnostic.disable()<CR>', opts)
   keymap('n', '<leader>lr', '<cmd>LspRestart<CR>', opts)
 end
 
@@ -203,7 +200,13 @@ require'lspconfig'.efm.setup {
   capabilities = capabilities
 }
 
+require'lspconfig'.tsserver.setup{
+  on_attach =on_attach,
+  capabilities = capabilities
+}
+
 require'lspconfig'.jsonls.setup {
+  on_attach = on_attach,
   capabilities = capabilities,
     commands = {
       Format = {
@@ -214,12 +217,32 @@ require'lspconfig'.jsonls.setup {
     }
 }
 
+if vim.fn.executable('solargraph') then
+  require'lspconfig'.solargraph.setup {
+    on_attach = on_attach,
+    capabilities = capabilities
+  }
+end
+
 require('lspkind').init({
   mode = 'symbol_text',
-  symbol_map = utils.symbol_map,
+  preset = 'codicons', -- need to install vscode-codicons
+  symbol_map = utils.symbol_map
 })
 
 -- Register the progress handle
 lsp_status.register_progress()
 vim.lsp.handlers['textDocument/documentSymbol'] = lsp_document_symbol_callback
 vim.lsp.handlers['textDocument/references'] = lsp_references_callback
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    -- Enable underline, use default values
+    underline = true,
+    -- Enable virtual text, override spacing to 4
+    virtual_text = true,
+    -- Use a function to dynamically turn signs off
+    -- and on, using buffer local variables
+    signs = true,
+    float = true
+  }
+)

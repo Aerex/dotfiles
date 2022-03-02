@@ -1,6 +1,12 @@
-local ok, rest_nvim = pcall(require, 'rest-nvim')
-if ok then
-  rest_nvim.setup({
+local M = {}
+M.setup = function()
+  local custom_dynamic_variables = { }
+  local ok, lcfg = pcall(require, 'nvim-local')
+  if ok then
+    custom_dynamic_variables = lcfg.http_rest_config().custom_dynamic_variables
+  end
+  print(custom_dynamic_variables)
+  require("rest-nvim").setup({
     -- Open request results in a horizontal split
     result_split_horizontal = false,
     -- Skip SSL verification, useful for unknown certificates

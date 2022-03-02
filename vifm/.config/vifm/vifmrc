@@ -59,7 +59,7 @@ set sortnumbers
 
 set undolevels=100
 
- set vimhelp
+set vimhelp
 
 " If you would like to run an executable file when you
 " press return on the file name set this.
@@ -121,8 +121,14 @@ endif
 "set statusline="  Hint: %z%= %A %10u:%-7g %15s %20d  "
 set statusline="%A %u %g %15s %20d  %="
 
+"Controls what will be saved in the $VIFM/vifminfo file.
+"default: bookmarks,bmarks"
+set vifminfo="bookmarks,bmarks"
+
 set number
 
+"Print relative line number in front of each file name when 'lsview' option is turned off. Use 'numberwidth' to control width of line number. Various combinations of 'number' and 'relativenumber' lead to such results:
+"default: false
 set relativenumber
 
 let &statusline  = "%2* %4*%1*"  " initial separator and first segment colour
@@ -170,7 +176,7 @@ mark l ~/Downloads
 " %m run the command in a menu window
 
 command! df df -h %m 2> /dev/null
-command! nvim :nvim-beta
+command! nvim :nvim
 command! diff vim -d %f %F
 command! zip zip -r %f.zip %f
 command! run !! ./%f
@@ -478,7 +484,7 @@ map <insert>  :!touch<space>
 map <space>mv :set millerview<cr>
 map <space>dl :!wget $(xsel --clipboard -o)
 map <space>vs :vs<cr>
-map <space>v  :!nvim-beta<space>
+map <space>v  :!nvim<space>
 map <space>n  :touch<space>
 map mkd       :mkdir<space>
 map vs        :vsplit<cr>
@@ -492,7 +498,9 @@ map <silent> gch  :cd ~/.cheat<cr>
 map <silent> g.   :cd ~/dotfiles2<cr>
 map <silent> gh   :cd ~<cr>
 map <silent> gn   :cd ~/Documents/repos/.private/notes<cr>
-map <silent> gq   :cd ~/.local/share/qutebrowser<cr>
+map <silent> gml  :cd ~/.Mail<cr>
+map <silent> gca  :cd ~/.cache<cr>
+map <silent> gq   :cd ~/.config/qutebrowser<cr>
 map <silent> gz   :cd ~/.config/zsh<cr>
 map <silent> gS   :cd ~/Documents/Scans<cr>
 map <silent> gJ   :cd ~/Documents/Japanese<cr>
@@ -505,39 +513,39 @@ map <silent> gpi  :cd ~/Pictures<cr>
 map cd            :cd <space>
 
 
-map X                                                                                     :extract<cr>
+map X :extract<cr>
 
-vnoremap rn                                                                               :rename<cr>
-nnoremap q                                                                                :q!<cr>
+vnoremap rn :rename<cr>
+nnoremap q :q!<cr>
 
 " Start shell in current directory
-nnoremap s                                                                                :shell<cr>
+nnoremap <space>s :shell<cr>
 
 " Display sorting dialog
-nnoremap o                                                                                :sort<cr>
+nnoremap o :sort<cr>
 
 " Toggle visibility of preview window
-nnoremap w                                                                                :view<cr>
-vnoremap w                                                                                :view<cr>
+nnoremap w :view<cr>
+vnoremap w :view<cr>
 
 
 " Open file in the background using its default program
-nnoremap gb                                                                               :file &<cr>l
+nnoremap gb :file &<cr>l
 
 " Maps for cut
 "nnoremap dd yy
 "nnoremap d y
 "vnoremap d y
-nnoremap D                                                                                :!echo Moving %f to Trash && trash-put %f<cr>
+nnoremap D  :!echo Moving %f to Trash && trash-put %f<cr>
 "vnoremap D                                                                               :!trash-put %f<cr>
 "nnoremap p                                                                               :put &<cr>
 "nnoremap P                                                                               :put! &<cr>
 
 " Yank current directory path into the clipboard
-nnoremap yd                                                                               :!echo %d | xclip %i<cr>
+nnoremap yd :!echo %d | xsel --input --clipboard<cr>
 
 " Yank current file path into the clipboard
-nnoremap yf                                                                               :!echo %c                                                             :p | xclip %i<cr>
+nnoremap yf :!echo %c | xsel --input --clipboard<cr>
 
 " Mappings for faster renaming
 nnoremap I cw<c-a>
@@ -577,6 +585,8 @@ set grepprg='rg --line-number %i %a %s'
 
 noremap <silent> //    :FZFlocate<Cr>
 noremap <silent> <c-f> :FZFfind<Cr>
+
+source ~/.config/vifm/local.vim
 
 " Add additional place to look for executables
 "

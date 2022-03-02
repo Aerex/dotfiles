@@ -26,8 +26,7 @@ if ok then
       ['<C-u'] = cmp.mapping.scroll_docs(4),
       ['<C-d>'] = cmp.mapping.scroll_docs(-4),
       ['<CR>'] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.INSERT,
-        select = true,
+        select = false -- Only confirm explicitly selected items
       },
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.get_selected_entry() == nil and ultisnips.can_expand_snippet() then
@@ -76,47 +75,47 @@ if ok then
           nvim_lsp = '[LSP]',
           nvim_lua = '[Lua]',
           buffer = '[BUF]',
+          spell = '[SPELL]',
           dictionary = '[DICT]',
-          rg = '[RG]',
+          rg = '[RG]'
         })[entry.source.name]
 
         return vim_item
       end,
     },
     sources = {
-      { name = 'nvim_lsp' },
-      { name = 'nvim_lua' },
-      { name = 'rg' },
-      { name = 'buffer' },
-      { name = 'path' },
-      { name = 'ultisnips' },
-      { name = 'dictionary', keyword_length = 2  }
+      { name = 'nvim_lsp', priority = 5 },
+      { name = 'ultisnips', priority = 3 },
+      { name = 'rg', priority = 2 },
+      { name = 'dictionary', keyword_length = 2},
     },
   }
+
   -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline('/', {
     sources = {
       { name = 'buffer' }
     }
   })
+
   -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline(':', {
-      sources = cmp.config.sources({
+    sources = cmp.config.sources({
       { name = 'path' }
     }, {
       { name = 'cmdline' }
     })
   })
-  local okd, cmp_dictionary = pcall(require, 'cmp_dictionary')
-  if okd then
+  local ok_dict, cmp_dictionary = pcall(require, 'cmp_dictionary')
+  if ok_dict then
     cmp_dictionary.setup({
       dic = {
-          ["*"] = { "/usr/share/dict/eng" },
+          ["*"] = { "/usr/share/dict/words" }
       },
       -- The following are default values, so you don't need to write them if you don't want to change them
       exact = 2,
       first_case_insensitive = false,
-      async = false,
+      async = true,
       capacity = 5,
       debug = false,
     })

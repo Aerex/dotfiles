@@ -44,6 +44,7 @@ M.check_back_space = function()
     :sub(col, col)
     :match("%s") ~= nil
 end
+
 -- Credits to https://github.com/quangnguyen30192/cmp-nvim-ultisnips/pull/10
 -- Apparently checking backspace is not enough to check if we should move foward to the next entry
 M.has_any_words_before = function()
@@ -77,7 +78,9 @@ M.ultisnips.expand_snippet = function()
 end
 
 M.ultisnips.can_expand_snippet = function()
-   return vim.fn['UltiSnips#CanExpandSnippet']() == 1
+   return vim.fn['UltiSnips#CanExpandSnippet']() == 1 and
+    vim.fn.complete_info() ~= nil and
+    vim.fn.complete_info()["selected"] == -1
 end
 
 return M
