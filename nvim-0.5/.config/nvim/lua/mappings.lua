@@ -65,8 +65,9 @@ local noremaps = {
       ['<leader>dsi']                                                 = 'lua require\'dap\'.step_into()',
       ['<leader>dR']  = 'lua require\'dap\'.disconnect({restart = true })',
       ['<leader>drc'] = 'lua require\'dap\'.run_to_cursor()',
-      ['<leader>dK']  = 'lua require\'dap.ui.variables\'.hover()',
-      ['<leader>dv']  = 'lua require\'dapui\'.float_element(\'scopes\', { width = 75, enter = true })',
+      ['<leader>dK']  = 'lua require\'dap.ui.widgets\'.hover()',
+      ['<leader>dv']  = 'lua require\'debugger\'.toggle_dap_ele(\'scopes\', \'float\')',
+
       ['<leader>tdd']  = 'UltestDebug',
       ['<leader>tdn']  = 'UltestDebug:Nearest',
       ['<leader>du']  = 'lua require\'dapui\'.toggle()',
@@ -111,7 +112,7 @@ local file_type_keymaps = {
   },
   http = {
     nmap = {
-      ['<cr>'] = 'lua require\'rest-nvim\'.run()',
+      ['<CR>'] = 'lua require\'rest-nvim\'.run()',
       ['K'] = 'lua require\'rest-nvim\'.run(true)'
     }
   }
@@ -124,6 +125,7 @@ vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
 vim.cmd('autocmd! TermOpen *toggleterm#* lua require\'terminals\'.set_terminal_keymaps()')
 vim.cmd('autocmd! FileType vimwiki lua require\'wiki\'.remap()')
+vim.api.nvim_set_keymap('', '<F2>', ":echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, \"name\")')<CR>", { silent = true})
 
 
 -- @param {table} m

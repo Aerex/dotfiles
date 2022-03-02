@@ -16,7 +16,7 @@ vim.cmd[[autocmd BufEnter plugins.lua noremap <leader>pc <cmd>PackerCompile<cr>]
 vim.cmd[[autocmd BufEnter plugins.lua noremap <leader>pS <cmd>PackerStatus<cr>]]
 
 -- Do not remove unusued plugins
-require('packer').init({display = {auto_clean = false}})
+require('packer').init({display = {auto_clean = true}})
 -- Only required if you have packer in your `opt` pack
 local ok, _ = pcall(vim.cmd, [[packadd packer.nvim]])
 
@@ -141,6 +141,7 @@ if ok then
     use {'AndrewRadev/bufferize.vim', cmd = {'Bufferize'}}
     use {'kevinhwang91/nvim-bqf', ft = 'qf'}
     use {'kkoomen/vim-doge', opt = true, run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
+    use { 'NTBBloodbath/rest.nvim',  ft = {'http'}, requires = { 'nvim-lua/plenary.nvim', config = function() require'rest' end }}
     use {'vimwiki/vimwiki', ft = {'vimwiki', 'markdown'},
       setup = function()
         vim.g.vimwiki_key_mappings = { headers = 0,html = 0, global = 0 }

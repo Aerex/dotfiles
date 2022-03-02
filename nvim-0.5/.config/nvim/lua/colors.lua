@@ -3,6 +3,7 @@ M.setup = function()
   local hl_cfg = {
     LineNr = { fg = "#7a966c" },
     Label = { fg = "#cec6cc"},
+    SpellBad = { bg = "None"},
     Comment = { gui = "bold", fg="#4C566A"},
     TSComment = { gui = "bold", fg="#4C566A"},
     Folded = { bg = "#4c566a", fg="black"},
@@ -43,6 +44,5 @@ M.setup = function()
   vim.cmd[[hi LineNr guifg=None]]
   vim.cmd[[hi SignColumn guifg=None]]
 end
-
 
 return M

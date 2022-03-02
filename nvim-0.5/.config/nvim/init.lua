@@ -66,8 +66,6 @@ vim.cmd[[hi LineNr guifg=None]]
 vim.cmd[[hi SignColumn guifg=None]]
 
 vim.cmd('autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"')
--- FIXME: Workaround for enabling synax
---vim.cmd('autocmd BufEnter * :syntax on')
 
 -- misc
 vim.g.vifm_embed_split = true
@@ -80,14 +78,13 @@ vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md,*.go %s/\s\+$//e ]], ''
 vim.api.nvim_exec([[autocmd FileType vimwiki,markdown set spell]], '')
 
 -- load plugins
-require('load_plugins')
+require('plugins')
 require('mappings')
 require('colors').setup()
 vim.api.nvim_exec([[autocmd BufEnter * syntax on]], '')
 
-  local ok, _ = pcall(require, 'nvim-local')
-  if ok then
-    -- FIXME(me): Find a better event to fire this function
-    vim.api.nvim_exec([[autocmd BufEnter *.go,*.feature,*.ts lua set_local_config()]], '')
-  end
+local ok, _ = pcall(require, 'nvim-local')
+if ok then
+  -- FIXME(me): Find a better event to fire this function
+  vim.api.nvim_exec([[autocmd BufEnter *.go,*.feature,*.ts lua set_local_config()]], '')
 end

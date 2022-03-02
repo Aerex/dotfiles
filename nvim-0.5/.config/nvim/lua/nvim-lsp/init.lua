@@ -146,6 +146,18 @@ require'lspconfig'.pylsp.setup{
   on_attach=on_attach,
   autostart = true,
   capabilities = capabilities,
+  root_dir = function(fname)
+    local util = require'lspconfig.util'
+    local root_files = {
+      'pyproject.toml',
+      'setup.py',
+      '__init__.py',
+      'setup.cfg',
+      'requirements.txt',
+      'Pipfile',
+    }
+    return util.root_pattern(unpack(root_files))(fname) or util.find_git_ancestor(fname)
+  end,
   settings = {
     pyls = {
       plugins = {
@@ -161,8 +173,8 @@ require'lspconfig'.pylsp.setup{
 require'lspconfig'.gopls.setup{
   on_attach=on_attach,
   capabilities = capabilities,
-    settings = {
-      gopls = {
+  settings = {
+    gopls = {
         staticcheck = true,
         usePlaceholders = false
       },

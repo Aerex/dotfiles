@@ -1,7 +1,8 @@
 
 # Add extra path to the list only if the directory exists
-EXTRAPATH=""
+NEWPATH=""
 for d in \
+    $HOME/bin \
     $HOME/.bin \
     $HOME/go/bin \
     /opt/android-skd/tools/bin \
@@ -11,10 +12,17 @@ for d in \
     /usr/local/go/bin \
     $HOME/.gem/ruby/2.6.0/bin \
     $HOME/.rbenv/bin \
+    /usr/local/sbin \
+    /usr/local/bin \
+    /usr/bin \
+    /usr/lib/jvm/default/bin \
+    /usr/bin/site_perl \
+    /usr/bin/vendor_perl \
+    /usr/bin/core_perl \
   ; do
-  test -d "$d" && EXTRAPATH="$d:$EXTRAPATH"
+  test -d "$d" && NEWPATH="$d:$NEWPATH"
 done
-export PATH=$EXTRAPATH:$PATH
+export PATH=$NEWPATH
 
 # Set go environment variables if golang installed
 NEWGOROOT=""
@@ -35,7 +43,7 @@ export JA_GTC_TARGET='en' # your preferred target language code
 export TERM=screen-256color
 
 # History
-if [[ $SHELL = 'zsh' ]]; then
+if [[ $SHELL = "/usr/bin/zsh" ]]; then
   export HISTFILE="$HOME/.zsh_history"
   export HISTSIZE=30000
   export SAVEHIST=${HISTSIZE}

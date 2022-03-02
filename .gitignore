@@ -30,3 +30,4 @@ nvim/.config/nvim/spell
 
 nvim-local/
 local.vim
+.mypy_cache

@@ -6,6 +6,7 @@ require('fzf').default_window_options = {
 }
 local action = require "fzf.actions".action
 local fzf = require('fzf').fzf
+local helpers = require('fzf.helpers')
 local utils = require('nvim-fzf.utils')
 
 local function open_file(window_cmd, filename, row, col)
@@ -16,15 +17,16 @@ local function open_file(window_cmd, filename, row, col)
 end
 
 local has_bat = vim.fn.executable("bat")
+local mem_path = {}
 
 local preview_action = action(function (lines, fzf_lines)
   fzf_lines = tonumber(fzf_lines)
   local line = lines[1]
   local parsed = utils.parse_vimgrep_line(line)
   if has_bat then
-    return utils.bat_preview(parsed, fzf_lines)
+    return utils.bat_preview(parsed, fzf_lines, mem_path)
   else
-    return utils.head_tail_preview(parsed, fzf_lines)
+    return utils.head_tail_preview(parsed, fzf_lines, mem_path)
   end
 end)
 
@@ -32,13 +34,30 @@ return function(pattern)
   coroutine.wrap(function ()
     local workspace = vim.lsp.buf.list_workspace_folders()[1]
     local rgcmd = "rg --vimgrep --no-heading " ..
-      "--color ansi ".. vim.fn.shellescape(pattern or ' ')
-      -- TODO: Need to process the result from rg to shorten filepath before printing into fzf
-      -- There should be a method to do that in the library
---    if workspace then
---      rgcmd = rgcmd .. " -g '!.git/' " .. workspace
---    end
-    local choices = fzf(rgcmd, "--multi --ansi --expect=ctrl-t,ctrl-s,ctrl-x,ctrl-v " .. "--preview " .. preview_action)
+      "--color never ".. vim.fn.shellescape(pattern or ' ')
+    if workspace then
+      rgcmd = rgcmd .. " -g '!.git/' " .. workspace
+    end
+    print(rgcmd)
+    local rgcmd_shorten_path = helpers.cmd_line_transformer(rgcmd, function(line)
+      local parsed = utils.parse_vimgrep_line(line)
+      local path_parts = utils.split_string(parsed.filename, "(.-)/")
+      local path_too_long = #path_parts > 3 and true or false
+      local pfilename = parsed.filename
+      mem_path[pfilename] = parsed.filename
+      if path_too_long then
+        pfilename = table.concat(utils.slice_table(path_parts, #path_parts-2, #path_parts), '/')
+        mem_path[pfilename] = parsed.filename
+      else
+      end
+      local tbl = {}
+      table.insert(tbl, pfilename)
+      table.insert(tbl, parsed.row)
+      table.insert(tbl, parsed.col)
+      table.insert(tbl, parsed.content)
+      return table.concat(tbl, ':')
+    end)
+    local choices = fzf(rgcmd_shorten_path, "--multi --ansi --expect=ctrl-t,ctrl-s,ctrl-x,ctrl-v " .. "--preview " .. preview_action)
     if not choices then return end
 
     local window_cmd
@@ -57,7 +76,7 @@ return function(pattern)
       local choice = choices[i]
       local parsed_content = utils.parse_vimgrep_line(choice)
       open_file(window_cmd,
-        parsed_content.filename,
+        mem_path[parsed_content.filename],
         parsed_content.row,
         parsed_content.col)
     end
