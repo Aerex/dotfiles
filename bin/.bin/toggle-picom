@@ -1,4 +1,10 @@
 #!/bin/bash
+# AUTHOR: Aerex
+# DESC:   Toggle picom
+# DEPEND: notify-send picom
+
+# Hotkey Binding Examples
+# bindsym $mod+Shift+grave exec /path/to/toggle-picom
 
 if [[ -s $(command -v picom) ]]; then
   if [[ -z $(pgrep -f '^[p]icom') ]]; then 
