@@ -18,8 +18,7 @@ vim.diagnostic.config({
   update_in_insert = false,
 })
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
   properties = {
@@ -30,7 +29,7 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
 }
 
 local on_attach = function(client, bufnr)
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  --vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   local function keymap(...)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
@@ -51,8 +50,16 @@ local on_attach = function(client, bufnr)
     }
   )
 
+
+  local ok_tsu, ts_utils = pcall(require, 'nvim-lsp-ts-utils')
+  if ok_tsu then
+    ts_utils.setup({})
+    -- required to fix code action ranges and filter diagnostics
+    ts_utils.setup_client(client)
+  end
   -- Attach LSP status
   lsp_status.on_attach(client)
+
 
  -- Attach LSP Signature
  lsp_signature.on_attach({
@@ -86,7 +93,11 @@ vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint
   keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   keymap('n', '<M-D>', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  if vim.bo.filetype == 'typescript' then
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', ':TSLspRenameFile<CR>', opts)
+  else
+    keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  end
   keymap('n', '<M-O>', '<cmd>lua require(\'nvim-fzf.lsp\').document_symbols()<CR>', opts)
   keymap('n', '<leader>ca', '<cmd>CodeActionMenu<CR>', opts)
   keymap('v', '<leader>ca', '<cmd>CodeActionMenu<CR>', opts)
@@ -201,7 +212,7 @@ require'lspconfig'.efm.setup {
 }
 
 require'lspconfig'.tsserver.setup{
-  on_attach =on_attach,
+  on_attach = on_attach,
   capabilities = capabilities
 }
 
@@ -230,19 +241,18 @@ require('lspkind').init({
   symbol_map = utils.symbol_map
 })
 
+local ok_null, null_ls = pcall(require, 'null-ls')
+if ok_null then
+  null_ls.setup({
+      debug = true,
+      sources = {
+          null_ls.builtins.diagnostics.eslint,
+          null_ls.builtins.code_actions.eslint, -- eslint or eslint_d
+          null_ls.builtins.formatting.eslint_d -- prettier, eslint, eslint_d, or prettierd
+      },
+  })
+end
 -- Register the progress handle
 lsp_status.register_progress()
 vim.lsp.handlers['textDocument/documentSymbol'] = lsp_document_symbol_callback
 vim.lsp.handlers['textDocument/references'] = lsp_references_callback
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    -- Enable underline, use default values
-    underline = true,
-    -- Enable virtual text, override spacing to 4
-    virtual_text = true,
-    -- Use a function to dynamically turn signs off
-    -- and on, using buffer local variables
-    signs = true,
-    float = true
-  }
-)

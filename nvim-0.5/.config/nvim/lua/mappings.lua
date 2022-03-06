@@ -8,14 +8,14 @@ function _G.smart_carrier_return()
 end
 
 local noremaps = {
-    -- misc
     n = {
       -- misc
       ['<leader>w']                                                  = 'write',
+      ['<leader>rb']                                                 = 'edit',
       -- trouble
       ['<leader>xx']                                                 = 'TroubleToggle',
-      ['<leader>xw']                                                 = 'TroubleToggle lsp_workspace_diagnostics',
-      ['<leader>xd']                                                 = 'TroubleToggle lsp_document_diagnostics',
+      ['<leader>xw']                                                 = 'TroubleToggle workspace_diagnostics',
+      ['<leader>xd']                                                 = 'TroubleToggle document_diagnostics',
       ['<leader>xq']                                                 = 'TroubleToggle quickfix',
       ['<leader>xl']                                                 = 'TroubleToggle loclist',
       ['<leader>xtq']                                                 = 'TodoQuickFix',
@@ -82,6 +82,8 @@ local noremaps = {
     },
     v = {
       ['<leader>yg']                                                 = 'GBrowse!',
+      ['<leader>dk']  = 'lua require\'dap.ui.variables\'.visual_hover()',
+
     }
   }
 
@@ -102,9 +104,16 @@ local file_type_keymaps = {
       ['<leader>mt'] = 'MarkdownPreviewToggle'
     }
   },
+  vimwiki = {
+    nmap = {
+      ['\\w='] = '<Plug>VimwikiAddHeaderLevel',
+      ['\\wx'] = '<Plug>VimwikiIndex'
+    }
+  },
   http = {
-    nnoremap = {
-      ['<CR>'] = 'lua require\'rest-nvim\'.run()'
+    nmap = {
+      ['<CR>'] = 'lua require\'rest-nvim\'.run()',
+      ['K'] = 'lua require\'rest-nvim\'.run(true)'
     }
   }
 }
@@ -115,6 +124,7 @@ vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = tr
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
 vim.cmd('autocmd! TermOpen *toggleterm#* lua require\'terminals\'.set_terminal_keymaps()')
+vim.cmd('autocmd! FileType vimwiki lua require\'wiki\'.remap()')
 vim.api.nvim_set_keymap('', '<F2>', ":echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, \"name\")')<CR>", { silent = true})
 
 

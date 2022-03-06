@@ -8,12 +8,12 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 -- Auto compile when there are changes in plugins.lua
-vim.cmd 'autocmd BufWrite load_plugins.lua PackerCompile'
+vim.cmd 'autocmd BufWrite plugins.lua PackerCompile'
 
 -- Mappings for packer
-vim.cmd[[autocmd BufEnter load_plugins.lua noremap <leader>ps <cmd>PackerSync<cr>]]
-vim.cmd[[autocmd BufEnter load_plugins.lua noremap <leader>pc <cmd>PackerCompile<cr>]]
-vim.cmd[[autocmd BufEnter load_plugins.lua noremap <leader>pS <cmd>PackerStatus<cr>]]
+vim.cmd[[autocmd BufEnter plugins.lua noremap <leader>ps <cmd>PackerSync<cr>]]
+vim.cmd[[autocmd BufEnter plugins.lua noremap <leader>pc <cmd>PackerCompile<cr>]]
+vim.cmd[[autocmd BufEnter plugins.lua noremap <leader>pS <cmd>PackerStatus<cr>]]
 
 -- Do not remove unusued plugins
 require('packer').init({display = {auto_clean = true}})
@@ -27,35 +27,30 @@ if ok then
     use {'wbthomason/packer.nvim'}
     use {'lewis6991/impatient.nvim' }
     use {'folke/which-key.nvim', config = function() require'which-key' end }
+
     -- lsp
-    use {'neovim/nvim-lspconfig', config = function() require('nvim-lsp') end }
+    use {'neovim/nvim-lspconfig', requires = {'jose-elias-alvarez/null-ls.nvim', 'jose-elias-alvarez/nvim-lsp-ts-utils'},
+      config = function() require('nvim-lsp') end }
     use { 'onsails/lspkind-nvim' }
     use { 'nvim-lua/lsp-status.nvim' }
     use { 'ray-x/lsp_signature.nvim' }
-    use {
-        'weilbith/nvim-code-action-menu',
-        cmd = 'CodeActionMenu',
-        config = function() vim.g.code_action_menu_show_details = false end
-    }
+    use { 'weilbith/nvim-code-action-menu', cmd = 'CodeActionMenu',
+      config = function() vim.g.code_action_menu_show_details = false end }
 
      -- treesitter
-    use {
-         'nvim-treesitter/nvim-treesitter',
-      requires = {
-        'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects', 'nvim-treesitter/playground'
-      },
-      config = function() require('treesitter') end,
-      run = ':TSUpdate'
+    use { 'nvim-treesitter/nvim-treesitter', requires = {
+        'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects',
+        'nvim-treesitter/playground'}, config = function() require('treesitter') end, run = ':TSUpdate'
     }
+
     -- textobject
-    use { 'tpope/vim-surround'}
+    use {'tpope/vim-surround'}
+    use {'tpope/vim-repeat'}
 
     -- fuzzy pickers / file finders
-    use {
-      'vijaymarupudi/nvim-fzf',
-      'vijaymarupudi/nvim-fzf-commands',
-      'vifm/vifm.vim'
-    }
+    use { 'vijaymarupudi/nvim-fzf'}
+    use {'vijaymarupudi/nvim-fzf-commands' }
+    use {'vifm/vifm.vim' }
 
     -- git
     use { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush', 'GBrowse'} }
@@ -148,13 +143,15 @@ if ok then
     use {'kkoomen/vim-doge', opt = true, run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
     use { 'NTBBloodbath/rest.nvim',  ft = {'http'}, requires = { 'nvim-lua/plenary.nvim', config = function() require'rest' end }}
     use {'vimwiki/vimwiki', ft = {'vimwiki', 'markdown'},
-      config = function() vim.g.vimwiki_global_vars = {headers = 0,html = 0, global = 0 } end }
+      setup = function()
+        vim.g.vimwiki_key_mappings = { headers = 0,html = 0, global = 0 }
+      end }
     use {'dhruvasagar/vim-table-mode', cmd = {'TableModeToggle', 'TableModeEnable', 'TableModeDisable', 'Tabelize', 'TableModeRealign',
       config = 'vim.table_mode_auto_align = 1'}}
     use {
       'voldikss/vim-translator', cmd = {'Translate', 'TranslateR', 'TranslateW', 'TranslateL'}, ft = {"trans"}
     }
-    use {  'NTBBloodbath/rest.nvim',  requires = { "nvim-lua/plenary.nvim" }, ft = {'http'},  config = function() require'rest' end  }
+    use {  'NTBBloodbath/rest.nvim',  requires = { "nvim-lua/plenary.nvim" }, ft = {'http'},  config = function() require'rest'.setup() end  }
     use { 'ledger/vim-ledger', ft = {'ledger'}, config = function() require'ledger' end }
     use {'iamcco/markdown-preview.nvim', run = 'cd app && npm install',
       cmd = {'MarkdownPreview', 'MarkdownPreviewStop'} , ft = {'markdown'},

@@ -6,7 +6,9 @@ M.setup = function()
     SpellBad = { bg = "None"},
     Comment = { gui = "bold", fg="#4C566A"},
     TSComment = { gui = "bold", fg="#4C566A"},
-    Folded = { bg = "#4c566a", fg="black"}
+    Folded = { bg = "#4c566a", fg="black"},
+    GitGutterAdd = { fg="#4ca64c "},
+    SpellBad = { fg="#FF0000"}
   }
 
   local ok, lcfg = pcall(require, 'nvim-local')
@@ -33,7 +35,6 @@ M.setup = function()
   })
   vim.cmd [[ colorscheme onenord ]]
   vim.cmd('hi rainbowcol7 guifg=#D8DEE9')
-  vim.cmd[[hi GitGutterAdd guifg=#4ca64c guibg=none]]
   vim.cmd[[hi GitSignAdd guifg=#4ca64c guibg=none]]
   vim.cmd[[hi DiffAdd guifg=#4ca64c guibg=none]]
   vim.cmd[[hi DiffAdded guifg=#4ca64c guibg=none]]
