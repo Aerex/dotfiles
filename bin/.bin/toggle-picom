@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ -s $(command -v picom) ]]; then
+  if [[ -z $(pgrep -f '^[p]icom') ]]; then 
+    [ -s $(command -v notify-send) ] && notify-send picom "Transparency Enabled" 
+    picom -b 
+  else 
+    [ -s $(command -v notify-send) ] && notify-send picom "Transparency Disabled"
+    pkill -f '^[p]icom'
+  fi
+fi
+
+# vim: ft=sh
