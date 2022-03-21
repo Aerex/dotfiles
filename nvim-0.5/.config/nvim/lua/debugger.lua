@@ -172,7 +172,20 @@ end
 require('dap.ext.vscode').load_launchjs()
 dap.set_log_level('TRACE')
 
-vim.cmd("au FileType dap-repl lua require('dap.ext.autocompl').attach()")
+vim.cmd('au FileType dap-repl lua require(\'dap.ext.autocompl\').attach()')
+
+M.toggle_dap_ele = function(ele, type)
+  local widgets = require('dap.ui.widgets')
+  local eles = {
+    frames =  widgets.frames,
+    scopes = widgets.scopes
+  }
+  if ele then
+    if type == "float" then
+      local wind = widgets.centered_float(eles[ele])
+    end
+  end
+end
 
 function debug_cli()
   --vim.fn.input
