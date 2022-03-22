@@ -1,0 +1,38 @@
+color search brightblue white
+color indicator brightblue default
+color status brightblue default
+
+# Entire line
+color index color237 default '.*'
+color index_subject color237 default '.*'
+color index_author color237 default '.*'
+color index_date color237 default
+color index_number brightblue default
+
+color header blue default ".*"
+color header color25 default "^(From)"
+color header brightcyan default "^(Subject)"
+color header brightwhite default "^(CC|BCC)"
+
+mono bold bold
+mono underline underline
+mono indicator reverse
+mono error bold
+
+color normal default default
+color error red default
+color tilde black default
+color indicator color25 default # currently selected message, default makes bar clear
+
+color   body    brightwhite     default         ^[[:space:]].*
+color   body    yellow          default         ^(diff).*
+color   body    green           default         "^Merged #.*"
+color   body    red             default         "^Closed #.*"
+color   body    brightblue      default         "^Reply to this email.*"
+color   body    green default "\`[^\`]*\`" # Green text between ` and `
+
+color index brightyellow black "~N"
+color index_author brightyellow black "~N"
+color index_subject brightyellow black "~N"
+
+# vim: ft=muttrc 
