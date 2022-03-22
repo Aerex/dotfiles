@@ -89,7 +89,7 @@ M.document_symbols = function()
 
     local choices = fzf(vim.tbl_keys(items_by_name),
      '--multi --ansi --expect=ctrl-v,ctrl-x,ctrl-s,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="Document Symbols> "')
-     local vimcmd = 'e'
+     local vimcmd = ''
      local key = choices[1]
      if key == 'ctrl-x' or key == 'ctrl-s' then
        vimcmd = 'new'
@@ -101,9 +101,13 @@ M.document_symbols = function()
 
      for i=2, #choices do
        local item = items_by_name[choices[i]]
-       vim.cmd(string.format('%s +%s %s', vimcmd, item.lnum, item.filename))
+       if vimcmd == '' then
+         vim.cmd(string.format(':%s', item.lnum))
+       else
+         vim.cmd(string.format('%s +%s %s', vimcmd, item.lnum, item.filename))
+       end
      end
-  end)()
+   end)()
 end
 
 
