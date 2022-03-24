@@ -82,7 +82,7 @@ vim.api.nvim_exec([[autocmd BufEnter * if matchstr(&filetype, '\(markdown\)\|\(v
 require('plugins')
 require('mappings')
 require('colors').setup()
-vim.api.nvim_exec([[autocmd BufEnter * syntax on]], '')
+vim.api.nvim_exec([[autocmd VimEnter *  syntax on ]], '')
 
 local ok, _ = pcall(require, 'nvim-local')
 if ok then
