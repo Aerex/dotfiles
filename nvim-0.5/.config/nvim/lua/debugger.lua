@@ -187,6 +187,17 @@ M.toggle_dap_ele = function(ele, type)
   end
 end
 
-function debug_cli()
-  --vim.fn.input
+M.start_or_continue  = function()
+  local dap = require'dap'
+  if not vim.g.loaded_vscode_dap then
+    vim.g.loaded_vscode_dap = 1
+    local workspace = None
+    if #vim.lsp.buf.list_workspace_folders() > 0 then
+      workspace = vim.lsp.buf.list_workspace_folders()[1] .. '/.vscode/launch.json'
+    end
+    require('dap.ext.vscode').load_launchjs(workspace)
+  end
+
+  dap.continue()
+end
 end
