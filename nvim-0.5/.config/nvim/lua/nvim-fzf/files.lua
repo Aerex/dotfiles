@@ -29,7 +29,7 @@ local _ = {}
   end
   local command  = string.format('%s %s | tee ', find_cmd, find_opts) .. cache_file
   coroutine.wrap(function ()
-    local choices = fzf(command, '--multi --ansi --expect=ctrl-v,ctrl-r,ctrl-t,ctrl-s,ctrl-x --preview '
+    local choices = fzf(command, '--header="ctrl-r=Refresh cache"--multi --ansi --expect=ctrl-v,ctrl-r,ctrl-t,ctrl-s,ctrl-x --preview '
       .. preview_files .. ' --prompt="Files> "', {
    })
     local vimcmd = 'e'
