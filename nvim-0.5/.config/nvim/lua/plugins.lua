@@ -103,7 +103,7 @@ if ok then
     use {'glepnir/galaxyline.nvim', requires = {'kyazdani42/nvim-web-devicons', opt = true},
       config = function() require('statusline') end
     }
-    use {'tpope/vim-dispatch'}
+    use {'tpope/vim-dispatch', cmd = {'Dispatch'}}
 
    -- completions / snippets
     use({ -- nvim-cmp
