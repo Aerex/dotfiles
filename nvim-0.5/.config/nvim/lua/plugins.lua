@@ -54,7 +54,7 @@ if ok then
     use {'vifm/vifm.vim' }
 
     -- git
-    use { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush', 'GBrowse'} }
+    use { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush', 'GBrowse', 'Gdiffsplit'} }
     use { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}, event = {'BufRead'}, config = function() require('nvim-git').setup_signs() end }
     use { 'TimUntersberger/neogit', cmd = {'Neogit'}, config = function() require('nvim-git').setup_neogit() end,
       requires = { 'nvim-lua/plenary.nvim','sindrets/diffview.nvim' }}

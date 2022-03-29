@@ -42,13 +42,14 @@ vim.g.miniyank_filename = vim.fn.stdpath('cache') .. '/.miniyank.mpack'
 
 -- Remove trailing spaces after saving for certain file types
 vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md,*.go %s/\s\+$//e ]], '')
-vim.api.nvim_exec([[autocmd FileType vimwiki,markdown set spell]], '')
+-- Enable spell on markdown and vimwiki filetypes
+vim.api.nvim_exec([[autocmd BufEnter * if matchstr(&filetype, '\(markdown\)\|\(vimwiki\)') | set spell | endif ]], '')
 
 -- load plugins
 require('plugins')
 require('mappings')
 require('colors').setup()
-vim.api.nvim_exec([[autocmd BufEnter * syntax on]], '')
+vim.api.nvim_exec([[autocmd VimEnter *  syntax on ]], '')
 
 local ok, _ = pcall(require, 'nvim-local')
 if ok then

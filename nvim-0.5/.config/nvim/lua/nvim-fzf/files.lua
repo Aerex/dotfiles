@@ -7,10 +7,12 @@ require('fzf').default_window_options = {
 local action = require('fzf.actions').action
 local fzf = require('fzf').fzf
 local FZF_CAHCE_FILES_DIR = vim.fn.stdpath('cache') .. '/fzf_files/'
-local cache_file = FZF_CAHCE_FILES_DIR .. vim.fn.sha256(vim.fn.getcwd())
+local cache_file = FZF_CAHCE_FILES_DIR .. vim.fn.sha256(vim.fn.expand('%:p:h'))
 
 local preview_files = action(function(lines)
-  local file_path= string.format('%s/%s', vim.fn.getcwd(), lines[1])
+  -- using expand at this point will return the expand file path as `term::<path>:/port/usr/bin`
+  -- so we will use regex to pull out the path only to build the true file path
+  local file_path= vim.fn.expand('%:p:h'):match('term://(.*)(/%d+)') .. lines[1]
   local preview_cmd = vim.fn.executable('bat') == 1 and 'bat' or 'cat'
   local preview_opts = vim.fn.executable('bat') == 1 and '--style=numbers --color always' or ''
   local cmd = string.format('%s %s %s', preview_cmd, preview_opts, file_path)
