@@ -95,7 +95,7 @@ if ok then
     use {
       'rcarriga/vim-ultest',
         run = ':UpdateRemotePlugins',
-        requires = {'vim-test/vim-test'},
+        requires = { { 'vim-test/vim-test', cmd = { 'TestFile', 'TestLast', 'TestSuite', 'TestVisit', 'TestNearest'} }},
         config = function() require('test') end
     }
 
