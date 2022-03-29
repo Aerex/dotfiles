@@ -4,41 +4,8 @@
 -- |_| \_|_____\___/  \_/  |___|_|  |_|
 --
 -- config options
-vim.o.relativenumber  = true
-vim.wo.relativenumber = true
-vim.o.swapfile        = false
-vim.bo.swapfile       = false
-vim.o.number          = true
-vim.wo.number         = true
-vim.o.history         = 999
-vim.o.termguicolors   = true
-vim.o.laststatus      = 2
-vim.g.mapleader       = ' '
-vim.o.shiftwidth      = 2
-vim.bo.shiftwidth     = 2
-vim.o.softtabstop     = 2
-vim.bo.softtabstop    = 2
-vim.o.tabstop         = 2
-vim.bo.tabstop        = 2
-vim.o.expandtab       = true
-vim.o.dictionary      = "/usr/share/dict/words"
-vim.bo.expandtab      = true
-vim.o.undodir         = vim.fn.stdpath('cache') .. '/undodir/'
-vim.bo.undofile       = true
-vim.o.undofile        = true
-vim.o.hidden          = true
-vim.o.clipboard       = vim.o.clipboard .. 'unnamedplus' -- use clipboard on everything
-vim.o.showmode        = true
-vim.o.autoread        = true
-vim.o.timeoutlen      = 500
-vim.o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
-vim.o.foldlevel       = 5
-vim.wo.signcolumn     = "auto:2"
-vim.o.smartindent     = true
-vim.opt.spell         = false
-vim.opt.spelllang     = { 'en_us' }
+require('options')
 
--- autocommands
 vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
 vim.cmd('autocmd VimResized * :wincmd =')
 -- FIXME(me): Figure out why set spell is being enabled in all buffers
