@@ -150,7 +150,6 @@ if ok then
     use {
       'voldikss/vim-translator', cmd = {'Translate', 'TranslateR', 'TranslateW', 'TranslateL'}, ft = {"trans"}
     }
-    use {  'NTBBloodbath/rest.nvim',  requires = { "nvim-lua/plenary.nvim" }, ft = {'http'},  config = function() require'rest'.setup() end  }
     use { 'ledger/vim-ledger', ft = {'ledger'}, config = function() require'ledger' end }
     use {'iamcco/markdown-preview.nvim', run = 'cd app && npm install',
       cmd = {'MarkdownPreview', 'MarkdownPreviewStop'} , ft = {'markdown'},
