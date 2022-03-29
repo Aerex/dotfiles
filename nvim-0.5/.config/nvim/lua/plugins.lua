@@ -140,7 +140,6 @@ if ok then
     }
     use {'AndrewRadev/bufferize.vim', cmd = {'Bufferize'}}
     use {'kevinhwang91/nvim-bqf', ft = 'qf'}
-    use {'kkoomen/vim-doge', opt = true, run = ':call doge#install()', config = 'vim.g.doge_enable_mappings = 0'}
     use { 'NTBBloodbath/rest.nvim',  ft = {'http'}, requires = { 'nvim-lua/plenary.nvim', config = function() require'rest' end }}
     use {'vimwiki/vimwiki', ft = {'vimwiki', 'markdown'},
       setup = function()
