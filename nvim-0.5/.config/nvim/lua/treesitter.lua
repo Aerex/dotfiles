@@ -57,15 +57,6 @@ require'nvim-treesitter.configs'.setup {
         ['id'] = '@comment.inner',
         ['am'] = '@call.outer',
         ['im'] = '@call.inner',
-        ['iS'] = {
-          ledger = '@status'
-        },
-        ['aE'] = {
-          ledger = '@entry.outer'
-        },
-        ['iE'] = {
-          ledger = '@entry.inner'
-        }
       }
     },
     swap = {
