@@ -61,7 +61,7 @@ if ok then
 
       -- yank/undo
       use {
-        { 'mbbill/undotree', cmd = 'UndotreeToggle',  config = [[vim.g.undotree_SetFocusWhenToggle = 1]] },
+        { opt = true, 'mbbill/undotree', cmd = 'UndotreeToggle',  config = [[vim.g.undotree_SetFocusWhenToggle = 1]] },
         { 'bfredl/nvim-miniyank', as = 'miniyank' }
       }
 
