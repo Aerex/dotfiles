@@ -25,6 +25,7 @@ if ok then
   function(use)
     -- Packer can manage itself as an optional plugin
     use {'wbthomason/packer.nvim'}
+    use{ 'nathom/filetype.nvim' }
     use {'lewis6991/impatient.nvim' }
     use {'folke/which-key.nvim', config = function() require'which-key' end }
 
