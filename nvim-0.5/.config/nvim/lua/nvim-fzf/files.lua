@@ -6,8 +6,8 @@ require('fzf').default_window_options = {
 }
 local action = require('fzf.actions').action
 local fzf = require('fzf').fzf
-local FZF_CAHCE_FILES_DIR = vim.fn.stdpath('cache') .. '/fzf_files/'
-local cache_file = FZF_CAHCE_FILES_DIR .. vim.fn.sha256(vim.fn.expand('%:p:h'))
+local FZF_CACHE_FILES_DIR = vim.fn.stdpath('cache') .. '/fzf_files/'
+local cache_file = ''
 
 local preview_files = action(function(lines)
   -- using expand at this point will return the expand file path as `term::<path>:/port/usr/bin`
@@ -22,14 +22,19 @@ end)
 local _ = {}
 
  _.find_files = function()
+  cache_file = FZF_CACHE_FILES_DIR .. vim.fn.sha256(current_dir)
+  local current_dir = vim.fn.expand('%:p:h')
   local find_cmd = vim.fn.executable('fd') == 1 and 'fd' or 'find'
-  local find_opts = vim.fn.executable('fd') == 1 and '-t f -L' or "-L -type f -printf %P\\\\n"
+  local find_opts = vim.fn.executable('fd') == 1 and string.format('-t f -L . %s -x echo {/}', current_dir) or "-L -type f -printf %P\\\\n"
+  local command = ''
   if vim.fn.filereadable(cache_file) == 0 then
-    if vim.fn.isdirectory(FZF_CAHCE_FILES_DIR) == 0  then
-      vim.fn.mkdir(FZF_CAHCE_FILES_DIR)
+    if vim.fn.isdirectory(FZF_CACHE_FILES_DIR) == 0  then
+      vim.fn.mkdir(FZF_CACHE_FILES_DIR)
     end
+    command = string.format('%s %s | tee ', find_cmd, find_opts) .. cache_file
+  else
+  command = string.format('%s %s', find_cmd, find_opts)
   end
-  local command  = string.format('%s %s | tee ', find_cmd, find_opts) .. cache_file
   coroutine.wrap(function ()
     local choices = fzf(command, '--multi --ansi --expect=ctrl-v,ctrl-r,ctrl-t,ctrl-s,ctrl-x --preview '
       .. preview_files .. ' --prompt="Files> "', {
