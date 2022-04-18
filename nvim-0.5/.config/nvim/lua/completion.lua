@@ -21,6 +21,12 @@ if ok then
       end,
     },
     mapping = {
+      ['<C-n>'] = cmp.mapping(function()
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+        end, { 'i', 's', }),
+      ['<C-p>'] = cmp.mapping(function()
+        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+        end, { 'i', 's', }),
       ['<C-b'] = cmp.mapping.scroll_docs(4),
       ['<C-f'] = cmp.mapping.scroll_docs(-4),
       ['<C-u'] = cmp.mapping.scroll_docs(4),
