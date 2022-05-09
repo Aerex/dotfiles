@@ -105,5 +105,5 @@ require'nvim-treesitter.configs'.setup {
   indent = {
     enable = true
   },
-  ensure_installed = { 'javascript', 'ledger', 'python', 'c', 'query', 'go', 'bash', 'json', 'php'}
+  ensure_installed = { 'javascript', 'ledger', 'python', 'c', 'query', 'go', 'bash', 'json', 'php', 'http'}
 }
