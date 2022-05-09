@@ -1,5 +1,6 @@
---local wk = require('which-key')
---local dap = require('dap')
+local M = {}
+local g = vim.g
+--local wk = require('which-key') local dap = require('dap')
 --local dapui = require('dapui')
 --
 --wk.register({
@@ -127,6 +128,7 @@ dapui.setup({
     remove = 'd',
     edit = 'e',
     repl = 'r',
+    toggle = 't',
   },
   sidebar = {
     -- You can change the order of elements in the sidebar
@@ -143,11 +145,6 @@ dapui.setup({
     size = 40,
     position = 'left', -- Can be 'left' or 'right'
   },
-  tray = {
-    elements = { 'repl' },
-    size = 10,
-    position = 'bottom', -- Can be 'bottom' or 'top'
-  },
   floating = {
     max_height = nil, -- These can be integers or a float between 0 and 1.
     max_width = nil, -- Floats will be treated as percentage of your screen.
@@ -156,24 +153,56 @@ dapui.setup({
 })
 
 -- Toggle dap ui when debugger starts and exits
-dap.listeners.after.event_initialized['dapui_config'] = function()
-  vim.o.signcolumn = "auto:2"
-  dapui.open()
-end
-dap.listeners.before.event_terminated['dapui_config'] = function()
-  vim.o.signcolumn = "auto"
-  dapui.close()
-end
-dap.listeners.before.event_exited['dapui_config'] = function()
-  vim.o.signcolum = "auto"
-  dapui.close()
-end
+dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
+dap.listeners.before.event_terminated['dapui_config'] = function()  dapui.close() end
+dap.listeners.before.event_exited['dapui_config'] = function() dapui.close() end
 
 require('dap.ext.vscode').load_launchjs()
-dap.set_log_level('TRACE')
 
 vim.cmd("au FileType dap-repl lua require('dap.ext.autocompl').attach()")
+
+local ok_dap_vt, nvim_dap_vt =  pcall(require, 'nvim-dap-virtual-text')
+if ok_dap_vt then
+  nvim_dap_vt.setup {
+    enabled = true,
+    enabled_commands = true,
+    highlight_changed_variables = true,
+    highlight_new_as_changed = false,
+    show_stop_reason = true,
+    commented = false,
+    -- experimental features:
+    virt_text_pos = 'eol',              -- position of virtual text, see `:h nvim_buf_set_extmark()`
+    all_frames = false,                 -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
+    virt_lines = false,                 -- show virtual lines instead of virtual text (will flicker!) virt_text_win_col = nil             -- position the virtual text at a fixed window column (starting from the first text column) ,
+                                        -- e.g. 80 to position at column 80, see `:h nvim_buf_set_extmark()`
+}
+end
+
+M.start_or_continue = function()
+  if not g.loaded_vs_launchjson then
+    g.loaded_vs_launchjson = 1
+    local launchjson_path
+    if #vim.lsp.buf.list_workspace_folders() > 0 then
+      launchjson_path = vim.lsp.buf.list_workspace_folders()[1] .. '/.vscode/launch.json'
+      require'dap.ext.vscode'.load_launchjs(launchjson_path)
+    end
+  end
+  dap.continue()
+end
+
+M.toggle_breakpoints_qf = function()
+  -- Add breakpoints to quickfix window
+  require'dap'.list_breakpoints()
+  -- Load trouble
+  require'packer'.loader('trouble.nvim')
+  -- open trouble quickfix
+  require'trouble'.open({ provider = 'quickfix'})
+end
+
+
 
 function debug_cli()
   --vim.fn.input
 end
+
+return M
