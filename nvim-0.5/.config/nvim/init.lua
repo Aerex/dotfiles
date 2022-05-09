@@ -27,7 +27,6 @@ vim.o.undodir         = vim.fn.stdpath('cache') .. '/undodir/'
 vim.bo.undofile       = true
 vim.o.undofile        = true
 vim.o.hidden          = true
-vim.o.clipboard       = vim.o.clipboard .. 'unnamedplus' -- use clipboard on everything
 vim.o.showmode        = true
 vim.o.autoread        = true
 vim.o.timeoutlen      = 500
@@ -35,19 +34,39 @@ vim.o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
 vim.o.foldlevel       = 5
 vim.wo.signcolumn     = "auto:2"
 vim.o.smartindent     = true
-vim.opt.spell         = false
+vim.wo.spell          = false
+vim.o.spell           = false
 vim.opt.spelllang     = { 'en_us' }
 
+vim.opt.clipboard:append('unnamedplus')
 -- autocommands
-vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
-vim.cmd('autocmd VimResized * :wincmd =')
+vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
+  pattern = {"*.md", "qutebrowser-editor*"},
+  command = 'set spell wrap',
+})
+vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
+  callback = function()
+    vim.opt_local.formatoptions:remove('r')
+    vim.opt_local.formatoptions:remove('o')
+  end
+})
+vim.api.nvim_create_autocmd('VimResized', {
+  pattern = '*',
+  command = 'wincmd =',
+})
+
+vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
+  pattern = {'*.trans'},
+  callback = function()
+    vim.opt_local.keywordprg = 'trans -no-ansi ja:'
+  end
+})
+--vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
 -- FIXME(me): Figure out why set spell is being enabled in all buffers
 --vim.cmd('autocmd BufEnter qutebrowser-editor* set spell wrap')
-vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
+--vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
 vim.o.grepprg="rg --vimgrep --no-heading --smart-case"
 vim.o.grepformat="%f:%l:%c:%m"
--- FIXME(me): Same as line 40
---vim.cmd('autocmd FileType markdown set spell')
 
 --buffers
 vim.o.splitright = true
@@ -82,10 +101,25 @@ vim.api.nvim_exec([[autocmd BufEnter * if matchstr(&filetype, '\(markdown\)\|\(v
 require('plugins')
 require('mappings')
 require('colors').setup()
-vim.api.nvim_exec([[autocmd VimEnter *  syntax on ]], '')
+
+vim.api.nvim_create_autocmd('VimEnter', {
+  pattern = {'*'},
+  command = 'syntax on',
+})
 
 local ok, _ = pcall(require, 'nvim-local')
 if ok then
-  -- FIXME(me): Find a better event to fire this function
-  vim.api.nvim_exec([[autocmd BufEnter *.go,*.feature,*.ts lua set_local_config()]], '')
+  -- NOTE(me): Find a better event to fire this function
+  vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
+    pattern =  {'*.go', '*.feature', '*.ts', '*.java'},
+    callback = function()
+      set_local_config()
+    end
+  })
+end
+
+local ok_v, notify = pcall(require, 'notify')
+if ok_v then
+  -- set vim-notify to handle notifications
+  vim.notify = notify
 end
