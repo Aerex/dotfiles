@@ -25,6 +25,7 @@ if ok then
   function(use)
     -- Packer can manage itself as an optional plugin
     use {'wbthomason/packer.nvim'}
+    use{ 'nathom/filetype.nvim' }
     use {'lewis6991/impatient.nvim' }
     use {'folke/which-key.nvim'}
     use {'famiu/nvim-reload'}
@@ -75,7 +76,7 @@ if ok then
 
       -- yank/undo
       use {
-        { 'mbbill/undotree', cmd = 'UndotreeToggle',  config = [[vim.g.undotree_SetFocusWhenToggle = 1]] },
+        { opt = true, 'mbbill/undotree', cmd = 'UndotreeToggle',  config = [[vim.g.undotree_SetFocusWhenToggle = 1]] },
         { 'bfredl/nvim-miniyank', as = 'miniyank' }
       }
 
@@ -110,7 +111,7 @@ if ok then
     use {
       'rcarriga/vim-ultest',
         run = ':UpdateRemotePlugins',
-        requires = {'vim-test/vim-test'},
+        requires = { { 'vim-test/vim-test', cmd = { 'TestFile', 'TestLast', 'TestSuite', 'TestVisit', 'TestNearest'} }},
         config = function() require('test') end
     }
 

@@ -1,7 +1,12 @@
 require'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true,
-    disable = {'html', 'php'} -- list of language that will be disabled
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+    disable = {'html', 'php', 'ledger'} -- list of language that will be disabled
   },
   smart_rename = {
     enable = true,
@@ -10,7 +15,7 @@ require'nvim-treesitter.configs'.setup {
     }
   },
   rainbow = {
-    enable = true
+    enable = false
   },
   playground = {
     enable = true
@@ -38,6 +43,8 @@ require'nvim-treesitter.configs'.setup {
       keymaps = {
         ['af'] = '@function.outer',
         ['if'] = '@function.inner',
+        ['ip'] = '@parameter.inner',
+        ['ap'] = '@parameter.outer',
         ['aC'] = '@class.outer',
         ['iC'] = '@class.inner',
         ['ac'] = '@conditional.outer',
@@ -52,8 +59,6 @@ require'nvim-treesitter.configs'.setup {
         ['id'] = '@comment.inner',
         ['am'] = '@call.outer',
         ['im'] = '@call.inner',
-        ['ip'] = '@parameter.inner',
-        ['ap'] = '@parameter.outer'
       }
     },
     swap = {
