@@ -123,3 +123,5 @@ if ok_v then
   -- set vim-notify to handle notifications
   vim.notify = notify
 end
+
+vim.ui.select = require'nvim-fzf.uiselect'
