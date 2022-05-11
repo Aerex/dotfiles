@@ -84,10 +84,11 @@ if ok then
       use {'folke/todo-comments.nvim', event = "BufRead", requires = 'nvim-lua/plenary.nvim', config = function() require('todo').setup() end }
 
     -- formatting
-    use {
-      'sbdchd/neoformat',
-      { 'godlygeek/tabular', cmd = { 'Tabularize' } },
-      { 'lukas-reineke/indent-blankline.nvim', config = function() require('indentlines') end },
+    use {'sbdchd/neoformat'}
+    use { 'godlygeek/tabular', cmd = { 'Tabularize' } }
+    use { 'lukas-reineke/indent-blankline.nvim',
+      config = function() require('indent_blankline').setup{
+        char='|', buftype_exclude = {'terminal'}, filetype_exclude = {'ledger', 'help'}} end
     }
     -- colors
     use {
