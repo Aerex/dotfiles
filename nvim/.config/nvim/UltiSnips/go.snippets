@@ -1,0 +1,88 @@
+snippet cfrune  "Cobra RunE function"
+func(cmd *cobra.Command, args []string) {
+	$0
+}
+endsnippet
+
+snippet gde "Add gomega Describe function block"
+Describe("$1", func() {
+	$0
+})
+endsnippet
+
+snippet gct "Add gomega Context function block"
+Context("$1", func() {
+	$0
+})
+endsnippet
+	
+
+snippet gbe "Add gomega BeforeEach function block"
+BeforeEach(func() {
+	$0
+})
+endsnippet
+
+snippet gae "Add gomega AfterEach function block"
+AfterEach(func() {
+	$0
+})
+endsnippet
+
+snippet gt "Add gomega It function block"
+It("$1", func() {
+	$0
+})
+endsnippet
+
+snippet exp "Add gomega Expect() function block"
+Expect($1)
+endsnippet
+
+snippet sn "Add gomega ShouldNot() function block"
+ShouldNot($1)
+endsnippet
+
+snippet hav "Add gomega HaveOccured() function block"
+HaveOccured()
+endsnippet
+
+snippet eq "Add gomega Equal() function block"
+Equal($1)
+endsnippet
+
+snippet todo "Add TODO block"
+// TODO(me): $1 $0
+endsnippet
+
+snippet log "Print variable"
+fmt.Printf("\n$1: %s", $1)
+endsnippet
+
+snippet sprintf "Add fmt.Sprintf function block" 
+fmt.Sprintf("$1", $2)
+endsnippet
+
+snippet haveoc "Add gomega HaveOccured block"
+HaveOccured()
+endsnippet
+
+snippet exne "Add Expect(..).ShouldNot(HaveOccurred) gomega block"
+Expect($1).ShouldNot(HaveOccurred())
+endsnippet
+
+snippet exer "Add Expect(..).Should(HaveOccurred) gomega block"
+Expect($1).Should(HaveOccurred())
+endsnippet
+
+#global p!
+#def insert_interface():
+# line = snip.line
+# buf = snip.buf[line+1]
+
+# 
+#
+#endglobal
+#snippet countf "Add counterfeiter block to interface"
+#//go:generate counterfiter . `!p snip.rv = insert_interface()`
+#endsnippet

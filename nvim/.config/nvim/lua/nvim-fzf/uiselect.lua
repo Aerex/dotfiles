@@ -25,7 +25,7 @@ return function(items, opts, on_choice)
   prompt = string.format('"%s> "', prompt)
 
   coroutine.wrap(function ()
-    local choices = fzf(entries, '--no-multi --ansi '
+    local choices = fzf(entries, '--preview-window "hidden:right:0" --no-multi --ansi '
     .. ' --prompt=' .. prompt)
     local selected = choices[1]
 

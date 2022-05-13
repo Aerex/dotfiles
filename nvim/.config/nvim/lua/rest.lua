@@ -5,7 +5,6 @@ M.setup = function()
   if ok then
     custom_dynamic_variables = lcfg.http_rest_config().custom_dynamic_variables
   end
-  print(custom_dynamic_variables)
   require("rest-nvim").setup({
     -- Open request results in a horizontal split
     result_split_horizontal = false,

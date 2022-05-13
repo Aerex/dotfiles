@@ -11,14 +11,18 @@ gl.short_line_list = {
   'dap-repl'
 }
 local icons = {
-    locker = u 'f023',
-    unsaved = u 'f693',
-    dos = u 'e70f',
-    unix = u 'f17c',
-    mac = u 'f179',
-    lsp_warn = u 'f071',
-    lsp_error = u 'f46e'
+  modified = '',
+  readonly = ''
 }
+--local icons = {
+--    locker = u 'f023',
+--    unsaved = u 'f693',
+--    dos = u 'e70f',
+--    unix = u 'f17c',
+--    mac = u 'f179',
+--    lsp_warn = u 'f071',
+--    lsp_error = u 'f46e'
+--}
 
 
 local colors = {
@@ -50,7 +54,12 @@ local remote_ip = function()
 end
 local get_diagnostic_info = function()
   if #vim.lsp.buf_get_clients() > 0 then
-    return require'lsp-status'.status()
+    local status = require'lsp-status'.status()
+    -- NOTE: Do not print status if it contains file issue warning
+    if string.find(status, 'github.com') then
+      return ''
+    end
+    return status
   end
   return ''
 end
@@ -74,11 +83,17 @@ local has_file_type = function()
 end
 
 local get_fcitx_status = function()
-  if vim.fn.executable('fcitx-remote') == 1 then
-    return tonumber(vim.fn.system('fcitx-remote')) > 1 and ' ' or ''
-  else
-    return ''
-  end
+  return  ''
+  -- FIXME(me): Need to check for 'Not get reply' if so print ''
+  --if vim.fn.executable('fcitx-remote') == 1 then
+  --  local status = vim.split(vim.fn.system('fcitx-remote'), '\n')[1]
+  --  if  status ~= 'Not get reply' then
+  --    return ''
+  --  end
+  --  return tonumber(vim.fn.system('fcitx-remote')) > 1 and ' ' or ''
+  --else
+  --  return ''
+  --end
 end
 
 local buffer_not_empty = function()
@@ -106,6 +121,18 @@ local get_file_name = function()
 
   if not #sname then return '' end
   return ' ' .. sname .. ' '
+end
+
+local get_file_state_icon = function()
+  local file_icon = ''
+  if vim.bo.readonly == true then
+    file_icon = icons.readonly
+  end
+  if vim.bo.modifiable and vim.bo.modified then
+    file_icon = icons.modified
+  end
+
+  return file_icon .. ' '
 end
 
 LSPStatus = get_diagnostic_info
@@ -176,13 +203,22 @@ gls.left[3] ={
   },
 }
 gls.left[4] = {
+  FileStateIcon = {
+    provider = get_file_state_icon,
+    condition = buffer_not_empty,
+    highlight = {colors.fg,colors.line_bg,'bold'}
+  }
+}
+
+gls.left[5] = {
   FileName = {
     provider = get_file_name,
     condition = buffer_not_empty,
     highlight = {colors.fg,colors.line_bg,'bold'}
   }
 }
-gls.left[5] = {
+
+gls.left[6] = {
   BlankSpace = {
     provider = function() return ' ' end,
     separator_highlight = {colors.blue,colors.line_bg},
@@ -191,20 +227,23 @@ gls.left[5] = {
 }
 
 
-gls.left[6] = {
+gls.left[7] = {
   GitIcon = {
     provider = function() return '   ' end,
     condition = require('galaxyline.provider_vcs').check_git_workspace,
     highlight = {colors.orange,colors.line_bg},
   }
 }
-gls.left[7] = {
-  GitBranch = {
-    provider = 'GitBranch',
-    condition = require('galaxyline.provider_vcs').check_git_workspace,
-    highlight = {colors.fg,colors.line_bg,'bold'},
-  }
-}
+
+-- TODO(me): This is too slow with big repos or using a worktree with many nested directories
+-- Need to make custom provider to handle this better
+--gls.left[8] = {
+--  GitBranch = {
+--    provider = 'GitBranch',
+--    condition = buffer_not_empty,
+--    highlight = {colors.fg,colors.line_bg,'bold'},
+--  }
+--}
 
 local checkwidth = function()
   local squeeze_width  = vim.fn.winwidth(0) / 2
@@ -214,7 +253,7 @@ local checkwidth = function()
   return false
 end
 
-gls.left[8] = {
+gls.left[9] = {
   BlankSpace = {
     provider = function() return ' ' end,
     condition = checkwidth,
@@ -222,7 +261,7 @@ gls.left[8] = {
     highlight = {colors.fg,colors.line_bg}
   }
 }
-gls.left[9] = {
+gls.left[10] = {
   DiffAdd = {
     provider = 'DiffAdd',
     condition = checkwidth,
@@ -230,7 +269,7 @@ gls.left[9] = {
     highlight = {colors.green,colors.line_bg},
   }
 }
-gls.left[10] = {
+gls.left[11] = {
   DiffModified = {
     provider = 'DiffModified',
     condition = checkwidth,
@@ -238,7 +277,7 @@ gls.left[10] = {
     highlight = {colors.orange,colors.line_bg},
   }
 }
-gls.left[11] = {
+gls.left[12] = {
   DiffRemove = {
     provider = 'DiffRemove',
     condition = checkwidth,
@@ -246,7 +285,7 @@ gls.left[11] = {
     highlight = {colors.red,colors.line_bg},
   }
 }
-gls.left[12] = {
+gls.left[13] = {
   LeftEnd = {
     provider = function() return '' end,
     separator = '',
@@ -255,7 +294,7 @@ gls.left[12] = {
   }
 }
 
-gls.left[13] = {
+gls.left[14] = {
     TrailingWhiteSpace = {
      provider = TrailingWhiteSpace,
      icon = '  ',
@@ -263,7 +302,7 @@ gls.left[13] = {
     }
 }
 
-gls.left[14] = {
+gls.left[15] = {
   LSPStatus = {
     provider = LSPStatus,
     highlight = {colors.yellow,colors.bg},

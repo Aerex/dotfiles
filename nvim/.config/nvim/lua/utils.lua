@@ -62,7 +62,7 @@ M.ultisnips.can_jump_backwards = function()
 end
 
 M.ultisnips.jump_backwards = function()
-  M.send_keys('<C-R>=UltiSnips#JumpBackwards()<CR>', 'n')
+  M.send_keys('<ESC>: call UltiSnips#JumpBackwards()<CR>', 'n')
 end
 
 M.ultisnips.can_jump_forward = function()
@@ -81,6 +81,21 @@ M.ultisnips.can_expand_snippet = function()
    return vim.fn['UltiSnips#CanExpandSnippet']() == 1 and
     vim.fn.complete_info() ~= nil and
     vim.fn.complete_info()["selected"] == -1
+end
+
+M.toggle_max_window = function()
+  local win = vim.api.nvim_win_get_buf(0)
+  local max_win = vim.api.nvim_win_get_var(win, 'c_max_win')
+  if max_win == nil then
+    -- TODO(me): See if there is any api call to max resize windows
+    vim.cmd('resize')
+    vim.cmd('vertical resize')
+    vim.api.nvim_win_set_var(win, 'c_max_win', 1)
+  else
+    -- TODO(me): See if there is any api call to balance windows
+    M.send_keys('<C-w>=', 'n')
+    vim.api.nvim_win_set_var(win, 'c_max_win', nil)
+  end
 end
 
 return M
