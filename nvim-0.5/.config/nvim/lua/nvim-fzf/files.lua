@@ -5,9 +5,11 @@ require('fzf').default_window_options = {
   end
 }
 local action = require('fzf.actions').action
+local utils = require('nvim-fzf.utils')
+local cmd_line_trans = require('fzf.helpers').cmd_line_transformer
 local fzf = require('fzf').fzf
-local FZF_CAHCE_FILES_DIR = vim.fn.stdpath('cache') .. '/fzf_files/'
-local cache_file = FZF_CAHCE_FILES_DIR .. vim.fn.sha256(vim.fn.expand('%:p:h'))
+local FZF_CACHE_FILES_DIR = vim.fn.stdpath('cache') .. '/fzf_files/'
+local cache_file = ''
 
 local preview_files = action(function(lines)
   -- using expand at this point will return the expand file path as `term::<path>:/port/usr/bin`
@@ -20,16 +22,32 @@ local preview_files = action(function(lines)
   return vim.fn.system(cmd)
 end)
 local _ = {}
+local filepath_map = {}
 
  _.find_files = function()
+  local current_dir = vim.fn.expand('%:p:h')
+  cache_file = FZF_CACHE_FILES_DIR .. vim.fn.sha256(current_dir)
   local find_cmd = vim.fn.executable('fd') == 1 and 'fd' or 'find'
-  local find_opts = vim.fn.executable('fd') == 1 and '-t f -L' or "-L -type f -printf %P\\\\n"
+  local find_opts = vim.fn.executable('fd') == 1 and string.format('-t f -L . %s', current_dir) or "-L -type f -printf %P\\\\n"
+  local command = ''
   if vim.fn.filereadable(cache_file) == 0 then
-    if vim.fn.isdirectory(FZF_CAHCE_FILES_DIR) == 0  then
-      vim.fn.mkdir(FZF_CAHCE_FILES_DIR)
+    if vim.fn.isdirectory(FZF_CACHE_FILES_DIR) == 0  then
+      vim.fn.mkdir(FZF_CACHE_FILES_DIR)
     end
+    command = string.format('%s %s | tee ', find_cmd, find_opts) .. cache_file
+  else
+    command = string.format('cat %s', cache_file)
   end
-  local command  = string.format('%s %s | tee ', find_cmd, find_opts) .. cache_file
+  local cmdchoices = cmd_line_trans(command, function(line)
+      local path_parts = vim.split(line, '/')
+      local filename = ''
+      if #path_parts > 0 then
+        filename = path_parts[#path_parts]
+      end
+      filepath_map[filename] = line
+
+      return filename
+  end)
   coroutine.wrap(function ()
     local choices = fzf(command, '--header="ctrl-r=Refresh cache"--multi --ansi --expect=ctrl-v,ctrl-r,ctrl-t,ctrl-s,ctrl-x --preview '
       .. preview_files .. ' --prompt="Files> "', {
@@ -49,7 +67,7 @@ local _ = {}
     end
 
     for i=2, #choices do
-      vim.cmd(string.format('%s %s', vimcmd, choices[i]))
+      vim.cmd(string.format('%s %s', vimcmd, filepath_map[choices[i]]))
     end
   end)()
 end

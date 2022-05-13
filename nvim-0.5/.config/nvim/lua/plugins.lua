@@ -27,14 +27,17 @@ if ok then
     use {'wbthomason/packer.nvim'}
     use{ 'nathom/filetype.nvim' }
     use {'lewis6991/impatient.nvim' }
-    use {'folke/which-key.nvim', config = function() require'which-key' end }
+    use {'folke/which-key.nvim'}
+    use {'famiu/nvim-reload'}
 
     -- lsp
-    use {'neovim/nvim-lspconfig', requires = {'jose-elias-alvarez/null-ls.nvim', 'jose-elias-alvarez/nvim-lsp-ts-utils'},
+    use {'neovim/nvim-lspconfig', requires = {'jose-elias-alvarez/nvim-lsp-ts-utils'},
       config = function() require('nvim-lsp') end }
+    use { 'mfussenegger/nvim-jdtls' }
     use { 'onsails/lspkind-nvim' }
     use { 'nvim-lua/lsp-status.nvim' }
     use { 'ray-x/lsp_signature.nvim' }
+    use { 'rmagatti/goto-preview'}
     use { 'weilbith/nvim-code-action-menu', cmd = 'CodeActionMenu',
       config = function() vim.g.code_action_menu_show_details = false end }
 
@@ -54,11 +57,22 @@ if ok then
     use {'vifm/vifm.vim' }
 
     -- git
-    use { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush', 'GBrowse', 'Gdiffsplit'} }
+    use { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush', 'GBrowse', 'Gdiffsplit'}, requires = {'tpope/vim-rhubarb' }}
     use { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}, event = {'BufRead'}, config = function() require('nvim-git').setup_signs() end }
-    use { 'TimUntersberger/neogit', cmd = {'Neogit'}, config = function() require('nvim-git').setup_neogit() end,
+    use { 'ldelossa/gh.nvim', requires = {'ldelossa/litee.nvim'},
+      config = function() require'litee.lib'.setup(); require'litee.gh'.setup() end }
+    use {  'TimUntersberger/neogit', cmd = {'Neogit'}, config = function() require('nvim-git').setup_neogit() end,
       requires = { 'nvim-lua/plenary.nvim','sindrets/diffview.nvim' }}
-    use { 'pwntester/octo.nvim', cmd = { 'Octo' }, requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}, {'Aerex/telescope.nvim'  } } }
+    use { 'pwntester/octo.nvim', cmd = { 'Octo' }, requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'},
+    {'nvim-telescope/telescope.nvim', config = function()
+      require'telescope'.setup({
+        pickers  = {
+          octo = {
+            theme = 'ivy'
+          }
+        }
+      }) end, }},
+    config = function() require('nvim-git').setup_octo() end}
 
       -- yank/undo
       use {
@@ -71,10 +85,11 @@ if ok then
       use {'folke/todo-comments.nvim', event = "BufRead", requires = 'nvim-lua/plenary.nvim', config = function() require('todo').setup() end }
 
     -- formatting
-    use {
-      'sbdchd/neoformat',
-      { 'godlygeek/tabular', cmd = { 'Tabularize' } },
-      { 'lukas-reineke/indent-blankline.nvim', config = function() require('indentlines') end },
+    use {'sbdchd/neoformat'}
+    use { 'godlygeek/tabular', cmd = { 'Tabularize' } }
+    use { 'lukas-reineke/indent-blankline.nvim',
+      config = function() require('indent_blankline').setup{
+        char='|', buftype_exclude = {'terminal'}, filetype_exclude = {'ledger', 'help'}} end
     }
     -- colors
     use {
@@ -101,9 +116,10 @@ if ok then
     }
 
     -- statusline
-    use {'glepnir/galaxyline.nvim', requires = {'kyazdani42/nvim-web-devicons', opt = true},
+    use {'glepnir/galaxyline.nvim', requires = {'kyazdani42/nvim-web-devicons'},
       config = function() require('statusline') end
     }
+    use { 'alvarosevilla95/luatab.nvim', requires= 'kyazdani42/nvim-web-devicons', config = function() require'luatab'.setup{} end }
     use {'tpope/vim-dispatch', cmd = {'Dispatch'}}
 
    -- completions / snippets
@@ -115,6 +131,7 @@ if ok then
           'hrsh7th/cmp-nvim-lua',
           'hrsh7th/cmp-nvim-lsp',
           'hrsh7th/cmp-cmdline',
+          'dmitmel/cmp-cmdline-history',
           'uga-rosa/cmp-dictionary',
           'lukas-reineke/cmp-rg',
           'hrsh7th/cmp-look', -- dictionary source
@@ -129,7 +146,7 @@ if ok then
           require('completion')
         end,
       })
-      -- profiling
+    -- profiling
     use { 'tweekmonster/startuptime.vim' }
 
     -- marks
@@ -137,25 +154,29 @@ if ok then
     -- terminal
     use {
       'akinsho/nvim-toggleterm.lua',
-     config = function() require'toggleterm'.setup{ open_mapping = [[<C-t>]], shading_factor = 1 } end
+     config = function() require'toggleterm'.setup{ open_mapping = [[<C-t>]], shading_factor = 1, direction = 'float' } end
     }
     use {'AndrewRadev/bufferize.vim', cmd = {'Bufferize'}}
     use {'kevinhwang91/nvim-bqf', ft = 'qf'}
     use { 'NTBBloodbath/rest.nvim',  ft = {'http'}, requires = { 'nvim-lua/plenary.nvim', config = function() require'rest' end }}
     use {'vimwiki/vimwiki', ft = {'vimwiki', 'markdown'},
       setup = function()
-        vim.g.vimwiki_key_mappings = { headers = 0,html = 0, global = 0 }
+        vim.g.vimwiki_key_mappings = { headers = 0,html = 0, global = 0, links = 0 }
       end }
     use {'dhruvasagar/vim-table-mode', cmd = {'TableModeToggle', 'TableModeEnable', 'TableModeDisable', 'Tabelize', 'TableModeRealign',
       config = 'vim.table_mode_auto_align = 1'}}
     use {
       'voldikss/vim-translator', cmd = {'Translate', 'TranslateR', 'TranslateW', 'TranslateL'}, ft = {"trans"}
     }
+    use { 'rcarriga/nvim-notify', config = function() require'notify'.setup{
+      background_colour="#646A76", timeout=1500, render = 'minimal'
+    } end }
     use { 'ledger/vim-ledger', ft = {'ledger'}, config = function() require'ledger' end }
     use {'iamcco/markdown-preview.nvim', run = 'cd app && npm install',
       cmd = {'MarkdownPreview', 'MarkdownPreviewStop'} , ft = {'markdown'},
       config = function() vim.g.mkdp_filetypes = { 'markdown', 'vimwiki' } end
     }
+
   end
   )
 end

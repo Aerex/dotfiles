@@ -1,32 +1,5 @@
 local M = {}
 local utils = require('utils')
---local wk = require('which-key')
---local dap = require('dap')
---local dapui = require('dapui')
---
---wk.register({
---  d = {
---    name = 'Debugger',
---    b =  {
---      name = 'Breakpoints',
---      p = { function() dap.toggle_breakpoint() end, 'Toggle Breakpoint' },
---    },
---    s = {
---      name = 'Step',
---      o = { function() dap.step_over() end, 'Step Over' },
---      O = { function() dap.step_out() end, 'Step Out' },
---      i = { function() dap.step_into() end, 'Step In' },
---    },
---    x = {
---      name = 'Connection',
---      r = { function() dap.disconnect({restart = true}) end, 'Restart' }
---      e = { function() dap.disconnect({terminateDebuggee = true}) end, 'Terminate and Disconnect' }
---    }
---    c = { function() dap.continue() end, 'Continue' }
---  {
---    prefix = '<Leader>'
---  }
---})
 local default_key_maps = {}
 function debugger_keymaps()
   local ref_map = { 'K', '<ctrl-j>' }
@@ -176,6 +149,7 @@ dapui.setup({
     remove = 'd',
     edit = 'e',
     repl = 'r',
+    toggle = 't',
   },
   sidebar = {
     -- You can change the order of elements in the sidebar
@@ -206,32 +180,35 @@ dap.listeners.before.event_exited['dapui_config'] = function()  dapui.close()end
 
 dap.set_log_level('TRACE')
 
-vim.cmd('au FileType dap-repl lua require(\'dap.ext.autocompl\').attach()')
 
-M.toggle_dap_ele = function(ele, type)
-  local widgets = require('dap.ui.widgets')
-  local eles = {
-    frames =  widgets.frames,
-    scopes = widgets.scopes
-  }
-  if ele then
-    if type == "float" then
-      local wind = widgets.centered_float(eles[ele])
-    end
-  end
+vim.cmd("au FileType dap-repl lua require('dap.ext.autocompl').attach()")
+
+local ok_dap_vt, nvim_dap_vt =  pcall(require, 'nvim-dap-virtual-text')
+if ok_dap_vt then
+  nvim_dap_vt.setup {
+    enabled = true,
+    enabled_commands = true,
+    highlight_changed_variables = true,
+    highlight_new_as_changed = false,
+    show_stop_reason = true,
+    commented = false,
+    -- experimental features:
+    virt_text_pos = 'eol',              -- position of virtual text, see `:h nvim_buf_set_extmark()`
+    all_frames = false,                 -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
+    virt_lines = false,                 -- show virtual lines instead of virtual text (will flicker!) virt_text_win_col = nil             -- position the virtual text at a fixed window column (starting from the first text column) ,
+                                        -- e.g. 80 to position at column 80, see `:h nvim_buf_set_extmark()`
+}
 end
 
-M.start_or_continue  = function()
-  local dap = require'dap'
-  if not vim.g.loaded_vscode_dap then
-    vim.g.loaded_vscode_dap = 1
-    local workspace = None
+M.start_or_continue = function()
+  if not g.loaded_vs_launchjson then
+    g.loaded_vs_launchjson = 1
+    local launchjson_path
     if #vim.lsp.buf.list_workspace_folders() > 0 then
-      workspace = vim.lsp.buf.list_workspace_folders()[1] .. '/.vscode/launch.json'
+      launchjson_path = vim.lsp.buf.list_workspace_folders()[1] .. '/.vscode/launch.json'
+      require'dap.ext.vscode'.load_launchjs(launchjson_path)
     end
-    require('dap.ext.vscode').load_launchjs(workspace)
   end
-
   dap.continue()
 end
 
@@ -244,5 +221,14 @@ M.hover_var = function()
   end
 end
 
+
+M.toggle_breakpoints_qf = function()
+  -- Add breakpoints to quickfix window
+  require'dap'.list_breakpoints()
+  -- Load trouble
+  require'packer'.loader('trouble.nvim')
+  -- open trouble quickfix
+  require'trouble'.open({ provider = 'quickfix'})
+end
 
 return M
