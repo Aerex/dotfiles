@@ -98,7 +98,8 @@ if ok then
       { name = 'ultisnips'},
       { name = 'nvim_lsp'},
       --{ name = 'rg'},
-      { name = 'path'}
+      { name = 'path'},
+      { name = 'dictionary', keyword_length = 2},
     },
   }
 
