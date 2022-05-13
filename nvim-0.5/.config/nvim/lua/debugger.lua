@@ -1,3 +1,5 @@
+local M = {}
+local utils = require('utils')
 --local wk = require('which-key')
 --local dap = require('dap')
 --local dapui = require('dapui')
@@ -25,6 +27,31 @@
 --    prefix = '<Leader>'
 --  }
 --})
+local default_key_maps = {}
+function debugger_keymaps()
+  local ref_map = { 'K', '<ctrl-j>' }
+  local api = vim.api
+  for _, buf in pairs(api.nvim_list_bufs()) do
+      local keymaps = api.nvim_buf_get_keymap(buf, 'n')
+      for _, keymap in pairs(keymaps) do
+        -- save default keymap to restore after session is over
+        if utils.list_contains(ref_map, keymap.lhs) then
+          table.insert(default_key_maps, keymap)
+          api.nvim_buf_del_keymap(buf, 'n', keymap.lhs)
+        end
+      end
+      local ok, wk = pcall(require, 'which-key')
+      if ok then
+        options = { silent = true, buffer = buf }
+        wk.register({
+          K = {'<cmd>lua require("dap.ui.widgets").hover()<cr>', 'Step Into', options },
+          ['<ctrl-j>'] = { '<cmd>lua require("dap").step_over()<cr>', 'Step Over', options },
+          ['<ctrl-k>'] = { '<cmd>lua require("dap").step_into()<cr>', 'Step Into', options },
+        })
+      end
+    end
+end
+
 local dap = require('dap')
 local dapui = require('dapui')
 dap.adapters.go = function(callback, _)
@@ -67,9 +94,21 @@ dap.configurations.go = {
     name = "Debug",
     request = "launch",
     program = "./${relativeFileDirname}",
-    args = {"account"},
-    stopOnEntry = true,
+    args= { "card", "list", "-q", "deck:Vocabulary vaci" },
     mode = "debug"
+  },
+  {
+    type = "go",
+    name = "Debug with args",
+    request = "launch",
+    program = "${file}",
+    mode = "debug",
+    args = function()
+      resp = vim.fn.input("Enter args separated by space: ")
+      args = vim.fn.split(resp, " ")
+      print(vim.inspect(args))
+      return args
+    end
   },
   {
     type = "go",
@@ -85,6 +124,16 @@ dap.configurations.go = {
     request = "launch",
     mode = "test",
     program = "./${relativeFileDirname}"
+  }, {
+      type= "go",
+      name= "anki-cli card list",
+      request= "launch",
+      program = function()
+        local w = vim.lsp.buf.list_workspace_folders()[1]
+        return w .. "/cmd/anki/main.go"
+      end,
+      args= { "card", "list", "-q", "too already" },
+      mode= "debug"
   }
 }
 dap.repl.commands =
@@ -134,19 +183,14 @@ dapui.setup({
       -- Provide as ID strings or tables with 'id' and 'size' keys
       {
         id = 'scopes',
-        size = 0.25, -- Can be float or integer > 1
+        size = 35, -- Can be float or integer > 1
       },
       { id = 'breakpoints', size = 0.25 },
       { id = 'stacks', size = 0.25 },
-      { id = 'watches', size = 00.25 },
+      { id = 'watches', size = 0.25 },
     },
-    size = 40,
+    size = 55,
     position = 'left', -- Can be 'left' or 'right'
-  },
-  tray = {
-    elements = { 'repl' },
-    size = 10,
-    position = 'bottom', -- Can be 'bottom' or 'top'
   },
   floating = {
     max_height = nil, -- These can be integers or a float between 0 and 1.
@@ -156,20 +200,10 @@ dapui.setup({
 })
 
 -- Toggle dap ui when debugger starts and exits
-dap.listeners.after.event_initialized['dapui_config'] = function()
-  vim.o.signcolumn = "auto:2"
-  dapui.open()
-end
-dap.listeners.before.event_terminated['dapui_config'] = function()
-  vim.o.signcolumn = "auto"
-  dapui.close()
-end
-dap.listeners.before.event_exited['dapui_config'] = function()
-  vim.o.signcolum = "auto"
-  dapui.close()
-end
+dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
+dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end
+dap.listeners.before.event_exited['dapui_config'] = function()  dapui.close()end
 
-require('dap.ext.vscode').load_launchjs()
 dap.set_log_level('TRACE')
 
 vim.cmd('au FileType dap-repl lua require(\'dap.ext.autocompl\').attach()')
@@ -200,4 +234,15 @@ M.start_or_continue  = function()
 
   dap.continue()
 end
+
+M.hover_var = function()
+  local dap = require'dap'
+  local status = dap.status()
+  if status then
+    local w = require'dap.ui.widgets'
+    w.hover()
+  end
 end
+
+
+return M
