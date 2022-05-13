@@ -15,6 +15,7 @@ if ok then
     completion = {
       completeopt = 'menu,menuone,noinsert'
     },
+    preselect = cmp.PreselectMode,
     snippet = {
       expand = function(args)
         vim.fn["UltiSnips#Anon"](args.body)
@@ -84,15 +85,16 @@ if ok then
       end,
     },
     sources = {
-      { name = 'nvim_lsp', priority = 5 },
-      { name = 'ultisnips', priority = 3 },
-      { name = 'rg', priority = 2 },
+      { name = 'ultisnips'},
+      { name = 'nvim_lsp'},
+      { name = 'rg'},
       { name = 'dictionary', keyword_length = 2},
     },
   }
 
   -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline('/', {
+    completion = { autocomplete = false },
     sources = {
       { name = 'buffer' }
     }
@@ -100,6 +102,7 @@ if ok then
 
   -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline(':', {
+   completion = { autocomplete = false },
     sources = cmp.config.sources({
       { name = 'path' }
     }, {
