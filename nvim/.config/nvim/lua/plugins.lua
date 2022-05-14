@@ -57,7 +57,7 @@ if ok then
     use {'vifm/vifm.vim' }
 
     -- git
-    use { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush', 'GBrowse', 'Gdiffsplit'}, requires = {'tpope/vim-rhubarb' }}
+    use { 'tpope/vim-fugitive', cmd = {'Gwrite', 'Git', 'Gpush', 'GBrowse', 'Gdiffsplit'}, requires = {'tpope/vim-rhubarb' }}
     use { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}, event = {'BufRead'}, config = function() require('nvim-git').setup_signs() end }
     use { 'ldelossa/gh.nvim', requires = {'ldelossa/litee.nvim'},
       config = function() require'litee.lib'.setup(); require'litee.gh'.setup() end }

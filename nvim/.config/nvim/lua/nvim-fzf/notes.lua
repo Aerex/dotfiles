@@ -13,7 +13,7 @@ local has_bat = vim.fn.executable("bat")
 local preview_action = action(function (lines, fzf_lines)
   fzf_lines = tonumber(fzf_lines)
   local line = lines[1]
-  local parsed = utils.parse_line(line)
+  local parsed = utils.parse_vimgrep_line(line)
   if has_bat then
     return utils.bat_preview(parsed, fzf_lines)
   else

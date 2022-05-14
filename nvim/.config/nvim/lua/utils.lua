@@ -92,4 +92,19 @@ M.list_contains = function(list, ele)
   return false
 end
 
+M.toggle_max_window = function()
+  local win = vim.api.nvim_win_get_buf(0)
+  local max_win = vim.api.nvim_win_get_var(win, 'c_max_win')
+  if max_win == nil then
+    -- TODO(me): See if there is any api call to max resize windows
+    vim.cmd('resize')
+    vim.cmd('vertical resize')
+    vim.api.nvim_win_set_var(win, 'c_max_win', 1)
+  else
+    -- TODO(me): See if there is any api call to balance windows
+    M.send_keys('<C-w>=', 'n')
+    vim.api.nvim_win_set_var(win, 'c_max_win', nil)
+  end
+end
+
 return M

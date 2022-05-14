@@ -10,12 +10,28 @@ if ok then
   vim.g.UltiSnipsSnippetsDir = os.getenv('HOME') ..'/.config/nvim/UltiSnips/'
   vim.g.UltiSnipsEditSplit = 'vertical'
   vim.g.UltiSnipsSnippetDirectories = {  get_packer_path().start ..'/vim-snippets/UltiSnips', os.getenv('HOME') .. '/.config/nvim/UltiSnips' }
+  local default_mapping = {
+    ['<Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+      else
+        fallback()
+      end
+    end,
+    ['<S-Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+      else
+        fallback()
+      end
+    end,
+  }
 
   cmp.setup {
     completion = {
       completeopt = 'menu,menuone,noinsert'
     },
-    preselect = cmp.PreselectMode,
+    preselect = cmp.PreselectMode.None,
     snippet = {
       expand = function(args)
         vim.fn["UltiSnips#Anon"](args.body)
@@ -23,47 +39,35 @@ if ok then
     },
     mapping = {
       ['<C-n>'] = cmp.mapping(function()
-        cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
         end, { 'i', 's', }),
       ['<C-p>'] = cmp.mapping(function()
-        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
         end, { 'i', 's', }),
       ['<C-b'] = cmp.mapping.scroll_docs(4),
       ['<C-f'] = cmp.mapping.scroll_docs(-4),
       ['<C-u'] = cmp.mapping.scroll_docs(4),
       ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-      ['<CR>'] = cmp.mapping.confirm {
-        select = false -- Only confirm explicitly selected items
-      },
+      ['<CR>'] = cmp.mapping.confirm({
+        behavior = cmp.ConfirmBehavior.Insert,
+        select = true -- Only confirm explicitly selected items
+      }),
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.get_selected_entry() == nil and ultisnips.can_expand_snippet() then
           ultisnips.expand_snippet()
         elseif ultisnips.can_jump_forward() then
           ultisnips.jump_forward()
         elseif cmp.visible() then
-          cmp.select_next_item()
+          cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
         else
           fallback()
         end
       end, {'i','s',}),
-      ['<C-Space>'] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          if ultisnips.can_expand_snippet() then
-            print('expanding snippet on c-space')
-            return ultisnips.expand_snippet()
-          end
-          cmp.select_next_item()
-        elseif has_any_words_before() then
-          send_keys('<Space>', 'n')
-        else
-          fallback()
-        end
-      end, { 'i', 's' }),
       ['<S-Tab>'] = cmp.mapping(function(fallback)
-        if ultisnips.can_jump_forward() then
+        if cmp.visible() then
+          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+        elseif ultisnips.jump_backwards() then
           ultisnips.jump_backwards()
-        elseif cmp.visible() then
-          cmp.select_prev_item()
         else
           fallback()
         end
@@ -84,7 +88,7 @@ if ok then
           buffer = '[BUF]',
           spell = '[SPELL]',
           dictionary = '[DICT]',
-          rg = '[RG]'
+          --rg = '[RG]'
         })[entry.source.name]
 
         return vim_item
@@ -93,22 +97,36 @@ if ok then
     sources = {
       { name = 'ultisnips'},
       { name = 'nvim_lsp'},
-      { name = 'rg'},
+      --{ name = 'rg'},
+      { name = 'path'},
       { name = 'dictionary', keyword_length = 2},
     },
   }
 
+  -- use dictionary and snips in document files
+  for _, doc_ft in pairs({'markdown', 'vimwiki'}) do
+    cmp.setup.filetype(doc_ft, {
+      sources = {
+        { name = 'spell'},
+        { name = 'dictionary',  keyword_length = 4},
+        { name = 'ultisnips'}
+      }
+    })
+  end
+
   -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline('/', {
-    completion = { autocomplete = false },
+    completion = { autocomplete = false},
+    mapping = default_mapping,
     sources = {
-      { name = 'buffer' }
+      { name = 'buffer', option = { keyword_pattern = [=[[^[:blank:]].*]=] } }
     }
   })
 
   -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline(':', {
-   completion = { autocomplete = false },
+    completion = { autocomplete = false },
+    mapping = default_mapping,
     sources = cmp.config.sources({
       { name = 'path' }
     }, {

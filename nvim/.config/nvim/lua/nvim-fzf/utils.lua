@@ -71,4 +71,15 @@ M.head_tail_preview = function(parsed, fzf_lines, mem_path)
   return output
 end
 
+M.find_index_of = function(tbl, value)
+  for k,v in pairs(tbl) do
+    if v == value then
+      print('\nv -> ' .. v)
+      print('\nk -> ' .. k)
+      return k
+    end
+    return -1
+  end
+end
+
 return M

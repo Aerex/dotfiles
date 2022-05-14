@@ -1,0 +1,35 @@
+global !p
+def insert_hidden_ref_anchor(ref):
+	# insert [ref]: url 
+	line = snip.line
+	col = snip.column
+	vim.command('normal G')
+	snip.expand_anon('\n' + '[' + ref + ']: ')
+	snip.expand_anon('`xsel --clipboard --output`')
+	snip.cursor.set(line, col)
+endglobal
+
+post_jump "if snip.tabstop == 0: insert_hidden_ref_anchor(snip.tabstops[2].current_text)"
+snippet refl "Add reference style link"
+[$1][$2] 
+endsnippet
+
+snippet meta "Add metablock"
+--- 
+title: $1
+description: $2
+tags: $3
+---
+endsnippet
+
+global !p
+def insert_method_call(name):
+	vim.command('normal G')
+	snip.expand_anon(name + '($1)\n')
+endglobal
+
+post_jump "if snip.tabstop == 0: insert_method_call(snip.tabstops[1].current_text)"
+snippet d "method declaration" b
+def $1():
+	$2
+endsnippet

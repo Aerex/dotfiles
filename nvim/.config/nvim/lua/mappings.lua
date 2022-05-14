@@ -42,14 +42,16 @@ local noremaps = {
       -- snippets
       ['<leader>ue']                                                 = 'UltiSnipsEdit',
       -- git
-      ['<leader>gs']                                                 = 'Git',
-      ['<leader>gd']                                                 = 'Gdiff',
+      ['<leader>gS']                                                 = 'Git',
+      ['<leader>gl']                                                 = 'Git log',
+      ['<leader>gd']                                                 = 'Gdiffsplit!',
       ['<leader>gb']                                                 = 'Git blame',
       ['<leader>gw']                                                 = 'Gwrite',
       ['<leader>gp']                                                 = 'Git push',
+      ['<leader>gc']                                                 = 'Neogit commit',
       ['<leader>gz']                                                 = 'lua require\'terminals\'.lazygit_toggle()',
       -- neogit variant
-      ['<leader>gS']                                                 = 'Neogit kind=split_above',
+      ['<leader>gs']                                                 = 'Neogit kind=split_above',
       -- TODO: create map for git push --set-upstream current branch
       -- test
       ['<leader>tf']                                                 = 'Ultest',
@@ -57,6 +59,7 @@ local noremaps = {
       ['<leader>ts']                                                 = 'UltestSummary!',
       ['<leader>tc']                                                 = 'UltestClear',
       ['<leader>to']                                                 = 'UltestOutput',
+      ['<leader>tO']                                                 = 'call ultest#output#jumpto()',
       -- debugger
       ['<leader>dd']                                                 = 'lua require\'debugger\'.start_or_continue()',
       ['<leader>dD']                                                 = 'lua require\'dap.ext.vscode\'.load_launchjs(vim.lsp.buf.list_workspace_folders()[1] .. \'/.vscode/launch.json\')',
@@ -76,7 +79,7 @@ local noremaps = {
       ['<leader>tdn']  = 'UltestDebug:Nearest',
       ['<leader>du']  = 'lua require\'dapui\'.toggle()',
       -- TODO: Need to make a method to only call method if running debugger (might set a global variable on debug session)
-      ['<leader>drp']  = 'lua require\'dap\'.repl.toggle()',
+      ['<leader>drp']  = 'lua require\'dap\'.repl.toggle()<CR><C-w>l',
       ['<leader>drP']  = 'lua require\'dapui\'.float_element(\'repl\', { width = 75, enter = true })',
       ['<leader>de']    = 'lua require\'dap\'.disconnect({terminateDebuggee = true })',
       ['<leader>dcb']   = 'lua require\'dap\'.set_breakpoint(vim.fn.input(\'Breakpoint condition: \'))',
@@ -85,6 +88,8 @@ local noremaps = {
       ['<leader>d,l'] = 'lua require\'dap\'.set_log_level("TRACE")',
         -- fcitx
       ['<M-Tab>'] = 'lua require\'fcitx5\'.toggle()',
+      ['<leader>d;'] = 'lua require\'debugger\'.toggle_breakpoints_qf()',
+      ['<leader>d,l'] = 'lua require\'dap\'.set_log_level("TRACE")'
     },
     v = {
       ['<leader>yg']  = 'GBrowse!',
@@ -134,16 +139,20 @@ vim.api.nvim_set_keymap('', '<F2>', ":echo map(synstack(line('.'), col('.')), 's
 
 -- @param {table} m
 -- @param {table|nil} opts
-M.set_keymap = function(m, opts)
+M.set_keymap = function(m, opts, callback)
   -- Credits to https://github.com/bsuth/dots/blob/c6fc019b417d2a32e31f4099228ffa6d89944e81/nvim/lua/mappings.lua
   opts = opts or { silent = true }
   for mode, modebindings in pairs(m) do
     for lhs, rhs in pairs(modebindings) do
       -- Append <cmd> and <cr> to better for vim command (exclude <Plug> commands)
-      if not string.find(rhs, 'v:lua') and not string.find(rhs, '<Plug>') then
-        rhs = '<cmd>' .. rhs .. '<cr>'
+      if type(rhs) == 'function' then
+        vim.keymap.set(mode, lhs, rhs, opts)
+      elseif type(rhs) == 'string' then
+        if not string.find(rhs, 'v:lua') and not string.find(rhs, '<Plug>') then
+          rhs = '<cmd>' .. rhs .. '<cr>'
+        end
+        vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
       end
-      vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
     end
   end
 end
@@ -163,7 +172,13 @@ M.set_keymap(noremaps, { silent = true, noremap = true })
 M.set_keymap(maps)
 M.set_filetype_keymap(file_type_keymaps)
 
-require('which_key')
+--TODO(me): Add which-key maps according to what buffer is open
+-- ex. octo maps when current buffer starts with octo://
+--local  ok_w, _ = pcall(require, 'which-key')
+--if ok_w thena
+--  require'which_key'.setup()
+--  vim.api.nvim_exec('autocmd BufEnter octo://* lua require\'which_key\'.load_octo()')
+--end
 
 
 return M
