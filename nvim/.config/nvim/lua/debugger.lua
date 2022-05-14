@@ -1,49 +1,9 @@
 local M = {}
+local g = vim.g
 local utils = require('utils')
---local wk = require('which-key')
---local dap = require('dap')
---local dapui = require('dapui')
---
---wk.register({
---  d = {
---    name = 'Debugger',
---    b =  {
---      name = 'Breakpoints',
---      p = { function() dap.toggle_breakpoint() end, 'Toggle Breakpoint' },
---    },
---    s = {
---      name = 'Step',
---      o = { function() dap.step_over() end, 'Step Over' },
---      O = { function() dap.step_out() end, 'Step Out' },
---      i = { function() dap.step_into() end, 'Step In' },
---    },
---    x = {
---      name = 'Connection',
---      r = { function() dap.disconnect({restart = true}) end, 'Restart' }
---      e = { function() dap.disconnect({terminateDebuggee = true}) end, 'Terminate and Disconnect' }
---    }
---    c = { function() dap.continue() end, 'Continue' }
---  {
---    prefix = '<Leader>'
---  }
---})
 local default_key_maps = {}
-
-M.restore_keymaps = function()
-  for _, keymap in pairs(default_key_maps) do
-    api.nvim_buf_set_keymap(
-      keymap.buffer,
-      keymap.mode,
-      keymap.lhs,
-      keymap.rhs,
-      { silent = keymap.silent == 1 }
-    )
-  end
-  keymap_restore = {}
-end
-
-M.debugger_keymaps = function()
-  local ref_map = { 'K', '<A-j>','<A-k>', '<A-l>' }
+function debugger_keymaps()
+  local ref_map = { 'K', '<ctrl-j>' }
   local api = vim.api
   for _, buf in pairs(api.nvim_list_bufs()) do
       local keymaps = api.nvim_buf_get_keymap(buf, 'n')
@@ -56,14 +16,11 @@ M.debugger_keymaps = function()
       end
       local ok, wk = pcall(require, 'which-key')
       if ok then
-        options = { silent = true, buffer = buf }
+        local options = { silent = true, buffer = buf }
         wk.register({
-          K = {'<cmd>lua require("dap.ui.widgets").hover()<cr>', 'Hover', options },
-          ['<A-j>'] = { '<cmd>lua require("dap").step_over()<cr>', 'Step Over', options },
-          ['<A-k>'] = { '<cmd>lua require("dap").step_into()<cr>', 'Step Into', options },
-          ['<A-l>'] = { '<cmd>lua require("dap").step_out()<cr>', 'Step Out', options },
-          ['<leader>dr'] = {'<cmd>lua require"dap".repl.toggle({height = 7})<CR><C-w>l', 'REPL', options },
-          ['<A-h>'] = { '<cmd>lua require("dap").continue()<cr>', 'Continue', options },
+          K = {'<cmd>lua require("dap.ui.widgets").hover()<cr>', 'Step Into', options },
+          ['<ctrl-j>'] = { '<cmd>lua require("dap").step_over()<cr>', 'Step Over', options },
+          ['<ctrl-k>'] = { '<cmd>lua require("dap").step_into()<cr>', 'Step Into', options },
         })
       end
     end
@@ -193,6 +150,7 @@ dapui.setup({
     remove = 'd',
     edit = 'e',
     repl = 'r',
+    toggle = 't',
   },
   sidebar = {
     -- You can change the order of elements in the sidebar
@@ -200,7 +158,7 @@ dapui.setup({
       -- Provide as ID strings or tables with 'id' and 'size' keys
       {
         id = 'scopes',
-        size = 25, -- Can be float or integer > 1
+        size = 35, -- Can be float or integer > 1
       },
       { id = 'breakpoints', size = 0.25 },
       { id = 'stacks', size = 0.25 },
@@ -221,48 +179,41 @@ dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() 
 dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end
 dap.listeners.before.event_exited['dapui_config'] = function()  dapui.close()end
 
-dap.listeners.after.event_terminated['me'] = M.restore_keymaps
-dap.listeners.after.event_initialized['me'] = M.debugger_keymaps
-
 dap.set_log_level('TRACE')
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'dap-repl',
-  callback = function()
-    require('dap.ext.autocompl').attach()
-  end
-})
 
+vim.cmd("au FileType dap-repl lua require('dap.ext.autocompl').attach()")
 
-M.toggle_dap_ele = function(ele, type)
-  local widgets = require('dap.ui.widgets')
-  local eles = {
-    frames =  widgets.frames,
-    scopes = widgets.scopes
-  }
-  if ele then
-    if type == "float" then
-      local wind = widgets.centered_float(eles[ele])
-    end
-  end
+local ok_dap_vt, nvim_dap_vt =  pcall(require, 'nvim-dap-virtual-text')
+if ok_dap_vt then
+  nvim_dap_vt.setup {
+    enabled = true,
+    enabled_commands = true,
+    highlight_changed_variables = true,
+    highlight_new_as_changed = false,
+    show_stop_reason = true,
+    commented = false,
+    -- experimental features:
+    virt_text_pos = 'eol',              -- position of virtual text, see `:h nvim_buf_set_extmark()`
+    all_frames = false,                 -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
+    virt_lines = false,                 -- show virtual lines instead of virtual text (will flicker!) virt_text_win_col = nil             -- position the virtual text at a fixed window column (starting from the first text column) ,
+                                        -- e.g. 80 to position at column 80, see `:h nvim_buf_set_extmark()`
+}
 end
 
-M.start_or_continue  = function()
-  local dap = require'dap'
-  if not vim.g.loaded_vscode_dap then
-    vim.g.loaded_vscode_dap = 1
-    local workspace = None
+M.start_or_continue = function()
+  if not g.loaded_vs_launchjson then
+    g.loaded_vs_launchjson = 1
+    local launchjson_path
     if #vim.lsp.buf.list_workspace_folders() > 0 then
-      workspace = vim.lsp.buf.list_workspace_folders()[1] .. '/.vscode/launch.json'
+      launchjson_path = vim.lsp.buf.list_workspace_folders()[1] .. '/.vscode/launch.json'
+      require'dap.ext.vscode'.load_launchjs(launchjson_path)
     end
-    require('dap.ext.vscode').load_launchjs(workspace)
   end
-
   dap.continue()
 end
 
 M.hover_var = function()
-  local dap = require'dap'
   local status = dap.status()
   if status then
     local w = require'dap.ui.widgets'
@@ -270,5 +221,14 @@ M.hover_var = function()
   end
 end
 
+
+M.toggle_breakpoints_qf = function()
+  -- Add breakpoints to quickfix window
+  require'dap'.list_breakpoints()
+  -- Load trouble
+  require'packer'.loader('trouble.nvim')
+  -- open trouble quickfix
+  require'trouble'.open({ provider = 'quickfix'})
+end
 
 return M

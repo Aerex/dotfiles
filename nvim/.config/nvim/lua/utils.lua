@@ -74,13 +74,22 @@ M.ultisnips.jump_forward = function()
 end
 
 M.ultisnips.expand_snippet = function()
-    M.send_keys('<C-R>=UltiSnips#ExpandSnippet()<CR>', 'n')
+    M.send_keys('<C-r>=[UltiSnips#CursorMoved(), UltiSnips#ExpandSnippet()][1]<cr>', 'n')
 end
 
 M.ultisnips.can_expand_snippet = function()
    return vim.fn['UltiSnips#CanExpandSnippet']() == 1 and
     vim.fn.complete_info() ~= nil and
     vim.fn.complete_info()["selected"] == -1
+end
+
+M.list_contains = function(list, ele)
+  for _, value in ipairs(list) do
+    if value == ele then
+      return true
+    end
+  end
+  return false
 end
 
 return M

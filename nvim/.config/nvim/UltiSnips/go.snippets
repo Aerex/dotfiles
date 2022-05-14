@@ -23,9 +23,27 @@ It("$1", func() {
 endsnippet
 
 snippet todo "Add TODO block"
-// TODO(me): $1 $0
+// TODO: $1 $0
+endsnippet
+
 snippet logn "fmt.Println"
 fmt.Println("#`!v line(".")`")
 fmt.Println($1)
 $0
+endsnippet
+
+snippet logs "Print struct"
+fmt.Printf("\n$1 -> %#v", $1)
+endsnippet
+
+snippet fixme "Add FIXME block"
+// FIXME: $1 $0
+endsnippet
+
+snippet note "Add note block"
+// NOTE: $1
+endsnippet
+
+snippet log "Log variable"
+fmt.Printf("\n$1: %v\n", $1)
 endsnippet

@@ -49,8 +49,8 @@ M.setup_signs = function()
     update_debounce = 100,
     status_formatter = nil, -- Use default
     word_diff = false,
-    diff_opts = {
-      internal = true
+    diff_opts =  {
+      internal = true,
     }
   }
   -- override color highlights

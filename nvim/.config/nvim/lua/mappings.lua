@@ -10,29 +10,32 @@ end
 local noremaps = {
     n = {
       -- misc
-      ['<leader>w']                                                  = 'write',
-      ['<leader>rb']                                                 = 'edit',
+      ['<leader>w']   = 'write',
+      ['<leader>rb']  = 'edit',
+      ['<leader>b']  = 'lua require(\'nvim-fzf.buffer\')()',
+      ['[t']          = 'tabprevious',
+      [']t']          = 'tabnext',
       -- trouble
-      ['<leader>xx']                                                 = 'TroubleToggle',
-      ['<leader>xw']                                                 = 'TroubleToggle workspace_diagnostics',
-      ['<leader>xd']                                                 = 'TroubleToggle document_diagnostics',
-      ['<leader>xq']                                                 = 'TroubleToggle quickfix',
-      ['<leader>xl']                                                 = 'TroubleToggle loclist',
-      ['<leader>xtq']                                                 = 'TodoQuickFix',
-      ['<leader>xtl']                                                 = 'TodoLocList',
-      ['<leader>xtx']                                                 = 'TodoTrouble',
+      ['<leader>xx']  = 'TroubleToggle',
+      ['<leader>xw']  = 'TroubleToggle workspace_diagnostics',
+      ['<leader>xd']  = 'TroubleToggle document_diagnostics',
+      ['<leader>xq']  = 'TroubleToggle quickfix',
+      ['<leader>xl']  = 'TroubleToggle loclist',
+      ['<leader>xtq'] = 'TodoQuickFix',
+      ['<leader>xtl'] = 'TodoLocList',
+      ['<leader>xtx'] = 'TodoTrouble',
       -- vifm
-      ['<leader>fm']                                                 = 'VsplitVifm',
-      ['<leader>Fm']                                                 = 'Vifm',
+      ['<leader>fm']  = 'VsplitVifm',
+      ['<leader>Fm']  = 'Vifm',
       -- fzf
-      ['<leader>ff']                                                 = 'lua require(\'nvim-fzf.files\')()',
-      ['<leader>fh']                                                 = 'lua require(\'nvim-fzf.helptags\')()',
-      ['<leader>fM']                                                 = 'lua require(\'nvim-fzf.manpages\')()',
-      ['<leader>p']                                                  = 'lua require(\'nvim-fzf.git\')()',
-      ['<leader>rg']                                                 = 'lua require(\'nvim-fzf.rg\')()',
-      ['\\rg']                                                        = 'lua require(\'nvim-fzf.rg\')(vim.fn.expand("<cword>"))',
-      [',rg']                                                        = 'lua require(\'nvim-fzf.rg\')(vim.fn.input("Search term: "))',
-      ['<leader>nv']                                                 = 'lua require(\'nvim-fzf.notes\')()',
+      ['<leader>ff']  = 'lua require(\'nvim-fzf.files\')()',
+      ['<leader>fh']  = 'lua require(\'nvim-fzf.helptags\')()',
+      ['<leader>fM']  = 'lua require(\'nvim-fzf.manpages\')()',
+      ['<leader>p']   = 'lua require(\'nvim-fzf.git\')()',
+      ['<leader>rg']  = 'lua require(\'nvim-fzf.rg\')()',
+      ['\\rg']        = 'lua require(\'nvim-fzf.rg\')(vim.fn.expand("<cword>"))',
+      [',rg']         = 'lua require(\'nvim-fzf.rg\')(vim.fn.input("Search term: "))',
+      ['<leader>nv']  = 'lua require(\'nvim-fzf.notes\')()',
       ['<leader>yr']                                                 = 'lua require(\'nvim-fzf.yank-history\')()',
       -- docs
       ['<leader>dg'] = 'DogeGenerate',
@@ -55,7 +58,8 @@ local noremaps = {
       ['<leader>tc']                                                 = 'UltestClear',
       ['<leader>to']                                                 = 'UltestOutput',
       -- debugger
-      ['<leader>dd']                                                 = 'lua require\'dap\'.continue()',
+      ['<leader>dd']                                                 = 'lua require\'debugger\'.start_or_continue()',
+      ['<leader>dD']                                                 = 'lua require\'dap.ext.vscode\'.load_launchjs(vim.lsp.buf.list_workspace_folders()[1] .. \'/.vscode/launch.json\')',
       ['<F5>']                                                       = 'lua require\'dap\'.continue()',
       ['<leader>db']                                                 = 'lua require\'dap\'.toggle_breakpoint()',
       ['<F9>']                                                       = 'lua require\'dap\'.toggle_breakpoint()',
@@ -66,7 +70,7 @@ local noremaps = {
       ['<leader>dR']  = 'lua require\'dap\'.disconnect({restart = true })',
       ['<leader>drc'] = 'lua require\'dap\'.run_to_cursor()',
       ['<leader>dK']  = 'lua require\'dap.ui.widgets\'.hover()',
-      ['<leader>dv']  = 'lua require\'debugger\'.toggle_dap_ele(\'scopes\', \'float\')',
+      ['<leader>dv']  = 'lua require\'dapui\'.float_element(\'scopes\', { enter = true })',
 
       ['<leader>tdd']  = 'UltestDebug',
       ['<leader>tdn']  = 'UltestDebug:Nearest',
@@ -77,13 +81,14 @@ local noremaps = {
       ['<leader>de']    = 'lua require\'dap\'.disconnect({terminateDebuggee = true })',
       ['<leader>dcb']   = 'lua require\'dap\'.set_breakpoint(vim.fn.input(\'Breakpoint condition: \'))',
       ['<leader>dLb'] = 'lua require\'dap\'.set_breakpoint(nil, nil, vim.fn.input(\'Log point message: \'))',
-      ['<leader>d;'] = 'lua require\'dap\'.list_breakpoints()',
-      ['<leader>d,l'] = 'lua require\'dap\'.set_log_level("TRACE")'
+      ['<leader>d;'] = 'lua require\'dap\'.list_breakpoints();require\'trouble\'.toggle({providers = \'quickfix\'})',
+      ['<leader>d,l'] = 'lua require\'dap\'.set_log_level("TRACE")',
+        -- fcitx
+      ['<M-Tab>'] = 'lua require\'fcitx5\'.toggle()',
     },
     v = {
-      ['<leader>yg']                                                 = 'GBrowse!',
+      ['<leader>yg']  = 'GBrowse!',
       ['<leader>dk']  = 'lua require\'dap.ui.variables\'.visual_hover()',
-
     }
   }
 
@@ -124,7 +129,6 @@ vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = tr
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
 vim.cmd('autocmd! TermOpen *toggleterm#* lua require\'terminals\'.set_terminal_keymaps()')
-vim.cmd('autocmd! FileType vimwiki lua require\'wiki\'.remap()')
 vim.api.nvim_set_keymap('', '<F2>', ":echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, \"name\")')<CR>", { silent = true})
 
 

@@ -2,7 +2,9 @@
 --local utils = require('nvim-lsp').utils
 local lsp_status = require('lsp-status')
 local lsp_signature = require('lsp_signature')
-local lsp_document_symbol_callback = require('nvim-fzf.lsp').document_symbols local lsp_references_callback = require('nvim-fzf.lsp').references
+local lsp_document_symbol_callback = require('nvim-fzf.lsp').document_symbols
+local lsp_references_callback = require('nvim-fzf.lsp').references
+local lsp_implementation_callback = require('nvim-fzf.lsp').implementation
 local utils = require('nvim-lsp.utils')
 --
 -- configure lsp-status
@@ -110,6 +112,34 @@ vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint
 end
 
 -- load lsp servers
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
+
+require'lspconfig'.sumneko_lua.setup {
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Setup your lua path
+        path = runtime_path,
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+}
 -- set the path to the sumneko installation; if you previously installed via the now deprecated :LspInstall, use
 --local sumneko_root_path = vim.fn.stdpath('cache') .. '/lspconfig/sumneko_lua/lua-language-server'
 --local sumneko_binary = sumneko_root_path .. '/bin/Linux/lua-language-server'
@@ -175,18 +205,20 @@ require'lspconfig'.gopls.setup{
   capabilities = capabilities,
   settings = {
     gopls = {
-        staticcheck = true,
         usePlaceholders = false
       },
     }
 }
-vim.cmd[[
-augroup gopls
-	autocmd!
-	autocmd BufWritePre *.go :silent! lua vim.lsp.buf.formatting()
-	autocmd BufWritePre *.go :silent! lua require'nvim-lsp.utils'.goimports(3000)
-augroup END
-]]
+
+local gopls_grp = vim.api.nvim_create_augroup('gopls', { clear = false })
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = {'*.go'},
+  group = gopls_grp,
+  callback = function()
+    vim.lsp.buf.formatting()
+    require'nvim-lsp.utils'.goimports(3000)
+  end
+})
 
 require'lspconfig'.vimls.setup {
   on_attach=on_attach,
@@ -256,3 +288,4 @@ end
 lsp_status.register_progress()
 vim.lsp.handlers['textDocument/documentSymbol'] = lsp_document_symbol_callback
 vim.lsp.handlers['textDocument/references'] = lsp_references_callback
+vim.lsp.handlers['textDocument/implementation'] = lsp_implementation_callback
