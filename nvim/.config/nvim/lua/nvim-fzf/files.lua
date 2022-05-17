@@ -28,6 +28,7 @@ local _ = {}
  _.find_files = function()
   cache_file = FZF_CACHE_FILES_DIR .. vim.fn.sha256(current_dir)
   local current_dir = vim.fn.expand('%:p:h')
+  cache_file = FZF_CACHE_FILES_DIR .. vim.fn.sha256(current_dir)
   local find_cmd = vim.fn.executable('fd') == 1 and 'fd' or 'find'
   local find_opts = vim.fn.executable('fd') == 1 and string.format('-t f -L . %s', current_dir) or "-L -type f -print"
   local command = ''
