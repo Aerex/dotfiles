@@ -1,22 +1,29 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python3
 
-import os
-import sys
+from os import environ, path, getenv
+import argparse
+from sys import exit
 from urllib.parse import urlparse
 import pyperclip
 
 def qute_command(command):
-    with open(os.environ['QUTE_FIFO'], 'w') as fifo:
+    with open(environ['QUTE_FIFO'], 'w') as fifo:
         fifo.write(command + '\n')
         fifo.flush()
 
-def main():
+def main(args):
     try:
-        QUTE_URL = os.getenv('QUTE_URL')
+        
+        QUTE_URL = getenv('QUTE_URL')
         extracted_url = urlparse(QUTE_URL)
-        path = extracted_url.path[1:]
-        pyperclip.copy(path)
-        qute_command('message-info "Successfully copied path {} from url {} to clipboard"'.format(path, QUTE_URL))
+        url_path = extracted_url.path[1:]
+
+        if args.domain:
+            print(extracted_url.netloc)
+            extracted_url = path.join(extracted_url.netloc, url_path)
+
+        pyperclip.copy(extracted_url)
+        qute_command('message-info "Successfully copied path {} from url {} to clipboard"'.format(extracted_url, QUTE_URL))
         return 0
     except Exception as e:
         qute_command('message-error "Failed to copy path of {} to clipboard"'.format(QUTE_URL))
@@ -26,4 +33,8 @@ def main():
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    cmd = argparse.ArgumentParser(prog='qute-yank-url', description='Small utility to yank url')
+    cmd.add_argument('-d', '--domain',dest='domain', action='store_true', help='Include domain to url')
+    args = cmd.parse_args()
+
+    exit(main(args))
