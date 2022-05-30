@@ -497,7 +497,8 @@ map <silent> gC   :cd ~/.config<cr>
 map <silent> gch  :cd ~/.cheat<cr>
 map <silent> g.   :cd ~/dotfiles2<cr>
 map <silent> gh   :cd ~<cr>
-map <silent> gn   :cd ~/Documents/repos/.private/notes<cr>
+map <silent> gno  :cd ~/Documents/repos/.private/notes<cr>
+map <silent> gnv  :cd ~/.config/nvim/<cr>
 map <silent> gml  :cd ~/.Mail<cr>
 map <silent> gca  :cd ~/.cache<cr>
 map <silent> gq   :cd ~/.config/qutebrowser<cr>
