@@ -1,9 +1,10 @@
 require('fzf').default_window_options = {
   window_on_create = function()
-    vim.cmd('set winhl=Normal:Normal')
+    vim.cmd('setlocal winhl=Normal:Normal,NormalFloat:Normal,FloatBorder:Normal')
   end
 }
 local fzf = require('fzf').fzf
+local uv = vim.loop
 local M = {}
 
 M.generate_items_by_name = function(method, params, processor, ...)
@@ -14,10 +15,14 @@ M.generate_items_by_name = function(method, params, processor, ...)
     for _, lsp_result in pairs(lsp_results) do
       local items = processor(lsp_result.result, ...)
       for _, item in pairs(items) do
-        items_by_name[item.text] = item
+        local key = item.text
+        if method == 'textDocument/references' then
+          local paths = vim.fn.split(items.filename, '/')
+          key = string.format('%s|%s', items.text, paths[#paths])
+        end
+        items_by_name[key] = item
       end
     end
-
     return items_by_name
 end
 
@@ -67,7 +72,7 @@ M.references = function()
     local params = vim.lsp.util.make_position_params()
     params.context = { includeDeclaration = true }
     local items_by_name = M.generate_items_by_name('textDocument/references',
-      params, vim.lsp.util.locations_to_items)
+      params, vim.lsp.util.locations_to_items, 'utf-8')
 
       -- TODO: figure out why you need to do an inline import here. Doesn't work otherwise
       local preview_files = require('fzf.actions').action(function(lines, fzf_lines)
@@ -112,7 +117,7 @@ M.document_symbols = function()
       params, vim.lsp.util.symbols_to_items, 0)
 
     -- TODO: figure out who you need to do an inline import here. Doesn't work otherwise
-    local preview_files = require('fzf.actions').action(function(lines, fzf_lines)
+    local preview_files = require('fzf.actions').async_action(function(pipe, lines, fzf_lines)
       local item = items_by_name[lines[1]]
 
       local start_line = item.lnum - (fzf_lines / 2)
@@ -124,8 +129,9 @@ M.document_symbols = function()
         preview_cmd = string.format('bat -H %d --style numbers --color always -r %i:%i %s',
           item.lnum, start_line, end_line, item.filename)
       end
-
-     return vim.fn.system(preview_cmd)
+      uv.write(pipe, vim.fn.system(preview_cmd), function()
+        uv.close(pipe)
+      end)
     end)
 
     local choices = fzf(vim.tbl_keys(items_by_name),
