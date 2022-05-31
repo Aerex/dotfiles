@@ -1,18 +1,27 @@
 -- Credits to https://github.com/vijaymarupudi/nvim-fzf-commands/blob/master/lua/fzf-commands/files.lua
-require('fzf').default_window_options = {
+local fzf = require('fzf')
+local fzf_cli = fzf.fzf
+local uv = vim.loop
+
+fzf.default_window_options = {
   window_on_create = function()
-    vim.cmd('set winhl=Normal:Normal')
+    vim.cmd('setlocal winhl=Normal:Normal,NormalFloat:Normal,FloatBorder:Normal')
   end
 }
 
-local action = require('fzf.actions').action
+fzf.default_options = {
+  border =  'single',
+  relative = 'editor',
+  style = 'minimal'
+}
+
+local action = require('fzf.actions').async_action
 local cmd_line_trans = require('fzf.helpers').cmd_line_transformer
-local fzf = require('fzf').fzf
 local FZF_CACHE_FILES_DIR = vim.fn.stdpath('cache') .. '/fzf_files/'
 local cache_file = ''
 local filepath_map = {}
 
-local preview_files = action(function(lines)
+local preview_files = action(function(pipe, lines)
   -- using expand at this point will return the expand file path as `term::<path>:/port/usr/bin`
   -- so we will use regex to pull out the path only to build the true file path
   local file_path = filepath_map[lines[1]]
@@ -20,13 +29,14 @@ local preview_files = action(function(lines)
   local preview_opts = vim.fn.executable('bat') == 1 and '--style=numbers --color always' or ''
   local cmd = string.format('%s %s %s', preview_cmd, preview_opts, file_path)
 
-  return vim.fn.system(cmd)
+  uv.write(pipe, vim.fn.system(cmd), function()
+    uv.close(pipe)
+  end)
 end)
 
 local _ = {}
 
  _.find_files = function()
-  cache_file = FZF_CACHE_FILES_DIR .. vim.fn.sha256(current_dir)
   local current_dir = vim.fn.expand('%:p:h')
   cache_file = FZF_CACHE_FILES_DIR .. vim.fn.sha256(current_dir)
   local find_cmd = vim.fn.executable('fd') == 1 and 'fd' or 'find'
@@ -52,7 +62,7 @@ local _ = {}
       return filename
   end)
   coroutine.wrap(function ()
-    local choices = fzf(cmdchoices, '--multi --ansi --expect=ctrl-v,ctrl-r,ctrl-t,ctrl-s,ctrl-x --preview '
+    local choices = fzf_cli(cmdchoices, '--multi --ansi --expect=ctrl-v,ctrl-r,ctrl-t,ctrl-s,ctrl-x --preview '
       .. preview_files .. ' --prompt="Files> "', {
    })
     local vimcmd = 'e'
