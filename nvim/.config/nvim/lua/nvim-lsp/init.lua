@@ -62,33 +62,43 @@ local on_attach = function(client, bufnr)
     -- required to fix code action ranges and filter diagnostics
     ts_utils.setup_client(client)
   end
-  -- Attach LSP status
-  lsp_status.on_attach(client)
-
-  local ok, goto_preview = pcall(require, 'goto-preview')
-  if ok then
-    goto_preview.setup{
+  local ok_goto, _ = pcall(require, 'goto-preview')
+  if ok_goto then
+    require'goto-preview'.setup{
       width = 120; -- Width of the floating window
       height = 15; -- Height of the floating window
-      border = {"↖", "─" ,"┐", "│", "┘", "─", "└", "│"}; -- Border characters of the floating window
+      border = {'↖', '─' ,'┐', '│', '┘', '─', '└', '│'}; -- Border characters of the floating window
       default_mappings = false; -- Bind default mappings
       debug = false; -- Print debug information
-      opacity = nil; -- 0-100 opacity level of the floating window where 100 is fully transparent.
+      opacity = 10; -- 0-100 opacity level of the floating window where 100 is fully transparent.
       resizing_mappings = false; -- Binds arrow keys to resizing the floating window.
-      post_open_hook = function(buf, wind)
-        vim.keymap.set('n', '\\gpd',  function() goto_preview.goto_preview_definition() end, { silent = true, buffer = buf})
-        vim.keymap.set('n', '\\gpi', function() goto_preview.goto_preview_implementation() end, { silent = true, buffer = buf})
-        vim.keymap.set('n', '\\gpr', function() goto_preview.goto_preview_references() end, { silent = true, buffer = buf})
-      end; -- A function taking two arguments, a buffer and a window to be ran as a hook.
+      post_open_hook = function(_, w)
+        -- close preview window
+          vim.keymap.set('n', 'qq', function() vim.api.nvim_win_close(w, true) end)
+      end,
       references = { -- Configure the telescope UI for slowing the references cycling window.
         telescope = require'telescope.themes'.get_dropdown({ hide_preview = false })
       };
-    -- These two configs can also be passed down to the goto-preview definition and implementation calls for one off "peak" functionality.
-    focus_on_open = true; -- Focus the floating window when opening it.
-    dismiss_on_move = false; -- Dismiss the floating window when moving the cursor.
-    force_close = true, -- passed into vim.api.nvim_win_close's second argument. See :h nvim_win_close
-    bufhidden = "wipe", -- the bufhidden option to set on the floating window. See :h bufhidden
-  }
+      -- These two configs can also be passed down to the goto-preview definition and implementation calls for one off "peak" functionality.
+      focus_on_open = true; -- Focus the floating window when opening it.
+      dismiss_on_move = false; -- Dismiss the floating window when moving the cursor.
+      force_close = true, -- passed into vim.api.nvim_win_close's second argument. See :h nvim_win_close
+      bufhidden = 'wipe', -- the bufhidden option to set on the floating window. See :h bufhidden
+    }
+   local wk_ok, wk = pcall(require, 'which-key')
+    if wk_ok then
+      wk.register({
+        g = {
+          name = 'Preview',
+          d = { function() require'goto-preview'.goto_preview_definition() end, 'Preview Definition' },
+        },
+      }, { prefix = '\\', silent = true, buffer = buf
+      })
+    else
+      vim.keymap.set('n', '\\gpd',  function() require'goto-preview'.goto_preview_definition() end,
+        { silent = true, buffer = buf})
+    end
+
   end
 
 
