@@ -19,6 +19,23 @@ in
     3*) echo "something beginning with 3 found";;
 esac
 
+# Parse opts (ex. -h -v)
+while getopts :hv arg; do
+  case "$arg"
+    h)
+      # print help
+      ;;
+    v)
+      # enable verbose
+      ;;
+    *)
+      # otherwise do something else
+      ;;
+    esac
+done
+
+shift $((OPTIND -1) # parse first arg next if necessary
+
 # Turn on debugging:
 set -x
 
