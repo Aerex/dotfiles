@@ -1,0 +1,84 @@
+#!/bin/bash
+# AUTHOR: Aerex
+# DESC:   execute a dunst shortcut action using dunstctl or fallback to keymaps in dunstrc
+# DEPEND: dunstctl  coreutils
+# REFF:   inspired by ttps://raw.githubusercontent.com/Polymehr/dotfiles/3d6a9e52b4be6c054a783c4b75db202593784ecd/i3/dunstctl.sh
+#
+# USAGES:  bindsym ctrl+space exec /path/to/dunst-shortcuts close
+
+help() {
+  cat <<HELP
+dunst-shortcuts <close|close-all|history|context>
+    
+Execute a shortcut action on dunst using dunstctl otherwise use keymaps configured in dunstrc
+
+-h        Print the help menu 
+-v        Enable verbose mode
+HELP
+        exit;
+}
+while getopts :hv arg; do
+  case "$arg" in 
+    h) 
+      help
+      ;;
+    v)
+      set -x
+      ;;
+    ?)
+      echo "ERROR: Unknown option $OPTARG"
+      exit 2
+      ;;
+    esac
+done
+
+# Get file path from arg
+shift $((OPTIND - 1))
+
+ACTION=$1
+
+if [ -z $ACTION ]; then
+  echo "Missing action"
+  help
+fi
+
+case "$ACTION" in
+  close)
+    if [[ "$(dunstctl count displayed)" -gt 0 ]]; then
+        dunstctl close
+    elif [[ -s $(command -v xdotool) ]]; then
+        xdotool key ctrl+space
+    else
+        send 'ctrl+space'
+    fi
+    ;;
+  close_all)
+    if [ "$(dunstctl count displayed)" -gt 0 ]; then
+        dunstctl close-all
+    elif [[ -s $(command -v xdotool) ]]; then
+        xdotool key ctrl+shift+space
+    else
+        send 'ctrl+shift+space'
+    fi
+    ;;
+  history)
+    if [ "$(dunstctl count history)" -gt 0 ]; then
+        dunstctl history-pop
+    elif [[ -s $(command -v xdotool) ]]; then
+        xdotool key ctrl+period
+    else
+        send 'ctrl+period'
+    fi
+    ;;
+  context)
+    if [ "$(dunstctl count displayed)" -gt 0 ]; then
+        dunstctl context
+    elif [[ -s $(command -v xdotool) ]]; then
+        xdotool key ctrl+shift+period
+    else
+        send 'ctrl+shift+period'
+    fi
+    ;;
+  *)
+    echo "Allowed actions: close, close-all, history, context"
+esac

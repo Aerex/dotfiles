@@ -1,0 +1,22 @@
+priority 100
+
+snippet todo "Add todo"
+-- TODO(me): $0
+endsnippet
+
+snippet fixme "Add fixme"
+-- FIXME(me): $0
+endsnippet
+
+snippet use "Use"
+use { $1 }
+endsnippet
+
+snippet logt "Print table"
+print('\n$1\n' .. vim.inspect($1))
+endsnippet
+
+snippet log "Print variable"
+print('\n$1 -> ' .. $1)
+endsnippet
+	

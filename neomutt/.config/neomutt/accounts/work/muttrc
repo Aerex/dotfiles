@@ -1,31 +1,40 @@
 # vim: filetype=muttrc
 
-set my_smtp_domain       = `. $my_confdir/bin/getcred Email/work smtp`
-set my_imap_domain       = `. $my_confdir/bin/getcred Email/work imap`
-set editor            = "$EDITOR"
-set quit              = yes
-set imap_user         = `. $my_confdir/bin/getcred Email/work login`
-set imap_pass         = `. $my_confdir/bin/getcred Email/work pass`
-set smtp_url          = "smtp://$imap_user:$imap_pass@$my_smtp_domain"
-set realname          = "$MUTT_REAL_NAME"
-set from              = `. $my_confdir/bin/getcred Email/work login`
-set use_from          = yes
-set ssl_starttls      = yes
-set ssl_force_tls     = yes
-#mailboxes             = +INBOX
-set mbox_type         = Maildir
-set sendmail          = "/usr/bin/msmtp -a INBOX"
-set folder            = "imaps://$my_imap_domain" 
-set spoolfile         = +INBOX
-set record            = "~/.Mail/Gmail/Work/Sent"
-set postponed         = "~/.Mail/Gmail/Work/Drafts"
-set header_cache      = ~/.config/neomutt/accounts/work/cache/headers
-set message_cachedir  = ~/.config/neomutt/accounts/work/cache/bodies
-set certificate_file  = ~/.config/neomutt/accounts/work/certificates
+set my_smtp_domain         = `. $my_confdir/bin/getcred Email/work smtp_domain`
+set my_offlineimap_account = "work"
+set my_smtp_port           = `. $my_confdir/bin/getcred Email/work smtp_port`
+set my_imap_domain         = `. $my_confdir/bin/getcred Email/work imap_domain`
+set my_imap_port           = `. $my_confdir/bin/getcred Email/work imap_port`
+set editor                 = "$EDITOR"
+set quit                   = yes
+set imap_user              = `. $my_confdir/bin/getcred Email/work login`
+set imap_pass              = `. $my_confdir/bin/getcred Email/work pass`
+set smtp_url               = "smtp://$imap_user:$imap_pass@$my_smtp_domain:$my_smtp_port/"
+set realname               = "$MUTT_REAL_NAME"
+set from                   = `. $my_confdir/bin/getcred Email/work login`
+set use_from               = yes
+set ssl_starttls           = no
+set ssl_verify_host        = no
+set ssl_force_tls          = no
+set mbox_type              = Maildir
+set sendmail               = "/usr/bin/msmtp -a INBOX"
+set virtual_spoolfile      = yes
+set folder                 = ~/.Mail/Work/
+set record                 = "~/.Mail/Work/Sent"
+set postponed              = "~/.Mail/Work/Drafts"
+set header_cache           = ~/.config/neomutt/accounts/work/cache/headers
+set message_cachedir       = ~/.config/neomutt/accounts/work/cache/bodies
+set certificate_file       = ~/.config/neomutt/accounts/work/certificates
 
-color index yellow default '.*'
-color index_author red default '.*'
-color index_number brightblue default
-color index_subject cyan default '.s'
-color index_size green default
+source ~/.config/neomutt/accounts/work/colors
+
+virtual-mailboxes "Week" "notmuch://?query=tag:inbox AND (NOT tag:archive) AND date:this_week AND (NOT tag:github) AND (NOT tag:event)"
+virtual-mailboxes "Today" "notmuch://?query=tag:inbox AND (NOT tag:archive) AND date:today AND (NOT tag:event)"
+virtual-mailboxes "Month" "notmuch://?query=tag:inbox AND (NOT tag:archive) AND date:this_month AND (NOT tag:github) AND (NOT tag:event)"
+virtual-mailboxes "Github" "notmuch://?query=tag:inbox AND tag:github AND (NOT tag:archive)"
+virtual-mailboxes "Events" "notmuch://?query=tag:inbox AND tag:event"
+virtual-mailboxes "Sent" "notmuch://?query=tag:sent"
+virtual-mailboxes "Todo" "notmuch://?query=tag:todo"
+virtual-mailboxes "Archive" "notmuch://?query=tag:archive"
+virtual-mailboxes "Junk" "notmuch://?query=tag:junk"
 

@@ -4,6 +4,12 @@ do
     echo $file found;
 done
 
+# To implement a while loop:
+while [ condition ]
+  do 
+     # commands
+done
+
 # To implement a case command:
 case "$1"
 in
@@ -12,6 +18,23 @@ in
     2) echo "two found";;
     3*) echo "something beginning with 3 found";;
 esac
+
+# Parse opts (ex. -h -v)
+while getopts :hv arg; do
+  case "$arg"
+    h)
+      # print help
+      ;;
+    v)
+      # enable verbose
+      ;;
+    *)
+      # otherwise do something else
+      ;;
+    esac
+done
+
+shift $((OPTIND -1) # parse first arg next if necessary
 
 # Turn on debugging:
 set -x

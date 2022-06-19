@@ -1,0 +1,55 @@
+# Mocha {{{
+snippet beforeeach "Add beforeEach block" 
+beforeEach(async function () {
+	$1
+});
+endsnippet
+
+snippet after "Add after block"
+after(async function() {
+	$1
+});
+endsnippet
+
+snippet before "Add Mocha before block"
+before(async function() {
+	$1
+});
+endsnippet
+
+
+snippet it "Add it block"
+it('$1', async function() {
+	$2
+});
+endsnippet
+#}}}
+
+snippet logv "Log a variable"
+console.log(\`$1: ${$1}\n\`);
+endsnippet
+
+snippet logvn "Log a variable with line number ref"
+console.log('`!v line(".")`\n');
+console.log(\`$1: ${$1}\n\`);
+endsnippet
+
+snippet context "Add mocha context block"
+context('$1', function() {
+	$0
+})
+endsnippet
+
+snippet todo "Add todo block" 
+// TODO(me): $1
+endsnippet
+
+snippet fixme "Add fixme block" 
+// FIXME(me): $1
+endsnippet
+
+snippet note "Add note block" 
+// NOTE(me): $1
+endsnippet
+
+# vim: fdm=marker

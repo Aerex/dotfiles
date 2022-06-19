@@ -209,3 +209,9 @@ git checkout --orphan master
 
 # Delete git ref
 git update-ref -d <ref-tags>
+
+# Create a worktree
+git worktree add --track -b <new-branch-name> <path-to-folder> remote/<new-branch-name>
+
+# List branches (only names)
+git branch --list --format="%(refname:short)"
