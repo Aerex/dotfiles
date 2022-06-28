@@ -44,93 +44,96 @@ M.setup = function()
   }
 end
 M.load_maps = function ()
-  local opts ={
-    mode = "n", -- NORMAL mode
-    -- prefix: use "<leader>f" for example for mapping everything related to finding files
-    -- the prefix is prepended to every mapping part of `mappings`
-    prefix = "",
-    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-    silent = true, -- use `silent` when creating keymaps
-    triggers = {'<leader>', '\\'}, -- manually setup triggers, auto is not working
-    noremap = true, -- use `noremap` when creating keymaps
-    nowait = false, -- use `nowait` when creating keymaps
-  }
-  require('which-key').register(
-      {
-        ['[n'] = 'Go to previous failed test',
-        [']n'] = 'Go to next failed test',
-        ['\\'] = {
-          ['zz'] = 'QuitAll'
-        },
-        ['<leader>'] = {
-          g = {
-            name = 'Git',
-            m = {'Blame/Messages'}
+  local ok, _ = pcall(require, 'which-key')
+  if ok then
+    local opts ={
+      mode = "n", -- NORMAL mode
+      -- prefix: use "<leader>f" for example for mapping everything related to finding files
+      -- the prefix is prepended to every mapping part of `mappings`
+      prefix = "",
+      buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+      silent = true, -- use `silent` when creating keymaps
+      triggers = {'<leader>', '\\'}, -- manually setup triggers, auto is not working
+      noremap = true, -- use `noremap` when creating keymaps
+      nowait = false, -- use `nowait` when creating keymaps
+    }
+    require('which-key').register(
+        {
+          ['[n'] = 'Go to previous failed test',
+          [']n'] = 'Go to next failed test',
+          ['\\'] = {
+            ['zz'] = 'QuitAll'
           },
-          p = 'Git Files',
-          t = {
-            name = 'Ultest/Neotest',
-            f = 'Run Tests in File',
-            n = 'Run Nearest',
-            s = 'Summary Toggle',
-            c = 'Ultest Clear',
-            d = {
-              name = 'Debug',
-              d = 'File',
-              n = 'Nearest',
+          ['<leader>'] = {
+            g = {
+              name = 'Git',
+              m = {'Blame/Messages'}
             },
-            o = 'Show Output',
-            O = 'Show and Jump Into Output',
-          },
-          d = {
-            name = 'Debug / Doge',
-            d = {'Choose debugger / Continue'},
-            b = {'Toggle breakpoint'},
-            R = {'Restart debugger'},
-            --L = {'Launch Filetype Debugger'},
-            T = {'Debug Filetype Test'},
-            e = {'Close / Reset debugger'},
-            i = {'Step into'},
-            o = {'Step over'},
-            k = {'Step out'},
-            rc = {'Run to cursor'},
-            rp = {'Open REPL'},
-            cb = {'Toggle conditional breakpoint'},
-            --X = {'Clear all breakpoints'},
-            K = {'Inspect'},
-            c = {'Code window'},
-            t = {'Tag window'},
-            v = {'Variables window'},
-            --w = {'Watches window'},
-            --s = {'Stack trace window'},
-          },
-          x = {
-            name = 'Diagnostics',
+            p = 'Git Files',
             t = {
-              name = 'Todo',
-              x = {'Show todo'}
+              name = 'Ultest/Neotest',
+              f = 'Run Tests in File',
+              n = 'Run Nearest',
+              s = 'Summary Toggle',
+              c = 'Ultest Clear',
+              d = {
+                name = 'Debug',
+                d = 'File',
+                n = 'Nearest',
+              },
+              o = 'Show Output',
+              O = 'Show and Jump Into Output',
             },
-            x = {'Toggle Trouble window'},
-            w = {'Show workspace diagnostics'},
-            d = {'Show document diagnostics'},
-            q = {'Show quickfix window'},
-            l = {'Show location window'},
-            D = {'Disable diagnostics'}
-          },
-          y = {
-            name = 'Yank',
-            g = { 'Yank Git URL to clipboard'}
-          },
-          f = {
-            name ='Fzf',
-            f = { 'Files'},
-            o = { 'Most Used Files'},
-            M = { 'Manpages'},
-            h = { 'Help'},
-          },
-          ['fm'] = { 'ViFm' },
-        }
-      }, opts
-    )
+            d = {
+              name = 'Debug / Doge',
+              d = {'Choose debugger / Continue'},
+              b = {'Toggle breakpoint'},
+              R = {'Restart debugger'},
+              --L = {'Launch Filetype Debugger'},
+              T = {'Debug Filetype Test'},
+              e = {'Close / Reset debugger'},
+              i = {'Step into'},
+              o = {'Step over'},
+              k = {'Step out'},
+              rc = {'Run to cursor'},
+              rp = {'Open REPL'},
+              cb = {'Toggle conditional breakpoint'},
+              --X = {'Clear all breakpoints'},
+              K = {'Inspect'},
+              c = {'Code window'},
+              t = {'Tag window'},
+              v = {'Variables window'},
+              --w = {'Watches window'},
+              --s = {'Stack trace window'},
+            },
+            x = {
+              name = 'Diagnostics',
+              t = {
+                name = 'Todo',
+                x = {'Show todo'}
+              },
+              x = {'Toggle Trouble window'},
+              w = {'Show workspace diagnostics'},
+              d = {'Show document diagnostics'},
+              q = {'Show quickfix window'},
+              l = {'Show location window'},
+              D = {'Disable diagnostics'}
+            },
+            y = {
+              name = 'Yank',
+              g = { 'Yank Git URL to clipboard'}
+            },
+            f = {
+              name ='Fzf',
+              f = { 'Files'},
+              o = { 'Most Used Files'},
+              M = { 'Manpages'},
+              h = { 'Help'},
+            },
+            ['fm'] = { 'ViFm' },
+          }
+        }, opts
+      )
+    end
 end
 return M
