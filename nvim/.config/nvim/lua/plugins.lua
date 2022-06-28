@@ -1,3 +1,4 @@
+local autocmd = require('utils').autocmd
 local execute = vim.api.nvim_command
 local fn = vim.fn
 
@@ -8,12 +9,20 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 -- Auto compile when there are changes in plugins.lua
-vim.cmd 'autocmd BufWrite plugins.lua PackerCompile'
+autocmd('BufWritePre', {
+  pattern = 'plugins.lua',
+  command = 'PackerCompile'
+})
 
--- Mappings for packer
-vim.cmd[[autocmd BufEnter plugins.lua noremap <leader>ps <cmd>PackerSync<cr>]]
-vim.cmd[[autocmd BufEnter plugins.lua noremap <leader>pc <cmd>PackerCompile<cr>]]
-vim.cmd[[autocmd BufEnter plugins.lua noremap <leader>pS <cmd>PackerStatus<cr>]]
+autocmd({'BufEnter', 'BufWinEnter'}, {
+  pattern = 'plugins.lua',
+  callback = function(args)
+    vim.keymap.set('n', '\\ps', function() require'packer'.sync() end, { silent = true, buffer = args.buf })
+    vim.keymap.set('n', '\\pi', function() require'packer'.install() end, { silent = true, buffer = args.buf })
+    vim.keymap.set('n', '\\pc', '<cmd>PackerCompile<cr>', { silent = true, buffer = args.buf })
+    vim.keymap.set('n', '\\pS', '<cmd>PackerStatus<cr>', { silent = true, buffer = args.buf })
+  end
+})
 
 -- Do not remove unusued plugins
 require('packer').init({display = {auto_clean = true}})
@@ -27,24 +36,39 @@ if ok then
     use {'wbthomason/packer.nvim'}
     use{ 'nathom/filetype.nvim' }
     use {'lewis6991/impatient.nvim' }
-    use {'folke/which-key.nvim'}
+    use {'folke/which-key.nvim', config = function() require'which_key'.setup() end}
     use {'famiu/nvim-reload'}
 
     -- lsp
     use {'neovim/nvim-lspconfig', requires = {'jose-elias-alvarez/nvim-lsp-ts-utils'},
       config = function() require('nvim-lsp') end }
     use { 'mfussenegger/nvim-jdtls' }
+    use { 'jose-elias-alvarez/null-ls.nvim' }
     use { 'onsails/lspkind-nvim' }
     use { 'nvim-lua/lsp-status.nvim' }
     use { 'ray-x/lsp_signature.nvim' }
     use { 'rmagatti/goto-preview'}
+    use({ 'j-hui/fidget.nvim', config = function()
+        require('fidget').setup({
+          window = {
+            relative = 'editor',
+            blend = 0,
+          },
+          sources = {
+            ['null-ls'] = {
+              ignore = true
+            },
+          },
+        })
+      end,
+    })
     use { 'weilbith/nvim-code-action-menu', cmd = 'CodeActionMenu',
       config = function() vim.g.code_action_menu_show_details = false end }
 
      -- treesitter
     use { 'nvim-treesitter/nvim-treesitter', requires = {
         'nvim-treesitter/nvim-treesitter-refactor', 'nvim-treesitter/nvim-treesitter-textobjects',
-        'nvim-treesitter/playground'}, config = function() require('treesitter') end, run = ':TSUpdate'
+        { 'nvim-treesitter/playground', cmd = 'TSPlaygroundToggle' }}, config = function() require('treesitter') end, run = ':TSUpdate'
     }
 
     -- textobject
@@ -58,8 +82,11 @@ if ok then
 
     -- git
     use { 'tpope/vim-fugitive', cmd = {'Git', 'Gpush', 'GBrowse', 'Gdiffsplit'}, requires = {'tpope/vim-rhubarb' }}
+    use { 'ruifm/gitlinker.nvim', config = function() require('nvim-git').setup_gitlinker() end }
     use { 'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}, event = {'BufRead'}, config = function() require('nvim-git').setup_signs() end }
-    use { 'ldelossa/gh.nvim', requires = {'ldelossa/litee.nvim'},
+    use { 'rhysd/git-messenger.vim', cmd = {'GitMessenger'} }
+
+    use { 'Aerex/gh.nvim', requires = {'ldelossa/litee.nvim'},
       config = function() require'litee.lib'.setup(); require'litee.gh'.setup() end }
     use {  'TimUntersberger/neogit', cmd = {'Neogit'}, config = function() require('nvim-git').setup_neogit() end,
       requires = { 'nvim-lua/plenary.nvim','sindrets/diffview.nvim' }}
@@ -102,7 +129,7 @@ if ok then
 
     -- debugger
     use {
-      'mfussenegger/nvim-dap',
+        'mfussenegger/nvim-dap' ,
       requires = { 'rcarriga/nvim-dap-ui', 'mfussenegger/nvim-dap-python', 'theHamsta/nvim-dap-virtual-text'},
       config = function() require('debugger') end
     }
@@ -110,10 +137,18 @@ if ok then
     -- test
     use {
       'rcarriga/vim-ultest',
+        cmd = {'Ultest','UltestNearest'},
         run = ':UpdateRemotePlugins',
         requires = { { 'vim-test/vim-test', cmd = { 'TestFile', 'TestLast', 'TestSuite', 'TestVisit', 'TestNearest'} }},
-        config = function() require('test') end
+        config = function() require('test').setup() end
     }
+    use {'nvim-neotest/neotest', requires = {
+      'nvim-neotest/neotest-go',
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+      'antoinemadec/FixCursorHold.nvim'
+    }, config = function() require('test').setup() end
+  }
 
     -- statusline
     use {'glepnir/galaxyline.nvim', requires = {'kyazdani42/nvim-web-devicons'},
@@ -132,8 +167,9 @@ if ok then
           'hrsh7th/cmp-nvim-lsp',
           'hrsh7th/cmp-cmdline',
           'dmitmel/cmp-cmdline-history',
+           { 'davidsierradz/cmp-conventionalcommits', ft = {'NeogitCommitMessage'}},
           'uga-rosa/cmp-dictionary',
-          'lukas-reineke/cmp-rg',
+          { opt = true, 'lukas-reineke/cmp-rg' },
           'hrsh7th/cmp-look', -- dictionary source
           'f3fora/cmp-spell', -- spell source
           {
@@ -148,6 +184,12 @@ if ok then
       })
     -- profiling
     use { 'tweekmonster/startuptime.vim' }
+    use { 'sunaku/vim-dasht', config = function()
+      vim.g.dasht_filetype_docsets = {
+        typescript = {'Mocha', 'Sinon'},
+        javascript = {'Mocha', 'Sinon'}
+      }
+    end}
 
     -- marks
     use { 'kshenoy/vim-signature' }
@@ -157,7 +199,8 @@ if ok then
      config = function() require'toggleterm'.setup{ open_mapping = [[<C-t>]], shading_factor = 1, direction = 'float' } end
     }
     use {'AndrewRadev/bufferize.vim', cmd = {'Bufferize'}}
-    use {'kevinhwang91/nvim-bqf', ft = 'qf'}
+    use {'kevinhwang91/nvim-bqf', requires = {'junegunn/fzf', run = function() vim.fn['fzf#install']() end},
+      ft = 'qf', config = function() require'qf'end}
     use { 'NTBBloodbath/rest.nvim',  ft = {'http'}, requires = { 'nvim-lua/plenary.nvim', config = function() require'rest' end }}
     use {'vimwiki/vimwiki', ft = {'vimwiki', 'markdown'},
       setup = function()
