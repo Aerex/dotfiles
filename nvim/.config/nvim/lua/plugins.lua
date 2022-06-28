@@ -211,9 +211,9 @@ if ok then
     use {
       'voldikss/vim-translator', cmd = {'Translate', 'TranslateR', 'TranslateW', 'TranslateL'}, ft = {"trans"}
     }
-    use { 'rcarriga/nvim-notify', config = function() require'notify'.setup{
+    use { 'rcarriga/nvim-notify', config = function() require'notify'.setup({
       background_colour="#646A76", timeout=1500, render = 'minimal'
-    } end }
+    }) end }
     use { 'ledger/vim-ledger', ft = {'ledger'}, config = function() require'ledger' end }
     use {'iamcco/markdown-preview.nvim', run = 'cd app && npm install',
       cmd = {'MarkdownPreview', 'MarkdownPreviewStop'} , ft = {'markdown'},
