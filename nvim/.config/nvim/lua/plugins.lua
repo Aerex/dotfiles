@@ -139,6 +139,7 @@ if ok then
       'rcarriga/vim-ultest',
         cmd = {'Ultest','UltestNearest'},
         run = ':UpdateRemotePlugins',
+        setup = function() vim.g.ultest_deprecation_notice = 0 end,
         requires = { { 'vim-test/vim-test', cmd = { 'TestFile', 'TestLast', 'TestSuite', 'TestVisit', 'TestNearest'} }},
         config = function() require('test').setup() end
     }
