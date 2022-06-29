@@ -106,6 +106,11 @@ M.load_maps = function ()
               --w = {'Watches window'},
               --s = {'Stack trace window'},
             },
+            l = {
+              name = 'LSP',
+              l = 'Show Log',
+              r = 'Restart LSP'
+            },
             x = {
               name = 'Diagnostics',
               t = {
