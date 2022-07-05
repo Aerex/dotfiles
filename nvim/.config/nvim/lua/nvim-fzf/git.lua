@@ -12,6 +12,9 @@ return function()
     _.get_git_root_path = function()
       return vim.split(vim.fn.system('git rev-parse --show-toplevel'), '\n')[1]
     end
+    _.is_git_repo = function()
+      return vim.split(vim.fn.system('git rev-parse --is-inside-work-tree 2>/dev/null'), '\n')[1] ~= ""
+    end
 
     _.get_git_full_file_path = function(file_name)
       return string.format('%s/%s', _.get_git_root_path(), file_name)
@@ -22,8 +25,9 @@ return function()
       local root = _.get_git_root_path()
       local file_path= string.format('%s/%s', root,lines[1])
       local cmd = "bat --style=numbers --color always " .. vim.fn.shellescape(file_path)
-
-      return vim.fn.system(cmd)
+      uv.write(pipe, vim.fn.system(cmd), function()
+        uv.close(pipe)
+      end)
     end)
 
     local git_ls_files = 'git ls-files --full-name --cached --others --exclude-standard'
