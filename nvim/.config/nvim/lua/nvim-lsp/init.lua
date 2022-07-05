@@ -198,10 +198,10 @@ require'lspconfig'.pylsp.setup{
     return util.root_pattern(unpack(root_files))(fname) or util.find_git_ancestor(fname)
   end,
   settings = {
-    pyls = {
+    pylsp = {
       plugins = {
         pycodestyle =  {enabled = false},
-        pylint =  { enabled = false },
+        pylint =  {enabled = false},
         black = {enabled = true},
         pyflakes = {enabled = false}
       }
