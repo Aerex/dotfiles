@@ -20,10 +20,10 @@ def main(args):
 
         if args.domain:
             print(extracted_url.netloc)
-            extracted_url = path.join(extracted_url.netloc, url_path)
+            url_path = path.join(extracted_url.netloc, url_path)
 
-        pyperclip.copy(extracted_url)
-        qute_command('message-info "Successfully copied path {} from url {} to clipboard"'.format(extracted_url, QUTE_URL))
+        pyperclip.copy(url_path)
+        qute_command('message-info "Successfully copied path {} from url {} to clipboard"'.format(url_path, QUTE_URL))
         return 0
     except Exception as e:
         qute_command('message-error "Failed to copy path of {} to clipboard"'.format(QUTE_URL))
