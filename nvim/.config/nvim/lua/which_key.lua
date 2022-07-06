@@ -59,30 +59,20 @@ M.load_maps = function ()
     }
     require('which-key').register(
         {
+          y = {
+            name = 'Yank',
+            g = { 'Yank Git URL to clipboard'}
+          },
           ['[n'] = 'Go to previous failed test',
           [']n'] = 'Go to next failed test',
-          ['\\'] = {
-            ['zz'] = 'QuitAll'
-          },
+          ['\\zz'] = 'Quit',
           ['<leader>'] = {
-            g = {
-              name = 'Git',
-              m = {'Blame/Messages'}
-            },
-            p = 'Git Files',
-            t = {
-              name = 'Ultest/Neotest',
-              f = 'Run Tests in File',
-              n = 'Run Nearest',
-              s = 'Summary Toggle',
-              c = 'Ultest Clear',
-              d = {
-                name = 'Debug',
-                d = 'File',
-                n = 'Nearest',
-              },
-              o = 'Show Output',
-              O = 'Show and Jump Into Output',
+            ['zz'] = 'QuitAll',
+            r = {
+              name = 'Refresh/Reload+Ripgrep',
+              b = 'Buffer',
+              c = 'Config',
+              g = 'Ripgrep all',
             },
             d = {
               name = 'Debug / Doge',
@@ -106,6 +96,25 @@ M.load_maps = function ()
               --w = {'Watches window'},
               --s = {'Stack trace window'},
             },
+            g = {
+              name = 'Git',
+              m = {'Blame/Messages'}
+            },
+            p = 'Git Files',
+            t = {
+              name = 'Ultest/Neotest',
+              f = 'Run Tests in File',
+              n = 'Run Nearest',
+              s = 'Summary Toggle',
+              c = 'Ultest Clear',
+              d = {
+                name = 'Debug',
+                d = 'File',
+                n = 'Nearest',
+              },
+              o = 'Show Output',
+              O = 'Show and Jump Into Output',
+            },
             l = {
               name = 'LSP',
               l = 'Show Log',
@@ -124,16 +133,12 @@ M.load_maps = function ()
               l = {'Show location window'},
               D = {'Disable diagnostics'}
             },
-            y = {
-              name = 'Yank',
-              g = { 'Yank Git URL to clipboard'}
-            },
             f = {
-              name ='Fzf',
-              f = { 'Files'},
-              o = { 'Most Used Files'},
-              M = { 'Manpages'},
-              h = { 'Help'},
+              name = 'Fzf',
+              f = {'Files'},
+              o = {'Most Used Files'},
+              M = {'Manpages'},
+              h = {'Help'},
             },
             ['fm'] = { 'ViFm' },
           }
