@@ -1,4 +1,5 @@
 local M = {}
+local okl, lcfg = pcall(require, 'nvim-local')
 M.setup_signs = function()
   local ok, gitsigns = pcall(require, 'gitsigns')
   if ok then
@@ -159,6 +160,11 @@ M.setup_neogit = function()
 --  end]], '')
 end
 
+--vim.api.nvim_create_autocmd({'BufWritePost', 'BufEnter', 'FocusGained', 'ShellCmdPost', 'VimResume'}, {
+--  pattern = '*',
+--  command = '<SID>neogit#refresh_manually(expand(\'<afile>\')'
+--})
+
 M.setup_octo = function()
   local octo_cfg = {}
   local cfg
@@ -169,6 +175,19 @@ M.setup_octo = function()
     cfg = octo_cfg
   end
   require'octo'.setup(cfg)
+end
+
+M.setup_gitlinker = function()
+  local gcfg = {
+    mappings = nil
+  }
+  local cfg
+  if okl then
+    cfg = vim.tbl_deep_extend('force', gcfg, lcfg.gitlinker_config())
+  else
+    cfg = gcfg
+  end
+  require'gitlinker'.setup(cfg)
 end
 
 return M
