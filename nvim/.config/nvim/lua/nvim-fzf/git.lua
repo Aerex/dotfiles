@@ -1,10 +1,19 @@
-require('fzf').default_window_options = {
+local fzf = require('fzf')
+local fzf_cli = fzf.fzf
+local uv = vim.loop
+
+fzf.default_window_options = {
   window_on_create = function()
-    vim.cmd('set winhl=Normal:Normal')
+    vim.cmd('setlocal winhl=Normal:Normal,NormalFloat:Normal,FloatBorder:Normal')
   end
 }
-local fzf = require('fzf').fzf
-local action = require('fzf.actions').action
+
+fzf.default_options = {
+  border =  'single',
+  relative = 'editor',
+  style = 'minimal'
+}
+local action = require('fzf.actions').async_action
 
 return function()
   coroutine.wrap(function()
@@ -20,8 +29,12 @@ return function()
       return string.format('%s/%s', _.get_git_root_path(), file_name)
     end
 
+    if not _.is_git_repo then
+      return
+    end
 
-    local preview_files = action(function(lines)
+
+    local preview_files = action(function(pipe, lines)
       local root = _.get_git_root_path()
       local file_path= string.format('%s/%s', root,lines[1])
       local cmd = "bat --style=numbers --color always " .. vim.fn.shellescape(file_path)
@@ -32,8 +45,8 @@ return function()
 
     local git_ls_files = 'git ls-files --full-name --cached --others --exclude-standard'
     local command = string.format('%s %s', git_ls_files, _.get_git_root_path())
-    local result = fzf(command,
-    '--multi --ansi --expect=ctrl-v,ctrl-x,ctrl-s,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="GitFiles> "')
+    local result = fzf_cli(command,
+    '--multi --expect=ctrl-v,ctrl-x,ctrl-s,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="GitFiles> "')
     local key = result[1]
 
     local vimcmd = 'e'
