@@ -13,14 +13,14 @@ if ok then
   local default_mapping = {
     ['<Tab>'] = function(fallback)
       if cmp.visible() then
-        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Replace })
       else
         fallback()
       end
     end,
     ['<S-Tab>'] = function(fallback)
       if cmp.visible() then
-        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Replace })
       else
         fallback()
       end
@@ -95,7 +95,7 @@ if ok then
       end,
     },
     sources = {
-      { name = 'ultisnips', priority = 4},
+      { name = 'ultisnips'},
       { name = 'nvim_lsp'},
       --{ name = 'rg'},
       { name = 'path'},
