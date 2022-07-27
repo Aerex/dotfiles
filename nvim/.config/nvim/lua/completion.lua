@@ -44,9 +44,9 @@ if ok then
       ['<C-p>'] = cmp.mapping(function()
         cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
         end, { 'i', 's', }),
-      ['<C-b'] = cmp.mapping.scroll_docs(4),
-      ['<C-f'] = cmp.mapping.scroll_docs(-4),
-      ['<C-u'] = cmp.mapping.scroll_docs(4),
+      ['<C-b>'] = cmp.mapping.scroll_docs(4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-u>'] = cmp.mapping.scroll_docs(4),
       ['<C-d>'] = cmp.mapping.scroll_docs(-4),
       ['<CR>'] = cmp.mapping.confirm({
         behavior = cmp.ConfirmBehavior.Insert,
