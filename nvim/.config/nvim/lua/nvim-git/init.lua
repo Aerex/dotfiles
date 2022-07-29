@@ -169,7 +169,7 @@ M.setup_octo = function()
   local octo_cfg = {}
   local cfg
   local ok, lcfg = pcall(require, 'nvim-local')
-  if ok then
+  if ok and lcfg['get_octo_config'] then
     cfg = vim.tbl_deep_extend("force", octo_cfg, lcfg.get_octo_config())
   else
     cfg = octo_cfg
@@ -182,7 +182,7 @@ M.setup_gitlinker = function()
     mappings = nil
   }
   local cfg
-  if okl then
+  if okl and lcfg['gitlinker_config']then
     cfg = vim.tbl_deep_extend('force', gcfg, lcfg.gitlinker_config())
   else
     cfg = gcfg
