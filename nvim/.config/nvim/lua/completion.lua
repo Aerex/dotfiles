@@ -95,7 +95,7 @@ if ok then
       end,
     },
     sources = {
-      { name = 'ultisnips', priority = 4},
+      { name = 'ultisnips'},
       { name = 'nvim_lsp'},
       --{ name = 'rg'},
       { name = 'path'},
