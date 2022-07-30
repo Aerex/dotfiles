@@ -3,16 +3,16 @@ M.setup = function()
   local hl_cfg = {
     LineNr = { fg = "#7a966c" },
     Label = { fg = "#cec6cc"},
-    SpellBad = { bg = "None"},
     Comment = { gui = "bold", fg="#4C566A"},
     TSComment = { gui = "bold", fg="#4C566A"},
     Folded = { bg = "#4c566a", fg="black"},
     GitGutterAdd = { fg="#4ca64c "},
-    SpellBad = { fg="#FF0000"}
+    FidgetTask = { bg="None"},
+    SpellBad = { fg="#FF0000"},
   }
 
   local ok, lcfg = pcall(require, 'nvim-local')
-  if ok then
+  if ok and lcfg['get_hl_config'] then
     custom_hl_config = vim.tbl_deep_extend("force", hl_cfg, lcfg.get_hl_config())
   else
     custom_hl_config = hl_cfg

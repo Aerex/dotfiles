@@ -172,13 +172,8 @@ M.set_keymap(noremaps, { silent = true, noremap = true })
 M.set_keymap(maps)
 M.set_filetype_keymap(file_type_keymaps)
 
---TODO(me): Add which-key maps according to what buffer is open
--- ex. octo maps when current buffer starts with octo://
---local  ok_w, _ = pcall(require, 'which-key')
---if ok_w thena
---  require'which_key'.setup()
---  vim.api.nvim_exec('autocmd BufEnter octo://* lua require\'which_key\'.load_octo()')
---end
+-- load which-keys if available
+require'which_key'.load_maps()
 
 
 return M

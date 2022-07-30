@@ -1,10 +1,20 @@
-require('fzf').default_window_options = {
+local fzf = require('fzf')
+local fzf_cli = fzf.fzf
+local uv = vim.loop
+
+fzf.default_window_options = {
   window_on_create = function()
     vim.cmd('setlocal winhl=Normal:Normal,NormalFloat:Normal,FloatBorder:Normal')
   end
 }
-local fzf = require('fzf').fzf
-local uv = vim.loop
+
+fzf.default_options = {
+  border =  'single',
+  relative = 'editor',
+  style = 'minimal'
+}
+
+get_filename = require('utils').get_filename
 local M = {}
 
 M.generate_items_by_name = function(method, params, processor, ...)
@@ -75,7 +85,7 @@ M.references = function()
       params, vim.lsp.util.locations_to_items, 'utf-8')
 
       -- TODO: figure out why you need to do an inline import here. Doesn't work otherwise
-      local preview_files = require('fzf.actions').action(function(lines, fzf_lines)
+      local preview_files = require('fzf.actions').async_action(function(pipe, lines, fzf_lines)
         local item = items_by_name[lines[1]]
 
         local start_line = item.lnum - (fzf_lines / 2)
@@ -88,10 +98,12 @@ M.references = function()
             item.lnum, start_line, end_line, item.filename)
         end
 
-       return vim.fn.system(preview_cmd)
+        uv.write(pipe, vim.fn.system(preview_cmd), function()
+          uv.close(pipe)
+        end)
       end)
 
-      local choices = fzf(vim.tbl_keys(items_by_name),
+      local choices = fzf_cli(vim.tbl_keys(items_by_name),
        '--multi --ansi --expect=ctrl-v,ctrl-x,ctrl-s,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="References> "')
        local vimcmd = 'e'
        local key = choices[1]
@@ -134,7 +146,7 @@ M.document_symbols = function()
       end)
     end)
 
-    local choices = fzf(vim.tbl_keys(items_by_name),
+    local choices = fzf_cli(vim.tbl_keys(items_by_name),
      '--multi --ansi --expect=ctrl-v,ctrl-x,ctrl-s,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="Document Symbols> "')
      local vimcmd = ''
      local key = choices[1]

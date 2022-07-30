@@ -2,11 +2,18 @@ local fzf = require('fzf')
 local fzf_cli = fzf.fzf
 local uv = vim.loop
 
-require('fzf').default_window_options = {
+fzf.default_window_options = {
   window_on_create = function()
     vim.cmd('setlocal winhl=Normal:Normal,NormalFloat:Normal,FloatBorder:Normal')
   end
 }
+
+fzf.default_options = {
+  border =  'single',
+  relative = 'editor',
+  style = 'minimal'
+}
+
 local action = require('fzf.actions').async_action
 
 return function()
@@ -15,16 +22,23 @@ return function()
     _.get_git_root_path = function()
       return vim.split(vim.fn.system('git rev-parse --show-toplevel'), '\n')[1]
     end
+    _.is_git_repo = function()
+      return vim.split(vim.fn.system('git rev-parse --is-inside-work-tree 2>/dev/null'), '\n')[1] ~= ""
+    end
 
     _.get_git_full_file_path = function(file_name)
       return string.format('%s/%s', _.get_git_root_path(), file_name)
+    end
+
+    if not _.is_git_repo then
+      return
     end
 
 
     local preview_files = action(function(pipe, lines)
       local root = _.get_git_root_path()
       local file_path= string.format('%s/%s', root,lines[1])
-      local cmd = 'bat --style=numbers --color always ' .. vim.fn.shellescape(file_path)
+      local cmd = "bat --style=numbers --color always " .. vim.fn.shellescape(file_path)
       uv.write(pipe, vim.fn.system(cmd), function()
         uv.close(pipe)
       end)

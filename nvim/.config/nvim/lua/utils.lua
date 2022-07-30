@@ -83,13 +83,9 @@ M.ultisnips.can_expand_snippet = function()
     vim.fn.complete_info()["selected"] == -1
 end
 
-M.list_contains = function(list, ele)
-  for _, value in ipairs(list) do
-    if value == ele then
-      return true
-    end
-  end
-  return false
+M.get_filename = function(path)
+  paths = vim.fn.split(path, '/')
+  return paths[#paths]
 end
 
 M.toggle_max_window = function()
@@ -105,6 +101,26 @@ M.toggle_max_window = function()
     M.send_keys('<C-w>=', 'n')
     vim.api.nvim_win_set_var(win, 'c_max_win', nil)
   end
+end
+
+M.autocmd = function(...)
+  vim.api.nvim_create_autocmd(...)
+end
+
+M.get_workspace = function()
+  local workspace = ''
+    if #vim.lsp.buf.list_workspace_folders() > 0 then
+      workspace = vim.lsp.buf.list_workspace_folders()[1]
+    end
+    return workspace
+end
+
+M.is_git_repo = function()
+  return vim.split(vim.fn.system('git rev-parse --is-inside-work-tree 2>/dev/null'), '\n')[1] ~= ""
+end
+
+M.get_git_root_path = function()
+  return vim.split(vim.fn.system('git rev-parse --show-toplevel'), '\n')[1]
 end
 
 return M

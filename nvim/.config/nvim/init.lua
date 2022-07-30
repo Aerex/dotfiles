@@ -5,6 +5,7 @@
 --
 -- config options
 require('options')
+local autocmd = require('utils').autocmd
 
 --vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
 autocmd('VimResized', {

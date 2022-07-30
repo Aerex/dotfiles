@@ -151,6 +151,7 @@ vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint
   vim.keymap.set('n', '<leader>,d', function() vim.diagnostic.open_float() end, { silent= true, buffer = bufnr })
   keymap('n', '<leader>xD', '<cmd>lua vim.diagnostic.disable()<CR>', opts)
   keymap('n', '<leader>lr', '<cmd>LspRestart<CR>', opts)
+  keymap('n', '<leader>ll', '<cmd>LspLog<CR>', opts)
 
   local ok_d, _ = pcall(require, 'jdtls')
   if ok_d and vim.bo.filetype == 'java' then
@@ -237,10 +238,10 @@ require'lspconfig'.pylsp.setup{
     return util.root_pattern(unpack(root_files))(fname) or util.find_git_ancestor(fname)
   end,
   settings = {
-    pyls = {
+    pylsp = {
       plugins = {
         pycodestyle =  {enabled = false},
-        pylint =  { enabled = false },
+        pylint =  {enabled = false},
         black = {enabled = true},
         pyflakes = {enabled = false}
       }

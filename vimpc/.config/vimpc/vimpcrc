@@ -22,23 +22,34 @@ set listallmeta
 " Highlight search results
 set hlsearch
 
-"Tab {{{1
-"map ]t  gt
-"map [t  gT
+" Tab {{{1
+map ]t  :tabnext<C-M>
+map [t  :tabprevious<C-M>
 "}}}
 
 " Goto {{{1
 map B :browse<C-M>
+map gb :browse<C-M>
 map L :library<C-M>
+map gl :library<C-M>
 map P :playlist<C-M>
-map H :help<C-M>
+map gp :playlist<C-M>
+map K :help<C-M>
 " }}}
 
 " Playback {{{1
-"map ,s  :seek<Right>
-"map (         :seek- 00:10<C-M>
+map ,s  :seek<Right>
+map )   :seek+ 00:10<C-M>
+map (   :seek- 00:10<C-M>
+
+map {   :seek+ 00:30<C-M>
+map }   :seek- 00:30<C-M>
+
+"map (         :seek- 01:10<C-M>
 "map )         :seek+ 00:10<C-M>
 "}}}
+
+map <C-l> :redraw<C-M>
 
 " Stop playing music when we quit
 "set stoponquit
@@ -53,10 +64,12 @@ map H :help<C-M>
 "map @ :set add next<C-M>a:set add end<C-M>
 
 " Ensure that the database is up to date each connect
-"update
+update
 
 " Color the statusline and tabs
 " highlight status blackbg
 " highlight tab blackbg
 
 echo Config File Complete
+
+" vim: ft=vim fdm=marker

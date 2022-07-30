@@ -20,10 +20,45 @@ source ~/.config/neomutt/accounts/aerex/main/muttrc
 source ~/.config/neomutt/gpgrc
 
 # @See https://neomutt.org/guide/reference#3-359-%C2%A0sleep_time
-# Specifies time, in seconds, to pause while displaying certain informational messages, while moving from folder to folder 
-# and after expunging messages from the current folder. The default is to pause one second, so a value of zero for this option 
+# Specifies time, in seconds, to pause while displaying certain informational messages, while moving from folder to folder
+# and after expunging messages from the current folder. The default is to pause one second, so a value of zero for this option
 # suppresses the pause.
 set sleep_time = 0
+
+# https://neomutt.org/guide/reference#3-452-%C2%A0wait_key
+# Controls whether NeoMutt will ask you to press a key after an external command has been invoked by these functions: <shell-escape>, <pipe-message>, <pipe-entry>, <print-message>, and <print-entry>commands.
+# It is also used when viewing attachments with " auto_view", provided that the corresponding mailcap entry has a needsterminal flag, and the external program is interactive.
+# When set , NeoMutt will always ask for a key. When unset , NeoMutt will wait for a key only if the external command returned a non-zero status.
+# Defaults: yes
+set wait_key = no
+
+# https://neomutt.org/guide/reference#3-436-%C2%A0ts_enabled
+# Controls whether NeoMutt tries to set the terminal status line and icon name. Most terminal emulators emulate the status line in the window title.
+# Default: no
+set ts_enabled = yes
+
+# https://neomutt.org/guide/reference#3-174-%C2%A0mail_check
+# This variable configures how often (in seconds) NeoMutt should look for new mail. Also see the $timeout variable.
+# Default: 5
+set mail_check = 5 
+
+# https://neomutt.org/guide/reference#3-184-%C2%A0mark_old
+# Controls whether or not NeoMutt marks new unread messages as old if you exit a mailbox without reading them.
+# With this option set , the next time you start NeoMutt, the messages will show up with an "O" next to them in the index menu, indicating that they are old.
+# Default: yes
+set mark_old = no
+
+# https://neomutt.org/guide/reference#3-277-%C2%A0pipe_decode
+# Used in connection with the <pipe-message>function.
+# When unset , NeoMutt will pipe the messages without any preprocessing. When set , NeoMutt will attempt to decode the messages first.
+# Strip headers and eval mimes when piping
+# Default: no
+set pipe_decode = yes
+
+# https://neomutt.org/guide/reference#3-429-%C2%A0tilde
+# When set , the internal-pager will pad blank lines to the bottom of the screen with a tilde ("~").
+# Default: no
+set tilde = yes
 
 # @See https://neomutt.org/guide/reference#3-165-%C2%A0ispell
 # How to invoke ispell (GNU's spell-checking software).
@@ -33,15 +68,173 @@ set ispell  = "aspell -e -c"
 # Specifies how to sort messages in the "index" menu. Valid values are: date or date-sent, date-received, from, mailbox-order (unsorted)
 # score, size, spam, subject, threads, to
 # You may optionally use the "reverse-" prefix to specify reverse sorting order.
-set sort = date 
+set sort = date
 
-# https://neomutt.org/guide/reference#3-167-%C2%A0mail_check 
-# This variable configures how often (in seconds) NeoMutt should look for new mail. Also see the $timeout variable.
-set mail_check = 120
+#http://www.mutt.org/doc/manual/manual.html#implicit-autoview
+#If set to “yes”, mutt will look for a mailcap entry with the “copiousoutput” flag set for every MIME attachment it doesn't have an internal viewer defined for. If such an entry is found, mutt will use the viewer defined in that entry to convert the body part to text form.
+set implicit_autoview = yes
+#Default: no
+
+# http://www.mutt.org/doc/manual/manual.html#status-chars
+# Controls the characters used by the “%r” indicator in $status_format.
+# The first character is used when the mailbox is unchanged.
+# The second is used when the mailbox has been changed, and it needs to be resynchronized.
+#The third is used if the mailbox is in read-only mode, or if the mailbox will not be written when exiting that mailbox
+# (You can toggle whether to write changes to a mailbox with the <toggle-write> operation, bound by default to “%”).
+# The fourth is used to indicate that the current folder has been opened in attach- message mode (Certain operations like composing a new mail, replying, forwarding, etc. are not permitted in this mode).
+set status_chars = " *A"
+
+
+# https://neomutt.org/guide/reference#3-280-%C2%A0pager_index_lines
+# Determines the number of lines of a mini-index which is shown when in the pager. The current message, unless near the top or bottom of the folder, will be roughly one third of the way down this mini-index, giving the reader the context of a few messages before and after the message. This is useful, for example, to determine how many messages remain to be read in the current thread. A value of 0 results in no index being shown. If the number of messages in the current folder is less than $pager_index_lines, then the index will only use as many lines as it needs.
+# 
+# Default: 0
+set pager_index_lines   = 10    # number of index lines to show
+
+# https://neomutt.org/guide/reference#3-278-%C2%A0pager_context
+# This variable controls the number of lines of context that are given when displaying the next or previous page in the internal pager. By default, NeoMutt will display the line after the last one on the screen at the top of the next page (0 lines of context).
+# This variable also specifies the amount of context given for search results. If positive, this many lines will be given before a match, if 0, the match will be top-aligned.
+# Default: 0
+set pager_context       = 7     # number of context lines to show
 
 #auto_view text/html
 #set implicit_autoview
 set mailcap_path='~/.config/neomutt/.mailcap'
+
+#https://neomutt.org/guide/reference#3-433-%C2%A0to_chars
+#Controls the character used to indicate mail addressed to you.
+#Default:  “  +TCFLR ”
+#Character	Default	Description
+#1	        <space>	The mail is not addressed to your address.
+#2	        +	      You are the only recipient of the message.
+#3          T	      Your address appears in the "To:" header field, but you are not the only recipient of the message.
+#4          C	      Your address is specified in the "Cc:" header field, but you are not the only recipient.
+#5          F	      Indicates the mail that was sent by you .
+#6          L	      Indicates the mail was sent to a mailing-list you subscribe to.
+#7          R	      Your address appears in the "Reply-To:" header field but none of the above applies.
+set to_chars = " ›»C‹L"
+
+# Sidebar
+#https://neomutt.org/guide/reference#3-349-%C2%A0sidebar_format
+#This variable allows you to customize the sidebar display.
+#This string is similar to $index_format, but has its own set of printf(3)-like sequences:
+#%B		Name of the mailbox
+#%d	* @	Number of deleted messages in the mailbox
+#%D		Descriptive name of the mailbox
+#%F	*	Number of flagged messages in the mailbox
+#%L	* @	Number of messages after limiting
+#%n		'N' if mailbox has new mail, ' ' (space) otherwise
+#%N	*	Number of unread messages in the mailbox (seen or unseen)
+#%o	*	Number of old messages in the mailbox (unread, seen)
+#%r	*	Number of read messages in the mailbox (read, seen)
+#%S	*	Size of mailbox (total number of messages)
+#%t	* @	Number of tagged messages in the mailbox
+#%Z	*	Number of new messages in the mailbox (unread, unseen)
+#%!		"!" : one flagged message; "!!" : two flagged messages; "n!" : n flagged messages (for n > 2). Otherwise prints nothing.
+#%>X	 	Right justify the rest of the string and pad with "X"
+#%|X	 	Pad to the end of the line with "X"
+#%*X	 	Soft-fill with character "X" as pad
+set sidebar_format = '%D %?F?[%F]? %?N?%N/ %?n?%n? %?S?%S?'
+
+# https://neomutt.org/guide/reference#3-357-%C2%A0sidebar_visible
+#This specifies whether or not to show sidebar. The sidebar shows a list of all your mailboxes.
+# Defaults: no
+set sidebar_visible = no
+
+# https://neomutt.org/guide/reference#3-358-%C2%A0sidebar_width
+# This controls the width of the sidebar. It is measured in screen columns.
+# For example: sidebar_width=20 could display 20 ASCII characters, or 10 Chinese characters.
+# Defaults: 30
+set sidebar_width = 20
+
+# https://neomutt.org/guide/reference#3-355-%C2%A0sidebar_short_path
+# By default the sidebar will show the mailbox's path, relative to the $folder variable.
+# Setting sidebar_shortpath=yes will shorten the names relative to the previous name. Here's an example:
+# Defaults: no
+set sidebar_short_path = yes
+
+# https://neomutt.org/guide/reference#3-352-%C2%A0sidebar_next_new_wrap
+# When set, the <sidebar-next-new>command will not stop and the end of the list of mailboxes, but wrap around to the beginning.
+# The <sidebar-prev-new>command is similarly affected, wrapping around to the end of the list.
+# Default: no
+set sidebar_next_new_wrap = yes
+
+# https://neomutt.org/guide/reference#3-176-%C2%A0mail_check_stats
+# When set , NeoMutt will periodically calculate message statistics of a mailbox while polling for new mail. It will check for unread, flagged, and total message counts. Because this operation is more performance intensive, it defaults to unset , and has a separate option, $mail_check_stats_interval, to control how often to update these counts.
+# Default: no
+set mail_check_stats = yes
+
+bind index,pager \Ck sidebar-prev
+bind index,pager \Cj sidebar-next
+bind index,pager \Co sidebar-open
+bind index,pager \Cp sidebar-prev-new
+bind index,pager \Cn sidebar-next-new
+bind index,pager B sidebar-toggle-visible
+
+# https://neomutt.org/guide/reference#3-170-%C2%A0index_format
+# This variable allows you to customize the message index display to your personal taste.
+# Default:  “ %4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s ”
+#This string is similar to $sidebar_format, but has its own set of printf(3)-like sequences:
+# %C Current message number
+# %Z A three character set of message status flags (ie. N/!o/r)
+# %e Current message number in thread
+# %E Number of messages in current thread
+
+# https://neomutt.org/feature/cond-date#2-%C2%A0introduction
+# Use conditional dates to format dates
+# If message is on this month use format Dec 10 - %[%b %d] ELSE use 2015-04-23 %[%Y-%m-%d]
+# ? TEST ? TRUE & FALSE ?
+# Date codes
+# %[d   Today
+# %[%H:%M ]      12:34
+# %[m   This month
+# %[%a %d]       Thu 12
+# %[y   This year
+# %[%b %d]       Dec 10
+# %[%m/%y ]      06/15
+#%?<sequence_char>?<if_string>&<else_string>?
+#%?<sequence_char>?<optional_string>?
+# ? TEST ? TRUE & FALSE ?
+# - Display Number of message
+# - Display Message Status
+# - Display Date
+# if a message arrived this year thread is folded (%[y)
+#   if a message arrive this month (%[m)
+#    if a message arrive today  (%[d)
+#     display datetime using format "%[%I:%M %p]" "04:23 PM"
+#    else
+#     display datetime using format "%[%a %b %d]" "Mon Mar 11"
+#    end
+#   else
+#     display datetime using format "%[%b %d]" "Mar 11"
+#   end
+# else
+#   display datetime using format "%[%b %d, %y]" "Mar 11, 2020"
+# end
+# Display the To address left justified and trim by 30 chars (see man printf for formatting)
+# (Optional) Display number of messages in thread
+# if this is a thread
+#   display message thread number / number of messages in thread
+# else if message has tags (notmuch)
+# end
+#
+set index_format='%4C %Z %<[y?%<[m?%<[d?%10[%I:%M %p  ]&%10[%a %b %d  ]>&%12[%b %d  ]>&%10[%b %d, %Y]> %-25.20L %?E?%2.e/%.E&   ?  %?Gi?%Gi &?%?Gt?%Gt &?%?Gr?%Gr &?%?Ga?%Ga &?%?Gh?%Gh &?%?Gg?%Gg &?%?Gc?%Gc &? %s'
+
+
+# https://neomutt.org/guide/reference#3-240-%C2%A0pager_format
+# This variable controls the format of the one-line message "status" displayed before each message in either the internal or an external pager.
+# The valid sequences are listed in the $index_format section.
+# Default:  “ -%Z- %C/%m: %-20.20n   %s%*  -- (%P) ”
+set pager_format = '%Z    %?E?Thread: %e/%E&Message: %C?    from: %-20.20n    subject: %25.25s%* %g (%P)'
+
+# https://neomutt.org/guide/reference#3-422-%C2%A0status_format
+# Controls the format of the status line displayed in the "index" menu. This string is similar to $index_format, but has its own set of printf(3)-like sequences:k
+# Default:  “ -%r-NeoMutt: %D [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]---(%s/%S)-%>-(%P)--- ”
+# %l	Approximate size (in bytes) of the current message (see formatstrings-size)
+# Credits to https://gideonwolfe.com/posts/workflow/neomutt/intro/
+set status_format = "[ Folder: %f ] [%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]%>─%?p?( %p postponed )? (%l)"
+#set status_format = '%r Neomutt(%D): [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? Size:%l?] (sort: %s/%S)%* (%P)'
+
 
 # Macros for switching accounts
 bind index <Space> noop
