@@ -1,23 +1,36 @@
 local M = {}
 local utils = require('utils')
 local default_key_maps = {}
+local dap = require('dap')
+local dapui = require('dapui')
+
+M.hover_var = function()
+  local status = dap.status()
+  if status then
+    local w = require'dap.ui.widgets'
+    w.hover()
+  end
+end
+
+M.toggle_breakpoints_qf = function()
+  -- Add breakpoints to quickfix window
+  require'dap'.list_breakpoints()
+  -- Load trouble
+  require'packer'.loader('trouble.nvim')
+  -- open trouble quickfix
+  require'trouble'.open({ provider = 'quickfix'})
+end
 
 M.restore_keymaps = function()
-  local api = vim.api
   for _, keymap in pairs(default_key_maps) do
-    api.nvim_buf_set_keymap(
-      keymap.buffer,
-      keymap.mode,
-      keymap.lhs,
-      keymap.rhs,
-      { silent = keymap.silent == 1 }
-    )
+    local rhs = keymap.rhs or keymap.callback
+    vim.keymap.set(keymap.mode, keymap.lhs, rhs, { buffer = keymap.buffer, silent = true })
   end
   default_key_maps = {}
 end
 
 M.debugger_keymaps = function()
-  local ref_map = { 'K', '<A-j>','<A-k>', '<A-l>' }
+  local ref_map = { 'K', '<A-j>','<A-k>', '<A-l>', '<A-h>', '<leader>dr', '<leader>dR', '<leader>dl', 'qq' }
   local api = vim.api
   for _, buf in pairs(api.nvim_list_bufs()) do
       local keymaps = api.nvim_buf_get_keymap(buf, 'n')
@@ -30,21 +43,21 @@ M.debugger_keymaps = function()
       end
       local ok, wk = pcall(require, 'which-key')
       if ok then
-        options = { silent = true, buffer = buf }
+        local options = { silent = true, buffer = buf }
         wk.register({
-          K = {'<cmd>lua require("dap.ui.widgets").hover()<cr>', 'Hover', options },
-          ['<A-j>'] = { '<cmd>lua require("dap").step_over()<cr>', 'Step Over', options },
-          ['<A-k>'] = { '<cmd>lua require("dap").step_into()<cr>', 'Step Into', options },
-          ['<A-l>'] = { '<cmd>lua require("dap").step_out()<cr>', 'Step Out', options },
-          ['<leader>dr'] = {'<cmd>lua require"dap".repl.toggle({height = 7})<CR><C-w>l', 'REPL', options },
-          ['<A-h>'] = { '<cmd>lua require("dap").continue()<cr>', 'Continue', options },
-        })
+          K = {function() require('dap.ui.widgets').hover() end, 'Hover'},
+          ['<A-j>'] = { function() require('dap').step_over() end, 'Step Over'},
+          ['<A-k>'] = { function() require('dap').step_into() end, 'Step Into'},
+          ['<A-l>'] = { function() require('dap').step_out() end, 'Step Out'},
+          ['<A-h>'] = { function() require('dap').continue() end, 'Continue'},
+          ['<leader>dr'] = {function() require'dap'.float_element('repl', { enter = true }) end, 'REPL'},
+          ['<leader>dR'] = {function() require'dap'.repl.toggle({height = 7}); utils.send_keys('<C-w>b', 'n') end, 'REPL'},
+          ['<leader>dl'] = {function() M.toggle_breakpoints_qf() end, 'Show breakpoint list'},
+        }, options)
       end
     end
 end
 
-local dap = require('dap')
-local dapui = require('dapui')
 dap.adapters.go = function(callback, _)
   local stdout = vim.loop.new_pipe(false)
   local handle
@@ -168,20 +181,24 @@ dapui.setup({
     edit = 'e',
     repl = 'r',
   },
-  sidebar = {
-    -- You can change the order of elements in the sidebar
-    elements = {
-      -- Provide as ID strings or tables with 'id' and 'size' keys
-      {
-        id = 'scopes',
-        size = 25, -- Can be float or integer > 1
+  layouts = {
+    {
+      elements = {
+        'scopes',
+        'breakpoints',
+        'stacks',
+        'watches',
       },
-      { id = 'breakpoints', size = 0.25 },
-      { id = 'stacks', size = 0.25 },
-      { id = 'watches', size = 0.25 },
+      size = 55,
+      position = 'left',
     },
-    size = 55,
-    position = 'left', -- Can be 'left' or 'right'
+    {
+      elements = {
+        'repl'
+      },
+      size = 10,
+      position = 'bottom',
+    },
   },
   floating = {
     max_height = nil, -- These can be integers or a float between 0 and 1.
@@ -198,7 +215,7 @@ dap.listeners.before.event_exited['dapui_config'] = function()  dapui.close()end
 dap.listeners.after.event_terminated['me'] = M.restore_keymaps
 dap.listeners.after.event_initialized['me'] = M.debugger_keymaps
 
-dap.set_log_level('TRACE')
+--dap.set_log_level('TRACE')
 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'dap-repl',
@@ -222,10 +239,9 @@ M.toggle_dap_ele = function(ele, type)
 end
 
 M.start_or_continue  = function()
-  local dap = require'dap'
   if not vim.g.loaded_vscode_dap then
     vim.g.loaded_vscode_dap = 1
-    local workspace = None
+    local workspace = nil
     if #vim.lsp.buf.list_workspace_folders() > 0 then
       workspace = vim.lsp.buf.list_workspace_folders()[1] .. '/.vscode/launch.json'
     end
@@ -233,24 +249,6 @@ M.start_or_continue  = function()
   end
 
   dap.continue()
-end
-
-M.hover_var = function()
-  local dap = require'dap'
-  local status = dap.status()
-  if status then
-    local w = require'dap.ui.widgets'
-    w.hover()
-  end
-end
-
-M.toggle_breakpoints_qf = function()
-  -- Add breakpoints to quickfix window
-  require'dap'.list_breakpoints()
-  -- Load trouble
-  require'packer'.loader('trouble.nvim')
-  -- open trouble quickfix
-  require'trouble'.open({ provider = 'quickfix'})
 end
 
 return M

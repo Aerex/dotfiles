@@ -1,5 +1,4 @@
 local M = {}
-local autocmd = require'utils'.autocmd
 
 M.setup = function()
   require('which-key').setup {
@@ -43,6 +42,7 @@ M.setup = function()
     show_help = true, -- show help message on the command line when the popup is visible
   }
 end
+
 M.load_maps = function ()
   local ok, _ = pcall(require, 'which-key')
   if ok then
@@ -146,4 +146,5 @@ M.load_maps = function ()
       )
     end
 end
+
 return M
