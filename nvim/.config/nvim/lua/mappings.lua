@@ -132,6 +132,14 @@ vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent
 vim.cmd('autocmd! TermOpen *toggleterm#* lua require\'terminals\'.set_terminal_keymaps()')
 vim.cmd('autocmd! FileType vimwiki lua require\'wiki\'.remap()')
 vim.api.nvim_set_keymap('', '<F2>', ":echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, \"name\")')<CR>", { silent = true})
+autocmd('FileType', {
+  pattern = '{lspinfo},{qf},{dap-repl}',
+  callback = function(args)
+    vim.keymap.set('n', 'qq', function() vim.api.nvim_win_close(0, true) end,
+    { silent = true, buffer = args.buf})
+  end
+})
+
 
 
 -- @param {table} m
