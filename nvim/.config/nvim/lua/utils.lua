@@ -62,7 +62,7 @@ M.ultisnips.can_jump_backwards = function()
 end
 
 M.ultisnips.jump_backwards = function()
-  M.send_keys('<ESC>: call UltiSnips#JumpBackwards()<CR>', 'n')
+  M.send_keys('<C-R>=UltiSnips#JumpBackwards()<CR>', 'n')
 end
 
 M.ultisnips.can_jump_forward = function()
@@ -74,7 +74,7 @@ M.ultisnips.jump_forward = function()
 end
 
 M.ultisnips.expand_snippet = function()
-    M.send_keys('<C-R>=UltiSnips#ExpandSnippet()<CR>', 'n')
+    M.send_keys('<C-r>=[UltiSnips#CursorMoved(), UltiSnips#ExpandSnippet()][1]<cr>', 'n')
 end
 
 M.ultisnips.can_expand_snippet = function()
@@ -86,15 +86,6 @@ end
 M.get_filename = function(path)
   paths = vim.fn.split(path, '/')
   return paths[#paths]
-end
-
-M.list_contains = function(list, value)
-  for k, v in pairs(list) do
-    if v == value then
-      return true
-    end
-  end
-  return false
 end
 
 M.toggle_max_window = function()

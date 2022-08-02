@@ -1,4 +1,14 @@
+local ok, ultest = pcall(require, 'ultest')
 local M = {}
+if ok then
+  vim.g["test#go#gotest#options"] = "-v --short"
+  vim.g.ultest_use_pty = 1
+  vim.g.ultest_output_on_run = 1
+  vim.g.ultest_output_on_line = 1
+  vim.g.ultest_virtual_text = 1
+  vim.cmd('let test#strategy = "dispatch"')
+  vim.cmd('let test#go#ginkgo#options = { \'all\': \'-noColor\', \'file\' : \'-noColor -focus\'}')
+end
 
 M.setup = function()
   local ok, ultest = pcall(require, 'ultest')

@@ -19,6 +19,17 @@ if ok then
     nowait = true,
     prefix = '<leader>'
   })
+  wk.register({
+      ["]"] = { "/^\\d", "Next Transaction"},
+      ["["] = { "?^\\d", "Previous Transaction"}
+  }, {
+    buffer = 0,
+    mode = 'n',
+    silent = true,
+    noremap = true,
+    nowait = true,
+    prefix = ''
+  })
 end
 
 

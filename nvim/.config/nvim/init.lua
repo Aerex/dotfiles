@@ -5,9 +5,22 @@
 --
 -- config options
 require('options')
+local autocmd = require('utils').autocmd
 
-vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
-vim.cmd('autocmd VimResized * :wincmd =')
+--vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
+autocmd('VimResized', {
+  pattern = '*',
+  command = 'wincmd ='
+})
+autocmd('VimEnter', {
+  pattern = '*',
+  callback = function()
+    vim.fn.system('kill -s SIGWINCH $PPID')
+  end
+})
+--vim.cmd('autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"')
+
+--vim.cmd('autocmd VimResized * :wincmd =')
 -- FIXME(me): Figure out why set spell is being enabled in all buffers
 --vim.cmd('autocmd BufEnter qutebrowser-editor* set spell wrap')
 --vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')

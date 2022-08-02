@@ -34,7 +34,7 @@ if ok then
     preselect = cmp.PreselectMode.None,
     snippet = {
       expand = function(args)
-        vim.fn["UltiSnips#Anon"](args.body)
+        vim.fn['UltiSnips#Anon'](args.body)
       end,
     },
     mapping = {

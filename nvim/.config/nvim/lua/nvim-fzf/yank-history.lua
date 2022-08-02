@@ -13,6 +13,14 @@ local fzf = require('fzf').fzf
 return function()
   coroutine.wrap(function()
     local _ = {}
+    _.get_system_clipboard = function()
+      if vim.g.clipboard_history then
+        local file = io.open(vim.g.clipboard_history, 'rb')
+      else
+        print('can\'t find clipboard because g:clipboard_history is not set')
+      end
+
+    end
     _.get_history = function()
       local file = io.open(vim.g.miniyank_filename, 'rb')
       local data = file:read('*all')

@@ -13,6 +13,7 @@ fzf.default_options = {
   relative = 'editor',
   style = 'minimal'
 }
+
 local action = require('fzf.actions').async_action
 
 return function()
@@ -46,7 +47,7 @@ return function()
     local git_ls_files = 'git ls-files --full-name --cached --others --exclude-standard'
     local command = string.format('%s %s', git_ls_files, _.get_git_root_path())
     local result = fzf_cli(command,
-    '--multi --expect=ctrl-v,ctrl-x,ctrl-s,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="GitFiles> "')
+    '--multi --ansi --expect=ctrl-v,ctrl-x,ctrl-s,enter,ctrl-t --preview ' .. preview_files .. ' --prompt="GitFiles> "')
     local key = result[1]
 
     local vimcmd = 'e'

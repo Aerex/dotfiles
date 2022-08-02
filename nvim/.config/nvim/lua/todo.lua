@@ -72,7 +72,7 @@ M.setup = function()
 
   local ok, lcfg = pcall(require, 'nvim-local')
   local config
-  if ok then
+  if ok and lcfg['get_todo_config'] then
     config = vim.tbl_deep_extend("force", cfg, lcfg.get_todo_config())
   else
     config = cfg

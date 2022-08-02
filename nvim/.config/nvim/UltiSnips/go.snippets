@@ -52,27 +52,29 @@ Equal($1)
 endsnippet
 
 snippet todo "Add TODO block"
-// TODO(me): $1 $0
+// TODO: $1 $0
 endsnippet
 
-snippet log "Print variable"
-fmt.Printf("\n$1: %s", $1)
+snippet logn "fmt.Println"
+fmt.Println("#`!v line(".")`")
+fmt.Println($1)
+$0
 endsnippet
 
-snippet sprintf "Add fmt.Sprintf function block" 
-fmt.Sprintf("$1", $2)
+snippet logs "Print struct"
+fmt.Printf("\n$1 -> %#v", $1)
 endsnippet
 
-snippet haveoc "Add gomega HaveOccured block"
-HaveOccured()
+snippet fixme "Add FIXME block"
+// FIXME: $1 $0
 endsnippet
 
-snippet exne "Add Expect(..).ShouldNot(HaveOccurred) gomega block"
-Expect($1).ShouldNot(HaveOccurred())
+snippet note "Add note block"
+// NOTE: $1
 endsnippet
 
-snippet exer "Add Expect(..).Should(HaveOccurred) gomega block"
-Expect($1).Should(HaveOccurred())
+snippet log "Log variable"
+fmt.Printf("\n$1: %v\n", $1)
 endsnippet
 
 #global p!
