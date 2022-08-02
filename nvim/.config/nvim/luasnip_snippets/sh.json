@@ -1,0 +1,17 @@
+{
+  "todo": {
+    "prefix": "todo",
+    "description": "Add TODO block",
+    "body": "# TODO(me): $1"
+  },
+  "head": {
+    "prefix": "head",
+    "description": "Add header comment block",
+    "body": [
+      "#!/usr/bin/env sh",
+      "# AUTHOR: ${1:Aerex}",
+      "# DESC: $2",
+      "# DEPEND: $3"
+    ]
+  }
+}

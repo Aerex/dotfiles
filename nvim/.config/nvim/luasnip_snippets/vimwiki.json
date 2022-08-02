@@ -1,0 +1,26 @@
+{
+  "refl": {
+    "prefix": "refl",
+    "description": "Add reference style link",
+    "body": "[$1][$2] "
+  },
+  "meta": {
+    "prefix": "meta",
+    "description": "Add metablock",
+    "body": [
+      "--- ",
+      "title: $1",
+      "description: $2",
+      "tags: $3",
+      "---"
+    ]
+  },
+  "d": {
+    "prefix": "d",
+    "description": "method declaration",
+    "body": [
+      "def $1():",
+      "\t$2"
+    ]
+  }
+}

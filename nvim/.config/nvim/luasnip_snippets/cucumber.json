@@ -1,0 +1,33 @@
+{
+  "sc": {
+    "prefix": "sc",
+    "description": "Add a Scenario block",
+    "body": [
+      "Scenario: $0",
+      "endsnippet ",
+      "",
+      "snippet whi \"Add a When I run block\"",
+      "When I run `ibmcloud $0`"
+    ]
+  },
+  "todo": {
+    "prefix": "todo",
+    "description": "Add TODO block",
+    "body": "# TODO(me): $0"
+  },
+  "note": {
+    "prefix": "note",
+    "description": "Add NOTE  block",
+    "body": "# NOTE(me): $0"
+  },
+  "scenario": {
+    "prefix": "scenario",
+    "description": "Add Scenario block",
+    "body": "Scenario: $1"
+  },
+  "whenirun": {
+    "prefix": "whenirun",
+    "description": "Add aruba When I run... block",
+    "body": "When I run `$1`"
+  }
+}

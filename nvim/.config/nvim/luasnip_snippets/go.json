@@ -1,0 +1,155 @@
+{
+  "map": {
+    "prefix": "map",
+    "description": "Map type",
+    "body": "map[${1:keytype}]${2:valtype}"
+  },
+  ":": {
+    "prefix": ":",
+    "description": "Variable declaration :=",
+    "body": "${1:name} := ${0:value}"
+  },
+  "json": {
+    "prefix": "json",
+    "description": "JSON field",
+    "body": "`json:\"${1:displayName}\"`"
+  },
+  "err": {
+    "prefix": "err",
+    "description": "Basic error handling",
+    "body": [
+      "if err != nil {",
+      "\tlog.${1:Fatal}(err)",
+      "\\}"
+    ]
+  },
+  "cfrune": {
+    "prefix": "cfrune",
+    "description": "Cobra RunE function",
+    "body": [
+      "func(cmd *cobra.Command, args []string) {",
+      "\t$0",
+      "\\}"
+    ]
+  },
+  "gde": {
+    "prefix": "gde",
+    "description": "Add gomega Describe function block",
+    "body": [
+      "Describe(\"$1\", func() {",
+      "\t$0",
+      "\\})"
+    ]
+  },
+  "gbe": {
+    "prefix": "gbe",
+    "description": "Add gomega BeforeEach function block",
+    "body": [
+      "BeforeEach(func() {",
+      "\t$0",
+      "\\})"
+    ]
+  },
+  "gbf": {
+    "prefix": "gbf",
+    "description": "Add gomega Before function block",
+    "body": [
+      "Before(func() {",
+      "\t$0",
+      "\\})"
+    ]
+  },
+  "gae": {
+    "prefix": "gae",
+    "description": "Add gomega AfterEach function block",
+    "body": [
+      "AfterEach(func() {",
+      "\t$0",
+      "\\})"
+    ]
+  },
+  "aftereach": {
+    "prefix": "aftereach",
+    "description": "Add gomega AfterEach function block",
+    "body": [
+      "AfterEach(func() {",
+      "\t$0",
+      "\\})"
+    ]
+  },
+  "gt": {
+    "prefix": "gt",
+    "description": "Add gomega It function block",
+    "body": [
+      "It(\"$1\", func() {",
+      "\t$0",
+      "\\})"
+    ]
+  },
+  "exp": {
+    "prefix": "exp",
+    "description": "Add gomega Expect() function block",
+    "body": "Expect($1)"
+  },
+  "sn": {
+    "prefix": "sn",
+    "description": "Add gomega ShouldNot() function block",
+    "body": "ShouldNot($1)"
+  },
+  "hav": {
+    "prefix": "hav",
+    "description": "Add gomega HaveOccured() function block",
+    "body": "HaveOccured()"
+  },
+  "eq": {
+    "prefix": "eq",
+    "description": "Add gomega Equal() function block",
+    "body": "Equal($1)"
+  },
+  "todo": {
+    "prefix": "todo",
+    "description": "Add TODO block",
+    "body": "// TODO(me): $1 $0"
+  },
+  "note": {
+    "prefix": "note",
+    "description": "Add note block",
+    "body": "// NOTE: $1 $0"
+  },
+  "log": {
+    "prefix": "log",
+    "description": "Print variable",
+    "body": [
+      "// REMOVEME: Do not commit",
+      "fmt.Printf(\"\\n$1: %s\\n\", $1)"
+    ]
+  },
+  "logs": {
+    "prefix": "logs",
+    "description": "Print struct",
+    "body": [
+      "// REMOVEME: Do not commit",
+      "fmt.Printf(\"\\n$1: %+v\\n\", $1)"
+    ]
+  },
+  "sprintf": {
+    "prefix": "sprintf",
+    "description": "Add fmt.Sprintf function block",
+    "body": "fmt.Sprintf(\"$1\", $2)"
+  },
+  "haveoc": {
+    "prefix": "haveoc",
+    "description": "Add gomega HaveOccured block",
+    "body": "HaveOccured()"
+  },
+  "exne": {
+    "prefix": "exne",
+    "description": "Add Expect(..).ShouldNot(HaveOccurred) gomega block",
+    "body": "Expect($1).ShouldNot(HaveOccurred())"
+  },
+  "exer": {
+    "prefix": "exer",
+    "description": "Add Expect(..).Should(HaveOccurred) gomega block",
+    "body": "Expect($1).Should(HaveOccurred())"
+  }
+}

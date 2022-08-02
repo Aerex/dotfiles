@@ -1,0 +1,27 @@
+{
+  "def": {
+    "prefix": "def",
+    "description": "#define ...",
+    "body": "#define $1",
+    "luasnip": {
+      "priority": -50
+    }
+  },
+  "mark": {
+    "prefix": "mark",
+    "description": "#pragma mark (mark)",
+    "body": [
+      "#if 0",
+      "${1:#pragma mark -",
+      "}#pragma mark $2",
+      "#endif",
+      "",
+      "$0"
+    ]
+  },
+  "fund": {
+    "prefix": "fund",
+    "description": "function declaration",
+    "body": "${1:void} ${2:function_name}($3);"
+  }
+}
