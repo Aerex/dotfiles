@@ -215,3 +215,13 @@ git worktree add --track -b <new-branch-name> <path-to-folder> remote/<new-branc
 
 # List branches (only names)
 git branch --list --format="%(refname:short)"
+
+# Check if git directory 
+git rev-parse --is-inside-work-tree 2>/dev/null
+
+# To view staged files with code changes 
+# or using --cached which is synonym for --staged
+git diff [--staged|--cached]
+
+# To view only file names without code changes
+git diff --staged --name-only  
