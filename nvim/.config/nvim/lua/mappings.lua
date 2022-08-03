@@ -1,4 +1,7 @@
-local t = require('utils').t
+local utils = require('utils')
+local t = utils.t
+local autocmd = utils.autocmd
+
 -- slower to access vim.api direct
 local api = vim.api
 local M = {}
