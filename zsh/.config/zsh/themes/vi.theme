@@ -1,13 +1,6 @@
-# Comment
-
-# vim mode indicator in prompt (http://superuser.com/questions/151803/how-do-i-customize-zshs-vim-mode)
-#vim_ins_mode="%{$fg[cyan]%}[INS]%{$reset_color%}"
-#vim_cmd_mode="%{$fg[green]%}[CMD]%{$reset_color%}"
 vim_mode=$vim_ins_mode
-#vim_replace_mode="%{$fg[blue]%}[REPLACE]%{$reset_color%}"
-#vim_visual_mode="%{$fg[orange]%}[VISUAL]%{$reset_color%}"
 
-PROMPT='$(parent-vifm)${vim_mode}%{$fg[magenta]%}[%c] %{$reset_color%}'
+PROMPT='$(ssh-client)$(parent-vifm)${vim_mode}%{$fg[magenta]%}[%c] %{$reset_color%}'
 
 RPROMPT='%{$fg[blue]%}$(git_super_status)%{$reset_color%}'
 
