@@ -14,6 +14,14 @@ else
   export EDITOR=/usr/local/bin/nvim
 fi
 
+if command -v nvimpager 1>/dev/null 2>&1; then
+  export PAGER=nvimpager
+elif command -v vimpager 1>/dev/null 2>&1; then
+  export PAGER=vimpager
+else
+  export PAGER="less -SR"
+fi
+
 export NOTES_DIRECTORY=~/Documents/notes
 export EDITOR=nvim
 export NOTES_EXT=""

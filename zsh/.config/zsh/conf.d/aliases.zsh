@@ -12,6 +12,9 @@ alias n="nnn"
 alias khdrc="nvim ~/.skhdrc"
 alias alconf="nvim ~/.config/alacritty/alacritty.yml"
 
+# ================ VIFM  ==================== #1
+alias f="vifmrun ."
+alias ff="sudo vifmrun ."
 # ================ HUB  ==================== #1
 alias hpr="hub pull-request -c" 
 
