@@ -78,8 +78,8 @@ local noremaps = {
       ['<leader>dK']  = 'lua require\'dap.ui.widgets\'.hover()',
       ['<leader>dv']  = 'lua require\'dapui\'.float_element(\'scopes\', { enter = true })',
 
-      ['<leader>tdd']  = 'UltestDebug',
-      ['<leader>tdn']  = 'UltestDebug:Nearest',
+      ['<leader>tdd']  = function() require'test'.debug_file() end,
+      ['<leader>tdn']  = function() require'test'.debug_nearest() end,
       ['<leader>du']  = 'lua require\'dapui\'.toggle()',
       -- TODO: Need to make a method to only call method if running debugger (might set a global variable on debug session)
       ['<leader>drp']  = 'lua require\'dap\'.repl.toggle()<CR><C-w>l',

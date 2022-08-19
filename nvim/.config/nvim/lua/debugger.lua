@@ -1,6 +1,8 @@
 local M = {}
 local utils = require('utils')
+local autocmd = utils.autocmd
 local default_key_maps = {}
+local api = vim.api
 local dap = require('dap')
 local dapui = require('dapui')
 
