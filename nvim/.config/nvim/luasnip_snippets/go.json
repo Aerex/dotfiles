@@ -45,7 +45,7 @@
     "prefix": "gbe",
     "description": "Add gomega BeforeEach function block",
     "body": [
-      "BeforeEach(func() {",
+      "Context(\"$1\", func() {",
       "\t$0",
       "\\})"
     ]
@@ -54,7 +54,7 @@
     "prefix": "gbf",
     "description": "Add gomega Before function block",
     "body": [
-      "Before(func() {",
+      "BeforeEach(func() {",
       "\t$0",
       "\\})"
     ]
@@ -109,7 +109,22 @@
   "todo": {
     "prefix": "todo",
     "description": "Add TODO block",
-    "body": "// TODO(me): $1 $0"
+    "body": "// TODO: $1 $0"
+  },
+  "logs": {
+    "prefix": "logs",
+    "description": "Print struct",
+    "body": "fmt.Printf(\"\\n$1 -> %+v\\n\", $1)"
+  },
+  "fixme": {
+    "prefix": "fixme",
+    "description": "Add FIXME block",
+    "body": "// FIXME: $1 $0"
+  },
+  "perf": {
+    "prefix": "perf",
+    "description": "Add PERF block",
+    "body": "// PERF: $1 $0"
   },
   "note": {
     "prefix": "note",
@@ -118,23 +133,12 @@
   },
   "log": {
     "prefix": "log",
-    "description": "Print variable",
-    "body": [
-      "// REMOVEME: Do not commit",
-      "fmt.Printf(\"\\n$1: %s\\n\", $1)"
-    ]
-  },
-  "logs": {
-    "prefix": "logs",
-    "description": "Print struct",
-    "body": [
-      "// REMOVEME: Do not commit",
-      "fmt.Printf(\"\\n$1: %+v\\n\", $1)"
-    ]
+    "description": "Log variable",
+    "body": "fmt.Printf(\"\\n$1: %v\\n\", $1)"
   },
   "sprintf": {
     "prefix": "sprintf",
-    "description": "Add fmt.Sprintf function block",
+    "description": "Add fmt.Sprintf",
     "body": "fmt.Sprintf(\"$1\", $2)"
   },
   "haveoc": {
