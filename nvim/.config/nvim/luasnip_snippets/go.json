@@ -1,4 +1,28 @@
 {
+  "map": {
+    "prefix": "map",
+    "description": "Map type",
+    "body": "map[${1:keytype}]${2:valtype}"
+  },
+  ":": {
+    "prefix": ":",
+    "description": "Variable declaration :=",
+    "body": "${1:name} := ${0:value}"
+  },
+  "json": {
+    "prefix": "json",
+    "description": "JSON field",
+    "body": "`json:\"${1:displayName}\"`"
+  },
+  "err": {
+    "prefix": "err",
+    "description": "Basic error handling",
+    "body": [
+      "if err != nil {",
+      "\tlog.${1:Fatal}(err)",
+      "\\}"
+    ]
+  },
   "cfrune": {
     "prefix": "cfrune",
     "description": "Cobra RunE function",
@@ -17,18 +41,18 @@
       "\\})"
     ]
   },
-  "gct": {
-    "prefix": "gct",
-    "description": "Add gomega Context function block",
+  "gbe": {
+    "prefix": "gbe",
+    "description": "Add gomega BeforeEach function block",
     "body": [
       "Context(\"$1\", func() {",
       "\t$0",
       "\\})"
     ]
   },
-  "gbe": {
-    "prefix": "gbe",
-    "description": "Add gomega BeforeEach function block",
+  "gbf": {
+    "prefix": "gbf",
+    "description": "Add gomega Before function block",
     "body": [
       "BeforeEach(func() {",
       "\t$0",
@@ -37,6 +61,15 @@
   },
   "gae": {
     "prefix": "gae",
+    "description": "Add gomega AfterEach function block",
+    "body": [
+      "AfterEach(func() {",
+      "\t$0",
+      "\\})"
+    ]
+  },
+  "aftereach": {
+    "prefix": "aftereach",
     "description": "Add gomega AfterEach function block",
     "body": [
       "AfterEach(func() {",
@@ -96,7 +129,7 @@
   "note": {
     "prefix": "note",
     "description": "Add note block",
-    "body": "// NOTE: $1"
+    "body": "// NOTE: $1 $0"
   },
   "log": {
     "prefix": "log",
@@ -108,28 +141,19 @@
     "description": "Add fmt.Sprintf",
     "body": "fmt.Sprintf(\"$1\", $2)"
   },
-  "map": {
-    "prefix": "map",
-    "description": "Map type",
-    "body": "map[${1:keytype}]${2:valtype}"
+  "haveoc": {
+    "prefix": "haveoc",
+    "description": "Add gomega HaveOccured block",
+    "body": "HaveOccured()"
   },
-  ":": {
-    "prefix": ":",
-    "description": "Variable declaration :=",
-    "body": "${1:name} := ${0:value}"
+  "exne": {
+    "prefix": "exne",
+    "description": "Add Expect(..).ShouldNot(HaveOccurred) gomega block",
+    "body": "Expect($1).ShouldNot(HaveOccurred())"
   },
-  "json": {
-    "prefix": "json",
-    "description": "JSON field",
-    "body": "`json:\"${1:displayName}\"`"
-  },
-  "err": {
-    "prefix": "err",
-    "description": "Basic error handling",
-    "body": [
-      "if err != nil {",
-      "\tlog.${1:Fatal}(err)",
-      "\\}"
-    ]
+  "exer": {
+    "prefix": "exer",
+    "description": "Add Expect(..).Should(HaveOccurred) gomega block",
+    "body": "Expect($1).Should(HaveOccurred())"
   }
 }

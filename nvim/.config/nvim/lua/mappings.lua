@@ -1,4 +1,7 @@
-local t = require('utils').t
+local utils = require('utils')
+local t = utils.t
+local autocmd = utils.autocmd
+
 -- slower to access vim.api direct
 local api = vim.api
 local M = {}
@@ -135,6 +138,14 @@ vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
 vim.cmd('autocmd! TermOpen *toggleterm#* lua require\'terminals\'.set_terminal_keymaps()')
 vim.api.nvim_set_keymap('', '<F2>', ":echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, \"name\")')<CR>", { silent = true})
+autocmd('FileType', {
+  pattern = '{lspinfo},{qf},{dap-repl}',
+  callback = function(args)
+    vim.keymap.set('n', 'qq', function() vim.api.nvim_win_close(0, true) end,
+    { silent = true, buffer = args.buf})
+  end
+})
+
 
 
 -- @param {table} m

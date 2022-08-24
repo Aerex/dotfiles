@@ -19,7 +19,7 @@ autocmd({'BufEnter', 'BufWinEnter'}, {
   callback = function(args)
     vim.keymap.set('n', '\\ps', function() require'packer'.sync() end, { silent = true, buffer = args.buf })
     vim.keymap.set('n', '\\pi', function() require'packer'.install() end, { silent = true, buffer = args.buf })
-    vim.keymap.set('n', '\\pc', '<cmd>PackerCompile<cr>', { silent = true, buffer = args.buf })
+    vim.keymap.set('n', '\\pc', function() require'packer'.compile() end, { silent = true, buffer = args.buf })
     vim.keymap.set('n', '\\pS', '<cmd>PackerStatus<cr>', { silent = true, buffer = args.buf })
   end
 })

@@ -28,6 +28,14 @@ if command -v qutebrowser 1>/dev/null 2>&1; then
   export BROWSER=$(which qutebrowser)
 fi
 
+if command -v nvimpager 1>/dev/null 2>&1; then
+  export PAGER=nvimpager
+elif command -v vimpager 1>/dev/null 2>&1; then
+  export PAGER=vimpager
+else
+  export PAGER="less -SR"
+fi
+
 export NOTES_DIRECTORY=~/Documents/notes
 export NOTES_EXT=""
 export LESSKEYIN=$HOME/.lesskey

@@ -4,116 +4,20 @@
   "contributes": {
     "snippets": [
       {
-        "language": "snippets",
-        "path": "./snippets.json"
-      },
-      {
-        "language": "erlang",
-        "path": "./erlang.json"
-      },
-      {
-        "language": "go",
-        "path": "./go.json"
-      },
-      {
-        "language": "tcl",
-        "path": "./tcl.json"
-      },
-      {
-        "language": "xml",
-        "path": "./xml.json"
-      },
-      {
-        "language": "rust",
-        "path": "./rust.json"
-      },
-      {
-        "language": "plsql",
-        "path": "./plsql.json"
-      },
-      {
-        "language": "css",
-        "path": "./css.json"
-      },
-      {
-        "language": "vifm",
-        "path": "./vifm.json"
-      },
-      {
-        "language": "bindzone",
-        "path": "./bindzone.json"
-      },
-      {
-        "language": "blade",
-        "path": "./blade.json"
-      },
-      {
-        "language": "coffee-jasmine",
-        "path": "./coffee-jasmine.json"
-      },
-      {
-        "language": "coffee-react",
-        "path": "./coffee-react.json"
-      },
-      {
-        "language": "crystal",
-        "path": "./crystal.json"
-      },
-      {
-        "language": "eelixir",
-        "path": "./eelixir.json"
-      },
-      {
-        "language": "d",
-        "path": "./d.json"
-      },
-      {
-        "language": "ada",
-        "path": "./ada.json"
-      },
-      {
-        "language": "htmldjango",
-        "path": "./htmldjango.json"
-      },
-      {
-        "language": "coffee",
-        "path": "./coffee.json"
-      },
-      {
-        "language": "javascript-angular",
-        "path": "./javascript-angular.json"
-      },
-      {
-        "language": "javascript-ember",
-        "path": "./javascript-ember.json"
-      },
-      {
-        "language": "javascript-jasmine-arrow",
-        "path": "./javascript-jasmine-arrow.json"
-      },
-      {
         "language": "javascript-jsdoc",
         "path": "./javascript-jsdoc.json"
       },
       {
-        "language": "ledger",
-        "path": "./ledger.json"
+        "language": "cs",
+        "path": "./cs.json"
       },
       {
-        "language": "help",
-        "path": "./help.json"
-      },
-      {
-        "language": "mako",
-        "path": "./mako.json"
+        "language": "javascript_react",
+        "path": "./javascript_react.json"
       },
       {
         "language": "objc",
         "path": "./objc.json"
-      },
-      {
-        "language": "octave",
-        "path": "./octave.json"
       },
       {
         "language": "php-laravel",
@@ -128,28 +32,244 @@
         "path": "./php-symfony2.json"
       },
       {
-        "language": "rails",
-        "path": "./rails.json"
-      },
-      {
-        "language": "robot",
-        "path": "./robot.json"
-      },
-      {
-        "language": "soy",
-        "path": "./soy.json"
-      },
-      {
-        "language": "texmath",
-        "path": "./texmath.json"
+        "language": "cuda",
+        "path": "./cuda.json"
       },
       {
         "language": "typescript_react",
         "path": "./typescript_react.json"
       },
       {
+        "language": "muttrc",
+        "path": "./muttrc.json"
+      },
+      {
+        "language": "soy",
+        "path": "./soy.json"
+      },
+      {
+        "language": "css",
+        "path": "./css.json"
+      },
+      {
+        "language": "django",
+        "path": "./django.json"
+      },
+      {
+        "language": "vue",
+        "path": "./vue.json"
+      },
+      {
+        "language": "all",
+        "path": "./all.json"
+      },
+      {
+        "language": "gitcommit",
+        "path": "./gitcommit.json"
+      },
+      {
+        "language": "python",
+        "path": "./python.json"
+      },
+      {
+        "language": "java",
+        "path": "./java.json"
+      },
+      {
+        "language": "help",
+        "path": "./help.json"
+      },
+      {
+        "language": "sh",
+        "path": "./sh.json"
+      },
+      {
+        "language": "go",
+        "path": "./go.json"
+      },
+      {
+        "language": "xml",
+        "path": "./xml.json"
+      },
+      {
+        "language": "yaml",
+        "path": "./yaml.json"
+      },
+      {
+        "language": "c",
+        "path": "./c.json"
+      },
+      {
+        "language": "eruby",
+        "path": "./eruby.json"
+      },
+      {
+        "language": "jinja2",
+        "path": "./jinja2.json"
+      },
+      {
+        "language": "octave",
+        "path": "./octave.json"
+      },
+      {
+        "language": "julia",
+        "path": "./julia.json"
+      },
+      {
+        "language": "lhaskell",
+        "path": "./lhaskell.json"
+      },
+      {
+        "language": "ocaml",
+        "path": "./ocaml.json"
+      },
+      {
+        "language": "perl",
+        "path": "./perl.json"
+      },
+      {
+        "language": "puppet",
+        "path": "./puppet.json"
+      },
+      {
+        "language": "ruby",
+        "path": "./ruby.json"
+      },
+      {
+        "language": "rust",
+        "path": "./rust.json"
+      },
+      {
+        "language": "cucumber",
+        "path": "./cucumber.json"
+      },
+      {
+        "language": "NeogitCommitMessage",
+        "path": "./NeogitCommitMessage.json"
+      },
+      {
+        "language": "typescript",
+        "path": "./typescript.json"
+      },
+      {
+        "language": "r",
+        "path": "./r.json"
+      },
+      {
+        "language": "javascript",
+        "path": "./javascript.json"
+      },
+      {
+        "language": "ledger",
+        "path": "./ledger.json"
+      },
+      {
+        "language": "robot",
+        "path": "./robot.json"
+      },
+      {
+        "language": "pandoc",
+        "path": "./pandoc.json"
+      },
+      {
+        "language": "supercollider",
+        "path": "./supercollider.json"
+      },
+      {
+        "language": "mako",
+        "path": "./mako.json"
+      },
+      {
+        "language": "xhtml",
+        "path": "./xhtml.json"
+      },
+      {
+        "language": "bindzone",
+        "path": "./bindzone.json"
+      },
+      {
+        "language": "rnoweb",
+        "path": "./rnoweb.json"
+      },
+      {
         "language": "svelte",
         "path": "./svelte.json"
+      },
+      {
+        "language": "blade",
+        "path": "./blade.json"
+      },
+      {
+        "language": "cpp",
+        "path": "./cpp.json"
+      },
+      {
+        "language": "rails",
+        "path": "./rails.json"
+      },
+      {
+        "language": "coffee-react",
+        "path": "./coffee-react.json"
+      },
+      {
+        "language": "php",
+        "path": "./php.json"
+      },
+      {
+        "language": "bib",
+        "path": "./bib.json"
+      },
+      {
+        "language": "proto",
+        "path": "./proto.json"
+      },
+      {
+        "language": "rst",
+        "path": "./rst.json"
+      },
+      {
+        "language": "javascript-node",
+        "path": "./javascript-node.json"
+      },
+      {
+        "language": "vimwiki",
+        "path": "./vimwiki.json"
+      },
+      {
+        "language": "markdown",
+        "path": "./markdown.json"
+      },
+      {
+        "language": "haskell",
+        "path": "./haskell.json"
+      },
+      {
+        "language": "snippets",
+        "path": "./snippets.json"
+      },
+      {
+        "language": "html",
+        "path": "./html.json"
+      },
+      {
+        "language": "coffee",
+        "path": "./coffee.json"
+      },
+      {
+        "language": "ejs",
+        "path": "./ejs.json"
+      },
+      {
+        "language": "erlang",
+        "path": "./erlang.json"
+      },
+      {
+        "language": "lua",
+        "path": "./lua.json"
+      },
+      {
+        "language": "plsql",
+        "path": "./plsql.json"
       },
       {
         "language": "json",
@@ -160,197 +280,82 @@
         "path": "./vim.json"
       },
       {
-        "language": "puppet",
-        "path": "./puppet.json"
-      },
-      {
-        "language": "julia",
-        "path": "./julia.json"
-      },
-      {
-        "language": "rnoweb",
-        "path": "./rnoweb.json"
-      },
-      {
-        "language": "cuda",
-        "path": "./cuda.json"
-      },
-      {
-        "language": "java",
-        "path": "./java.json"
-      },
-      {
-        "language": "lhaskell",
-        "path": "./lhaskell.json"
-      },
-      {
-        "language": "all",
-        "path": "./all.json"
-      },
-      {
-        "language": "typescript",
-        "path": "./typescript.json"
-      },
-      {
-        "language": "sh",
-        "path": "./sh.json"
-      },
-      {
-        "language": "javascript",
-        "path": "./javascript.json"
-      },
-      {
-        "language": "markdown",
-        "path": "./markdown.json"
-      },
-      {
-        "language": "vimwiki",
-        "path": "./vimwiki.json"
-      },
-      {
-        "language": "pandoc",
-        "path": "./pandoc.json"
-      },
-      {
-        "language": "html",
-        "path": "./html.json"
-      },
-      {
-        "language": "perl",
-        "path": "./perl.json"
-      },
-      {
-        "language": "vue",
-        "path": "./vue.json"
+        "language": "tcl",
+        "path": "./tcl.json"
       },
       {
         "language": "matlab",
         "path": "./matlab.json"
       },
       {
-        "language": "jinja2",
-        "path": "./jinja2.json"
+        "language": "zsh",
+        "path": "./zsh.json"
       },
       {
-        "language": "proto",
-        "path": "./proto.json"
+        "language": "texmath",
+        "path": "./texmath.json"
       },
       {
         "language": "tex",
         "path": "./tex.json"
       },
       {
-        "language": "javascript-node",
-        "path": "./javascript-node.json"
+        "language": "elm",
+        "path": "./elm.json"
       },
       {
-        "language": "cpp",
-        "path": "./cpp.json"
+        "language": "d",
+        "path": "./d.json"
       },
       {
-        "language": "ejs",
-        "path": "./ejs.json"
+        "language": "crystal",
+        "path": "./crystal.json"
       },
       {
-        "language": "c",
-        "path": "./c.json"
+        "language": "coffee-jasmine",
+        "path": "./coffee-jasmine.json"
       },
       {
-        "language": "zsh",
-        "path": "./zsh.json"
+        "language": "ada",
+        "path": "./ada.json"
       },
       {
-        "language": "python",
-        "path": "./python.json"
-      },
-      {
-        "language": "htmljinja",
-        "path": "./htmljinja.json"
+        "language": "eelixir",
+        "path": "./eelixir.json"
       },
       {
         "language": "html_minimal",
         "path": "./html_minimal.json"
       },
       {
-        "language": "bib",
-        "path": "./bib.json"
+        "language": "htmldjango",
+        "path": "./htmldjango.json"
       },
       {
-        "language": "NeogitCommitMessage",
-        "path": "./NeogitCommitMessage.json"
+        "language": "htmljinja",
+        "path": "./htmljinja.json"
       },
       {
-        "language": "r",
-        "path": "./r.json"
+        "language": "javascript-angular",
+        "path": "./javascript-angular.json"
       },
       {
-        "language": "php",
-        "path": "./php.json"
+        "language": "javascript-ember",
+        "path": "./javascript-ember.json"
       },
       {
-        "language": "gitcommit",
-        "path": "./gitcommit.json"
+        "language": "javascript-jasmine-arrow",
+        "path": "./javascript-jasmine-arrow.json"
       },
       {
-        "language": "eruby",
-        "path": "./eruby.json"
+        "language": "html",
+        "path": "./html.json"
       },
       {
-        "language": "cs",
-        "path": "./cs.json"
-      },
-      {
-        "language": "haskell",
-        "path": "./haskell.json"
-      },
-      {
-        "language": "yaml",
-        "path": "./yaml.json"
-      },
-      {
-        "language": "django",
-        "path": "./django.json"
-      },
-      {
-        "language": "cucumber",
-        "path": "./cucumber.json"
-      },
-      {
-        "language": "lua",
-        "path": "./lua.json"
-      },
-      {
-        "language": "javascript_react",
-        "path": "./javascript_react.json"
-      },
-      {
-        "language": "elm",
-        "path": "./elm.json"
-      },
-      {
-        "language": "xhtml",
-        "path": "./xhtml.json"
-      },
-      {
-        "language": "supercollider",
-        "path": "./supercollider.json"
-      },
-      {
-        "language": "rst",
-        "path": "./rst.json"
-      },
-      {
-        "language": "ocaml",
-        "path": "./ocaml.json"
-      },
-      {
-        "language": "ruby",
-        "path": "./ruby.json"
-      },
-      {
-        "language": "c",
-        "path": "./c.json"
+        "language": "jinja2",
+        "path": "./jinja2.json"
       }
     ]
   }
 }
+

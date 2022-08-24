@@ -1,17 +1,29 @@
 # ================ GENERAL  ==================== #1
 alias cls="clear"
-alias cat="vimcat -c 'set bg=light'"
-alias ls="exa"
+alias fpasswd="cat /etc/passwd | fzf"
+alias pager="$PAGER"
+alias hpp="http-prompt"
+alias wmclass="xprop WM_CLASS"
+alias mux="tmuxinator"
+alias myip="curl https://checkip.amazonaws.com"
+#alias cat="vimcat -c 'set bg=light'"
+alias ls="lsd"
+alias l='ls -l'
+alias la='ls -a'
+alias lal='ls -la'
+alias lt='ls --tree'
 alias wconf="nvim ~/.wuzz/config.toml"
-alias rm='trash'
 alias wttr="curl wttr.in?0"
 alias speedtest="export PYTHONHTTPSVERIFY=0; speedtest-cli"
-alias uuid="python -c \"import uuid; print uuid.uuid4()\" | pbcopy"
-alias mail="neomutt"
+alias uuid="python3 -c \"import uuid; print(uuid.uuid4())\" | copy"
+alias mail="neomutt -d5"
 alias n="nnn"
 alias khdrc="nvim ~/.skhdrc"
 alias alconf="nvim ~/.config/alacritty/alacritty.yml"
 
+# ================ VIFM  ==================== #1
+alias f="vifmrun ."
+alias ff="sudo vifmrun ."
 # ================ HUB  ==================== #1
 alias hpr="hub pull-request -c" 
 
@@ -35,6 +47,7 @@ alias gcalm="gcalcli calm"
 
 # ================ GIT ==================== #1
 alias g="git"
+alias grm="git rm"
 alias git-bug="$HOME/go/bin/git-bug"
 ### add ### #2
 alias gaa="git add -A"
@@ -62,20 +75,23 @@ alias gcp="git cherry-pick"
 alias gcpc="git cherry-pick --continue"
 alias grsu="git remote set-url"
 alias gtr="git ls-tree HEAD"
-alias gh="git hist"
 alias gm="git merge"
 alias gr="git rebase -i"
 alias grmc="git rm --cached"
 alias gmm="git merge master"
-alias gmd="git merge develop"
+alias gmd="git merge dev"
 alias grc="git rebase --continue"
 alias gd="git diff"
 alias gst="git stash"
+alias gsts="git status --short | grep '^\w.'"
+alias gstu="git status --short | grep '^??'"
 alias gs="git status"
 alias gk="gitk --all&"
 alias gx="gitx --all"
 alias gcm="git commit"
+alias gcmn="git commit -n"
 alias gam="git commit --amend"
+alias gamn="git commit --amend -n"
 alias gpu="git pu"
 alias gp="gpu"
 alias gpd="git push --delete"
@@ -85,10 +101,12 @@ alias gpufm="export OVERRIDE_MASTER_PUSH=1; git push origin master -f"
 alias gpum="export OVERRIDE_MASTER_PUSH=1; git push origin master"
 alias gpuso="git push --set-upstream origin"
 alias gcom="git co master"
-alias gcod="git co develop"
+alias gcod="git co dev"
 alias gmv="git mv"
 alias gconf="git config --global"
 alias gpr="git pull-request"
+### GH ### 
+alias ghim="gh issue list -a @me"
 
 # ================ NPM ==================== #1
 alias ns="npm start"
@@ -114,23 +132,12 @@ alias nus="npm uninstall --save"
 # Note: Anythig prefix with `tm` is a tmux alias
 # Edit tmux configuration
 alias tma="tmux attach -t"
+alias tmm="tmux attach -t main"
 alias tmcc="ssh aerex@aerex.me -t tmux attach -c chat"
-alias tmi="tmux attach -t misc"
+#alias tmi="tmux attach -t misc"
 alias tmu="tmux attach -t music"
 alias tmc="tmux attach -t chat"
-alias tcc="tmux context none"
 alias tconf="nvim ~/.tmux.conf"
-
-# ================ FASD ==================== #
-# alias jj='zz'
-alias a='fasd -a'        # any
-alias s='fasd -si'       # show / search / select
-alias d='fasd -d'        # directory
-alias f='fasd -f'        # file
-alias sd='fasd -sid'     # interactive directory selection
-alias sf='fasd -sif'     # interactive file selection
-# alias z='fasd_cd -d'     # cd, same functionality as j in autojump
-# alias zz='fasd_cd -d -i' # cd with interactive selection
 
 # ================ BREW ==================== #
 alias restart_khd="brew services restart khd"
@@ -139,6 +146,7 @@ alias restart_kwm="brew services retart kwm"
 # ================ TASKWARRIOR ==================== #
 alias t="task" # for work
 alias trm="task rm"
+alias tn="task annotate"
 alias tm="task modify"
 alias tn="task note"
 alias ta="task add"
@@ -149,7 +157,8 @@ alias tc="task context"
 alias tls="task ls"
 alias tlsn="task ls +next" 
 alias tin="task in"
-alias tcc="task context none"
+#alias tcc="task context none"
+alias tcc="task context empty"
 alias tda="task context da"
 alias tu="task undo"
 alias te="task edit"
@@ -158,9 +167,6 @@ alias tst="task start"
 alias tsp="task stop"
 alias tun="task denote"
 
-# ================ RANGER  ==================== #1
-alias r="ranger"
-alias rs="sudo ranger ."
 
 # ================ MUSIC  ==================== #1
 alias hp="http-prompt"
@@ -177,20 +183,23 @@ alias note="notes"
 
 # ================ VIM  ==================== #1
 alias v="nvim"
+alias vv="sudo nvim"
 alias vconf="nvim ~/.config/nvim/init.vim"
 
 # ================ ZSH  ==================== #1
+alias fal="alias | fzf"
 alias zae="nvim ~/.config/zsh/conf.d/aliases.zsh; source ~/.config/zsh/conf.d/aliases.zsh"
 alias zpconf="nvim ~/.zprofile; source ~/.zprofile"
 alias zase="nvim ~/.config/zsh/conf.d/aliases.sec.zsh; source ~/.config/zsh/conf.d/aliases.sec.zsh"
-alias zsev="nvim ~/.config/zsh/conf.d/env.sec.zsh"
-alias sz="source ~/.zshrc"
+alias zsev="nvim ~/.shellenv.local; source ~/.shellenv.local"
+alias zev="nvim ~/.zshenv; source ~/.zshenv"
+alias sz="exec $SHELL"
 alias zeconf="nvim ~/.zshenv; source ~/.zshenv"
-alias history="cat ~/.zsh_history | less"
+alias history="cat ~/.zsh_history | pager"
 alias zs="sz"
 alias zconf="nvim ~/.zshrc; source ~/.zshrc"
 alias zrc="nvim ~/.zshrc; source ~/.zshrc"
-
+alias tagcd="cd ~/.mnt/tags"
 # ================ JIRA  ==================== #1
 # Note: Anything prefix with a `j` is a jira alias
 alias j="jira"
@@ -233,3 +242,23 @@ alias cals="vdirsyncer sync"
 
 
 # vim: nowrap fdm=marker fmr=#,#
+#
+# ================ I3  ==================== #1
+alias rst_scratch="i3-msg -q 'exec --no-startup-id st -t quickterm'"
+# ================ KEYMAP  ==================== #1
+alias showkeys="xmodmap -pke"
+# ================ FONT  ==================== #1
+alias restfont="xset fp rehash; fc-cache"
+
+
+# vim: nowrap fdm=marker fmr=#,#
+#
+# ================ SYSTEMD/JOURNAL  ==================== #1
+alias ssctl="sudo systemctl"
+alias ssctldr="sudo systemctl daemon-reload"
+alias jctl="sudo journalctl -u"
+
+
+
+# vim: nowrap fdm=marker fmr=#,#
+#

@@ -1,9 +1,4 @@
 {
-  "todo": {
-    "prefix": "todo",
-    "description": "Add TODO block",
-    "body": "# TODO(me): $1"
-  },
   "#!": {
     "prefix": "#!",
     "description": "#!/usr/bin/env python",
@@ -261,5 +256,11 @@
       "\tcase _:",
       "\t\t${0:pass}"
     ]
+  },
+  "todo": {
+    "prefix": "todo",
+    "description": "Add TODO block",
+    "body": "# TODO(me): $1"
   }
 }
+

@@ -1,27 +1,4 @@
 {
-  "todo": {
-    "prefix": "todo",
-    "description": "Add todo",
-    "body": "-- TODO(me): $0",
-    "luasnip": {
-      "priority": 100
-    }
-  },
-  "fixme": {
-    "prefix": "fixme",
-    "description": "Add fixme",
-    "body": "-- FIXME(me): $0"
-  },
-  "logt": {
-    "prefix": "logt",
-    "description": "Print table",
-    "body": "print('\\n$1\\n' .. vim.inspect($1))"
-  },
-  "log": {
-    "prefix": "log",
-    "description": "Print variable",
-    "body": "print('\\n$1 -> ' .. $1)"
-  },
   "#!": {
     "prefix": "#!",
     "description": "#!/usr/bin/env lua",
@@ -139,17 +116,37 @@
     "description": "local x = 1",
     "body": "local ${1:x} = ${0:1}"
   },
-  "use": {
-    "prefix": "use",
-    "description": "Use",
-    "body": "use { '$1' \\}",
-    "luasnip": {
-      "autotrigger": true
-    }
-  },
   "req": {
     "prefix": "req",
     "description": "Require",
     "body": "require('$1')"
+  },
+  "todo": {
+    "prefix": "todo",
+    "description": "Add todo",
+    "body": "-- TODO(me): $0",
+    "luasnip": {
+      "priority": 100
+    }
+  },
+  "fixme": {
+    "prefix": "fixme",
+    "description": "Add fixme",
+    "body": "-- FIXME(me): $0"
+  },
+  "use": {
+    "prefix": "use",
+    "description": "Use",
+    "body": "use { $1 \\}"
+  },
+  "logt": {
+    "prefix": "logt",
+    "description": "Print table",
+    "body": "print('\\n$1\\n' .. vim.inspect($1))"
+  },
+  "log": {
+    "prefix": "log",
+    "description": "Print variable",
+    "body": "print('\\n$1 -> ' .. $1)"
   }
 }

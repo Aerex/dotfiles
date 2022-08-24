@@ -1,9 +1,37 @@
 {
+  "int": {
+    "prefix": "int",
+    "description": "interface",
+    "body": [
+      "interface $1 {",
+      "\\}"
+    ],
+    "luasnip": {
+      "priority": -50
+    }
+  },
+  "nspc": {
+    "prefix": "nspc",
+    "description": "namespace",
+    "body": [
+      "namespace $1 {",
+      "\\}"
+    ]
+  },
   "beforeeach": {
     "prefix": "beforeeach",
     "description": "Add beforeEach block",
     "body": [
       "beforeEach(async function () {",
+      "\t$1",
+      "\\});"
+    ]
+  },
+  "aftereach": {
+    "prefix": "aftereach",
+    "description": "Add afterEach block",
+    "body": [
+      "afterEach(async function () {",
       "\t$1",
       "\\});"
     ]
@@ -35,8 +63,8 @@
       "\\});"
     ]
   },
-  "logv": {
-    "prefix": "logv",
+  "log": {
+    "prefix": "log",
     "description": "Log a variable",
     "body": "console.log(`$1: \\${$1\\}\\n`);"
   },
@@ -46,41 +74,27 @@
     "body": [
       "context('$1', function() {",
       "\t$0",
-      "\\})"
+      "\\});"
     ]
   },
   "todo": {
     "prefix": "todo",
-    "description": "Add todo block",
+    "description": "Add TODO block",
     "body": "// TODO(me): $1"
   },
   "fixme": {
     "prefix": "fixme",
-    "description": "Add fixme block",
+    "description": "Add FIXME block",
     "body": "// FIXME(me): $1"
   },
   "note": {
     "prefix": "note",
-    "description": "Add note block",
+    "description": "Add NOTE block",
     "body": "// NOTE(me): $1"
   },
-  "int": {
-    "prefix": "int",
-    "description": "interface",
-    "body": [
-      "interface $1 {",
-      "\\}"
-    ],
-    "luasnip": {
-      "priority": -50
-    }
-  },
-  "nspc": {
-    "prefix": "nspc",
-    "description": "namespace",
-    "body": [
-      "namespace $1 {",
-      "\\}"
-    ]
+  "removeme": {
+    "prefix": "removeme",
+    "description": "Add REMOVEME block",
+    "body": "// REMOVEME(me): $1"
   }
 }
