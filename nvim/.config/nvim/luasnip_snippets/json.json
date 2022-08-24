@@ -1,0 +1,31 @@
+{
+  "btr": {
+    "prefix": "btr",
+    "description": "Add i18 json translation",
+    "body": [
+      "{",
+      "\t\"id\": \"$1\",",
+      "\t\"translation\": \"$1\"",
+      "\\},",
+      "$0"
+    ]
+  },
+  "s": {
+    "prefix": "s",
+    "description": "String",
+    "body": "\"${1:key}\": \"${0:value}\",",
+    "luasnip": {
+      "priority": -50
+    }
+  },
+  "n": {
+    "prefix": "n",
+    "description": "Number",
+    "body": "\"${1:key}\": ${0:value},"
+  },
+  "null": {
+    "prefix": "null",
+    "description": "Null",
+    "body": "\"${0:key}\": null,"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "sc": {
+    "prefix": "sc",
+    "description": "Add a Scenario block",
+    "body": [
+      "Scenario: $0",
+      "endsnippet ",
+      "",
+      "snippet whi \"Add a When I run block\"",
+      "When I run `ibmcloud $0`"
+    ]
+  },
+  "todo": {
+    "prefix": "todo",
+    "description": "Add TODO block",
+    "body": "# TODO(me): $0"
+  }
+}

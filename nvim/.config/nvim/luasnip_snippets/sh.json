@@ -1,0 +1,17 @@
+{
+  "doc": {
+    "prefix": "doc",
+    "description": "Added method doc",
+    "body": [
+      "# AUTHOR: $1",
+      "# DESC: $2",
+      "# DEPEND: $3",
+      "# REFF: $4"
+    ]
+  },
+  "todo": {
+    "prefix": "todo",
+    "description": "Add TODO block",
+    "body": "# TODO(me): $1"
+  }
+}

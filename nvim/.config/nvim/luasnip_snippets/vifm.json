@@ -1,0 +1,7 @@
+{
+  "mapg": {
+    "prefix": "mapg",
+    "description": "Add map",
+    "body": "map <silent> $1 :$0"
+  }
+}
