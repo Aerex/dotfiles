@@ -1,24 +1,36 @@
+zmodload zsh/zprof
 export ZLE_REMOVE_SUFFIX_CHARS=""
-
 OS=$(uname -s)
 
 # FZF
 export FZF_DEFAULT_OPTS="--bind ctrl-g:jump --bind alt-j:preview-down --bind alt-k:preview-up"
 
 # Misc
-if [ -f ~/neovim/bin/nvim ]; then
-  export EDITOR=~/neovim/bin/nvim
-elif [ -f /usr/bin/nvim ]; then
+if [ -f /usr/bin/nvim ]; then
   export EDITOR=/usr/bin/nvim
-else
+elif [ -f /usr/local/bin/nvim ]; then 
   export EDITOR=/usr/local/bin/nvim
+elif [ -f ~/neovim/bin/nvim ]; then 
+  export EDITOR=~/neovim/bin/nvim
+else
+  export EDITOR=vim
+fi
+
+if command -v nvimpager 1>/dev/null 2>&1; then
+  export PAGER=nvimpager
+elif command -v vimpager 1>/dev/null 2>&1; ; then
+  export PAGER=vimpager
+else
+  export PAGER=less -SR
+fi
+
+if command -v qutebrowser 1>/dev/null 2>&1; then 
+  export BROWSER=$(which qutebrowser)
 fi
 
 export NOTES_DIRECTORY=~/Documents/notes
-export EDITOR=nvim
 export NOTES_EXT=""
-export PAGER=vimpager
-export BROWSER=$(which qutebrowser)
+export LESSKEYIN=$HOME/.lesskey
 
 
 # Set name of the theme to load --- if set to "random", it will
@@ -40,7 +52,7 @@ export BROWSER=$(which qutebrowser)
 HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-DISABLE_AUTO_UPDATE="true"
+#DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -72,19 +84,51 @@ ENABLE_CORRECTION="true"
 
 # Would you like to use another custom folder than $ZSH/custom?
 
+# [zsh-git-prompt] location
+export __GIT_PROMPT_DIR=$ZINIT_HOME/olivierverdier/zsh-git-prompt-master
 
-# Credits to https://github.com/Tuurlijk/dotfiles/blob/master/.zshrc
-# Load zgen only if a user types a zgen command
-source ${ZDOTDIR:-${HOME}}/.zgen/zgen.zsh
-#	zgen "$@"
-#zgen () {
-#	if [[ ! -s ${ZDOTDIR:-${HOME}}/.zgen/zgen.zsh ]]; then
-#		git clone --recursive https://github.com/tarjoilija/zgen.git ${ZDOTDIR:-${HOME}}/.zgen
-#	fi
-#	source ${ZDOTDIR:-${HOME}}/.zgen/zgen.zsh
-#	zgen "$@"
-#}
+# use Haskell's version of zsh-git-prompt (if available)
+if [[ -f $__GIT_PROMPT_DIR/src/.bin/gitstatus ]]; then GIT_PROMPT_EXECUTABLE="haskell"; fi
 
+export ZSH_THEME_GIT_PROMPT_CACHE=1
+
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+if [[ ! -d $ZINIT_HOME ]]; then
+  print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+  mkdir -p "$(dirname $ZINIT_HOME)"
+  git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+source "${ZINIT_HOME}/zinit.zsh" 
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+zinit light-mode for \
+  zdharma-continuum/zinit-annex-as-monitor \
+  zdharma-continuum/zinit-annex-bin-gem-node \
+  zdharma-continuum/zinit-annex-patch-dl \
+  zdharma-continuum/zinit-annex-rust
+
+
+zinit ice lucid wait="0" atload='_zsh_autosuggest_start'
+zinit light zsh-users/zsh-autosuggestions
+zinit light woefe/zsh-git-prompt
+zinit snippet OMZP::ssh-agent
+zinit snippet OMZP::shrink-path
+
+zinit ice lucid wait='0'
+zinit light zsh-users/zsh-completions
+
+zinit light jeffreytse/zsh-vi-mode
+zinit light ytet5uy4/fzf-widgets
+zinit light crater2150/tmsu-fzf
+
+zinit ice wait:2 lucid extract"" from"gh-r" as"command" mv"taskwarrior-tui* -> tt"
+zinit load kdheepak/taskwarrior-tui
+
+ZSH_THEME="vi"
+zinit snippet $XDG_CONFIG_HOME/zsh/themes/vi.theme 
+zinit ice if'[[ "$OS" == "Darwin" ]]'; zinit snippet OMZP::brew
+#
 # Generate zgen init script if needed
 # Credits to https://github.com/Tuurlijk/dotfiles/blob/master/.zshrc
 #if [[ ! -s ${ZDOTDIR:-${HOME}}/.zgen/init.zsh ]]; then
@@ -122,30 +166,6 @@ fi
 #  }
 #  zle -N history-beginning-search-backward-then-append
 
-
-# [zsh-git-prompt] location
-export __GIT_PROMPT_DIR=~/.zgen/olivierverdier/zsh-git-prompt-master
-
-# use Haskell's version of zsh-git-prompt (if available)
-if [[ -f $__GIT_PROMPT_DIR/src/.bin/gitstatus ]]; then GIT_PROMPT_EXECUTABLE="haskell"; fi
-
-export ZSH_THEME_GIT_PROMPT_CACHE=1
-
-if ! zgen saved; then
-  zgen load zsh-users/zsh-autosuggestions
-  zgen load olivierverdier/zsh-git-prompt
-  zgen oh-my-zsh plugins/ssh-agent
-  zgen oh-my-zsh plugins/shrink-path
-  zgen load zsh-users/zsh-completions
-  zgen load jeffreytse/zsh-vi-mode
-  [ "$OS" = "Darwin" ] && zgen load brew
-  zgen save
-fi
-#ZSH_THEME="theunraveler-mod"
-#ZSH_THEME="theunraveler"
-
-
-
 # Options
 # zsh will not beep
 setopt no_beep
@@ -163,17 +183,17 @@ setopt nohup
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-ZSH_CUSTOM=$HOME/.config/zsh
 
+export ZSH_CONFIG_HOME=$XDG_CONFIG_HOME/zsh
 # User configuration
-if [ -d $ZSH_CUSTOM/conf.d ]; then
-  for file in $ZSH_CUSTOM/conf.d/**.zsh; do
+if [ -d $ZSH_CONFIG_HOME/conf.d ]; then
+  for file in $ZSH_CONFIG_HOME/conf.d/**.zsh; do
     source $file
   done
 fi
 
-if [ -d $ZSH_CUSTOM/functions ]; then
-  for file in $ZSH_CUSTOM/functions/*.zsh; do
+if [ -d $ZSH_CONFIG_HOME/functions ]; then
+  for file in $ZSH_CONFIG_HOME/functions/*.zsh; do
     source $file
   done
 fi
@@ -185,24 +205,39 @@ setopt correct
 # When offering typo corrections, do not propose anything which starts with an underscore (such as many of Zsh's shell functions)
 CORRECT_IGNORE='_*'
 
-
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH=$PATH:/$PYENV_ROOT
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-fi
+#export PYENV_ROOT="$HOME/.pyenv"
+#export PATH=$PATH:/$PYENV_ROOT
+#if command -v pyenv 1>/dev/null 2>&1; then
+#  eval "$(pyenv init -)"
+#  eval "$(pyenv virtualenv-init -)"
+#fi
 if command -v zoxide 1>/dev/null 2>&1; then 
    eval "$(zoxide init zsh)" 
 fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+function init_nvm() {
+  zinit light lukechilds/zsh-nvm  # This load nvm on first use of node, npm, etc
+}
 
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
 if command -v rbenv 1>/dev/null 2>&1; then
   eval "$(rbenv init - zsh)"
 fi
+
+alias luamake=/home/aerex/Documents/repos/git/lua-language-server/3rd/luamake/luamake
+
+NVM_LOADED=$(zinit loaded | grep nvm)
+function nvm() {
+  if [[ -z $NVM_LOADED ]]; then
+    zinit light lukechilds/zsh-nvm  # This load nvm on first use of node, npm, etc
+  fi
+
+  \nvm
+}
+
+[[ -f ~/.override-bins ]] && source ~/.override-bins
+
+### End of Zinit's installer chunk
