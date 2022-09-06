@@ -106,6 +106,11 @@ if ok then
         { opt = true, 'mbbill/undotree', cmd = 'UndotreeToggle',  config = [[vim.g.undotree_SetFocusWhenToggle = 1]] },
         { 'bfredl/nvim-miniyank', as = 'miniyank' }
       }
+      use { 'gbprod/yanky.nvim',
+        config = function()
+          require('yanky').setup({})
+        end
+      }
 
       -- diagnostics
       use {'folke/trouble.nvim', cmd = {'Trouble', 'TroubleToggle', 'TroubleClose', 'TroubleRefresh' } }

@@ -123,8 +123,9 @@ zinit light woefe/zsh-git-prompt
 zinit snippet OMZP::ssh-agent
 zinit snippet OMZP::shrink-path
 
-zinit ice lucid wait='0'
+zinit ice wait lucid atload'zicompinit; zicdreplay' blockf
 zinit light zsh-users/zsh-completions
+zinit ice wait lucid atload'zicompinit; zicdreplay' block
 
 zinit light jeffreytse/zsh-vi-mode
 zinit light ytet5uy4/fzf-widgets
@@ -134,7 +135,7 @@ zinit ice wait:2 lucid extract"" from"gh-r" as"command" mv"taskwarrior-tui* -> t
 zinit load kdheepak/taskwarrior-tui
 
 ZSH_THEME="vi"
-zinit snippet $XDG_CONFIG_HOME/zsh/themes/vi.theme 
+zinit snippet ~/.config/zsh/themes/vi.theme 
 zinit ice if'[[ "$OS" == "Darwin" ]]'; zinit snippet OMZP::brew
 #
 # Generate zgen init script if needed
@@ -192,7 +193,7 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 
-export ZSH_CONFIG_HOME=$XDG_CONFIG_HOME/zsh
+export ZSH_CONFIG_HOME=~/.config/zsh
 # User configuration
 if [ -d $ZSH_CONFIG_HOME/conf.d ]; then
   for file in $ZSH_CONFIG_HOME/conf.d/**.zsh; do

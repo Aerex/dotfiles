@@ -14,6 +14,7 @@ local noremaps = {
     n = {
       -- misc
       ['<leader>w']   = 'write',
+      ['\\zz'] = 'quitall!',
       ['<leader>rb']  = 'edit',
       ['<leader>b']  = 'lua require(\'nvim-fzf.buffer\')()',
       ['[t']          = 'tabprevious',
@@ -39,7 +40,7 @@ local noremaps = {
       ['\\rg']        = 'lua require(\'nvim-fzf.rg\')(vim.fn.expand("<cword>"))',
       [',rg']         = 'lua require(\'nvim-fzf.rg\')(vim.fn.input("Search term: "))',
       ['<leader>nv']  = 'lua require(\'nvim-fzf.notes\')()',
-      ['<leader>yr']                                                 = 'lua require(\'nvim-fzf.yank-history\')()',
+      ['<leader>yr'] = 'YankyRingHistory',
       -- docs
       ['<leader>dg'] = 'DogeGenerate',
       -- snippets
@@ -132,6 +133,11 @@ local file_type_keymaps = {
 }
 
 -- misc
+vim.keymap.set({'n','x'}, 'p', '<Plug>(YankyPutAfter)')
+vim.keymap.set({'n','x'}, 'P', '<Plug>(YankyPutBefore)')
+vim.keymap.set({'n','x'}, 'gp', '<Plug>(YankyGPutAfter)')
+vim.keymap.set({'n','x'}, 'gP', '<Plug>(YankyGPutBefore)')
+
 vim.api.nvim_set_keymap('n', '<leader><enter>', ':', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = true })
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
@@ -180,7 +186,6 @@ M.set_filetype_keymap = function(m)
 end
 
 M.set_keymap(noremaps, { silent = true, noremap = true })
-M.set_keymap(maps)
 M.set_filetype_keymap(file_type_keymaps)
 
 -- load which-keys if available
