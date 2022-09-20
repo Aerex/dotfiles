@@ -88,8 +88,6 @@ local noremaps = {
       ['<leader>de']    = 'lua require\'dap\'.disconnect({terminateDebuggee = true })',
       ['<leader>dcb']   = 'lua require\'dap\'.set_breakpoint(vim.fn.input(\'Breakpoint condition: \'))',
       ['<leader>dLb'] = 'lua require\'dap\'.set_breakpoint(nil, nil, vim.fn.input(\'Log point message: \'))',
-      ['<leader>d;'] = 'lua require\'dap\'.list_breakpoints();require\'trouble\'.toggle({providers = \'quickfix\'})',
-      ['<leader>d,l'] = 'lua require\'dap\'.set_log_level("TRACE")',
         -- fcitx
       ['<M-Tab>'] = 'lua require\'fcitx5\'.toggle()',
       ['<leader>d;'] = 'lua require\'debugger\'.toggle_breakpoints_qf()',
@@ -102,13 +100,6 @@ local noremaps = {
   }
 
      --['leader>dl :lua require'dap'.run_last()<CR>
-
-local maps = {
-  n = {
-    p = '<Plug>(miniyank-autoput)',
-    P = '<Plug>(miniyank-autoPut)'
-  }
-}
 
 local file_type_keymaps = {
   markdown = {
@@ -135,8 +126,6 @@ local file_type_keymaps = {
 -- misc
 vim.keymap.set({'n','x'}, 'p', '<Plug>(YankyPutAfter)')
 vim.keymap.set({'n','x'}, 'P', '<Plug>(YankyPutBefore)')
-vim.keymap.set({'n','x'}, 'gp', '<Plug>(YankyGPutAfter)')
-vim.keymap.set({'n','x'}, 'gP', '<Plug>(YankyGPutBefore)')
 
 vim.api.nvim_set_keymap('n', '<leader><enter>', ':', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = true })
