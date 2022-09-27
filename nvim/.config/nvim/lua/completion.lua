@@ -1,11 +1,10 @@
 local send_keys = require('utils').send_keys
 local get_packer_path = require('utils').get_packer_path
-local has_any_words_before = require('utils').has_any_words_before
 local ultisnips = require('utils').ultisnips
 local ok, cmp = pcall(require,'cmp')
 
 if ok then
-  vim.g.UltiSnipsExpandTrigger = 'None'
+  vim.g.UltiSnipsExpandTrigger = nil
   vim.g.UltiSnipsRemoveSelectModeMappings = 0
   vim.g.UltiSnipsSnippetsDir = os.getenv('HOME') ..'/.config/nvim/UltiSnips/'
   vim.g.UltiSnipsEditSplit = 'vertical'
@@ -50,7 +49,7 @@ if ok then
       ['<C-d>'] = cmp.mapping.scroll_docs(-4),
       ['<CR>'] = cmp.mapping.confirm({
         behavior = cmp.ConfirmBehavior.Insert,
-        select = true -- Only confirm explicitly selected items
+        select = false
       }),
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.get_selected_entry() == nil and ultisnips.can_expand_snippet() then
