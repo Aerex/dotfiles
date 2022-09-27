@@ -1,0 +1,29 @@
+#!/bin/env bash
+
+if [[ -z $(command -v jq) ]]; then
+  "ERROR: Missing jq"
+  exit 1
+fi
+
+ghcli_rl_json=$(mktemp ${tmp_dir}/XXXXXXX_ghcli_rl.json)
+curl --silent 'https://api.github.com/repos/cli/cli/releases/latest' > $ghcli_rl_json
+
+# if not install get gh
+dl_url=$(cat $ghcli_rl_json | jq -r '.assets[] | select(.name | contains("linux_amd64.tar.gz")).browser_download_url')
+
+ver=$(cat $ghcli_rl_json | jq -r  '.tag_name' | sed -E 's/v//g')
+wget $dl_url -O /tmp/ghcli.tar.gz
+tar -xvf /tmp/ghcli.tar.gz
+pushd 1>/dev/null
+cd /tmp/gh_$ver_linux_amd64
+sudo mv bin/gh /usr/local/bin
+if [[ ! -d /usr/local/share/licenses/gh ]]; then
+  sudo mkdir /usr/local/share/licenses/gh
+fi
+sudo mv LICENSE /usr/local/share/licenses/gh
+sudo mv share/man/man1/* /usr/share/man/man1/
+popd 1>/dev/null
+
+# TODO: Add check to see if latest version was installed
+
+# vim: ft=bash
