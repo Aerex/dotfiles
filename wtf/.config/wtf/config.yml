@@ -1,0 +1,106 @@
+wtf:
+  colors:
+    border:
+      focusable: darkslateblue
+      focused: orange
+      normal: gray
+  openUrlUtil:
+    - "tmux"
+    - "new-window"
+    - "w3m"
+  grid:
+    columns: [32, 62, 32, 32]
+    rows: [8, 3, 2, 1]
+  refreshInterval: 1
+  mods:
+    clocks_a:
+      colors:
+        rows:
+          even: "#EBCEAD"
+          odd: "white"
+      enabled: true
+      locations:
+        Austin: "America/Chicago"
+        Tampa: "EST"
+        Ghana: "Africa/Accra"
+        Tokyo: 'Asia/Tokyo'
+      position:
+        top: 0
+        left: 0
+        height: 1
+        width: 1
+      refreshInterval: 15
+      sort: "natural"
+      title: "Clocks A"
+      type: "clocks"
+    news_subreddit:
+      type: 'subreddit'
+      enabled: true
+      numberOfPosts: 3
+      position:
+        top: 1
+        left: 0
+        height: 2
+        width: 4
+      refreshInterval: 900
+      sortOrder: top
+      subreddit: "news"
+      topTimePeriod: month
+    neovim_subreddit:
+      type: 'subreddit'
+      enabled: true
+      numberOfPosts: 4
+      position:
+        top: 3
+        left: 0
+        height: 2
+        width: 4
+      refreshInterval: 900
+      sortOrder: top
+      subreddit: "neovim"
+      topTimePeriod: week
+    prettyweather:
+      enabled: true
+      city: 'Austin'
+      position: 
+        top: 0
+        left: 2 
+        height: 1
+        width: 1
+      refreshInterval: 300
+      unit: "u"
+      view: 0
+      language: "en"
+    resourceusage:
+      cpuCombined: true
+      enabled: true
+      position:
+        top: 0
+        left: 1
+        height: 1
+        width: 1
+      refreshInterval: 1
+      showCPU: true
+      showMem: true
+      showSwp: true
+    power:
+      enabled: true
+      position:
+        top: 0
+        left: 3
+        height: 1
+        width: 1
+      refreshInterval: 15
+      title: "⚡️"
+    tasks:
+      type: cmdrunner
+      title: "tasks"
+      cmd: "task"
+      args: ["tiny", "limit:3"]
+      enabled: true
+      position:
+        top: 5
+        left: 0
+        height: 3
+        width: 4
+      refreshInterval: 3600
