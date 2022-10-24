@@ -1,0 +1,2 @@
+# Persist notification (requires critical notifiication)
+notify-send -u critical -t 0

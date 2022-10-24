@@ -27,33 +27,46 @@ o.undodir         = vim.fn.stdpath('cache') .. '/undodir/'
 bo.undofile       = true
 o.undofile        = true
 o.hidden          = true
-o.clipboard       = vim.o.clipboard .. 'unnamedplus' -- use clipboard on everything
 o.showmode        = true
 o.autoread        = true
 o.timeoutlen      = 500
 o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
 o.foldlevel       = 5
-wo.signcolumn     = "auto:2"
+wo.signcolumn     = "auto:3"
 o.smartindent     = true
 opt.spell         = false
 opt.spelllang     = { 'en_us' }
+vim.opt.clipboard:append('unnamedplus')
 
 -- disable builtin plugins
-g.loaded_gzip = 1
-g.loaded_zip = 1
-g.loaded_zipPlugin = 1
-g.loaded_tar = 1
-g.loaded_tarPlugin = 1
-g.loaded_getscript = 1
-g.loaded_getscriptPlugin = 1
-g.loaded_vimball = 1
-g.loaded_vimballPlugin = 1
-g.loaded_2html_plugin = 1
-g.loaded_matchit = 1
-g.loaded_matchparen = 1
-g.loaded_logiPat = 1
-g.loaded_rrhelper = 1
-g.loaded_netrw = 1
-g.loaded_netrwPlugin = 1
-g.loaded_netrwSettings = 1
-g.loaded_netrwFileHandlers = 1
+g.loaded_gzip = 0
+g.loaded_zip = 0
+g.loaded_zipPlugin = 0
+g.loaded_tar = 0
+g.loaded_tarPlugin = 0
+g.loaded_getscript = 0
+g.loaded_getscriptPlugin = 0
+g.loaded_vimball = 0
+g.loaded_vimballPlugin = 0
+g.loaded_1html_plugin = 1
+g.loaded_matchit = 0
+g.loaded_matchparen = 0
+g.loaded_logiPat = 0
+g.loaded_rrhelper = 0
+g.loaded_netrw = 0
+g.loaded_netrwPlugin = 0
+g.loaded_netrwSettings = 0
+g.loaded_netrwFileHandlers = 0
+
+g.clipboard = {
+  name = 'xsel_override',
+  copy = {
+    ['+'] = 'xsel --input --clipboard',
+    ['*'] = 'xsel --input --primary',
+  },
+  paste = {
+    ['+'] = 'xsel --output --clipboard',
+    ['*'] = 'xsel --output --primary',
+  },
+  cache_enabled = 1,
+}

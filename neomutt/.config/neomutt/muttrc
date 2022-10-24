@@ -9,8 +9,7 @@
 
 
 #############################
-# Generation Configuration {{{1 
-#############################
+# Generation Configuration {{{1
 set my_confdir='$HOME/.config/neomutt'
 
 # Default account
@@ -237,7 +236,7 @@ set status_format = "[ Folder: %f ] [%r%m messages%?n? (%n new)?%?d? (%d to dele
 
 
 # Macros for switching accounts
-bind index <Space> noop
+bind  index <Space> noop
 macro index <Space>gm '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/main/muttrc<enter><enter-command>echo "Switched to Main Account"<enter><change-folder>!<enter>'
 macro index <Space>gw '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/work/muttrc<enter><enter-command>echo "Switched to Work Account"<enter><change-folder>!<enter>'
 macro index <Space>gs '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/support/muttrc<enter><enter-command>echo "Switching to Support Account"<enter><change-folder>!<enter>'
@@ -247,6 +246,10 @@ macro index <Space>gg '<sync-mailbox><enter-command>source ~/.config/neomutt/acc
 macro index <Space>gr '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/receipt/muttrc<enter><enter-command>echo "Switching to Receipt Account"<enter><change-folder>!<enter>'
 macro index <Space>gy '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/yahoo/muttrc<enter><enter-command>echo "Switching to Yahoo Account"<enter><change-folder>!<enter>'
 macro index <Space>gp '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/paperless/muttrc<enter><enter-command>echo "Switching to Paperless Account"<enter><change-folder>!<enter>'
+macro index <Space>gn '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/aerex/junk/work/muttrc<enter><enter-command>echo "Switching to Work Junk Account"<enter><change-folder>!<enter>'
+
+# Hooks
+folder-hook . exec collapse-all
 
 # Colors
 color index yellow default '.*'
