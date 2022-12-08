@@ -41,8 +41,9 @@ local noremaps = {
       ['<leader>fM']                                                 = function() require'nvim-fzf.manpages'()end,
       -- TODO: telescope seems faster here need to figure out why fzf is not
       ['<leader>p']                                                  = function() require'nvim-telescope'.git_files() end,
-      ['\\p']                                                        = function() require'nvim-fzf.git'() end,
-      ['<leader>rg']                                                 = function() require'nvim-fzf.rg'() end,
+      [',p']                                                        = function() require'nvim-fzf.git'() end,
+      ['<leader>rg']                                                 = function() require'nvim-telescope'.rg_search() end,
+      ['<leader>\\rg']                                                 = function() require'nvim-fzf.rg'() end,
       ['\\rG']                                                        = function() require'nvim-fzf.rg'(vim.fn.expand('<cword>'), true) end,
       ['\\rg']                                                        = function() require'nvim-telescope'.rg_string() end,
       [',rg']                                                        = function() require'nvim-fzf.rg'(vim.fn.input('Search term: '), true) end,
