@@ -3,3 +3,9 @@ ufw delete deny 80/tcp
 
 # To delete a rule by the row number from the status (ufw status)
 ufw delete <NUM>
+
+# To allow specific IP address and port
+ufw allow from <IP> to any port <PORT>
+
+# To allow specific IP subnet (16 bit mask) and port
+ufw allow from <IP>/16 to any port <PORT>

@@ -32,6 +32,9 @@ git stash pop
 # from the stash list
 git stash apply stash@{6}
 
+# To reverse a dropped stash
+git stash apply $stash_hash
+
 # To commit staged changes
 git commit -m "Your commit message"
 
