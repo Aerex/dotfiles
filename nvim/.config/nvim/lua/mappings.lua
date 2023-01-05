@@ -100,6 +100,10 @@ local noremaps = {
       ['<leader>dL']         =  'DapShowLog',
         -- fcitx
       ['<M-Tab>'] = 'lua require\'fcitx5\'.toggle()',
+      -- scratch
+      ['<M-C-n>'] = function() require'scratch'.scratch() end,
+      ['<M-C-m>'] = function() require'scratch'.scratchWithName() end,
+      ['<M-C-o>'] = function() require'scratch'.fzfScratch() end
     }
   }
 
