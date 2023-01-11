@@ -76,7 +76,28 @@ M.setup_signs = function()
 
   local ok_d, diffview = pcall(require, 'diffview')
   if ok_d then
-    diffview.setup{}
+    diffview.setup{
+      hooks = {
+        view_opened = function(view)
+          -- load which key labels
+          local ok, wk = pcall(require, 'which-key')
+          if ok then
+            require'which-key'.register({
+             b = { 'Toggle Diff File Panel'},
+             c = {
+               name = 'Choose Diff Hunk (1|2|3)',
+               o = { 'Choose OURS (Head|3)' },
+               t = { 'Choose the THEIRS version (Base|1)'},
+               a = { 'Delete markers and keep changes|2'},
+             }}, { triggers = {'<leader>'}, prefix = " "})
+             require'which-key'.register({
+               ['[x'] = {'Jump to Prev Conflict'},
+               [']x'] = {'Jump to Next Conflict'},
+             })
+          end
+        end
+      }
+    }
   end
 end
 
