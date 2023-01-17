@@ -1,14 +1,14 @@
-local send_keys = require('utils').send_keys
 local get_packer_path = require('utils').get_packer_path
 local ultisnips = require('utils').ultisnips
-local ok, cmp = pcall(require,'cmp')
+local ok, cmp = pcall(require, 'cmp')
 
 if ok then
   vim.g.UltiSnipsExpandTrigger = nil
   vim.g.UltiSnipsRemoveSelectModeMappings = 0
-  vim.g.UltiSnipsSnippetsDir = os.getenv('HOME') ..'/.config/nvim/UltiSnips/'
+  vim.g.UltiSnipsSnippetsDir = os.getenv('HOME') .. '/.config/nvim/UltiSnips/'
   vim.g.UltiSnipsEditSplit = 'vertical'
-  vim.g.UltiSnipsSnippetDirectories = {  get_packer_path().start ..'/vim-snippets/UltiSnips', os.getenv('HOME') .. '/.config/nvim/UltiSnips' }
+  vim.g.UltiSnipsSnippetDirectories = { get_packer_path().start .. '/vim-snippets/UltiSnips',
+    os.getenv('HOME') .. '/.config/nvim/UltiSnips' }
   local default_mapping = {
     ['<Tab>'] = function(fallback)
       if cmp.visible() then
@@ -39,14 +39,16 @@ if ok then
     mapping = {
       ['<C-n>'] = cmp.mapping(function()
         cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-        end, { 'i', 's', }),
+      end, { 'i', 's', }),
       ['<C-p>'] = cmp.mapping(function()
         cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-        end, { 'i', 's', }),
-      ['<C-b>'] = cmp.mapping.scroll_docs(4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-u>'] = cmp.mapping.scroll_docs(4),
-      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+      end, { 'i', 's', }),
+      ['<C-d>'] = cmp.mapping.scroll_docs(4),
+      ['<C-k>'] = cmp.mapping.scroll_docs(4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-j>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
       ['<CR>'] = cmp.mapping.confirm({
         behavior = cmp.ConfirmBehavior.Insert,
         select = false
@@ -61,7 +63,7 @@ if ok then
         else
           fallback()
         end
-      end, {'i','s',}),
+      end, { 'i', 's', }),
       ['<S-Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
@@ -94,28 +96,27 @@ if ok then
       end,
     },
     sources = {
-      { name = 'ultisnips'},
-      { name = 'nvim_lsp'},
-      --{ name = 'rg'},
-      { name = 'path'},
-      { name = 'dictionary', keyword_length = 2},
+      { name = 'ultisnips' },
+      { name = 'nvim_lsp' },
+      { name = 'path' },
+      { name = 'dictionary', keyword_length = 2 },
     },
   }
 
   -- use dictionary and snips in document files
-  for _, doc_ft in pairs({'markdown', 'vimwiki'}) do
+  for _, doc_ft in pairs({ 'markdown', 'vimwiki' }) do
     cmp.setup.filetype(doc_ft, {
       sources = {
-        { name = 'spell'},
-        { name = 'dictionary',  keyword_length = 4},
-        { name = 'ultisnips'}
+        { name = 'spell' },
+        { name = 'dictionary', keyword_length = 4 },
+        { name = 'ultisnips' }
       }
     })
   end
 
   -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline('/', {
-    completion = { autocomplete = false},
+    completion = { autocomplete = false },
     mapping = default_mapping,
     sources = {
       { name = 'buffer', option = { keyword_pattern = [=[[^[:blank:]].*]=] } }
@@ -136,7 +137,7 @@ if ok then
   if ok_dict then
     cmp_dictionary.setup({
       dic = {
-          ["*"] = { "/usr/share/dict/words" }
+        ["*"] = { "/usr/share/dict/words" }
       },
       -- The following are default values, so you don't need to write them if you don't want to change them
       exact = 2,
