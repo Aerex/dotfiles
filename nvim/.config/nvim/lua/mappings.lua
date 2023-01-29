@@ -58,12 +58,12 @@ local noremaps = {
       ['<leader>gs']                                                 = 'Neogit kind=split_above',
       -- TODO: create map for git push --set-upstream current branch
       -- test
-      ['<leader>tf']                                                 = 'Ultest',
-      ['<leader>tn']                                                 = 'UltestNearest',
-      ['<leader>ts']                                                 = 'UltestSummary!',
+      ['<leader>tf']                                                 = function() require'test'.test_file() end,
+      ['<leader>tn']                                                 = function() require'test'.test_nearest() end,
+      ['<leader>ts']                                                 = function() require'test'.summary() end,
       ['<leader>tc']                                                 = 'UltestClear',
-      ['<leader>to']                                                 = 'UltestOutput',
-      ['<leader>tO']                                                 = 'call ultest#output#jumpto()',
+      ['<leader>to']                                                 = function() require'test'.output() end,
+      ['<leader>tO']                                                 = function() require'test'.output({ enter = true }) end,
       -- debugger
       ['<leader>dd']                                                 = 'lua require\'debugger\'.start_or_continue()',
       ['<leader>dD']                                                 = 'lua require\'dap.ext.vscode\'.load_launchjs(vim.lsp.buf.list_workspace_folders()[1] .. \'/.vscode/launch.json\')',
@@ -134,7 +134,7 @@ vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent
 vim.cmd('autocmd! TermOpen *toggleterm#* lua require\'terminals\'.set_terminal_keymaps()')
 vim.api.nvim_set_keymap('', '<F2>', ":echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, \"name\")')<CR>", { silent = true})
 autocmd('FileType', {
-  pattern = '{lspinfo},{qf},{dap-repl}',
+  pattern = '{lspinfo},{qf},{dap-repl},{dap-float},{neotest-output},{fugitiveblame}',
   callback = function(args)
     vim.keymap.set('n', 'qq', function() vim.api.nvim_win_close(0, true) end,
     { silent = true, buffer = args.buf})
