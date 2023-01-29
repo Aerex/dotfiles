@@ -27,7 +27,8 @@ o.undodir         = vim.fn.stdpath('cache') .. '/undodir/'
 bo.undofile       = true
 o.undofile        = true
 o.hidden          = true
-o.clipboard       = vim.o.clipboard .. 'unnamedplus' -- use clipboard on everything
+opt.clipboard:append('unnamedplus')
+opt.runtimepath:append('/usr/share/vifm/vim-doc/')
 o.showmode        = true
 o.autoread        = true
 o.timeoutlen      = 500
@@ -37,6 +38,18 @@ wo.signcolumn     = "auto:2"
 o.smartindent     = true
 opt.spell         = false
 opt.spelllang     = { 'en_us' }
+g.clipboard = {
+  name = 'xsel_override',
+  copy = {
+    ['+'] = 'xsel --input --clipboard',
+    ['*'] = 'xsel --input --primary',
+  },
+  paste = {
+    ['+'] = 'xsel --output --clipboard',
+    ['*'] = 'xsel --output --primary',
+  },
+  cache_enabled = 1,
+}
 
 -- disable builtin plugins
 g.loaded_gzip = 1
