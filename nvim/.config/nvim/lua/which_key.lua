@@ -175,7 +175,8 @@ M.load_maps = function()
             l = {
               name = 'VimWikiList',
               h = { 'Decrement Bullet' },
-              l = { 'Increment Bullet' }
+              l = { 'Increment Bullet' },
+              r = { 'Renumber List' }
             }
           },
           ['\\w='] = { 'Increment Header Level' },
