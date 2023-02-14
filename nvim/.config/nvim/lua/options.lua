@@ -29,7 +29,7 @@ o.undofile        = true
 o.hidden          = true
 o.showmode        = true
 o.autoread        = true
-o.timeoutlen      = 500
+o.timeoutlen      = 150
 o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
 o.foldlevel       = 5
 wo.signcolumn     = "auto:3"
