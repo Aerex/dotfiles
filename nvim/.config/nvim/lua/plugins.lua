@@ -30,25 +30,31 @@ require('packer').init({display = {auto_clean = true}})
 local ok, _ = pcall(vim.cmd, [[packadd packer.nvim]])
 
 if ok then
-  return require('packer').startup(
-  function(use)
-    -- Packer can manage itself as an optional plugin
-    use {'wbthomason/packer.nvim'}
-    use{ 'nathom/filetype.nvim' }
-    use {'lewis6991/impatient.nvim' }
-    use {'folke/which-key.nvim', config = function() require'which_key'.setup() end}
-    use {'famiu/nvim-reload'}
+  return require('packer').startup({
+    function(use)
+      -- Packer can manage itself as an optional plugin
+      use { 'wbthomason/packer.nvim' }
+      use { 'nathom/filetype.nvim' }
+      use { 'lewis6991/impatient.nvim' }
+      use { 'folke/which-key.nvim', config = function() require 'which_key'.setup() end }
+      use { 'famiu/nvim-reload' }
 
-    -- lsp
-    use {'neovim/nvim-lspconfig', requires = {'jose-elias-alvarez/nvim-lsp-ts-utils'},
-      config = function() require('nvim-lsp') end }
-    use { 'mfussenegger/nvim-jdtls' }
-    use { 'jose-elias-alvarez/null-ls.nvim' }
-    use { 'onsails/lspkind-nvim' }
-    use { 'nvim-lua/lsp-status.nvim' }
-    use { 'ray-x/lsp_signature.nvim' }
-    use { 'rmagatti/goto-preview'}
-    use({ 'j-hui/fidget.nvim', config = function()
+      -- lsp
+      use { 'neovim/nvim-lspconfig', requires = { 'jose-elias-alvarez/nvim-lsp-ts-utils' },
+        config = function() require('nvim-lsp') end }
+      use { 'mfussenegger/nvim-jdtls' }
+      use { 'jose-elias-alvarez/null-ls.nvim' }
+      use { 'onsails/lspkind-nvim' }
+      use { 'ray-x/lsp_signature.nvim' }
+      use { 'ray-x/navigator.lua', requires = { 'ray-x/guihua.lua', run = 'cd lua/fzy && make' } }
+      use { 'rmagatti/goto-preview' }
+      use { 'amrbashir/nvim-docs-view', cmd = { "DocsViewToggle" }, config = function()
+        require("docs-view").setup {
+          position = "right",
+          width = 60,
+        }
+      end }
+      use({ 'j-hui/fidget.nvim', config = function()
         require('fidget').setup({
           window = {
             relative = 'editor',
