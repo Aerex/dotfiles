@@ -122,7 +122,7 @@ vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint
   --keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
   keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
   vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, { silent = true, buffer = bufnr })
-  keymap('n', 'gi', function() require'telescope.builtin'.lsp_implementations() end, { sielent = true, buffer = bufnr })
+  vim.keymap.set('n', 'gi', function() require'telescope.builtin'.lsp_implementations() end, { silent = true, buffer = bufnr })
   keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   keymap('n', '\\wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   keymap('n', '\\wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
