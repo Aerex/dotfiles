@@ -72,34 +72,33 @@ local on_attach = function(client, bufnr)
       debug = false; -- Print debug information
       opacity = 10; -- 0-100 opacity level of the floating window where 100 is fully transparent.
       resizing_mappings = false; -- Binds arrow keys to resizing the floating window.
-      post_open_hook = function(_, w)
-        -- close preview window
-          vim.keymap.set('n', 'qq', function() vim.api.nvim_win_close(w, true) end)
-      end,
+      post_open_hook = function(buf, wind)
+        vim.keymap.set('n', 'qq', function() vim.api.nvim_win_close(wind, true) end, {silent = true, buffer = buf})
+      end; -- A function taking two arguments, a buffer and a window to be ran as a hook.
       references = { -- Configure the telescope UI for slowing the references cycling window.
         telescope = require'telescope.themes'.get_dropdown({ hide_preview = false })
       };
-      -- These two configs can also be passed down to the goto-preview definition and implementation calls for one off "peak" functionality.
-      focus_on_open = true; -- Focus the floating window when opening it.
-      dismiss_on_move = false; -- Dismiss the floating window when moving the cursor.
-      force_close = true, -- passed into vim.api.nvim_win_close's second argument. See :h nvim_win_close
-      bufhidden = 'wipe', -- the bufhidden option to set on the floating window. See :h bufhidden
-    }
-   local wk_ok, wk = pcall(require, 'which-key')
-    if wk_ok then
-      wk.register({
-        g = {
-          name = 'Preview',
+    -- These two configs can also be passed down to the goto-preview definition and implementation calls for one off "peak" functionality.
+    focus_on_open = true; -- Focus the floating window when opening it.
+    dismiss_on_move = false; -- Dismiss the floating window when moving the cursor.
+    force_close = true, -- passed into vim.api.nvim_win_close's second argument. See :h nvim_win_close
+    bufhidden = 'wipe', -- the bufhidden option to set on the floating window. See :h bufhidden
+  }
+  if ok_w then
+    wk.register({
+      g = {
+        name = 'Preview',
+        p = {
           d = { function() require'goto-preview'.goto_preview_definition() end, 'Preview Definition' },
-        },
-      }, { prefix = '\\', silent = true, buffer = buf
-      })
-    else
-      vim.keymap.set('n', '\\gpd',  function() require'goto-preview'.goto_preview_definition() end,
-        { silent = true, buffer = buf})
-    end
-
+          r = { function() require'goto-preview'.goto_preview_references() end, 'Preview References' },
+        }
+      },
+    }, { silent = true, buffer = bufnr })
+  else
+    vim.keymap.set('n', 'gpd',  function() goto_preview.goto_preview_definition() end, { silent = true, buffer = bufnr})
+    vim.keymap.set('n', 'gpr',  function() goto_preview.goto_preview_references() end, { silent = true, buffer = bufnr})
   end
+end
 
 
  -- Attach LSP Signature
@@ -125,14 +124,13 @@ vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint
   -- LSP keymap
  local opts = { noremap=true, silent=true }
   vim.keymap.set('n', 'gd',  function() vim.lsp.buf.declaration() end, { silent = true, buffer = bufnr })
+  vim.keymap.set('n', 'gr', function() require'nvim-telescope'.lsp_ref() end, opts)
   vim.keymap.set('n', '<c-]>', function() vim.lsp.buf.definition() end, { silent = true, buffer = bufnr })
   vim.keymap.set('n', '<C-w>]', function() vim.cmd('vsplit'); vim.lsp.buf.definition() end, { silent = true, buffer = bufnr })
   --keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
   keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
-  keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  -- TODO(me): Create a fzf lsp_implementation method. Use telescope
-  -- temp
-  keymap('n', 'gi', '<cmd>Telescope lsp_implementations<CR>', opts)
+  vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, { silent = true, buffer = bufnr })
+  keymap('n', 'gi', function() require'telescope.builtin'.lsp_implementations() end, { sielent = true, buffer = bufnr })
   keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   keymap('n', '\\wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   keymap('n', '\\wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
