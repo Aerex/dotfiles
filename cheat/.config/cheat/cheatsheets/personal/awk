@@ -12,3 +12,6 @@ printf '1 2 3' | awk 'BEGIN {OFS=":"}; {print $1,$2,$3}'
 
 #Match a string from the input (find 1 and print it)
 printf '1\n2\n3\n' | awk '{if(match($1, /1/))print $1}'
+
+# Print each directory in $PATH (may contain dups)
+echo $PATH | awk -F ':' '{for(i=1;i<=NF;i++)printf("%s\n", $i)}'

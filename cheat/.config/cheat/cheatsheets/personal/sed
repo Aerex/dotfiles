@@ -16,11 +16,16 @@ sed '/^$/d' file.txt
 # To replace newlines in multiple lines
 sed ':a;N;$!ba;s/\n//g'  file.txt
 
+# To replace newlines with literal \n
+# Use $! to exclude last \n
+sed '$!s/$/\\n/' file | tr -d '\n'
+
 # Remove leading whitespace
 sed "s/^[ \t]*//
 
 # Delete the nth line where n is an integer 
 sed -i 'nd' file.txt
 
-#Delete the last line
+# Delete the last line
 sed -i '$d' file.txt
+

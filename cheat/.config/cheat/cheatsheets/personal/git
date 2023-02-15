@@ -32,6 +32,9 @@ git stash pop
 # from the stash list
 git stash apply stash@{6}
 
+# To reverse a dropped stash
+git stash apply $stash_hash
+
 # To commit staged changes
 git commit -m "Your commit message"
 
@@ -225,3 +228,12 @@ git diff [--staged|--cached]
 
 # To view only file names without code changes
 git diff --staged --name-only  
+
+# Clone only specific folders
+git init <repo>
+cd <repo>
+git remote add -f origin <url>
+git config core.sparseCheckout true
+mkdir -p .git/info
+echo 'some/dir/' >> .git/info/sparse-checkout
+echo 'another/sub/tree' >> .git/info/sparse-checkout

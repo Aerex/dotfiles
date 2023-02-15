@@ -74,6 +74,9 @@ config.set('content.javascript.enabled', True, 'chrome://*/*')
 # Type: Bool
 config.set('content.javascript.enabled', True, 'qute://*/*')
 
+# Enable save to clipboard buttons to work 
+config.set('content.javascript.clipboard', 'access', 'github.com')
+
 # Allow pdf.js to view PDF files in the browser. Note that the files can
 # still be downloaded by clicking the download button in the pdf.js
 # viewer.
@@ -91,7 +94,7 @@ c.content.plugins = True
 # `{line0}`: Same as `{line}`, but starting from index 0. * `{column0}`:
 # Same as `{column}`, but starting from index 0.
 # Type: ShellCommand
-c.editor.command = ['termite', '-e', '/home/aerex/neovim/bin/nvim {}']
+c.editor.command = ['alacritty', '-e', 'nvim', '{}']
 
 # Encoding to use for the editor.
 # Type: Encoding
@@ -111,14 +114,22 @@ c.fileselect.handler = 'external'
 # The following placeholders are defined: * `{}`: Filename of the file to be
 # written to. If not contained in any argument, the standard output of the command is read instead.
 # Type: ShellCommand
-c.fileselect.single_file.command =  ['termite', '-t', 'qute-fileselect', '-e', 'vifm --choose-files={}']
+c.fileselect.single_file.command =  ['alacrity', '-t', 'qute-fileselect', '-e', 'vifm', '--choose-files={}']
 
 # Command (and arguments) to use for selecting multiple files in forms. The command should write
 # the selected file paths to the specified file or to stdout, separated by newlines. The following
 # placeholders are defined: * `{}`: Filename of the file to be written to. If not contained in any
 # argument, the standard output of the command is read instead.
 # Type: ShellCommand
-c.fileselect.multiple_files.command =  ['termite', '-t', 'qute-fileselect', '-e', 'vifm --choose-files={}']
+c.fileselect.multiple_files.command =  ['alacrity', '-t', 'qute-fileselect', '-e', 'vifm', '--choose-files={}']
+
+# Mode to use for hints.
+# Type: String
+# Valid values:
+#   - number - Use numeric hints. (In this mode you can also type letters from the hinted element to filter and reduce the number of elements that are hinted)
+#   - letter - Use the characters in the `hints.chars` setting.
+#   - word - Use hints words based on the html elements and the extra words.
+c.hints.mode = 'number'
 
 # A comma-separated list of regexes to use for 'next' links.
 # Type: List of Regex
@@ -227,10 +238,13 @@ c.url.searchengines = {
     'aur': 'https://aur.archlinux.org/packages.php?O=0&K={}&do_Search=Go',
     'man': 'https://www.die.net/search/?q={}',
     'viwiki': 'http://vim.wikia.com/wiki/Special:Search?query={}',
-    'git': 'https://github.com/search?q={}',
+    'gh': 'https://github.com/search?q={}',
     'jisho': 'https://jisho.org/search/{}',
     'pypi': 'https://pypi.org/search/?q={}',
-    'inv': 'https://invidio.us/search?q={}'
+    'pkg': 'https://pkgs.org/search/?q={}',
+    'inv': 'https://invidio.us/search?q={}',
+    'scp': 'https://scp-wiki.wikidot.com/scp-{}',
+    'nvp': 'https://neovimcraft.com/?search={}'
 }
 
 # Page(s) to open at the start.
@@ -591,6 +605,10 @@ c.fonts.web.family.serif = 'Noto Serif'
 # Font family for sans-serif fonts.
 # Type: FontFamily
 c.fonts.web.family.sans_serif = 'Noto Sans'
+
+# Prevent accidental close tab use x
+config.unbind('d', mode='normal')
+config.bind('x', 'tab-close') 
 
 config.bind('J', 'tab-prev')
 config.bind('K', 'tab-next')

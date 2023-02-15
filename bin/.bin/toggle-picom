@@ -6,14 +6,13 @@
 # Hotkey Binding Examples
 # bindsym $mod+Shift+grave exec /path/to/toggle-picom
 
-if [[ -s $(command -v picom) ]]; then
-  if [[ -z $(pgrep -f '^[p]icom') ]]; then 
-    [ -s $(command -v notify-send) ] && notify-send picom "Transparency Enabled" 
-    picom -b 
-  else 
-    [ -s $(command -v notify-send) ] && notify-send picom "Transparency Disabled"
-    pkill -f '^[p]icom'
-  fi
-fi
 
+if (($(ps -aux | grep '[p]icom -b' | wc -l) > 0))
+then
+  notify-send picom "Transparency Disabled" 
+  pkill -9 picom
+else
+  notify-send picom "Transparency Enabled" 
+  picom -b --config=$HOME/.config/picom/picom.conf 
+fi
 # vim: ft=sh

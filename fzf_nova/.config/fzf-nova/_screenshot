@@ -5,7 +5,7 @@
 # TODO: Need to figure out why flameshot gui 
 # changes the cursor style after closing app
 if command -v flameshot >/dev/null; then
-  setsid flameshot gui -d 500 -p $HOME/Pictures
+  setsid flameshot gui
 elif command -v gnome-screenshot >/dev/null; then
   setsid gnome-screenshot -i 
   pkill --full st\ -t\ fzfnova

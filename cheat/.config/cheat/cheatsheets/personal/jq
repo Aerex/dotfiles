@@ -42,3 +42,10 @@ jq '.results[] | select(.name == "John") | {age}'          # Get age for 'John'
 jq '.results[] | select((.name == "Joe") and (.age = 10))' # Get complete records for all 'Joe' aged 10
 jq '.results[] | select(.name | contains("Jo"))'           # Get complete records for all names with 'Jo'
 jq '.results[] | select(.name | test("Joe\s+Smith"))'      # Get complete records for all names matching PCRE regex 'Joe\+Smith'
+
+# Read keys with hypens
+#curl -sSL "https://metadata.ryanparman.com/microformats2/?url=https://ryanparman.com" \
+#    | jq '.rels | to_entries | .[] | select(.key == "structured-data") | .value'
+
+# Select objects with at least one widget and at least one user
+$ cat part-r-00000 | jq 'select((.widgets | length) > 0 and (.users | length) > 0)'

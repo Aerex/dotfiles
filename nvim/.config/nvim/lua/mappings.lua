@@ -14,9 +14,12 @@ local noremaps = {
     n = {
       -- misc
       ['<leader>w']   = 'write',
-      ['\\zz'] = 'quitall!',
+      ['<C-a>']       = '<NOP>', --disable due to tmux prefix
+      ['\\zz']        = 'quitall!',
       ['<leader>rb']  = 'edit',
-      ['<leader>b']  = 'lua require(\'nvim-fzf.buffer\')()',
+      ['<leader>b']   = 'lua require(\'nvim-fzf.buffer\')()',
+      ['<leader>rc']                                                 = function() require'nvim-reload'.Reload() end,
+      ['<C-Space>']                                                  = function() require'notify'.dismiss() end,
       ['[t']          = 'tabprevious',
       [']t']          = 'tabnext',
       -- trouble
@@ -32,15 +35,20 @@ local noremaps = {
       ['<leader>fm']  = 'VsplitVifm',
       ['<leader>Fm']  = 'Vifm',
       -- fzf
-      ['<leader>ff']  = 'lua require(\'nvim-fzf.files\')()',
-      ['<leader>fh']  = 'lua require(\'nvim-fzf.helptags\')()',
-      ['<leader>fM']  = 'lua require(\'nvim-fzf.manpages\')()',
-      ['<leader>p']   = 'lua require(\'nvim-fzf.git\')()',
-      ['<leader>rg']  = 'lua require(\'nvim-fzf.rg\')()',
-      ['\\rg']        = 'lua require(\'nvim-fzf.rg\')(vim.fn.expand("<cword>"))',
-      [',rg']         = 'lua require(\'nvim-fzf.rg\')(vim.fn.input("Search term: "))',
-      ['<leader>nv']  = 'lua require(\'nvim-fzf.notes\')()',
-      ['<leader>yr'] = 'YankyRingHistory',
+      ['<leader>ff']                                                 = function() require'nvim-fzf.files'() end,
+      ['<leader>fh']                                                 = function() require'nvim-fzf.helptags'() end,
+      ['<leader>fo']                                                 = 'lua require(\'nvim-fzf.mru\').get_mru()',
+      ['<leader>fM']                                                 = function() require'nvim-fzf.manpages'()end,
+      -- TODO: telescope seems faster here need to figure out why fzf is not
+      ['<leader>p']                                                  = function() require'nvim-telescope'.git_files() end,
+      [',p']                                                        = function() require'nvim-fzf.git'() end,
+      ['<leader>rg']                                                 = function() require'nvim-telescope'.rg_search() end,
+      ['<leader>\\rg']                                                 = function() require'nvim-fzf.rg'() end,
+      ['\\rG']                                                        = function() require'nvim-fzf.rg'(vim.fn.expand('<cword>'), true) end,
+      ['\\rg']                                                        = function() require'nvim-telescope'.rg_string() end,
+      [',rg']                                                        = function() require'nvim-fzf.rg'(vim.fn.input('Search term: '), true) end,
+      ['<leader>nv']                                                 = function() require'nvim-fzf.notes'() end,
+      ['<leader>yr']                                                 = 'YankyRingHistory',
       -- docs
       ['<leader>dg'] = 'DogeGenerate',
       -- snippets
@@ -54,6 +62,7 @@ local noremaps = {
       ['<leader>gp']                                                 = 'Git push',
       ['<leader>gc']                                                 = 'Neogit commit',
       ['<leader>gz']                                                 = 'lua require\'terminals\'.lazygit_toggle()',
+      ['<leader>gm']                                                 = 'GitMessenger',
       -- neogit variant
       ['<leader>gs']                                                 = 'Neogit kind=split_above',
       -- TODO: create map for git push --set-upstream current branch
@@ -66,9 +75,8 @@ local noremaps = {
       ['<leader>tO']                                                 = function() require'test'.output({ enter = true }) end,
       -- debugger
       ['<leader>dd']                                                 = 'lua require\'debugger\'.start_or_continue()',
-      ['<leader>dD']                                                 = 'lua require\'dap.ext.vscode\'.load_launchjs(vim.lsp.buf.list_workspace_folders()[1] .. \'/.vscode/launch.json\')',
-      ['<F5>']                                                       = 'lua require\'dap\'.continue()',
-      ['<leader>db']                                                 = 'lua require\'dap\'.toggle_breakpoint()',
+      ['<F5>']                                                       = function() require'debugger'.start_or_continue() end,
+      ['<leader>dbb']                                                 = 'lua require\'dap\'.toggle_breakpoint()',
       ['<F9>']                                                       = 'lua require\'dap\'.toggle_breakpoint()',
       ['<leader>dso']                                                 = 'lua require\'dap\'.step_over()',
       ['<F10>']                                                      = 'lua require\'dap\'.step_over()',
@@ -78,28 +86,34 @@ local noremaps = {
       ['<leader>drc'] = 'lua require\'dap\'.run_to_cursor()',
       ['<leader>dK']  = 'lua require\'dap.ui.widgets\'.hover()',
       ['<leader>dv']  = 'lua require\'dapui\'.float_element(\'scopes\', { enter = true })',
-
+      ['<leader>dbl'] = function() require'debugger'.toggle_breakpoints_qf() end,
       ['<leader>tdd']  = function() require'test'.debug_file() end,
       ['<leader>tdn']  = function() require'test'.debug_nearest() end,
       ['<leader>du']  = 'lua require\'dapui\'.toggle()',
       -- TODO: Need to make a method to only call method if running debugger (might set a global variable on debug session)
-      ['<leader>drp']  = 'lua require\'dap\'.repl.toggle()<CR><C-w>l',
+      ['<leader>drp']  = 'lua require\'dap\'.repl.toggle()<CR><C-w>b',
       ['<leader>drP']  = 'lua require\'dapui\'.float_element(\'repl\', { width = 75, enter = true })',
       ['<leader>de']    = 'lua require\'dap\'.disconnect({terminateDebuggee = true })',
       ['<leader>dcb']   = 'lua require\'dap\'.set_breakpoint(vim.fn.input(\'Breakpoint condition: \'))',
-      ['<leader>dLb'] = 'lua require\'dap\'.set_breakpoint(nil, nil, vim.fn.input(\'Log point message: \'))',
+      ['<leader>dlb'] = 'lua require\'dap\'.set_breakpoint(nil, nil, vim.fn.input(\'Log point message: \'))',
+      ['<leader>d,l'] = 'lua require\'dap\'.set_log_level("TRACE")',
+      ['<leader>dL']         =  'DapShowLog',
         -- fcitx
       ['<M-Tab>'] = 'lua require\'fcitx5\'.toggle()',
-      ['<leader>d;'] = 'lua require\'debugger\'.toggle_breakpoints_qf()',
-      ['<leader>d,l'] = 'lua require\'dap\'.set_log_level("TRACE")'
-    },
-    v = {
-      ['<leader>yg']  = 'GBrowse!',
-      ['<leader>dk']  = 'lua require\'dap.ui.variables\'.visual_hover()',
+      -- scratch
+      ['<M-C-n>'] = function() require'scratch'.scratch() end,
+      ['<M-C-m>'] = function() require'scratch'.scratchWithName() end,
+      ['<M-C-o>'] = function() require'scratch'.fzfScratch() end
     }
   }
 
-     --['leader>dl :lua require'dap'.run_last()<CR>
+
+local maps = {
+  n = {
+    p = '<Plug>(miniyank-autoput)',
+    P = '<Plug>(miniyank-autoPut)',
+  }
+}
 
 local file_type_keymaps = {
   markdown = {
@@ -112,6 +126,7 @@ local file_type_keymaps = {
   vimwiki = {
     nmap = {
       ['\\w='] = '<Plug>VimwikiAddHeaderLevel',
+      ['\\w-'] = '<Plug>VimwikiRemoveHeaderLevel',
       ['\\wx'] = '<Plug>VimwikiIndex'
     }
   },
@@ -126,20 +141,40 @@ local file_type_keymaps = {
 -- misc
 vim.keymap.set({'n','x'}, 'p', '<Plug>(YankyPutAfter)')
 vim.keymap.set({'n','x'}, 'P', '<Plug>(YankyPutBefore)')
+vim.keymap.set({'n','x'}, 'gp', '<Plug>(YankyGPutAfter)')
+vim.keymap.set({'n','x'}, 'gP', '<Plug>(YankyGPutBefore)')
 
-vim.api.nvim_set_keymap('n', '<leader><enter>', ':', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = true })
-vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
-vim.api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
-vim.cmd('autocmd! TermOpen *toggleterm#* lua require\'terminals\'.set_terminal_keymaps()')
-vim.api.nvim_set_keymap('', '<F2>', ":echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, \"name\")')<CR>", { silent = true})
+vim.keymap.set('n', '<leader><enter>', ':', { silent = true })
+vim.keymap.set('n', '<A-a>', '<C-a>', { silent = true })
+vim.keymap.set('n', ']n', function() require'test'.next_fail() end, { silent = true })
+vim.keymap.set('n', '[n', function() require'test'.prev_fail() end, { silent = true })
+vim.keymap.set('n', '!', ':!', { silent = true })
+vim.keymap.set('v', '<leader>yg', function() require'gitlinker'.get_buf_range_url('v', {}) end, { silent = true })
+vim.keymap.set('n', '<leader>yg', function() require'gitlinker'.get_buf_range_url('n', {}) end, { silent = true})
+vim.keymap.set('n', '<leader>sp', function() print(vim.fn.expand('%:p')) end, { silent = true})
+api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = true })
+api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
+autocmd('TermOpen', {
+  pattern = '*toggleterm#*',
+  callback = function()
+    require'terminals'.set_terminal_keymaps()
+  end
+})
+api.nvim_set_keymap('', '<F2>', ":echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, \"name\")')<CR>", { silent = true})
 autocmd('FileType', {
-  pattern = '{lspinfo},{qf},{dap-repl},{dap-float},{neotest-output},{fugitiveblame}',
+  pattern = '{lspinfo},{qf},{dap-repl},{dap-float},{neotest-output},{man},{help},{fugitiveblame},{dap-float},{httpResult}',
   callback = function(args)
-    vim.keymap.set('n', 'qq', function() vim.api.nvim_win_close(0, true) end,
+    vim.keymap.set('n', 'qq', function() api.nvim_win_close(0, true) end,
     { silent = true, buffer = args.buf})
   end
 })
+
+-- TableMode
+
+vim.g['table_mode_motion_left_map'] = ']\\'
+vim.g['table_mode_motion_right-map'] = '[\\'
+vim.g['table_mode_motion_up-map']= '}\\'
+vim.g['table_mode_motion_down-map'] = '{\\'
 
 
 
@@ -157,7 +192,7 @@ M.set_keymap = function(m, opts, callback)
         if not string.find(rhs, 'v:lua') and not string.find(rhs, '<Plug>') then
           rhs = '<cmd>' .. rhs .. '<cr>'
         end
-        vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
+        api.nvim_set_keymap(mode, lhs, rhs, opts)
       end
     end
   end
@@ -167,8 +202,12 @@ M.set_filetype_keymap = function(m)
   for filetype, filetype_bindings in pairs(m) do
     for mode, modebindings in pairs(filetype_bindings) do
       for lhs, rhs in pairs (modebindings) do
-        local cmd = string.format('autocmd FileType %s %s  %s <cmd>%s<cr>', filetype, mode, lhs, rhs)
-        vim.api.nvim_exec(cmd, '')
+        local cmd_prefix="<cmd>"
+        if string.find(rhs, '<Plug>') then
+          cmd_prefix=""
+        end
+          local cmd = string.format('autocmd FileType %s %s  %s %s%s<cr>', filetype, mode, lhs, cmd_prefix, rhs)
+        api.nvim_exec(cmd, '')
       end
     end
   end

@@ -21,7 +21,7 @@ if command -v nvimpager 1>/dev/null 2>&1; then
 elif command -v vimpager 1>/dev/null 2>&1; ; then
   export PAGER=vimpager
 else
-  export PAGER=less -SR
+  export PAGER='less -SR'
 fi
 
 if command -v qutebrowser 1>/dev/null 2>&1; then 

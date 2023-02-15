@@ -30,3 +30,6 @@ npm run script -- <arguments>
 
 # Install packages in package.json except devDependencies
 npm install --production
+
+# Install package from github using ssh
+npm install git+ssh://git@github.com/user/repo.git

@@ -20,7 +20,8 @@ in
 esac
 
 # Parse opts (ex. -h -v)
-while getopts :hv arg; do
+while getopts ":hv" opt
+do
   case "$arg"
     h)
       # print help
@@ -94,3 +95,9 @@ Editing:
  
 done
 
+# Arithmetic Expansion
+$((expression))
+## Adding two numbers
+echo $((2+2)
+# Add a number to a variable
+echo $(($n+1))

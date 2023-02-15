@@ -1,4 +1,5 @@
 local M = {}
+local autocmd = require 'utils'.autocmd
 
 M.setup = function()
   require('which-key').setup {
@@ -38,126 +39,175 @@ M.setup = function()
       spacing = 3, -- spacing between columns
       align = 'left', -- align columns left, center or right
     },
-    hidden = { '<silent>', '<cmd>', '<Cmd>', '<CR>', 'call', 'lua', '^:', '^ '}, -- hide mapping boilerplate
+    ignore_missing = true,
+    hidden = { '<silent>', '<cmd>', '<Cmd>', '<CR>', 'call', 'lua', '^:', '^ ' }, -- hide mapping boilerplate
     show_help = true, -- show help message on the command line when the popup is visible
   }
 end
 
-M.load_maps = function ()
+M.load_maps = function()
   local ok, _ = pcall(require, 'which-key')
   if ok then
-    local opts ={
+    local opts = {
       mode = "n", -- NORMAL mode
       -- prefix: use "<leader>f" for example for mapping everything related to finding files
       -- the prefix is prepended to every mapping part of `mappings`
       prefix = "",
       buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
       silent = true, -- use `silent` when creating keymaps
-      triggers = {'<leader>', '\\'}, -- manually setup triggers, auto is not working
+      ignore_missing = true,
+      triggers = { '<leader>', '\\' }, -- manually setup triggers, auto is not working
       noremap = true, -- use `noremap` when creating keymaps
       nowait = false, -- use `nowait` when creating keymaps
     }
     require('which-key').register(
-        {
-          y = {
-            name = 'Yank',
-            g = { 'Yank Git URL to clipboard'}
+      {
+        ['<M-C-n>'] = { 'Toggle Scratch' },
+        y = {
+          name = 'Yank',
+          g = { 'Yank Git URL to clipboard' },
+          s = { 'Yank surrounding word' },
+          S = { 'Yank surrounding WORD' },
+        },
+        ['[n'] = 'Go to previous failed test',
+        [']n'] = 'Go to next failed test',
+        ['\\zz'] = 'Quit',
+        ['<leader>'] = {
+          ['zz'] = 'QuitAll',
+          r = {
+            name = 'Refresh/Reload+Ripgrep',
+            b = 'Buffer',
+            c = 'Config',
+            g = 'Ripgrep all',
           },
-          ['[n'] = 'Go to previous failed test',
-          [']n'] = 'Go to next failed test',
-          ['\\zz'] = 'Quit',
-          ['<leader>'] = {
-            ['zz'] = 'QuitAll',
-            r = {
-              name = 'Refresh/Reload+Ripgrep',
-              b = 'Buffer',
-              c = 'Config',
-              g = 'Ripgrep all',
+          h = {
+            name = 'GitSigns',
+            b = 'Show Git Blame',
+            r = 'Reset Hunk',
+            R = 'Reset Buffer',
+            s = 'Stage Hunk',
+            S = 'Stage Buffer',
+            t = 'Toggle Signs',
+            p = 'Preview Hunk',
+            u = 'Undo Stage Hunk',
+            U = 'Undo Stage Buffer',
+          },
+          d = {
+            name = 'Debug / Doge',
+            d = { 'Choose debugger / Continue' },
+            l = { 'Run Last' },
+            b = {
+              name = 'Breakpoint+',
+              b = { 'Toggle breakpoint' },
+              l = { 'Show breakpoint list' },
             },
-            h = {
-              name = 'GitSigns',
-              b = 'Show Git Blame',
-              r = 'Reset Hunk',
-              R = 'Reset Buffer',
-              s = 'Stage Hunk',
-              S = 'Stage Buffer',
-              t = 'Toggle Signs',
-              p = 'Preview Hunk',
-              u = 'Undo Stage Hunk',
-              U = 'Undo Stage Buffer',
-            },
+            R = { 'Restart debugger' },
+            --L = {'Launch Filetype Debugger'},
+            T = { 'Debug Filetype Test' },
+            e = { 'Close / Reset debugger' },
+            i = { 'Step into' },
+            o = { 'Step over' },
+            k = { 'Step out' },
+            rc = { 'Run to cursor' },
+            rp = { 'Open REPL' },
+            cb = { 'Toggle conditional breakpoint' },
+            --X = {'Clear all breakpoints'},
+            K = { 'Inspect' },
+            c = { 'Code window' },
+            t = { 'Tag window' },
+            v = { 'Variables window' },
+            --w = {'Watches window'},
+            --s = {'Stack trace window'},
+          },
+          g = {
+            name = 'Git',
+            m = { 'Blame/Messages' }
+          },
+          p = 'Git Files',
+          t = {
+            name = 'Ultest/Neotest',
+            f = 'Run Tests in File',
+            n = 'Run Nearest',
+            s = 'Summary Toggle',
+            c = 'Ultest Clear',
             d = {
-              name = 'Debug / Doge',
-              d = {'Choose debugger / Continue'},
-              l = {'Run Last'},
-              b = {'Toggle breakpoint'},
-              R = {'Restart debugger'},
-              --L = {'Launch Filetype Debugger'},
-              T = {'Debug Filetype Test'},
-              e = {'Close / Reset debugger'},
-              i = {'Step into'},
-              o = {'Step over'},
-              k = {'Step out'},
-              rc = {'Run to cursor'},
-              rp = {'Open REPL'},
-              cb = {'Toggle conditional breakpoint'},
-              --X = {'Clear all breakpoints'},
-              K = {'Inspect'},
-              c = {'Code window'},
-              t = {'Tag window'},
-              v = {'Variables window'},
-              --w = {'Watches window'},
-              --s = {'Stack trace window'},
+              name = 'Debug',
+              d = 'File',
+              n = 'Nearest',
             },
-            g = {
-              name = 'Git',
-              m = {'Blame/Messages'}
-            },
-            p = 'Git Files',
+            o = 'Show Output',
+            O = 'Show and Jump Into Output',
+          },
+          l = {
+            name = 'LSP',
+            l = 'Show Log',
+            r = 'Restart LSP'
+          },
+          x = {
+            name = 'Diagnostics',
             t = {
-              name = 'Ultest/Neotest',
-              f = 'Run Tests in File',
-              n = 'Run Nearest',
-              s = 'Summary Toggle',
-              c = 'Ultest Clear',
-              d = {
-                name = 'Debug',
-                d = 'File',
-                n = 'Nearest',
-              },
-              o = 'Show Output',
-              O = 'Show and Jump Into Output',
+              name = 'Todo',
+              x = { 'Show todo' }
             },
+            x = { 'Toggle Trouble window' },
+            w = { 'Show workspace diagnostics' },
+            d = { 'Show document diagnostics' },
+            q = { 'Show quickfix window' },
+            l = { 'Show location window' },
+            D = { 'Disable diagnostics' }
+          },
+          f = {
+            name = 'Fzf',
+            f = { 'Files' },
+            o = { 'Most Used Files' },
+            M = { 'Manpages' },
+            h = { 'Help' },
+          },
+          ['fm'] = { 'ViFm' },
+        }
+      }, opts
+    )
+    autocmd({ 'BufEnter', 'BufRead' }, {
+      pattern = { '*.md', 'qutebrowser-editor*' },
+      callback = function()
+        require 'which-key'.register({
+          g = {
             l = {
-              name = 'LSP',
-              l = 'Show Log',
-              r = 'Restart LSP'
-            },
-            x = {
-              name = 'Diagnostics',
-              t = {
-                name = 'Todo',
-                x = {'Show todo'}
-              },
-              x = {'Toggle Trouble window'},
-              w = {'Show workspace diagnostics'},
-              d = {'Show document diagnostics'},
-              q = {'Show quickfix window'},
-              l = {'Show location window'},
-              D = {'Disable diagnostics'}
-            },
-            f = {
-              name = 'Fzf',
-              f = {'Files'},
-              o = {'Most Used Files'},
-              M = {'Manpages'},
-              h = {'Help'},
-            },
-            ['fm'] = { 'ViFm' },
+              name = 'VimWikiList',
+              h = { 'Decrement Bullet' },
+              l = { 'Increment Bullet' },
+              r = { 'Renumber List' }
+            }
+          },
+          ['\\w='] = { 'Increment Header Level' },
+          ['\\w-'] = { 'Decrement Header Level' },
+          ['\\wx'] = { 'Open Wiki Index' },
+        })
+        -- TODO(me): Figure out how to unregister
+        if vim.o.foldmethod == "manual" then
+          require 'which-key'.register({
+            ['zf'] = { 'Create a fold' },
+            ['zd'] = { 'Delete a fold' }
+          })
+        end
+      end
+    })
+
+    autocmd({ 'BufEnter', 'BufRead' }, {
+      pattern = 'plugins.lua',
+      callback = function()
+        require 'which-key'.register({
+          p = {
+            name = 'Plugin',
+            s = { 'Clean and install plugins' },
+            u = { 'Update plugins' },
+            i = { 'Install plugins' },
+            b = { 'Backup plugins' }
           }
-        }, opts
-      )
-    end
+        })
+      end
+    })
+  end
 end
 
 return M
