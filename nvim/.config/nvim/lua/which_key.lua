@@ -58,7 +58,7 @@ M.load_maps = function()
       ignore_missing = true,
       triggers = { '<leader>', '\\' }, -- manually setup triggers, auto is not working
       noremap = true, -- use `noremap` when creating keymaps
-      nowait = false, -- use `nowait` when creating keymaps
+      nowait = true, -- use `nowait` when creating keymaps
     }
     require('which-key').register(
       {
@@ -121,9 +121,11 @@ M.load_maps = function()
           },
           g = {
             name = 'Git',
-            m = { 'Blame/Messages' }
+            m =  'Blame/Messages',
+            c =  'Commit',
+            p = 'Push',
+            ['up'] = 'Push Upstream',
           },
-          p = 'Git Files',
           t = {
             name = 'Ultest/Neotest',
             f = 'Run Tests in File',
