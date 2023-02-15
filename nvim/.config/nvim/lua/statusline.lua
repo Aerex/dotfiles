@@ -1,4 +1,5 @@
 local gl = require('galaxyline')
+ local galaxyline_colours = require("galaxyline.theme").default
 local devicons = require('nvim-web-devicons')
 local u = require('utils').u
 local gls = gl.section
@@ -38,7 +39,7 @@ local colors = {
     orange = '#FF8800',
     purple = '#5d4d7a',
     magenta = '#c678dd',
-    blue = '#51afef';
+    blue = '#51afef',
     red = '#ec5f67'
 }
 
@@ -54,7 +55,9 @@ local remote_ip = function()
 end
 local get_diagnostic_info = function()
   if #vim.lsp.buf_get_clients() > 0 then
-    local status = require'lsp-status'.status()
+    local lspclient = require('galaxyline.provider_lsp')
+    local status = lspclient.get_lsp_client("")
+    --local status = require'lsp-status'.status()
     -- NOTE: Do not print status if it contains file issue warning
     if string.find(status, 'github.com') then
       return ''
@@ -105,6 +108,7 @@ end
 
 local get_file_name = function()
   local fname = vim.fn.expand('%:p')
+  local truncated_parts = {}
   if vim.startswith(fname, vim.env.HOME) then
     fname = vim.fn.substitute(fname, vim.env.HOME, "~", "")
   end
@@ -149,6 +153,33 @@ gls.left[1] = {
 gls.left[2] = {
   ViMode = {
     provider = function()
+      local modes = {
+        -- Normal
+        n = { "Normal", galaxyline_colours.violet },
+        no = { "Operator Pending", galaxyline_colours.violet },
+        -- Insert
+        i = { "Insert", galaxyline_colours.yellow },
+        -- Visual
+        v = { "Visual", galaxyline_colours.magenta },
+        V = { "Visual Line", galaxyline_colours.magenta },
+        [""] = { "Visual Block", galaxyline_colours.magenta },
+        -- Select
+        s = { "Select", galaxyline_colours.blue },
+        S = { "Select Line", galaxyline_colours.blue },
+        [""] = { "Select Block", galaxyline_colours.blue },
+        -- Replace
+        R = { "Replace", galaxyline_colours.red },
+        Rv = { "Virtual Replace", galaxyline_colours.red },
+          -- Exec
+          c = { "Command", galaxyline_colours.orange },
+          cv = { "Vim Ex", galaxyline_colours.green },
+          ce = { "Normal Ex", galaxyline_colours.green },
+          r = { "Hit-Enter Prompt", galaxyline_colours.cyan },
+          rm = { "More Prommpt", galaxyline_colours.cyan },
+          ["r?"] = { "Confirm Query", galaxyline_colours.green },
+          ["!"] = { "Shell", galaxyline_colours.orange },
+          t = { "Terminal", galaxyline_colours.green },
+        }
       -- auto change color according the vim mode
       local alias = {
           n = 'NORMAL',
