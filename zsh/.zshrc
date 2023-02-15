@@ -110,6 +110,7 @@ source "${ZINIT_HOME}/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
+zinit light jeffreytse/zsh-vi-mode
 zinit light-mode for \
   zdharma-continuum/zinit-annex-as-monitor \
   zdharma-continuum/zinit-annex-bin-gem-node \
@@ -127,7 +128,6 @@ zinit ice wait lucid atload'zicompinit; zicdreplay' blockf
 zinit light zsh-users/zsh-completions
 zinit ice wait lucid atload'zicompinit; zicdreplay' block
 
-zinit light jeffreytse/zsh-vi-mode
 zinit light ytet5uy4/fzf-widgets
 zinit light crater2150/tmsu-fzf
 
