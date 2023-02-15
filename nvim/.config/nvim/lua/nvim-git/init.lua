@@ -49,7 +49,7 @@ M.setup_signs = function()
       current_line_blame_opts = {
         virt_text = true,
         virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-        delay = 1000,
+        delay = 250,
         ignore_whitespace = false,
       },
       current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
@@ -108,10 +108,15 @@ M.setup_neogit = function()
     disable_signs = false,
     disable_hint = false,
     auto_refresh = false,
+    console_timeout = 5000,
     disable_context_highlighting = true,
     disable_commit_confirmation = true,
     commit_popup = {
       kind = "split_above"
+    },
+    console_kind = 'floating',
+    popup = {
+      kind = "floating"
     },
     kind = "split_above",
     -- customize displayed signs
@@ -131,20 +136,16 @@ M.setup_neogit = function()
         ['='] = 'Toggle',
         ['x'] = 'Discard',
         ['-'] = 'Stage',
+        ['dd'] = 'DiffAtFile',
         ['p'] = '',
         ['pl'] = 'PullPopup',
         ['pu'] = 'PushPopup',
         ['gl'] = 'LogPopup',
         ['L'] = '',
+        ['#'] = 'Console',
       }
     }
   }
---vim.api.nvim_exec([[
---  augroup DefaultRefreshEvents
---    au!
---    au BufWritePost,BufEnter,FocusGained,ShellCmdPost,VimResume * call <SID>neogit#refresh_manually(expand('<afile>'))
---  augroup END
---  end]], '')
 end
 
 --vim.api.nvim_create_autocmd({'BufWritePost', 'BufEnter', 'FocusGained', 'ShellCmdPost', 'VimResume'}, {
@@ -175,5 +176,52 @@ M.setup_gitlinker = function()
   end
   require'gitlinker'.setup(cfg)
 end
+
+M.setup_gh = function()
+  require'litee.lib'.setup()
+  require 'litee.gh'.setup({
+    -- deprecated, around for compatability for now.
+    -- remap the arrow keys to resize any litee.nvim windows.
+    map_resize_keys = true,
+    -- do not map any keys inside any gh.nvim buffers.
+    disable_keymaps = false,
+    -- the icon set to use.
+    icon_set = "default",
+    -- any custom icons to use.
+    icon_set_custom = nil,
+    -- whether to register the @username and #issue_number omnifunc completion
+    -- in buffers which start with .git/
+    git_buffer_completion = true,
+    -- defines keymaps in gh.nvim buffers.
+    keymaps = {
+        -- when inside a gh.nvim panel, this key will open a node if it has
+        -- any futher functionality. for example, hitting <CR> on a commit node
+        -- will open the commit's changed files in a new gh.nvim panel.
+        open = "<CR>",
+        -- when inside a gh.nvim panel, expand a collapsed node
+        expand = "zo",
+        -- when inside a gh.nvim panel, collpased and expanded node
+        collapse = "zc",
+        -- when cursor is over a "#1234" formatted issue or PR, open its details
+        -- and comments in a new tab.
+        goto_issue = "gd",
+        -- show any details about a node, typically, this reveals commit messages
+        -- and submitted review bodys.
+        details = "<CR>",
+        -- inside a convo buffer, submit a comment
+        submit_comment = "<leader>cs",
+        -- inside a convo buffer, when your cursor is ontop of a comment, open
+        -- up a set of actions that can be performed.
+        actions = "<A-a>",
+        -- inside a thread convo buffer, resolve the thread.
+        resolve_thread = "<leader>rc",
+        -- inside a gh.nvim panel, if possible, open the node's web URL in your
+        -- browser. useful particularily for digging into external failed CI
+        -- checks.
+        goto_web = "gx"
+    },
+  })
+end
+
 
 return M
