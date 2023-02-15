@@ -1,18 +1,10 @@
 -- TODO: Need to figure out why requiring modules creates a loop
 --local utils = require('nvim-lsp').utils
-local lsp_status = require('lsp-status')
 local lsp_signature = require('lsp_signature')
 local lsp_document_symbol_callback = require('nvim-fzf.lsp').document_symbols
 local lsp_references_callback = require('nvim-fzf.lsp').references
 local lsp_implementation_callback = require('nvim-fzf.lsp').implementation
 local utils = require('nvim-lsp.utils')
---
--- configure lsp-status
-lsp_status.config({
-  status_symbol = '',
-  show_filename = true,
-  current_function = false
-})
 
 vim.diagnostic.config({
   virtual_text = true,
@@ -22,7 +14,7 @@ vim.diagnostic.config({
   update_in_insert = false,
 })
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
   properties = {
@@ -89,14 +81,16 @@ local on_attach = function(client, bufnr)
     if wk_ok then
       wk.register({
         g = {
-          name = 'Preview',
-          d = { function() require'goto-preview'.goto_preview_definition() end, 'Preview Definition' },
+          p = {
+            name = 'Preview',
+            d = { function() require'goto-preview'.goto_preview_definition() end, 'Preview Definition' },
+          }
         },
-      }, { prefix = '\\', silent = true, buffer = buf
+      }, { silent = true, buffer = bufnr
       })
     else
-      vim.keymap.set('n', '\\gpd',  function() require'goto-preview'.goto_preview_definition() end,
-        { silent = true, buffer = buf})
+      vim.keymap.set('n', 'gpd',  function() require'goto-preview'.goto_preview_definition() end,
+        { silent = true, buffer = bufnr})
     end
 
   end
@@ -129,9 +123,7 @@ vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint
   vim.keymap.set('n', '<C-w>]', function() vim.cmd('vsplit'); vim.lsp.buf.definition() end, { silent = true, buffer = bufnr })
   --keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
   keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
-  keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  -- TODO(me): Create a fzf lsp_implementation method. Use telescope
-  -- temp
+  vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, { silent = true, buffer = bufnr })
   keymap('n', 'gi', '<cmd>Telescope lsp_implementations<CR>', opts)
   keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   keymap('n', '\\wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
@@ -140,7 +132,7 @@ vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint
   keymap('n', '<M-D>', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   vim.keymap.set('n', '<leader>rn', function() vim.lsp.buf.rename() end, { silent = true, buffer = bufnr })
   -- FIXME(me): nvim-fzf.lsp#document_symbols is not working on selected
-  keymap('n', '<A-O>', '<cmd>lua require(\'nvim-fzf.lsp\').document_symbols()<CR>', opts)
+  vim.keymap.set('n', 'g0', vim.lsp.buf.document_symbol, opts)
   --keymap('n', '<A-O>', '<cmd>Telescope lsp_document_symbols<CR>', opts)
   keymap('n', '<leader>ca', '<cmd>CodeActionMenu<CR>', opts)
   keymap('v', '<leader>ca', '<cmd>CodeActionMenu<CR>', opts)
@@ -188,6 +180,7 @@ require'lspconfig'.sumneko_lua.setup {
       },
     },
   },
+  on_attach = on_attach
 }
 -- set the path to the sumneko installation; if you previously installed via the now deprecated :LspInstall, use
 --local sumneko_root_path = vim.fn.stdpath('cache') .. '/lspconfig/sumneko_lua/lua-language-server'
@@ -264,7 +257,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   pattern = {'*.go'},
   group = gopls_grp,
   callback = function()
-    vim.lsp.buf.formatting()
+    vim.lsp.buf.format({async = true})
     require'nvim-lsp.utils'.goimports(2000)
   end
 })
@@ -424,7 +417,6 @@ if ok_null then
   })
 end
 -- Register the progress handle
-lsp_status.register_progress()
 vim.lsp.handlers['textDocument/documentSymbol'] = lsp_document_symbol_callback
 vim.lsp.handlers['textDocument/references'] = lsp_references_callback
 vim.lsp.handlers['textDocument/implementation'] = lsp_implementation_callback
