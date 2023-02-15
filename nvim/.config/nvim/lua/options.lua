@@ -31,7 +31,7 @@ opt.clipboard:append('unnamedplus')
 opt.runtimepath:append('/usr/share/vifm/vim-doc/')
 o.showmode        = true
 o.autoread        = true
-o.timeoutlen      = 500
+o.timeoutlen      = 100
 o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
 o.foldlevel       = 5
 wo.signcolumn     = "auto:2"
