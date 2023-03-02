@@ -1,11 +1,26 @@
 # MISC {{{
+# ensure we have correct locale set (this is mostly for MacOS)
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+export NOTES_DIRECTORY=$HOME/.nb/notes
+export LESSKEYIN=$HOME/.lesskey
+
 export OS=$(uname -s)
 export SHELL_NAME="$(basename $SHELL)"
+
 export JA_GTC_SOURCE='ja' # your preferred source language code
 export JA_GTC_TARGET='en' # your preferred target language code
 export TERM=screen-256color
 # make backward-word and forward-word move to each word separated by a '/'
 export WORDCHARS=''
+
+if [[ $SHELL_NAME == 'zsh' ]]; then
+  export ZLE_REMOVE_SUFFIX_CHARS=""
+fi
+
+# When offering typo corrections, do not propose anything which starts with an underscore (such as many of Zsh's shell functions)
+CORRECT_IGNORE='_*'
 #}}}
 
 # PATHS {{{
@@ -65,6 +80,7 @@ if command -v fzf 1>/dev/null 2>&1; then
   if command -v tmux 1>/dev/null 2>&1; then
     export FZF_TMUX_OPTS=$FZF_DEFAULT_OPTS
   fi
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 fi
 #}}}
 
@@ -130,5 +146,9 @@ export NVM_DIR="$HOME/.nvm"
 
 if command -v rbenv 1>/dev/null 2>&1; then
   eval "$(rbenv init - zsh)"
+fi
+
+if command -v zoxide 1>/dev/null 2>&1; then 
+   eval "$(zoxide init zsh)" 
 fi
 # vim:ft=zsh fdm=marker

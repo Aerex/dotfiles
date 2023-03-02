@@ -1,46 +1,4 @@
 zmodload zsh/zprof
-export ZLE_REMOVE_SUFFIX_CHARS=""
-OS=$(uname -s)
-
-# FZF
-export FZF_DEFAULT_OPTS="--bind ctrl-g:jump --bind alt-j:preview-down --bind alt-k:preview-up"
-
-# Misc
-if [ -f /usr/bin/nvim ]; then
-  export EDITOR=/usr/bin/nvim
-elif [ -f /usr/local/bin/nvim ]; then 
-  export EDITOR=/usr/local/bin/nvim
-elif [ -f ~/neovim/bin/nvim ]; then 
-  export EDITOR=~/neovim/bin/nvim
-else
-  export EDITOR=vim
-fi
-
-if command -v nvimpager 1>/dev/null 2>&1; then
-  export PAGER=nvimpager
-elif command -v vimpager 1>/dev/null 2>&1; ; then
-  export PAGER=vimpager
-else
-  export PAGER='less -SR'
-fi
-
-if command -v qutebrowser 1>/dev/null 2>&1; then 
-  export BROWSER=$(which qutebrowser)
-fi
-
-if command -v nvimpager 1>/dev/null 2>&1; then
-  export PAGER=nvimpager
-elif command -v vimpager 1>/dev/null 2>&1; then
-  export PAGER=vimpager
-else
-  export PAGER="less -SR"
-fi
-
-export NOTES_DIRECTORY=~/Documents/notes
-export NOTES_EXT=""
-export LESSKEYIN=$HOME/.lesskey
-
-
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -137,26 +95,20 @@ zinit load kdheepak/taskwarrior-tui
 ZSH_THEME="vi"
 zinit snippet ~/.config/zsh/themes/vi.theme 
 zinit ice if'[[ "$OS" == "Darwin" ]]'; zinit snippet OMZP::brew
-#
-# Generate zgen init script if needed
-# Credits to https://github.com/Tuurlijk/dotfiles/blob/master/.zshrc
-#if [[ ! -s ${ZDOTDIR:-${HOME}}/.zgen/init.zsh ]]; then
-#	zgen save
-#fi
 
-# Load the oh-my-zsh's library.
-# Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-#ANTIGEN_LOG=$HOME/.antigen/antigen.log
-# Load Antigen ZSH Plugin Manager
-#ANTIGEN_PATH=~/dotfiles
-#source $ANTIGEN_PATH/antigen.zsh
+zinit wait lucid for \
+ silent atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zpcdreplay" \
+    zdharma-continuum/fast-syntax-highlighting \
+ atload"!_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions \
+ as"completion" \
+    marlonrichert/zsh-autocomplete
+zinit light Aloxaf/fzf-tab
 
-if [ -d $HOME/.config/zsh/functions ]; then
-  for file in $HOME/.config/zsh/functions/**/*.zsh; do
+export ZSH_CONFIG_HOME=$HOME/.config/zsh
+# Load ZLE Widgets and Functions
+if [ -d $ZSH_CONFIG_HOME/functions ]; then
+  for file in $ZSH_CONFIG_HOME/functions/**/*.zsh; do
       source $file
   done
 fi
