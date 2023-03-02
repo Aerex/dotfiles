@@ -93,9 +93,10 @@ M.load_maps = function()
             U = 'Undo Stage Buffer',
           },
           d = {
-            name = 'Debug / Doge',
+            name = 'Debug',
             d = { 'Choose debugger / Continue' },
-            l = { 'Run Last' },
+            ['ll'] = { 'Run Last' },
+            ['lb'] = { 'Show Dap Log' },
             b = {
               name = 'Breakpoint+',
               b = { 'Toggle breakpoint' },

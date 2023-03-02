@@ -171,7 +171,8 @@ local maps = {
     ['<leader>to']   = function() require('test').output() end,
     ['<leader>tO']   = function() require('test').output({ enter = true }) end,
     -- debugger
-    ['<leader>dd']   = 'lua require\'debugger\'.start_or_continue()',
+    ['<leader>dd']   = function() require 'debugger'.start_or_continue() end,
+    ['<leader>dll']  = function() require 'dap'.run_last() end,
     ['<F5>']         = function() require 'debugger'.start_or_continue() end,
     ['<leader>dbb']  = 'lua require\'dap\'.toggle_breakpoint()',
     ['<F9>']         = 'lua require\'dap\'.toggle_breakpoint()',
