@@ -49,8 +49,6 @@ local noremaps = {
       [',rg']                                                        = function() require'nvim-fzf.rg'(vim.fn.input('Search term: '), true) end,
       ['<leader>nv']                                                 = function() require'nvim-fzf.notes'() end,
       ['<leader>yr']                                                 = 'YankyRingHistory',
-      -- docs
-      ['<leader>dg'] = 'DogeGenerate',
       -- snippets
       ['<leader>ue']                                                 = 'UltiSnipsEdit',
       -- git
@@ -78,10 +76,10 @@ local noremaps = {
       ['<F5>']                                                       = function() require'debugger'.start_or_continue() end,
       ['<leader>dbb']                                                 = 'lua require\'dap\'.toggle_breakpoint()',
       ['<F9>']                                                       = 'lua require\'dap\'.toggle_breakpoint()',
-      ['<leader>dso']                                                 = 'lua require\'dap\'.step_over()',
-      ['<F10>']                                                      = 'lua require\'dap\'.step_over()',
-      ['<leader>dsO']                                                 = 'lua require\'dap\'.step_out()',
-      ['<leader>dsi']                                                 = 'lua require\'dap\'.step_into()',
+      ['<leader>dso']                                                 = function() require'dap'.step_over() end,
+      ['<F10>']                                                      = function() require'dap'.step_over() end,
+      ['<leader>dsO']                                                 = function() require'dap'.step_out() end,
+      ['<leader>dsi']                                                 = function() require'dap'.step_into() end,
       ['<leader>dR']  = 'lua require\'dap\'.disconnect({restart = true })',
       ['<leader>drc'] = 'lua require\'dap\'.run_to_cursor()',
       ['<leader>dK']  = 'lua require\'dap.ui.widgets\'.hover()',
@@ -106,14 +104,6 @@ local noremaps = {
       ['<M-C-o>'] = function() require'scratch'.fzfScratch() end
     }
   }
-
-
-local maps = {
-  n = {
-    p = '<Plug>(miniyank-autoput)',
-    P = '<Plug>(miniyank-autoPut)',
-  }
-}
 
 local file_type_keymaps = {
   markdown = {
@@ -149,9 +139,9 @@ vim.keymap.set('n', '<A-a>', '<C-a>', { silent = true })
 vim.keymap.set('n', ']n', function() require'test'.next_fail() end, { silent = true })
 vim.keymap.set('n', '[n', function() require'test'.prev_fail() end, { silent = true })
 vim.keymap.set('n', '!', ':!', { silent = true })
-vim.keymap.set('v', '<leader>yg', function() require'gitlinker'.get_buf_range_url('v', {}) end, { silent = true })
-vim.keymap.set('n', '<leader>yg', function() require'gitlinker'.get_buf_range_url('n', {}) end, { silent = true})
-vim.keymap.set('n', '<leader>sp', function() print(vim.fn.expand('%:p')) end, { silent = true})
+vim.keymap.set('v', '<leader>yg', function() require 'gitlinker'.get_buf_range_url('v', {}) end, { silent = true })
+vim.keymap.set('n', '<leader>yg', function() require 'gitlinker'.get_buf_range_url('n', {}) end, { silent = true })
+vim.keymap.set('n', '<leader>sp', function() vim.notify(vim.fn.expand('%:p')) end, { silent = true })
 api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = true })
 api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
 autocmd('TermOpen', {
@@ -165,7 +155,7 @@ autocmd('FileType', {
   pattern = '{lspinfo},{qf},{dap-repl},{dap-float},{neotest-output},{man},{help},{fugitiveblame},{dap-float},{httpResult}',
   callback = function(args)
     vim.keymap.set('n', 'qq', function() api.nvim_win_close(0, true) end,
-    { silent = true, buffer = args.buf})
+      { silent = true, buffer = args.buf })
   end
 })
 
@@ -201,12 +191,12 @@ end
 M.set_filetype_keymap = function(m)
   for filetype, filetype_bindings in pairs(m) do
     for mode, modebindings in pairs(filetype_bindings) do
-      for lhs, rhs in pairs (modebindings) do
-        local cmd_prefix="<cmd>"
+      for lhs, rhs in pairs(modebindings) do
+        local cmd_prefix = "<cmd>"
         if string.find(rhs, '<Plug>') then
-          cmd_prefix=""
+          cmd_prefix = ""
         end
-          local cmd = string.format('autocmd FileType %s %s  %s %s%s<cr>', filetype, mode, lhs, cmd_prefix, rhs)
+        local cmd = string.format('autocmd FileType %s %s  %s %s%s<cr>', filetype, mode, lhs, cmd_prefix, rhs)
         api.nvim_exec(cmd, '')
       end
     end
@@ -217,7 +207,7 @@ M.set_keymap(noremaps, { silent = true, noremap = true })
 M.set_filetype_keymap(file_type_keymaps)
 
 -- load which-keys if available
-require'which_key'.load_maps()
+require 'which_key'.load_maps()
 
 
 return M
