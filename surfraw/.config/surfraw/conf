@@ -1,0 +1,67 @@
+# autoconf guessed prefix
+prefix=/usr
+
+# graphical browser? defaults to yes for meatminds. text browser users can
+# work it out how to change it.
+defyn   SURFRAW_graphical		yes
+
+# name/path of text browser executable
+# e.g links, lynx, w3m
+def   SURFRAW_text_browser	w3m
+
+# name/path of browser executable
+# e.g mozilla, netscape etc. Default to $BROWSER if no listed ones found
+def   SURFRAW_graphical_browser	"${BROWSER:-xdg-open}"
+
+# text browser arguments, or "none"
+def   SURFRAW_text_browser_args	none
+
+# graphical browser arguments, or "none"
+def   SURFRAW_graphical_browser_args	--target tab-silent
+
+# use -remote openURL for graphical browser
+defyn   SURFRAW_graphical_remote	no
+
+# when using the -remote, open a new window?
+defyn   SURFRAW_new_window	no
+
+# name of screen command to run
+def   SURFRAW_screen		tmux
+
+# If surfraw is running under screen(1), start a new screen
+# for each text browser invocation?
+defyn SURFRAW_new_screen	no
+
+# arguments for the screen command
+def   SURFRAW_screen_args	""
+
+# "quote" arguments
+defyn SURFRAW_quote_args	no
+
+# requote arguments if they have spaces in
+# ie so:
+#  sr google foo "bar baz" bam
+# works.
+defyn SURFRAW_quote_ifs    yes
+
+# default number of results to return
+def   SURFRAW_results		30
+
+# escape [% "@$%&+,/:;<=>?@@[\^{|}~'] characters in command line arguments
+# subsequently used to construct a url
+defyn SURFRAW_escape_url_args	yes
+
+# just print search url?
+defyn SURFRAW_print             no
+
+# Fetch and dump url?
+defyn SURFRAW_dump		no
+
+# Language/country (for elvi that support it)
+# Should be a 2-letter iso country code
+def SURFRAW_lang     	  	"US"
+
+# provider for searches that use a search engine
+# with (eg) site: specifiers
+# supported: google duckduckgo
+def SURFRAW_customsearch_provider searx.aerex.me
