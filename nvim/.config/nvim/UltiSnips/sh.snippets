@@ -8,3 +8,14 @@ endsnippet
 snippet todo "Add TODO block" 
 # TODO(me): $1
 endsnippet
+
+snippet head "Add header comment block"
+#!/usr/bin/env ${1:bash}
+# AUTHOR: ${2:Aerex}
+# DESC: $3
+# DEPEND: $4
+endsnippet
+
+snippet log "Add log"
+prinf "\n$1: $$1"
+endsnippet
