@@ -5,6 +5,12 @@ beforeEach(async function () {
 });
 endsnippet
 
+snippet aftereach "Add afterEach block" 
+afterEach(async function () {
+	$1
+});
+endsnippet
+
 snippet after "Add after block"
 after(async function() {
 	$1
@@ -25,9 +31,12 @@ it('$1', async function() {
 endsnippet
 #}}}
 
-snippet logv "Log a variable"
+snippet log "Log a variable"
 console.log(\`$1: ${$1}\n\`);
 endsnippet
+
+snippet logjs "Log a JSON string"
+console.log(\`$1: ${JSON.stringify($1, null, 2)}\n\`);
 
 snippet logvn "Log a variable with line number ref"
 console.log('`!v line(".")`\n');
@@ -37,19 +46,23 @@ endsnippet
 snippet context "Add mocha context block"
 context('$1', function() {
 	$0
-})
+});
 endsnippet
 
-snippet todo "Add todo block" 
+snippet todo "Add TODO block" 
 // TODO(me): $1
 endsnippet
 
-snippet fixme "Add fixme block" 
+snippet fixme "Add FIXME block" 
 // FIXME(me): $1
 endsnippet
 
-snippet note "Add note block" 
+snippet note "Add NOTE block" 
 // NOTE(me): $1
+endsnippet
+
+snippet removeme "Add REMOVEME block" 
+// REMOVEME(me): $1
 endsnippet
 
 # vim: fdm=marker
