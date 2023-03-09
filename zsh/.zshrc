@@ -1,46 +1,4 @@
 zmodload zsh/zprof
-export ZLE_REMOVE_SUFFIX_CHARS=""
-OS=$(uname -s)
-
-# FZF
-export FZF_DEFAULT_OPTS="--bind ctrl-g:jump --bind alt-j:preview-down --bind alt-k:preview-up"
-
-# Misc
-if [ -f /usr/bin/nvim ]; then
-  export EDITOR=/usr/bin/nvim
-elif [ -f /usr/local/bin/nvim ]; then 
-  export EDITOR=/usr/local/bin/nvim
-elif [ -f ~/neovim/bin/nvim ]; then 
-  export EDITOR=~/neovim/bin/nvim
-else
-  export EDITOR=vim
-fi
-
-if command -v nvimpager 1>/dev/null 2>&1; then
-  export PAGER=nvimpager
-elif command -v vimpager 1>/dev/null 2>&1; ; then
-  export PAGER=vimpager
-else
-  export PAGER='less -SR'
-fi
-
-if command -v qutebrowser 1>/dev/null 2>&1; then 
-  export BROWSER=$(which qutebrowser)
-fi
-
-if command -v nvimpager 1>/dev/null 2>&1; then
-  export PAGER=nvimpager
-elif command -v vimpager 1>/dev/null 2>&1; then
-  export PAGER=vimpager
-else
-  export PAGER="less -SR"
-fi
-
-export NOTES_DIRECTORY=~/Documents/notes
-export NOTES_EXT=""
-export LESSKEYIN=$HOME/.lesskey
-
-
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -90,16 +48,6 @@ ENABLE_CORRECTION="true"
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
-# Would you like to use another custom folder than $ZSH/custom?
-
-# [zsh-git-prompt] location
-export __GIT_PROMPT_DIR=$ZINIT_HOME/olivierverdier/zsh-git-prompt-master
-
-# use Haskell's version of zsh-git-prompt (if available)
-if [[ -f $__GIT_PROMPT_DIR/src/.bin/gitstatus ]]; then GIT_PROMPT_EXECUTABLE="haskell"; fi
-
-export ZSH_THEME_GIT_PROMPT_CACHE=1
-
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 if [[ ! -d $ZINIT_HOME ]]; then
   print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
@@ -117,63 +65,45 @@ zinit light-mode for \
   zdharma-continuum/zinit-annex-patch-dl \
   zdharma-continuum/zinit-annex-rust
 
-
-zinit ice lucid wait="0" atload='_zsh_autosuggest_start'
-zinit light zsh-users/zsh-autosuggestions
 zinit light woefe/zsh-git-prompt
 zinit snippet OMZP::ssh-agent
 zinit snippet OMZP::shrink-path
 
-zinit ice wait lucid atload'zicompinit; zicdreplay' blockf
-zinit light zsh-users/zsh-completions
-zinit ice wait lucid atload'zicompinit; zicdreplay' block
-
+zinit light jeffreytse/zsh-vi-mode
+zinit ice lucide wait "2"
 zinit light ytet5uy4/fzf-widgets
 zinit light crater2150/tmsu-fzf
+bindkey '^t' tmsu-fzf-change-directory
+bindkey '^[t' tmsu-fzf-insert-file
+bindkey '^O' tmsu-fzf-edit-file
 
 zinit ice wait:2 lucid extract"" from"gh-r" as"command" mv"taskwarrior-tui* -> tt"
 zinit load kdheepak/taskwarrior-tui
+export FZSHELL_BIND_KEY='^b'
+zinit ice lucide wait "2" atclone"./scripts/install.sh --no-instructions"
+zinit load mnowotnik/fzshell 
 
 ZSH_THEME="vi"
 zinit snippet ~/.config/zsh/themes/vi.theme 
 zinit ice if'[[ "$OS" == "Darwin" ]]'; zinit snippet OMZP::brew
-#
-# Generate zgen init script if needed
-# Credits to https://github.com/Tuurlijk/dotfiles/blob/master/.zshrc
-#if [[ ! -s ${ZDOTDIR:-${HOME}}/.zgen/init.zsh ]]; then
-#	zgen save
-#fi
 
-# Load the oh-my-zsh's library.
-# Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-#ANTIGEN_LOG=$HOME/.antigen/antigen.log
-# Load Antigen ZSH Plugin Manager
-#ANTIGEN_PATH=~/dotfiles
-#source $ANTIGEN_PATH/antigen.zsh
+zinit wait lucid for \
+ silent atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zpcdreplay" \
+    zdharma-continuum/fast-syntax-highlighting \
+ atload"!_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions \
+ as"completion" \
+    marlonrichert/zsh-autocomplete
+zinit light Aloxaf/fzf-tab
 
-if [ -d $HOME/.config/zsh/functions ]; then
-  for file in $HOME/.config/zsh/functions/**/*.zsh; do
+export ZSH_CONFIG_HOME=$HOME/.config/zsh
+
+# Load ZLE Widgts, Functions, and Configurations
+if [ -d $ZSH_CONFIG_HOME ]; then
+  for file in $ZSH_CONFIG_HOME/**/*.zsh; do
       source $file
   done
 fi
-
-# Load ZLE Widgets and Functions
-if [ -d $HOME/.config/zsh/widgets ]; then
-  for file in $HOME/.config/zsh/widgets/*.zsh; do
-    source $file
-  done
-fi
-
-  # Zsh's history-beginning-search-backward is very close to Vim's C-x C-l
-#  history-beginning-search-backward-then-append() {
-#    zle history-beginning-search-backward
-#    zle vi-add-eol
-#  }
-#  zle -N history-beginning-search-backward-then-append
 
 # Options
 # zsh will not beep
@@ -187,56 +117,13 @@ setopt noflowcontrol
 stty -ixon -ixoff
 # Do not kill background processes when closing the shell.
 setopt nohup
-
-# ensure we have correct locale set (this is mostly for MacOS)
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-
-
-export ZSH_CONFIG_HOME=~/.config/zsh
-# User configuration
-if [ -d $ZSH_CONFIG_HOME/conf.d ]; then
-  for file in $ZSH_CONFIG_HOME/conf.d/**.zsh; do
-    source $file
-  done
-fi
-
-if [ -d $ZSH_CONFIG_HOME/functions ]; then
-  for file in $ZSH_CONFIG_HOME/functions/*.zsh; do
-    source $file
-  done
-fi
-
-
 # limit correction only to commands
 setopt correct
 
-# When offering typo corrections, do not propose anything which starts with an underscore (such as many of Zsh's shell functions)
-CORRECT_IGNORE='_*'
-
-#export PYENV_ROOT="$HOME/.pyenv"
-#export PATH=$PATH:/$PYENV_ROOT
-#if command -v pyenv 1>/dev/null 2>&1; then
-#  eval "$(pyenv init -)"
-#  eval "$(pyenv virtualenv-init -)"
-#fi
-if command -v zoxide 1>/dev/null 2>&1; then 
-   eval "$(zoxide init zsh)" 
-fi
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 function init_nvm() {
+  zinit ice depth=1 wait lucid
   zinit light lukechilds/zsh-nvm  # This load nvm on first use of node, npm, etc
 }
-
-[ -f ~/.zshrc.local ] && source ~/.zshrc.local
-
-if command -v rbenv 1>/dev/null 2>&1; then
-  eval "$(rbenv init - zsh)"
-fi
-
-alias luamake=/home/aerex/Documents/repos/git/lua-language-server/3rd/luamake/luamake
 
 NVM_LOADED=$(zinit loaded | grep nvm)
 function nvm() {
@@ -247,6 +134,11 @@ function nvm() {
   \nvm
 }
 
-[[ -f ~/.override-bins ]] && source ~/.override-bins
+if command -v zoxide 1>/dev/null 2>&1; then 
+   eval "$(zoxide init zsh)" 
+fi
 
-### End of Zinit's installer chunk
+# Source any local files if available
+[[ -f ~/.override-bins ]] && source ~/.override-bins
+[[ -f ~/.zshenv.local ]] && source ~/.zshenv.local 
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local 

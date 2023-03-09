@@ -1,4 +1,29 @@
+# MISC {{{
+# ensure we have correct locale set (this is mostly for MacOS)
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
 
+export NOTES_DIRECTORY=$HOME/.nb/notes
+export LESSKEYIN=$HOME/.lesskey
+
+export OS=$(uname -s)
+export SHELL_NAME="$(basename $SHELL)"
+
+export JA_GTC_SOURCE='ja' # your preferred source language code
+export JA_GTC_TARGET='en' # your preferred target language code
+export TERM=screen-256color
+# make backward-word and forward-word move to each word separated by a '/'
+export WORDCHARS=''
+
+if [[ $SHELL_NAME == 'zsh' ]]; then
+  export ZLE_REMOVE_SUFFIX_CHARS=""
+fi
+
+# When offering typo corrections, do not propose anything which starts with an underscore (such as many of Zsh's shell functions)
+CORRECT_IGNORE='_*'
+#}}}
+
+# PATHS {{{
 # Add extra path to the list only if the directory exists
 NEWPATH=""
 for d in \
@@ -16,6 +41,8 @@ for d in \
     /usr/local/bin \
     /usr/bin \
     /usr/lib/jvm/default/bin \
+    $HOME/.jenv/bin/ \
+    $HOME/.cargo/bin/ \
     /usr/bin/site_perl \
     /usr/bin/vendor_perl \
     /usr/bin/core_perl \
@@ -23,7 +50,41 @@ for d in \
   test -d "$d" && NEWPATH="$d:$NEWPATH"
 done
 export PATH=$NEWPATH
+# }}}
 
+# EDITOR {{{
+if [ -f /usr/bin/nvim ]; then
+  export EDITOR=/usr/bin/nvim
+elif [ -f /usr/local/bin/nvim ]; then 
+  export EDITOR=/usr/local/bin/nvim
+elif [ -f ~/neovim/bin/nvim ]; then 
+  export EDITOR=~/neovim/bin/nvim
+else
+  export EDITOR=vim
+fi
+#}}}
+
+# PAGER {{{
+if command -v nvimpager 1>/dev/null 2>&1; then
+  export PAGER=nvimpager
+elif command -v vimpager 1>/dev/null 2>&1; ; then
+  export PAGER=vimpager
+else
+  export PAGER='less -SR'
+fi
+#}}}
+
+# FZF {{{
+if command -v fzf 1>/dev/null 2>&1; then
+  export FZF_DEFAULT_OPTS="--bind ctrl-g:jump --bind alt-j:preview-down --bind alt-k:preview-up --preview-window=top,border-bold"
+  if command -v tmux 1>/dev/null 2>&1; then
+    export FZF_TMUX_OPTS=$FZF_DEFAULT_OPTS
+  fi
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+fi
+#}}}
+
+# GO {{{
 # Set go environment variables if golang installed
 NEWGOROOT=""
 for d in \
@@ -35,28 +96,59 @@ done
 export GOROOT=$NEWGOROOT
 export GOPATH=$HOME/go
 
-export ANDROID_HOME=/opt/android-sdk
-
-export JA_GTC_SOURCE='ja' # your preferred source language code
-export JA_GTC_TARGET='en' # your preferred target language code
-
-export TERM=screen-256color
-
-# History
-if [[ $SHELL = "/usr/bin/zsh" ]]; then
-  export HISTFILE="$HOME/.zsh_history"
-  export HISTSIZE=30000
-  export SAVEHIST=${HISTSIZE}
+if [[ -d $HOME/.goenv/ ]]; then
+  export GOENV_ROOT="$HOME/.goenv"
+  export PATH="$GOENV_ROOT/bin:$PATH"
+  eval "$(goenv init -)"
+  export PATH="$GOROOT/bin:$PATH"
+  export PATH="$PATH:$GOPATH/bin"
 fi
+#}}}
 
-# make backward-word and forward-word move to each word separated by a '/'
-export WORDCHARS=''
+# ANDROID {{{
+[[ -d /opt/android-sdk ]] && export ANDROID_HOME=/opt/android-sdk
+#}}}
 
-export PASSWORD_STORE_ENABLE_EXTENSIONS=true
+# BROWSER {{{
+if command -v qutebrowser 1>/dev/null 2>&1; then 
+  export BROWSER=$(which qutebrowser)
+fi
+# }}}
+
+# History {{{
+export HISTFILE="$HOME/.${SHELL_NAME}_history"
+if [[ $HISTSIZE -lt 90000 ]]; then
+  unset HISTSIZE
+  HISTSIZE=90000
+  export SAVEHIST=90000
+fi
+#}}}
+
+export NOTES_DIRECTORY=$HOME/.nb/notes
+export LESSKEYIN=$HOME/.lesskey
+
+# PASSWORD {{{
+if command -v pass 1>/dev/null 2>&1; then
+  export PASSWORD_STORE_ENABLE_EXTENSIONS=true
 export PASSWORD_STORE_EXTENSIONS_DIR=$HOME/.password-store/.extensions
+fi
+#}}}
+
+export RLWRAP_EDITOR="$EDITOR +%L"
 
 [[ -f $HOME.cargo/env ]] && . "$HOME/.cargo/env"
 
-[[ -f ~/.shellenv.local ]] && source ~/.shellenv.local
+[[ -f ~/.zshenv.local ]] && source ~/.zshenv.local
+[[ -d ~/.jenv/ ]] && eval "$(jenv init -)"
 
-# vim:ft=sh
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+if command -v rbenv 1>/dev/null 2>&1; then
+  eval "$(rbenv init - zsh)"
+fi
+
+if command -v zoxide 1>/dev/null 2>&1; then 
+   eval "$(zoxide init zsh)" 
+fi
+# vim:ft=zsh fdm=marker
