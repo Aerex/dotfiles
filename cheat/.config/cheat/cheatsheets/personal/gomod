@@ -1,0 +1,16 @@
+# Output graph into an image
+gomod graph <query> | dot -Tpng -o </location/of/png>
+
+# Print the full dependency graph of this module (not including test-only dependencies):
+gomod graph '**'
+
+# Print the graph of all shared dependencies, including test-only ones, of a given package. 
+gomod graph --packages 'shared(deps(github.com/my/module/library/pkg:test))'
+
+# Show only the dependency graph leading to the  gopkg.in/yaml.v2  and  gopkg.in/yaml.v3  modules:
+gomod graph 'rdeps(gopkg.in/yaml.v2:test + gopkg.in/yaml.v3:test)'
+
+# Show the same dependency graph as above but limited to the paths shared between both modules. Note
+# that the resulting graph will not include the two targeted modules themselves.
+gomod graph 'rdeps(gopkg.in/yaml.v2:test) inter rdeps(gopkg.in/yaml.v3:test)'
+

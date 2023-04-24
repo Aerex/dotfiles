@@ -1,0 +1,19 @@
+# Copy your uptime into the selection for pasting:
+uptime | xclip
+
+# Copy your password file for pasting:
+xclip /etc/passwd
+
+# Save some text you have Edit | Copied in a web browser:
+xclip -o -sel clip > webpage.txt
+
+# Open a URL selected in an email client
+mozilla `xclip -o`
+
+# Copy XA_PRIMARY to XA_CLIPBOARD
+xclip -o | xclip -sel clip
+
+# In command mode in vim, select some lines of text, then press shift-:
+# for an ex prompt, and use this command to copy the selected lines of
+# text to the primary X selection:
+!xclip -f

@@ -58,3 +58,8 @@ Host *
  AddKeysToAgent yes
  UseKeychain yes
  IdentityFile ~/.ssh/id_rsa
+
+# Use HEREDoc to run multiline commands 
+ssh user@hostmane <<ENDSSH
+....
+ENDSSH
