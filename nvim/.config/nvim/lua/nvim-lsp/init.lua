@@ -30,7 +30,6 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
 
-
   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     vim.lsp.diagnostic.on_publish_diagnostics, {
       -- Enable underline, use default values
@@ -56,70 +55,74 @@ local on_attach = function(client, bufnr)
   end
   local ok_goto, _ = pcall(require, 'goto-preview')
   if ok_goto then
-    require'goto-preview'.setup{
-      width = 120; -- Width of the floating window
-      height = 15; -- Height of the floating window
-      border = {'↖', '─' ,'┐', '│', '┘', '─', '└', '│'}; -- Border characters of the floating window
-      default_mappings = false; -- Bind default mappings
-      debug = false; -- Print debug information
-      opacity = 10; -- 0-100 opacity level of the floating window where 100 is fully transparent.
-      resizing_mappings = false; -- Binds arrow keys to resizing the floating window.
+    require 'goto-preview'.setup {
+      width = 120,                                         -- Width of the floating window
+      height = 15,                                         -- Height of the floating window
+      border = { '↖', '─', '┐', '│', '┘', '─', '└', '│' }, -- Border characters of the floating window
+      default_mappings = false,                            -- Bind default mappings
+      debug = false,                                       -- Print debug information
+      opacity = 10,                                        -- 0-100 opacity level of the floating window where 100 is fully transparent.
+      resizing_mappings = false,                           -- Binds arrow keys to resizing the floating window.
       post_open_hook = function(buf, wind)
-        vim.keymap.set('n', 'qq', function() vim.api.nvim_win_close(wind, true) end, {silent = true, buffer = buf})
-      end; -- A function taking two arguments, a buffer and a window to be ran as a hook.
+        vim.keymap.set('n', 'qq', function() vim.api.nvim_win_close(wind, true) end, { silent = true, buffer = buf })
+      end,           -- A function taking two arguments, a buffer and a window to be ran as a hook.
       references = { -- Configure the telescope UI for slowing the references cycling window.
-        telescope = require'telescope.themes'.get_dropdown({ hide_preview = false })
-      };
-    -- These two configs can also be passed down to the goto-preview definition and implementation calls for one off "peak" functionality.
-    focus_on_open = true; -- Focus the floating window when opening it.
-    dismiss_on_move = false; -- Dismiss the floating window when moving the cursor.
-    force_close = true, -- passed into vim.api.nvim_win_close's second argument. See :h nvim_win_close
-    bufhidden = 'wipe', -- the bufhidden option to set on the floating window. See :h bufhidden
-  }
-  if ok_w then
-    wk.register({
-      g = {
-        name = 'Preview',
-        p = {
-          d = { function() require'goto-preview'.goto_preview_definition() end, 'Preview Definition' },
-          r = { function() require'goto-preview'.goto_preview_references() end, 'Preview References' },
-        }
+        telescope = require 'telescope.themes'.get_dropdown({ hide_preview = false })
       },
-    }, { silent = true, buffer = bufnr })
-  else
-    vim.keymap.set('n', 'gpd',  function() require'goto-preview'.goto_preview_definition() end, { silent = true, buffer = bufnr})
-    vim.keymap.set('n', 'gpr',  function() require'goto-preview'.goto_preview_references() end, { silent = true, buffer = bufnr})
+      -- These two configs can also be passed down to the goto-preview definition and implementation calls for one off "peak" functionality.
+      focus_on_open = true,    -- Focus the floating window when opening it.
+      dismiss_on_move = false, -- Dismiss the floating window when moving the cursor.
+      force_close = true,      -- passed into vim.api.nvim_win_close's second argument. See :h nvim_win_close
+      bufhidden = 'wipe',      -- the bufhidden option to set on the floating window. See :h bufhidden
+    }
+    if ok_w then
+      wk.register({
+        g = {
+          name = 'Preview',
+          p = {
+            d = { function() require 'goto-preview'.goto_preview_definition() end, 'Preview Definition' },
+            r = { function() require 'goto-preview'.goto_preview_references() end, 'Preview References' },
+          }
+        },
+      }, { silent = true, buffer = bufnr })
+    else
+      vim.keymap.set('n', 'gpd', function() goto_preview.goto_preview_definition() end, { silent = true, buffer = bufnr })
+      vim.keymap.set('n', 'gpr', function() goto_preview.goto_preview_references() end, { silent = true, buffer = bufnr })
+    end
   end
-end
 
 
- -- Attach LSP Signature
- lsp_signature.on_attach({
-    bind = true, -- This is mandatory, otherwise border config won't get registered.
-    doc_lines = 10, -- only show one line of comment set to 0 if you do not want API comments be shown
+  -- Attach LSP Signature
+  lsp_signature.on_attach({
+    bind = true,        -- This is mandatory, otherwise border config won't get registered.
+    doc_lines = 10,     -- only show one line of comment set to 0 if you do not want API comments be shown
     hint_enable = true, -- virtual hint enable
     hint_prefix = ' ',
     hint_scheme = 'String',
     handler_opts = {
-      border = 'rounded'   -- double, single, shadow, none
+      border = 'rounded' -- double, single, shadow, none
     },
     auto_close_after = 10,
-    decorator = {'`', '`'}  -- or decorator = {'***', '***'}  decorator = {'**', '**'} see markdown help
+    decorator = { '`', '`' } -- or decorator = {'***', '***'}  decorator = {'**', '**'} see markdown help
   })
 
--- Set diagnostic symbols
-vim.fn.sign_define('DiagnosticSignError', {text='✖', texthl='DiagnosticSignError'})
-vim.fn.sign_define('DiagnosticSignWarn', {text='⚠', texthl='DiagnosticSignWarn'})
-vim.fn.sign_define('DiagnosticSignInfo', {text='כֿ',texthl='DiagnosticSignInfo'})
-vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint'})
+  -- Set diagnostic symbols
+  vim.fn.sign_define('DiagnosticSignError', { text = '✖', texthl = 'DiagnosticSignError' })
+  vim.fn.sign_define('DiagnosticSignWarn', { text = '⚠', texthl = 'DiagnosticSignWarn' })
+  vim.fn.sign_define('DiagnosticSignInfo', { text = 'כֿ', texthl = 'DiagnosticSignInfo' })
+  vim.fn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
 
   -- LSP keymap
- local opts = { noremap=true, silent=true }
-  vim.keymap.set('n', 'gd',  function() vim.lsp.buf.declaration() end, { silent = true, buffer = bufnr })
-  vim.keymap.set('n', 'gr', function() require'nvim-telescope'.lsp_ref() end, opts)
+  local opts = { noremap = true, silent = true }
+  vim.keymap.set('n', 'gd', function() vim.lsp.buf.declaration() end, { silent = true, buffer = bufnr })
+  vim.keymap.set('n', 'gr', function() require 'nvim-telescope'.lsp_ref() end, opts)
   vim.keymap.set('n', '<c-]>', function() vim.lsp.buf.definition() end, { silent = true, buffer = bufnr })
-  vim.keymap.set('n', '<C-w>]', function() vim.cmd('vsplit'); vim.lsp.buf.definition() end, { silent = true, buffer = bufnr })
-  --keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
+  vim.keymap.set('n', '<C-w>]', function()
+      vim.cmd('vsplit');
+      vim.lsp.buf.definition()
+    end,
+    { silent = true, buffer = bufnr })
+  vim.keymap.set('n', 'g0', function() utils.document_symbols() end, { silent = true, buffer = bufnr })
   keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
   vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, { silent = true, buffer = bufnr })
   vim.keymap.set('n', 'gi', function() require'telescope.builtin'.lsp_implementations() end, { silent = true, buffer = bufnr })
@@ -131,25 +134,40 @@ vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint
   vim.keymap.set('n', '<leader>rn', function() vim.lsp.buf.rename() end, { silent = true, buffer = bufnr })
   -- FIXME(me): nvim-fzf.lsp#document_symbols is not working on selected
   vim.keymap.set('n', 'g0', function() require'nvim-telescope'.document_symbols() end, { silent = true, buffer = bufnr})
+  vim.keymap.set('n', '<leader>la', function() require 'navigator.codelens'.run_action() end,
+    { silent = true, buffer = bufnr })
   --keymap('n', '<A-O>', '<cmd>Telescope lsp_document_symbols<CR>', opts)
+  vim.keymap.set('n', '<leader>la', function() require 'navigator.codelens'.run_action() end,
+    { silent = true, buffer = bufnr })
   keymap('n', '<leader>ca', '<cmd>CodeActionMenu<CR>', opts)
   keymap('v', '<leader>ca', '<cmd>CodeActionMenu<CR>', opts)
   keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   keymap('n', '<leader>di', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  vim.keymap.set('n', '<leader>,d', function() vim.diagnostic.open_float() end, { silent= true, buffer = bufnr })
-  keymap('n', '<leader>xD', '<cmd>lua vim.diagnostic.disable()<CR>', opts)
+  vim.keymap.set('n', '<leader>,d', function() vim.diagnostic.open_float() end, { silent = true, buffer = bufnr })
+  vim.keymap.set('n', '<leader>xD', vim.diagnostic.disable, { silent = true, buffer = bufnr })
   keymap('n', '<leader>lr', '<cmd>LspRestart<CR>', opts)
-  keymap('n', '<leader>ll', '<cmd>LspLog<CR>', opts)
+  keymap('n', '\\ll', '<cmd>LspLog<CR>', opts)
 
+  if ok_w then
+    wk.register({
+      ['\\ll'] = { 'Show LSP Log' },
+      g = {
+        name = 'LSP',
+        r = { 'Reference' },
+        ['0'] = { 'Document Symbol' },
+        W = { 'Workspace Symbol' },
+        d = { 'Declaration' },
+      },
+      { silent = true, buffer = bufnr }
+    })
+  end
   local ok_d, _ = pcall(require, 'jdtls')
   if ok_d and vim.bo.filetype == 'java' then
-    require'jdtls.setup'.add_commands()
-    require'jdtls'.setup_dap()
+    require 'jdtls.setup'.add_commands()
+    require 'jdtls'.setup_dap()
   end
 end
-
--- load lsp servers
 
 local lua_settings = {
   settings = {

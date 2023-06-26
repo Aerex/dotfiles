@@ -1,0 +1,2 @@
+# Upgrade a package 
+go get -u <package-path>@version

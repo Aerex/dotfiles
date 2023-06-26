@@ -160,17 +160,18 @@ end
 M.rg_search = function()
   local workspace = vim.lsp.buf.list_workspace_folders()[1]
   workspace = workspace ~= "" and workspace or (is_git_repo() and get_git_root_path() or vim.fn.getcwd())
-  vim.notify('workspace -> ' .. workspace)
-  require('telescope.builtin').live_grep(M.get_dropdown({
+  require('telescope.builtin').grep_string(M.get_dropdown({
+    search = '',
+    only_sort_text = false,
+    word_match = '-w',
     layout_strategy = 'cursor',
     disable_coordinates = true,
+    search_dirs = { workspace, vim.fn.getcwd() },
     cwd = workspace,
-    glob_pattern = { '!go.sum' },
     layout_config = {
       width = function(_, max_columns, _)
         return math.min(max_columns, 150)
       end,
-
       height = function(_, _, max_lines)
         return math.min(max_lines, 30)
       end,
@@ -179,7 +180,7 @@ M.rg_search = function()
         prompt_position = 'top',
       }
     },
-    prompt_prefix = 'Rg> ',
+    prompt_prefix = 'Rg Search> ',
   }))
 end
 

@@ -152,3 +152,12 @@ EOF
 
 # Update configmap
 kubectl get configmap <config-map-name> -n <namespace> kube-system -o yaml > output.yaml
+
+# List all supported resource types
+kubectl api-resources
+
+# List all CRDs
+kubectl get crds
+
+# Restart deployment
+kubectl rollout restart deployments/<deployment>

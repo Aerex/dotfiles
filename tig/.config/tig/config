@@ -71,6 +71,23 @@ bind generic @k :?^@@
 bind generic @- :toggle diff-context -1
 bind generic @+ :toggle diff-context +1
 
+# ================ Diff  ====================
+bind diff [ none
+bind diff ] none
+bind diff } none
+bind diff { none
+
+# Next staged chunk
+bind diff ] :?^@@ 
+# Previous staged chunk
+bind diff [ :/^@@ 
+
+# Next diff
+bind diff } :?^diff --(git|cc)
+# Prev diff
+bind diff { :/^diff --(git|cc)
+
+
 # ================ Status  ====================
 bind status  s  none
 bind stage   s  none
@@ -118,6 +135,8 @@ bind diff <Ctrl-j> !./tig-rebase.sh descend %(commit)
 # Edit commit message
 bind main <Ctrl-r> !./tig-rebase.sh reword %(commit)
 bind diff <Ctrl-r> !./tig-rebase.sh reword %(commit)
+# Reset to commit
+bind main <Esc>r !git reset %(commit)
 
 # Abort current rebase
 bind main <Ctrl-x> !./tig-rebase.sh abort

@@ -16,11 +16,11 @@ end
 
 M.toggle_breakpoints_qf = function()
   -- Add breakpoints to quickfix window
-  require'dap'.list_breakpoints()
+  require 'dap'.list_breakpoints()
   -- Load trouble
-  require'packer'.loader('trouble.nvim')
+  require 'packer'.loader('trouble.nvim')
   -- open trouble quickfix
-  require'trouble'.open({ provider = 'quickfix'})
+  require 'trouble'.open({ provider = 'qf' })
 end
 
 M.restore_keymaps = function()
