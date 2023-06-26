@@ -87,8 +87,8 @@ local on_attach = function(client, bufnr)
       },
     }, { silent = true, buffer = bufnr })
   else
-    vim.keymap.set('n', 'gpd',  function() goto_preview.goto_preview_definition() end, { silent = true, buffer = bufnr})
-    vim.keymap.set('n', 'gpr',  function() goto_preview.goto_preview_references() end, { silent = true, buffer = bufnr})
+    vim.keymap.set('n', 'gpd',  function() require'goto-preview'.goto_preview_definition() end, { silent = true, buffer = bufnr})
+    vim.keymap.set('n', 'gpr',  function() require'goto-preview'.goto_preview_references() end, { silent = true, buffer = bufnr})
   end
 end
 
@@ -130,11 +130,10 @@ vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint
   keymap('n', '<M-D>', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   vim.keymap.set('n', '<leader>rn', function() vim.lsp.buf.rename() end, { silent = true, buffer = bufnr })
   -- FIXME(me): nvim-fzf.lsp#document_symbols is not working on selected
-  vim.keymap.set('n', 'g0', vim.lsp.buf.document_symbol, opts)
+  vim.keymap.set('n', 'g0', function() require'nvim-telescope'.document_symbols() end, { silent = true, buffer = bufnr})
   --keymap('n', '<A-O>', '<cmd>Telescope lsp_document_symbols<CR>', opts)
   keymap('n', '<leader>ca', '<cmd>CodeActionMenu<CR>', opts)
   keymap('v', '<leader>ca', '<cmd>CodeActionMenu<CR>', opts)
-  keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   keymap('n', '<leader>di', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
@@ -151,18 +150,13 @@ vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint
 end
 
 -- load lsp servers
-local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
 
-require'lspconfig'.sumneko_lua.setup {
+local lua_settings = {
   settings = {
     Lua = {
       runtime = {
         -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
         version = 'LuaJIT',
-        -- Setup your lua path
-        path = runtime_path,
       },
       diagnostics = {
         -- Get the language server to recognize the `vim` global
@@ -178,40 +172,13 @@ require'lspconfig'.sumneko_lua.setup {
       },
     },
   },
-  on_attach = on_attach
 }
--- set the path to the sumneko installation; if you previously installed via the now deprecated :LspInstall, use
---local sumneko_root_path = vim.fn.stdpath('cache') .. '/lspconfig/sumneko_lua/lua-language-server'
---local sumneko_binary = sumneko_root_path .. '/bin/Linux/lua-language-server'
---require'lspconfig'.sumneko_lua.setup {
---  cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
---  on_attach = on_attach,
---  capabilities = capabilities,
---  settings = {
---    Lua = {
---      runtime = {
---        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
---        version = 'LuaJIT',
---        -- Setup your lua path
---        path = vim.split(package.path, ';'),
---      },
---      diagnostics = {
---        -- Get the language server to recognize the `vim` global
---        globals = {'vim'},
---      },
---      workspace = {
---        -- Make the server aware of Neovim runtime files
---        library = {
---          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
---          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
---        },
---      },
---      telemetry = {
---        enable = false
---      }
---    }
---  }
---}
+
+require'lspconfig'.lua_ls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = lua_settings
+}
 require'lspconfig'.pylsp.setup{
   on_attach=on_attach,
   autostart = true,
@@ -304,7 +271,6 @@ require'lspconfig'.bashls.setup {
   on_attach = on_attach,
   capabilities = capabilities
 }
-
 if vim.fn.executable('solargraph') then
   require'lspconfig'.solargraph.setup {
     on_attach = on_attach,
@@ -460,7 +426,7 @@ navigator.setup({
       }
     }
   },
-  sumneko_lua = {
+  lua_ls = {
     on_attach = on_attach,
     capabilities =capabilities,
     settings = lua_settings,
