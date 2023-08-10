@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# AUTHOR: Aerex
+# DESC:   Power options
+
+CHOICES='Suspend\nShutdown\nRestart/Reboot'
+sel=$(echo -e "$CHOICES" | fzf)
+
+if [[ $sel == "Suspend" ]]; then
+  systemctl suspend
+elif [[ $sel == "Shutdown" ]]; then
+  shutdown now
+elif [[ $sel == "Restart/Reboot" ]]; then
+  shutdown -r now
+fi
