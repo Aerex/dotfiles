@@ -482,14 +482,17 @@ let &statusline .= "  %d %4*%2* "        	" file modification date and time
 
 map <insert>  :!touch<space>
 map <space>mv :set millerview<cr>
-map <space>dl :!wget $(xsel --clipboard -o)
+map <space>dl :!wget $(xsel --clipboard -o)<cr>
 map <space>vs :vs<cr>
 map <space>v  :!nvim<space>
 map <space>n  :touch<space>
+map f /
 map mkd       :mkdir<space>
 map vs        :vsplit<cr>
 map sp        :split<cr>
 nmap J        <tab>
+nmap [t       :tabprevious<cr>
+nmap ]t       :tabnext<cr>
 nmap K        <tab>
 
 " GOTO ------------------------------------------------------------------------------ {{{2
@@ -507,12 +510,14 @@ map <silent> gS   :cd ~/Documents/Scans<cr>
 map <silent> gJ   :cd ~/Documents/Japanese<cr>
 map <silent> gdl  :cd ~/Downloads<cr>
 map <silent> gdo  :cd ~/Documents<cr>
-map <silent> gj   :cd ~/.jira.d<cr>
 map <silent> gtw  :cd ~/.task<cr>
 map <silent> gpac :cd ~/.local/share/nvim/site/pack/packer<cr>
 map <silent> gpi  :cd ~/Pictures<cr>
 map cd            :cd <space>
 
+" Switch between file previewers
+nnoremap <silent> <c-p> <c-w><c-w>A<c-w><c-w>
+nnoremap <silent> <c-n> <c-w><c-w>a<c-w><c-w>
 
 map X :extract<cr>
 
@@ -524,6 +529,7 @@ nnoremap <space>s :shell<cr>
 
 " Display sorting dialog
 nnoremap o :sort<cr>
+noremap O :sort!<cr>
 
 " Toggle visibility of preview window
 nnoremap w :view<cr>
@@ -543,10 +549,10 @@ nnoremap D  :!echo Moving %f to Trash && trash-put %f<cr>
 "nnoremap P                                                                               :put! &<cr>
 
 " Yank current directory path into the clipboard
-nnoremap yd :!echo %d | xsel --input --clipboard<cr>
+nnoremap yd :!echo -n %d | xsel --input --clipboard<cr>
 
 " Yank current file path into the clipboard
-nnoremap yf :!echo %c | xsel --input --clipboard<cr>
+nnoremap yf :!echo -n %c | xsel --input --clipboard<cr>
 
 " Mappings for faster renaming
 nnoremap I cw<c-a>
@@ -577,17 +583,15 @@ nnoremap <f6>                                                                   
 nnoremap <f8>                                                                             :delete<cr>
 
 " ------------------------------------------------------------------------------
-
-" Various customization examples
-
-" Use ag (the silver searcher) instead of grep
-"
 set grepprg='rg --line-number %i %a %s'
 
 noremap <silent> //    :FZFlocate<Cr>
 noremap <silent> <c-f> :FZFfind<Cr>
 
-source ~/.config/vifm/local.vim
+" Source local config if one exists
+if filereadable($HOME.'/.config/vifm/local.vim')
+  source ~/.config/vifm/local.vim
+endif
 
 " Add additional place to look for executables
 "

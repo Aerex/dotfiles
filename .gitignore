@@ -23,11 +23,17 @@ neomutt/.config/neomutt/**/cache/**
 
 zsh/.config/zsh/functions/jenkins
 zsh/.config/zsh/functions/jira
-.local**
+**.local
 local/
 
 nvim/.config/nvim/spell
+vifm/.config/vifm/vifminfo.json_*
 
 nvim-local/
 local.vim
 .mypy_cache
+
+w3m/.w3m/w3mcache*
+w3m/.w3m/w3msrc*
+w3m/.w3m/w3mtmp*
+w3m/.w3m/cookie
