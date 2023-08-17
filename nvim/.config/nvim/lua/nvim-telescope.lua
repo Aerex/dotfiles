@@ -4,13 +4,87 @@ local root_utils = require('utils')
 local is_git_repo = root_utils.is_git_repo
 local get_git_root_path = root_utils.get_git_root_path
 
+local actions = require("telescope.actions")
+local action_state = require("telescope.actions.state")
+local transform_mod = require("telescope.actions.mt").transform_mod
+
+local function telescope_multiopen(prompt_bufnr, method)
+  local cmd_map = {
+    vertical = "vsplit",
+    horizontal = "split",
+    tab = "tabe",
+    default = "edit"
+  }
+  local picker = action_state.get_current_picker(prompt_bufnr)
+  local multi_selection = picker:get_multi_selection()
+  local has_multi_selection = (next(picker:get_multi_selection()) ~= nil)
+
+  if has_multi_selection then
+    require("telescope.pickers").on_close_prompt(prompt_bufnr)
+    pcall(vim.api.nvim_set_current_win, picker.original_win_id)
+
+    for i, entry in ipairs(multi_selection) do
+      -- opinionated use-case
+      local cmd = i == 1 and "edit" or cmd_map[method]
+      vim.cmd(string.format("%s %s", cmd, entry.value))
+    end
+  else
+    actions["select_" .. method](prompt_bufnr)
+  end
+end
+
+local multi_select = transform_mod({
+  vertical = function(prompt_bufnr)
+    telescope_multiopen(prompt_bufnr, "vertical")
+  end,
+  horizontal = function(prompt_bufnr)
+    telescope_multiopen(prompt_bufnr, "horizontal")
+  end,
+  tab = function(prompt_bufnr)
+    telescope_multiopen(prompt_bufnr, "tab")
+  end,
+  open = function(prompt_bufnr)
+    telescope_multiopen(prompt_bufnr, "default")
+  end,
+})
+
+
+local multi_open_maps = {
+  i = {
+    ['<C-x>'] = require('telescope.actions').select_horizontal,
+    ['<C-s>'] = require('telescope.actions').select_horizontal,
+    ['<C-c>'] = require('telescope.actions').close,
+    ['<C-j>'] = require('telescope.actions').move_selection_next,
+    ['<C-k>'] = require('telescope.actions').move_selection_previous,
+    ['<A-p>'] = require('telescope.actions.layout').toggle_preview,
+    ['<Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_next,
+    ['<S-Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_previous
+    --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
+  },
+  n = {
+    ['q'] = require('telescope.actions').close,
+    ['<Esc>'] = require('telescope.actions').close,
+    ['<CR>'] = multi_select.open,
+    ['<C-c>'] = require('telescope.actions').close,
+    ['<C-s>'] = multi_select.horizonal,
+    ['<C-x>'] = multi_select.horizontal,
+    ['<C-t>'] = multi_select.tab,
+    ['<A-j>'] = require('telescope.actions').preview_scrolling_up,
+    ['<A-k>'] = require('telescope.actions').preview_scrolling_up,
+    ['<A-p>'] = require('telescope.actions.layout').toggle_preview,
+    ['<Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_next,
+    ['<S-Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_previous
+    --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
+  }
+}
+
 M.setup = function()
   require('telescope').setup {
     defaults = {
       layout_strategy = 'vertical',
       path_display = {
         shorten = {
-          len     = 2,
+          len     = 3,
           exclude = { -1 }
         }
       },
@@ -22,6 +96,8 @@ M.setup = function()
           ['<C-j>'] = require('telescope.actions').move_selection_next,
           ['<C-k>'] = require('telescope.actions').move_selection_previous,
           ['<A-p>'] = require('telescope.actions.layout').toggle_preview,
+          ['<Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_next,
+          ['<S-Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_previous
           --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
         },
         n = {
@@ -33,7 +109,8 @@ M.setup = function()
           ['<A-j>'] = require('telescope.actions').preview_scrolling_up,
           ['<A-k>'] = require('telescope.actions').preview_scrolling_up,
           ['<A-p>'] = require('telescope.actions.layout').toggle_preview,
-          ['<Tab>'] = require('telescope.actions').toggle_selection,
+          ['<Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_next,
+          ['<S-Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_previous
           --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
         }
       },
@@ -41,13 +118,33 @@ M.setup = function()
       file_previewer = require('telescope.previewers').vim_buffer_cat.new,
       grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
       qflist_previewer = require('telescope.previewers').vim_buffer_qflist.new,
+      pickers = {
+        oldfiles = {
+          mappings = multi_open_maps
+        },
+        find_files = {
+          mappings = multi_open_maps
+        },
+        buffers = {
+          mappings = multi_open_maps
+        },
+        live_grep = {
+          mappings = multi_open_maps
+        },
+        grep_string = {
+          mappings = multi_open_maps
+        },
+        lsp_references = {
+          mappings = multi_open_maps
+        },
+      }
     },
     extensions = {
       fzf = {
-        fuzzy = true, -- false will only do exact matching
+        fuzzy = true,                   -- false will only do exact matching
         override_generic_sorter = true, -- override the generic sorter
-        override_file_sorter = true, -- override the file sorter
-        case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+        override_file_sorter = true,    -- override the file sorter
+        case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
       },
     }
   }
@@ -96,7 +193,6 @@ M.document_symbols = function()
       width = function(_, max_columns, _)
         return math.min(max_columns, 9)
       end,
-
       --height = function(_, _, max_lines)
       --  return math.min(max_lines, 15)
       --end,
@@ -120,7 +216,6 @@ M.lsp_ref = function()
       width = function(_, max_columns, _)
         return math.min(max_columns, 9)
       end,
-
       --height = function(_, _, max_lines)
       --  return math.min(max_lines, 15)
       --end,
@@ -144,7 +239,6 @@ M.rg_string = function()
       width = function(_, max_columns, _)
         return math.min(max_columns, 150)
       end,
-
       height = function(_, _, max_lines)
         return math.min(max_lines, 25)
       end,
@@ -161,13 +255,14 @@ M.rg_search = function()
   local workspace = vim.lsp.buf.list_workspace_folders()[1]
   workspace = workspace ~= "" and workspace or (is_git_repo() and get_git_root_path() or vim.fn.getcwd())
   require('telescope.builtin').grep_string(M.get_dropdown({
+    path_display = { 'smart' },
     search = '',
-    only_sort_text = false,
+    only_sort_text = true,
     word_match = '-w',
     layout_strategy = 'cursor',
     disable_coordinates = true,
-    search_dirs = { workspace, vim.fn.getcwd() },
-    cwd = workspace,
+    --search_dirs = { workspace, vim.fn.getcwd() },
+    --cwd = workspace,
     layout_config = {
       width = function(_, max_columns, _)
         return math.min(max_columns, 150)
