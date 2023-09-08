@@ -1,0 +1,21 @@
+nunmap "ir"
+nunmap "ic"
+nmap "i" "\"
+nmap "a" "\"
+nmap "A" "\"
+nnoremap "O" "ir<CR>\"
+nnoremap "o" "or<CR>j\"
+nmap "<SPACE>w" ":w<cr>" 
+nmap "<SPACE>zz" ":q!<CR>"
+nmap "<SPACE>fd" ":datefmt<CR>"
+nunmap "<C-d>"
+nunmap "<C-u>"
+nmap "<SPACE>fh" ":help<CR>"
+nmap "<C-d>" "<C-f>"
+nmap "<C-u>" "<C-b>"
+
+set autocalc
+set numeric
+set numeric_decimal=0
+set overlap
+set xlsx_readformulas 
