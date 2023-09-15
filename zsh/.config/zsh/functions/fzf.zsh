@@ -1,11 +1,16 @@
 function conf(){
-  CONFIG_DIRS=(~/.wuzz/config.toml, ~/.tmux.conf, ~/.config/nvim/init.vim, ~/.jira.d/config.yml, ~/.chunkwmrc, ~/.skhdrc, ~/.kube/config,
-  ~/.myclirc, ~/.qutebrowser/config.py, ~/.taskrc, ~/.config/bugwarrior/bugwarriorrc, ~/.config/vdirsyncer/config, ~/.config/tig/config, 
-  ~/tmux.powerline.conf, ~/.my.cnf, ~/.config/neomutt/muttrc, ~/.offlineimaprc, ~/.config/i3/config, ~/.Xresources)
-  VERT_CONFIG_DIRS=$(echo $CONFIG_DIRS | awk -v RS=, '{ sub(" ", ""); print }')
+  if [[ ! -z $(command -v tmsu) ]]; then 
+    tmsu files --path=$HOME conf | fzf --preview="highlight -O ansi -l --force {}" \
+      --bind "enter:execute($EDITOR {})+abort"
+  else
+    CONFIG_DIRS=(~/.wuzz/config.toml, ~/.tmux.conf, ~/.config/nvim/init.vim, ~/.jira.d/config.yml, ~/.chunkwmrc, ~/.skhdrc, ~/.kube/config,
+      ~/.myclirc, ~/.qutebrowser/config.py, ~/.taskrc, ~/.config/bugwarrior/bugwarriorrc, ~/.config/vdirsyncer/config, ~/.config/tig/config, 
+      ~/tmux.powerline.conf, ~/.my.cnf, ~/.config/neomutt/muttrc, ~/.offlineimaprc, ~/.config/i3/config, ~/.Xresources)
+      VERT_CONFIG_DIRS=$(echo $CONFIG_DIRS | awk -v RS=, '{ sub(" ", ""); print }')
 
-  echo $VERT_CONFIG_DIRS | fzf --preview="highlight -O ansi -l --force {}" \
-    --bind "enter:execute($EDITOR {})+abort"
+      echo $VERT_CONFIG_DIRS | fzf --preview="highlight -O ansi -l --force {}" \
+        --bind "enter:execute($EDITOR {})+abort"
+  fi
 }
 # Open a file at specified linenumber in $EDITOR using rg and fzf
 vg() {
@@ -24,7 +29,7 @@ vg() {
   fi
 
   if [[ -n $file ]]; then
-     ${EDITOR:-vim} $file +$line
+    ${EDITOR:-vim} $file +$line
   fi
 }
 
@@ -135,3 +140,51 @@ fdeskl() {
       --bind="enter:execute($EDITOR {})+abort"\
       --bind="ctrl-space:execute(echo {})+abort"
 }
+# Helper function to integrate pikaur and fzf
+pifz() {
+  pos=$1
+  if [[ ! -f ~/.pifz_history$pos ]]; then
+    touch ~/.pifz_history$pos
+  fi
+  shift
+  sed "s/ /\t/g" |
+    fzf --nth=$pos --multi --history="/home/aerex/.pifz_history$pos" \
+      --ansi \
+      --preview-window=60%,border-left \
+      --bind="double-click:execute(xdg-open 'https://archlinux.org/packages/{$pos}'),alt-enter:execute(xdg-open 'https://aur.archlinux.org/packages?K={$pos}&SB=p&SO=d&PP=100')" \
+       "$@" | cut -f$pos | xargs
+}
+
+# Dev note: print -s adds a shell history entry
+
+# List installable packages into fzf and install selection
+pacf() {
+  cache_dir="/tmp/pikaur-$USER"
+  test "$1" = "-y" && rm -rf "$cache_dir" && shift
+  mkdir -p "$cache_dir"
+  preview_cache="$cache_dir/preview_{2}"
+  list_cache="$cache_dir/list"
+  { test "$(cat "$list_cache$@" | wc -l)" -lt 50000 && rm "$list_cache$@"; } 2>/dev/null
+  pkg=$( (cat "$list_cache$@" 2>/dev/null || { pacman --color=always -Sl "$@"} | sed 's/ [^ ]*unknown-version[^ ]*//' | tee "$list_cache$@") |
+    pifz 2 --tiebreak=index --preview="cat $preview_cache 2>/dev/null | grep -v 'Querying' | grep . || pikaur --color always -Si {2} | tee $preview_cache")
+  if test -n "$pkg"
+    then echo "Installing $pkg..."
+      cmd="pikaur -S $pkg"
+      print -s "$cmd"
+      eval "$cmd"
+      rehash
+  fi
+}
+# List installed packages into fzf and remove selection
+# Tip: use -e to list only explicitly installed packages
+pacfr() {
+  pkg=$(pikaur --color=always -Q "$@" | pifz 1 --tiebreak=length --preview="pikaur --color always -Qli {1}")
+  if test -n "$pkg"
+    then echo "Removing $pkg..."
+      cmd="pikaur -R --cascade --recursive $pkg"
+      print -s "$cmd"
+      eval "$cmd"
+  fi
+}
+
+alias pacfu="pacfr"

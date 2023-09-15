@@ -1,18 +1,10 @@
 -- TODO: Need to figure out why requiring modules creates a loop
 --local utils = require('nvim-lsp').utils
-local lsp_status = require('lsp-status')
 local lsp_signature = require('lsp_signature')
 local lsp_document_symbol_callback = require('nvim-fzf.lsp').document_symbols
 local lsp_references_callback = require('nvim-fzf.lsp').references
 local lsp_implementation_callback = require('nvim-fzf.lsp').implementation
 local utils = require('nvim-lsp.utils')
---
--- configure lsp-status
-lsp_status.config({
-  status_symbol = '',
-  show_filename = true,
-  current_function = false
-})
 
 vim.diagnostic.config({
   virtual_text = true,
@@ -132,15 +124,19 @@ local on_attach = function(client, bufnr)
     { silent = true, buffer = bufnr })
   vim.keymap.set('n', 'g0', function() utils.document_symbols() end, { silent = true, buffer = bufnr })
   keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { silent = true, buffer = bufnr })
-  vim.keymap.set('n', 'gi', function() require 'telescope.builtin'.lsp_implementations() end,
-    { silent = true, buffer = bufnr })
+  vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, { silent = true, buffer = bufnr })
+  vim.keymap.set('n', 'gi', function() require'telescope.builtin'.lsp_implementations() end, { silent = true, buffer = bufnr })
   keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   keymap('n', '\\wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   keymap('n', '\\wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   keymap('n', '\\wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   keymap('n', '<M-D>', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   vim.keymap.set('n', '<leader>rn', function() vim.lsp.buf.rename() end, { silent = true, buffer = bufnr })
+  -- FIXME(me): nvim-fzf.lsp#document_symbols is not working on selected
+  vim.keymap.set('n', 'g0', function() require'nvim-telescope'.document_symbols() end, { silent = true, buffer = bufnr})
+  vim.keymap.set('n', '<leader>la', function() require 'navigator.codelens'.run_action() end,
+    { silent = true, buffer = bufnr })
+  --keymap('n', '<A-O>', '<cmd>Telescope lsp_document_symbols<CR>', opts)
   vim.keymap.set('n', '<leader>la', function() require 'navigator.codelens'.run_action() end,
     { silent = true, buffer = bufnr })
   keymap('n', '<leader>ca', '<cmd>CodeActionMenu<CR>', opts)
@@ -173,15 +169,12 @@ local on_attach = function(client, bufnr)
   end
 end
 
-
-require'lspconfig'.sumneko_lua.setup {
+local lua_settings = {
   settings = {
     Lua = {
       runtime = {
         -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
         version = 'LuaJIT',
-        -- Setup your lua path
-        path = runtime_path,
       },
       diagnostics = {
         -- Get the language server to recognize the `vim` global
@@ -198,38 +191,12 @@ require'lspconfig'.sumneko_lua.setup {
     },
   },
 }
--- set the path to the sumneko installation; if you previously installed via the now deprecated :LspInstall, use
---local sumneko_root_path = vim.fn.stdpath('cache') .. '/lspconfig/sumneko_lua/lua-language-server'
---local sumneko_binary = sumneko_root_path .. '/bin/Linux/lua-language-server'
---require'lspconfig'.sumneko_lua.setup {
---  cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
---  on_attach = on_attach,
---  capabilities = capabilities,
---  settings = {
---    Lua = {
---      runtime = {
---        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
---        version = 'LuaJIT',
---        -- Setup your lua path
---        path = vim.split(package.path, ';'),
---      },
---      diagnostics = {
---        -- Get the language server to recognize the `vim` global
---        globals = {'vim'},
---      },
---      workspace = {
---        -- Make the server aware of Neovim runtime files
---        library = {
---          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
---          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
---        },
---      },
---      telemetry = {
---        enable = false
---      }
---    }
---  }
---}
+
+require'lspconfig'.lua_ls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = lua_settings
+}
 require'lspconfig'.pylsp.setup{
   on_attach=on_attach,
   autostart = true,
@@ -273,7 +240,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   pattern = {'*.go'},
   group = gopls_grp,
   callback = function()
-    vim.lsp.buf.formatting()
+    vim.lsp.buf.format({async = true})
     require'nvim-lsp.utils'.goimports(2000)
   end
 })
@@ -322,7 +289,6 @@ require'lspconfig'.bashls.setup {
   on_attach = on_attach,
   capabilities = capabilities
 }
-
 if vim.fn.executable('solargraph') then
   require'lspconfig'.solargraph.setup {
     on_attach = on_attach,
@@ -478,7 +444,7 @@ navigator.setup({
       }
     }
   },
-  sumneko_lua = {
+  lua_ls = {
     on_attach = on_attach,
     capabilities =capabilities,
     settings = lua_settings,
@@ -492,7 +458,6 @@ require('guihua.maps').setup({
 })
 end
 
-lsp_status.register_progress()
 vim.lsp.handlers['textDocument/documentSymbol'] = lsp_document_symbol_callback
 vim.lsp.handlers['textDocument/references'] = lsp_references_callback
 vim.lsp.handlers['textDocument/implementation'] = lsp_implementation_callback

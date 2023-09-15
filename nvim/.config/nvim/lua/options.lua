@@ -27,16 +27,29 @@ o.undodir         = vim.fn.stdpath('cache') .. '/undodir/'
 bo.undofile       = true
 o.undofile        = true
 o.hidden          = true
+opt.clipboard:append('unnamedplus')
+opt.runtimepath:append('/usr/share/vifm/vim-doc/')
 o.showmode        = true
 o.autoread        = true
-o.timeoutlen      = 150
+o.timeoutlen      = 100
 o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
 o.foldlevel       = 5
 wo.signcolumn     = "auto:3"
 o.smartindent     = true
 opt.spell         = false
 opt.spelllang     = { 'en_us' }
-vim.opt.clipboard:append('unnamedplus')
+g.clipboard = {
+  name = 'xsel_override',
+  copy = {
+    ['+'] = 'xsel --input --clipboard',
+    ['*'] = 'xsel --input --primary',
+  },
+  paste = {
+    ['+'] = 'xsel --output --clipboard',
+    ['*'] = 'xsel --output --primary',
+  },
+  cache_enabled = 1,
+}
 
 -- disable builtin plugins
 g.loaded_gzip = 0
@@ -57,16 +70,3 @@ g.loaded_netrw = 0
 g.loaded_netrwPlugin = 0
 g.loaded_netrwSettings = 0
 g.loaded_netrwFileHandlers = 0
-
-g.clipboard = {
-  name = 'xsel_override',
-  copy = {
-    ['+'] = 'xsel --input --clipboard',
-    ['*'] = 'xsel --input --primary',
-  },
-  paste = {
-    ['+'] = 'xsel --output --clipboard',
-    ['*'] = 'xsel --output --primary',
-  },
-  cache_enabled = 1,
-}
