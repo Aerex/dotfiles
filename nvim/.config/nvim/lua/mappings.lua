@@ -145,9 +145,7 @@ local maps = {
     ['\\rg']         = function() require 'nvim-telescope'.rg_string() end,
     [',rg']          = function() require 'nvim-fzf.rg' (vim.fn.input('Search term: '), true) end,
     ['<leader>nv']   = function() require 'nvim-fzf.notes' () end,
-    ['<leader>yr']   = 'YankyRingHistory',
-    -- docs
-    ['<leader>dg']   = 'DogeGenerate',
+    ['<leader>yr']   = function() require("telescope").extensions.yank_history.yank_history() end,
     -- snippets
     ['<leader>ue']   = 'UltiSnipsEdit',
     -- git
@@ -229,10 +227,30 @@ local file_type_keymaps = {
 }
 
 -- misc
-vim.keymap.set({'n','x'}, 'p', '<Plug>(YankyPutAfter)')
-vim.keymap.set({'n','x'}, 'P', '<Plug>(YankyPutBefore)')
-vim.keymap.set({'n','x'}, 'gp', '<Plug>(YankyGPutAfter)')
-vim.keymap.set({'n','x'}, 'gP', '<Plug>(YankyGPutBefore)')
+local yok = pcall(require, 'yanky')
+if yok then
+  -- put after cursor
+  vim.keymap.set({ 'n', 'x' }, 'p', function() require("yanky.picker").actions.put("p") end)
+  -- put before cursor
+  vim.keymap.set({ 'n', 'x' }, 'P', function() require("yanky.picker").actions.put("P") end)
+  -- put after cursor and leave the cursor after
+  vim.keymap.set({ 'n', 'x' }, 'P', function() require("yanky.picker").actions.put("gp") end)
+  -- put before cursor and leave the cursor after
+  vim.keymap.set({ 'n', 'x' }, 'P', function() require("yanky.picker").actions.put("gp") end)
+
+  vim.keymap.set("n", "]p", "<Plug>(YankyPutIndentAfterLinewise)")
+  vim.keymap.set("n", "[p", "<Plug>(YankyPutIndentBeforeLinewise)")
+  vim.keymap.set("n", "]P", "<Plug>(YankyPutIndentAfterLinewise)")
+  vim.keymap.set("n", "[P", "<Plug>(YankyPutIndentBeforeLinewise)")
+
+  vim.keymap.set("n", ">p", "<Plug>(YankyPutIndentAfterShiftRight)")
+  vim.keymap.set("n", "<p", "<Plug>(YankyPutIndentAfterShiftLeft)")
+  vim.keymap.set("n", ">P", "<Plug>(YankyPutIndentBeforeShiftRight)")
+  vim.keymap.set("n", "<P", "<Plug>(YankyPutIndentBeforeShiftLeft)")
+
+  vim.keymap.set("n", "=p", "<Plug>(YankyPutAfterFilter)")
+  vim.keymap.set("n", "=P", "<Plug>(YankyPutBeforeFilter)")
+end
 
 vim.keymap.set('n', '<leader><enter>', ':', { silent = true })
 vim.keymap.set('n', '<A-a>', '<C-a>', { silent = true })

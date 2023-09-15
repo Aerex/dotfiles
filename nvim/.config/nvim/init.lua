@@ -7,7 +7,13 @@
 require('options')
 local autocmd = require('utils').autocmd
 
---vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
+autocmd('FileType', {
+  pattern = '*',
+  callback = function()
+    vim.opt.formatoptions:remove('r')
+    vim.opt.formatoptions:remove('o')
+  end
+})
 autocmd('VimResized', {
   pattern = '*',
   command = 'wincmd ='
@@ -24,8 +30,13 @@ autocmd('VimEnter', {
 -- FIXME(me): Figure out why set spell is being enabled in all buffers
 --vim.cmd('autocmd BufEnter qutebrowser-editor* set spell wrap')
 --vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
-vim.o.grepprg="rg --vimgrep --no-heading --smart-case"
-vim.o.grepformat="%f:%l:%c:%m"
+if vim.fn.executable('ugrep') then
+  vim.o.grepprg = 'ugrep -RInk -j -u --tabs=1 --ignore-files'
+  vim.o.grepformat = '%f:%l:%c:%m,%f+%l+%c+%m,%-G%f\\|%l\\|%c\\|%m'
+else
+  vim.o.grepprg = "rg --vimgrep --no-heading --smart-case"
+  vim.o.grepformat = "%f:%l:%c:%m"
+end
 
 --buffers
 vim.o.splitright = true

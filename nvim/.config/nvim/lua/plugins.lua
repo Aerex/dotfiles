@@ -138,17 +138,21 @@ if ok then
         config = function() require('nvim-git').setup_octo() end }
 
       -- yank/undo
-      use {
-        { opt = true, 'mbbill/undotree', cmd = 'UndotreeToggle', config = [[vim.g.undotree_SetFocusWhenToggle = 1]] },
-        { 'bfredl/nvim-miniyank', as = 'miniyank' }
-      }
       use { 'gbprod/yanky.nvim',
         requires = 'kkharji/sqlite.lua',
         config = function()
           require('yanky').setup({
             ring = {
               storage = 'sqlite'
-            }
+            },
+            system_clipboard = {
+              sync_with_ring = true,
+            },
+            highlight = {
+              on_put = true,
+              on_yank = true,
+              timer = 500,
+            },
           })
         end
       }
@@ -321,10 +325,10 @@ if ok then
         'TWReportSort',
         'TWSync', 'TWToggleReadonly', 'TWToggleHLField', 'TWHistory', 'TWHistoryClear', 'TWBookmark', 'TWBookmarkClear' }
       }
-      use { 'michaelb/sniprun', run = 'bash install.sh', requires = { 'LintaoAmons/scratch.nvim' },
+      use { 'michaelb/sniprun', run = 'bash install.sh', requires = { tag = 'v0.4.1', 'LintaoAmons/scratch.nvim' },
         config = function()
           require('scratch').setup {
-            scratch_file_dir = vim.fn.stdpath('cache') .. '/scratch.nvim', -- Where the scratch files will be saved
+            scratch_file_dir = vim.fn.stdpath('cache') .. '/scratch.nvim',        -- Where the scratch files will be saved
             filetypes = { 'json', 'xml', 'go', 'lua', 'js', 'py', 'sh', 'ruby' }, -- filetypes to select from
           }
         end
