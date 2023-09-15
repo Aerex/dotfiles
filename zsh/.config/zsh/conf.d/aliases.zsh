@@ -19,7 +19,11 @@ alias uuid="python3 -c \"import uuid; print(uuid.uuid4())\" | copy"
 alias mail="neomutt -d5"
 alias n="nnn"
 alias khdrc="nvim ~/.skhdrc"
-alias alconf="nvim ~/.config/alacritty/alacritty.yml"
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias -- -="cd -"
 
 # ================ VIFM  ==================== #1
 alias f="vifmrun ."
