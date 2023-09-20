@@ -1,0 +1,44 @@
+completions:
+  - pattern: "docker rmi"
+    cmd: docker images --format '{{.Repository}}:{{.Tag}}\t{{.ID}}'
+    map: ' {{ .item | splitList "\t" | last }}'
+    preview: docker image inspect {{.item}}
+  - pattern: "nestor console (.*) (.*)"
+    cmd: nestor --job $1 feed | awk -F ' ' '{print substr($2, 2)}'
+    map: '{{ .item | splitList "\t" | last }}'
+    preview: nestor console {{._1}} {{.item}} | head -n 50
+  - pattern: "nestor console .*"
+    cmd: nestor dashboard | awk -F ' - ' '{if(!match($1, /disabled|notbuilt|unknown/))print $2}'
+    map: '{{ .item }}'
+  - pattern: "nestor build .*"
+    cmd: nestor dashboard | awk -F ' - ' '{if(!match($1, /disabled|notbuilt|unknown/))print $2}'
+    map: '{{ .item }}'
+  - pattern: "nb o (.*)"
+    cmd: /usr/bin/ls -1 ~/.nb/$(cat ~/.nb/.current)
+    map: ' {{ .item | splitList "\t" | last }}'
+  - pattern: "jcli job log .*"
+    cmd: nestor dashboard | awk -F ' - ' '{if(!match($1, /disabled|notbuilt|unknown/))print $2}'
+    map: ' {{ .item | splitList "\t" | last }}'
+  - pattern: "jcli job edit .*"
+    cmd: nestor dashboard | awk -F ' - ' '{if(!match($1, /disabled|notbuilt|unknown/))print $2}'
+    map: ' {{ .item | splitList "\t" | last }}'
+  - pattern: "travis logs .*"
+    cmd: git branch --all | ugrep -v HEAD | sed "s/.* //" | sed "s#remotes/[^/]*/##" | tr -d ' ' | sort -u
+    map: '{{ .item | splitList "\t" | last }}'
+  - pattern: "(kubectl|k) (get|edit) (.*) (.*)"
+    cmd: kubectl get $3 -o json | jq -r '.items[].metadata | {name} | join("")'
+    map: '{{ .item | splitList "\t" | last }}'
+    preview: kubectl get {{._3}} {{.item}} -o yaml
+  - pattern: "gh (.*) (.*) (.*)"
+    cmd: gh $1 list --json title,number -q '.[] | {title, number} | join(" - ")'
+    map: '{{ .item }}'
+    preview: 'gh pr view {{.item | splitList "-" | first}}'
+    replacement: gh {{._1}} {{._2}} {{.item | splitList "-" | first }}
+  - pattern: "gh (.*) view (.*)"
+    cmd: gh $1 list --json title,number -q '.[] | {title, number} | join(" - ")'
+    map: '{{ .item }}'
+    preview: 'gh pr view {{.item | splitList "-" | first}}'
+    replacement: gh {{._1}} view {{.item | splitList "-" | first }}
+  - pattern: "(icd|ibmcloud) resource service-instances --service-name .*)"
+    cmd: ibmcloud catalog service-marketplace --rc --output json | jq -r '.[] | .name'
+    map: '{{ .item }}'
