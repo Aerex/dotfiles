@@ -176,6 +176,7 @@ keymap C-y DOWN
 keymap gg BEGIN
 keymap G END
 keymap C-d NEXT_PAGE
+keymap C-f NEXT_PAGE
 keymap C-u PREV_PAGE
 keymap zz CENTER_V
 ########## cursor ##########
@@ -236,7 +237,7 @@ keymap a ADD_BOOKMARK
 keymap :b VIEW_BOOKMARK
 
 ########## tab ##########
-keymap d CLOSE_TAB
+keymap x CLOSE_TAB
 keymap gh GOTO $WWW_HOME
 keymap gH TAB_GOTO $WWW_HOME
 keymap C-t NEW_TAB
