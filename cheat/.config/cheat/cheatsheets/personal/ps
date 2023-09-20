@@ -1,0 +1,2 @@
+# Get top 10 processes that use the most memory
+ps aux --sort=-%mem | head -n 10

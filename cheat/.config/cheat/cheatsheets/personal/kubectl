@@ -161,3 +161,6 @@ kubectl get crds
 
 # Restart deployment
 kubectl rollout restart deployments/<deployment>
+
+# Resources consumption for pods
+kubectl top pods 
