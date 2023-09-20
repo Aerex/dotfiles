@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/home/noamfo/Pictures/wp6252831-amoled-linux-wallpapers.png",
+    "alpha": "100",
+    "special": {
+        "background": "#0a0e10",
+        "foreground": "#b7b7b7",
+        "cursor": "#b7b7b7"
+    },
+    "colors": {
+        "color0": "#0a0e10",
+        "color1": "#5E8FA5",
+        "color2": "#6493A9",
+        "color3": "#6499B0",
+        "color4": "#74B1CD",
+        "color5": "#7EC0DF",
+        "color6": "#7FC2E1",
+        "color7": "#b7b7b7",
+        "color8": "#808080",
+        "color9": "#5E8FA5",
+        "color10": "#6493A9",
+        "color11": "#6499B0",
+        "color12": "#74B1CD",
+        "color13": "#7EC0DF",
+        "color14": "#7FC2E1",
+        "color15": "#b7b7b7"
+    }
+}
