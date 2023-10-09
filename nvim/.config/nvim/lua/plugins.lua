@@ -166,8 +166,10 @@ if ok then
       use { 'sbdchd/neoformat' }
       use { 'godlygeek/tabular', cmd = { 'Tabularize' } }
       use { 'lukas-reineke/indent-blankline.nvim',
-        config = function() require('indent_blankline').setup {
-            char = '|', buftype_exclude = { 'terminal' }, filetype_exclude = { 'ledger', 'help' }
+        config = function()
+          require('ibl').setup {
+            indent = { char = '|' },
+            exclude = { buftypes = { 'terminal' }, filetypes = { 'ledger', 'help' } }
           }
         end
       }
