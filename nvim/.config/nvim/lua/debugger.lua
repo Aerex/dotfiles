@@ -252,4 +252,28 @@ M.start_or_continue  = function()
   dap.continue()
 end
 
+M.run_with_args = function()
+  local args = vim.fn.input('Enter args: ')
+  if vim.fn.split(args, ' ') > 0 then
+    args = vim.split(vim.fn.expand(args), '\n')
+    local approval = vim.fn.confirm(
+      "Will try to run:\n    " ..
+      vim.bo.filetype .. " " ..
+      vim.fn.expand('%') .. " " ..
+      args .. "\n\n" ..
+      "Do you approve? ",
+      "&Yes\n&No", 1
+    )
+    if approval == 1 then
+      dap.run({
+        type = vim.bo.filetype,
+        request = 'launch',
+        name = 'Launch file with custom arguments (adhoc)',
+        program = '${file}',
+        args = args,
+      })
+    end
+	end
+end
+
 return M
