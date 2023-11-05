@@ -2,6 +2,7 @@
 --local utils = require('nvim-lsp').utils
 local lsp_signature = require('lsp_signature')
 local lsp_document_symbol_callback = require('nvim-fzf.lsp').document_symbols
+local lsp_configs = require('lspconfig.configs')
 local lsp_references_callback = require('nvim-fzf.lsp').references
 local lsp_implementation_callback = require('nvim-fzf.lsp').implementation
 local utils = require('nvim-lsp.utils')
@@ -86,8 +87,8 @@ local on_attach = function(client, bufnr)
         },
       }, { silent = true, buffer = bufnr })
     else
-      vim.keymap.set('n', 'gpd', function() goto_preview.goto_preview_definition() end, { silent = true, buffer = bufnr })
-      vim.keymap.set('n', 'gpr', function() goto_preview.goto_preview_references() end, { silent = true, buffer = bufnr })
+      vim.keymap.set('n', 'gpd', function() require'goto-preview'.goto_preview_definition() end, { silent = true, buffer = bufnr })
+      vim.keymap.set('n', 'gpr', function() require'goto-preview'.goto_preview_references() end, { silent = true, buffer = bufnr })
     end
   end
 
@@ -234,6 +235,35 @@ require'lspconfig'.gopls.setup{
       },
     }
 }
+
+if not lsp_configs.golang_lint then
+  local golang_lint = vim.fn.stdpath('data') .. "/mason/packages/golangci-lint/golangci-lint-1.54.2-linux-amd64/golangci-lint"
+  lsp_configs.golang_lint = {
+    default_config = {
+      cmd = { golang_lint },
+      filetypes = {'go' },
+      root_dir = require'lspconfig'.util.root_pattern('.git', 'go.mod')
+    }
+  }
+end
+
+require'lspconfig'.golang_lint.setup({
+  capabilities = capabilities,
+  on_attach = on_attach,
+  init_options = {
+    command = {
+      'golangci-lint',
+      'run',
+      '--out-format',
+      'json',
+      '--enable',
+      'gosec,revive',
+      '--disable',
+      'typecheck',
+    },
+  },
+})
+
 
 local gopls_grp = vim.api.nvim_create_augroup('gopls', { clear = false })
 vim.api.nvim_create_autocmd('BufWritePre', {
