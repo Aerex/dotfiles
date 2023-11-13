@@ -58,6 +58,7 @@ local multi_open_maps = {
     ['<C-k>'] = require('telescope.actions').move_selection_previous,
     ['<A-p>'] = require('telescope.actions.layout').toggle_preview,
     ['<Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_next,
+    ["<C-f>"] = require('telescope.actions').to_fuzzy_refine,
     ['<S-Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_previous
     --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
   },
@@ -146,10 +147,15 @@ M.setup = function()
         override_file_sorter = true,    -- override the file sorter
         case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
       },
+      fzf_writer = {
+        minimum_grep_characters = 2,
+        minimum_files_characters = 2
+      }
     }
   }
   require('telescope').load_extension('fzf')
   require 'telescope'.load_extension('yank_history')
+  require('telescope').load_extension('fzf_writer')
   vim.g.telescope_cache_results = 1
   vim.g.telescope_prime_fuzzy_find = 1
 end
@@ -251,10 +257,34 @@ M.rg_string = function()
   }))
 end
 
+M.live_grep = function()
+  local workspace = vim.lsp.buf.list_workspace_folders()[1]
+  workspace = workspace ~= "" and workspace or (is_git_repo() and get_git_root_path() or vim.fn.getcwd())
+  vim.notify(workspace)
+  require('telescope.builtin').live_grep(M.get_dropdown({
+    layout_strategy = 'cursor',
+    cwd = workspace,
+    layout_config = {
+      width = function(_, max_columns, _)
+        return math.min(max_columns, 150)
+      end,
+      height = function(_, _, max_lines)
+        return math.min(max_lines, 30)
+      end,
+      cursor = {
+        anchor = 'N',
+        prompt_position = 'top',
+      }
+    },
+    prompt_prefix = 'Rg Search> ',
+  }))
+end
+
+
 M.rg_search = function()
   local workspace = vim.lsp.buf.list_workspace_folders()[1]
   workspace = workspace ~= "" and workspace or (is_git_repo() and get_git_root_path() or vim.fn.getcwd())
-  require('telescope.builtin').grep_string(M.get_dropdown({
+  require('telescope').grep_string(M.get_dropdown({
     path_display = { 'smart' },
     search = '',
     only_sort_text = true,

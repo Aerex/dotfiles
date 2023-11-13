@@ -91,24 +91,27 @@ M.setup_signs = function()
 
   local ok_d, diffview = pcall(require, 'diffview')
   if ok_d then
-    diffview.setup{
+    diffview.setup {
       hooks = {
         view_opened = function(view)
           -- load which key labels
           local ok, wk = pcall(require, 'which-key')
           if ok then
-            require'which-key'.register({
-             b = { 'Toggle Diff File Panel'},
-             c = {
-               name = 'Choose Diff Hunk (1|2|3)',
-               o = { 'Choose OURS (Head|3)' },
-               t = { 'Choose the THEIRS version (Base|1)'},
-               a = { 'Delete markers and keep changes|2'},
-             }}, { triggers = {'<leader>'}, prefix = " "})
-             require'which-key'.register({
-               ['[x'] = {'Jump to Prev Conflict'},
-               [']x'] = {'Jump to Next Conflict'},
-             })
+            require 'which-key'.register({
+              b = { 'Toggle Diff File Panel' },
+              c = {
+                name = 'Choose Diff Hunk (1|2|3)',
+                o = { 'Choose OURS (Head|1)' },
+                t = { 'Choose the THEIRS version (Base|3)' },
+                b = { 'Choose the BASE version (Base|2)' },
+                a = { 'Delete markers and keep changes / keep marks' },
+              }
+            }, { triggers = { '<leader>' }, prefix = " " })
+            require 'which-key'.register({
+              ['[x'] = { 'Jump to Prev Conflict' },
+              [']x'] = { 'Jump to Next Conflict' },
+              ['dx'] = { 'Choose none of the versions of the conflict (delete region)' },
+            })
           end
         end
       }
@@ -122,18 +125,31 @@ M.setup_neogit = function()
   neogit.setup {
     disable_signs = false,
     disable_hint = false,
-    auto_refresh = false,
-    console_timeout = 5000,
     disable_context_highlighting = true,
     disable_commit_confirmation = true,
+    auto_refresh = false,
+    filewatcher = {
+      interval = 1000,
+      enabled = true,
+    },
+    commit_view = {
+      kind = 'floating',
+      verify_commit = os.execute('which gpg') == 0,
+    },
+    console_timeout = 5000,
+    -- Allows a different telescope sorter. Defaults to 'fuzzy_with_index_bias'. The example
+    -- below will use the native fzf sorter instead.
+    telescope_sorter = function()
+      return require('telescope').extensions.fzf.native_fzf_sorter()
+    end,
     commit_popup = {
-      kind = "split_above"
+      kind = 'split_above'
     },
     console_kind = 'floating',
     popup = {
-      kind = "floating"
+      kind = 'split'
     },
-    kind = "split_above",
+    kind = 'split',
     -- customize displayed signs
     signs = {
       -- { CLOSED, OPENED }
@@ -142,22 +158,30 @@ M.setup_neogit = function()
       hunk = { '', '' },
     },
     integrations = {
-      diffview = true
+      diffview = true,
+      telescope = true
     },
     -- override/add mappings
     mappings = {
+      popup = {
+        ['b'] = 'BranchPopup',
+        ['p'] = 'PullPopup',
+        ['P'] = 'PushPopup',
+        ['gl'] = 'LogPopup',
+        ['?'] = 'HelpPopup',
+      },
       status = {
-        ['B'] = 'BranchPopup',
         ['='] = 'Toggle',
         ['x'] = 'Discard',
         ['-'] = 'Stage',
         ['dd'] = 'DiffAtFile',
-        ['p'] = '',
-        ['pl'] = 'PullPopup',
-        ['pu'] = 'PushPopup',
-        ['gl'] = 'LogPopup',
-        ['L'] = '',
         ['#'] = 'Console',
+        ['<c-x>'] = 'SplitOpen',
+        ['<c-s>'] = 'SplitOpen',
+        ['<c-v>'] = 'VSplitOpen',
+        ['<c-t>'] = 'TabOpen',
+        ['{'] = 'GoToPreviousHunkHeader',
+        ['}'] = 'GoToNextHunkHeader',
       }
     }
   }
@@ -176,7 +200,7 @@ M.setup_octo = function()
   else
     cfg = octo_cfg
   end
-  require'octo'.setup(cfg)
+  require 'octo'.setup(cfg)
 end
 
 M.setup_gitlinker = function()
@@ -184,16 +208,32 @@ M.setup_gitlinker = function()
     mappings = nil
   }
   local cfg
-  if okl and lcfg['gitlinker_config']then
+  if okl and lcfg['gitlinker_config'] then
     cfg = vim.tbl_deep_extend('force', gcfg, lcfg.gitlinker_config())
   else
     cfg = gcfg
   end
-  require'gitlinker'.setup(cfg)
+  require 'gitlinker'.setup(cfg)
+end
+
+M.git_push_upstream = function()
+  local curr_branch = vim.fn.system('git rev-parse --abbrev-ref HEAD')
+  local remotes = vim.fn.systemlist('git remote')
+  local remote = 'origin'
+  if #remotes > 0 then
+    local remote_choices = { 'Select remote: ' }
+    for index, choice in pairs(remotes) do
+      table.insert(remote_choices, string.format('%d. %s', index + 1, choice))
+    end
+    local idx = vim.fn.inputlist(remote_choices)
+    local remote_choice = remote_choices[idx]
+    remote = string.gsub(remote_choice, '%d. ', '')
+  end
+  vim.fn.system(string.format('git push --set-upstream %s %s', remote, curr_branch))
 end
 
 M.setup_gh = function()
-  require'litee.lib'.setup()
+  require 'litee.lib'.setup()
   require 'litee.gh'.setup({
     -- deprecated, around for compatability for now.
     -- remap the arrow keys to resize any litee.nvim windows.
@@ -209,31 +249,31 @@ M.setup_gh = function()
     git_buffer_completion = true,
     -- defines keymaps in gh.nvim buffers.
     keymaps = {
-        -- when inside a gh.nvim panel, this key will open a node if it has
-        -- any futher functionality. for example, hitting <CR> on a commit node
-        -- will open the commit's changed files in a new gh.nvim panel.
-        open = "<CR>",
-        -- when inside a gh.nvim panel, expand a collapsed node
-        expand = "zo",
-        -- when inside a gh.nvim panel, collpased and expanded node
-        collapse = "zc",
-        -- when cursor is over a "#1234" formatted issue or PR, open its details
-        -- and comments in a new tab.
-        goto_issue = "gd",
-        -- show any details about a node, typically, this reveals commit messages
-        -- and submitted review bodys.
-        details = "<CR>",
-        -- inside a convo buffer, submit a comment
-        submit_comment = "<leader>cs",
-        -- inside a convo buffer, when your cursor is ontop of a comment, open
-        -- up a set of actions that can be performed.
-        actions = "<A-a>",
-        -- inside a thread convo buffer, resolve the thread.
-        resolve_thread = "<leader>rc",
-        -- inside a gh.nvim panel, if possible, open the node's web URL in your
-        -- browser. useful particularily for digging into external failed CI
-        -- checks.
-        goto_web = "gx"
+      -- when inside a gh.nvim panel, this key will open a node if it has
+      -- any futher functionality. for example, hitting <CR> on a commit node
+      -- will open the commit's changed files in a new gh.nvim panel.
+      open = "<CR>",
+      -- when inside a gh.nvim panel, expand a collapsed node
+      expand = "zo",
+      -- when inside a gh.nvim panel, collpased and expanded node
+      collapse = "zc",
+      -- when cursor is over a "#1234" formatted issue or PR, open its details
+      -- and comments in a new tab.
+      goto_issue = "gd",
+      -- show any details about a node, typically, this reveals commit messages
+      -- and submitted review bodys.
+      details = "d",
+      -- inside a convo buffer, submit a comment
+      submit_comment = "<leader>cs",
+      -- inside a convo buffer, when your cursor is ontop of a comment, open
+      -- up a set of actions that can be performed.
+      actions = "<A-a>",
+      -- inside a thread convo buffer, resolve the thread.
+      resolve_thread = "<leader>rc",
+      -- inside a gh.nvim panel, if possible, open the node's web URL in your
+      -- browser. useful particularily for digging into external failed CI
+      -- checks.
+      goto_web = "gx"
     },
   })
 end
