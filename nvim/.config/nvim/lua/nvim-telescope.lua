@@ -64,7 +64,6 @@ local multi_open_maps = {
   },
   n = {
     ['q'] = require('telescope.actions').close,
-    ['<Esc>'] = require('telescope.actions').close,
     ['<CR>'] = multi_select.open,
     ['<C-c>'] = require('telescope.actions').close,
     ['<C-s>'] = multi_select.horizonal,
@@ -102,6 +101,12 @@ M.setup = function()
           --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
         },
         n = {
+          --['?'] = require('telescope.actions').which_key {
+          --  name_width = 20, -- typically leads to smaller floats
+          --  max_height = 0.5, -- increase potential maximum height
+          --  separator = " > ", -- change sep between mode, keybind, and name
+          --  close_with_action = false, -- do not close float on action
+          --},
           ['q'] = require('telescope.actions').close,
           ['<Esc>'] = require('telescope.actions').close,
           ['<C-c>'] = require('telescope.actions').close,

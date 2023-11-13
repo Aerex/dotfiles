@@ -1,6 +1,7 @@
 -- TODO: Need to figure out why requiring modules creates a loop
 local lsp_signature = require('lsp_signature')
 local lsp_document_symbol_callback = require('nvim-fzf.lsp').document_symbols
+local lsp_configs = require('lspconfig.configs')
 local lsp_references_callback = require('nvim-fzf.lsp').references
 local lsp_implementation_callback = require('nvim-fzf.lsp').implementation
 local utils = require('nvim-lsp.utils')
@@ -92,8 +93,8 @@ local on_attach = function(client, bufnr)
         },
       }, { silent = true, buffer = bufnr })
     else
-      vim.keymap.set('n', 'gpd', function() goto_preview.goto_preview_definition() end, { silent = true, buffer = bufnr })
-      vim.keymap.set('n', 'gpr', function() goto_preview.goto_preview_references() end, { silent = true, buffer = bufnr })
+      vim.keymap.set('n', 'gpd', function() require'goto-preview'.goto_preview_definition() end, { silent = true, buffer = bufnr })
+      vim.keymap.set('n', 'gpr', function() require'goto-preview'.goto_preview_references() end, { silent = true, buffer = bufnr })
     end
   end
 

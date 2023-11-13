@@ -121,11 +121,13 @@ end
 
 M.setup_neogit = function()
   local neogit = require('neogit')
-
   neogit.setup {
-    disable_signs = false,
+    -- Hides the hints at the top of the status buffer
     disable_hint = false,
     disable_context_highlighting = true,
+    -- Disables signs for sections/items/hunks
+    disable_signs = false,
+    -- Do not ask to confirm the commit - just do it when the buffer is closed.
     disable_commit_confirmation = true,
     auto_refresh = false,
     filewatcher = {
@@ -145,7 +147,6 @@ M.setup_neogit = function()
     commit_popup = {
       kind = 'split_above'
     },
-    console_kind = 'floating',
     popup = {
       kind = 'split'
     },
@@ -185,6 +186,7 @@ M.setup_neogit = function()
       }
     }
   }
+
 end
 
 --vim.api.nvim_create_autocmd({'BufWritePost', 'BufEnter', 'FocusGained', 'ShellCmdPost', 'VimResume'}, {
