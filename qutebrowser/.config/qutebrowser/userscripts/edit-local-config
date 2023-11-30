@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ -f $QUTE_CONFIG_DIR/config.local.py ]]; then 
+  alacritty -e nvim $QUTE_CONFIG_DIR/config.local.py
+  echo "config-source $QUTE_CONFIG_DIR/config.local.py" >> "$QUTE_FIFO"
+else
+  echo "message-warning \"Could not find $QUTE_CONFIG_DIR/config.local.py\"" >> "$QUTE_FIFO"
+fi
+
+
+
+# vim: ft=sh
