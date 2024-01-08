@@ -166,6 +166,7 @@ M.setup_neogit = function()
     mappings = {
       popup = {
         ['b'] = 'BranchPopup',
+        ['d'] = 'DiffPopup',
         ['p'] = 'PullPopup',
         ['P'] = 'PushPopup',
         ['gl'] = 'LogPopup',
@@ -175,7 +176,6 @@ M.setup_neogit = function()
         ['='] = 'Toggle',
         ['x'] = 'Discard',
         ['-'] = 'Stage',
-        ['dd'] = 'DiffAtFile',
         ['#'] = 'Console',
         ['<c-x>'] = 'SplitOpen',
         ['<c-s>'] = 'SplitOpen',
@@ -186,7 +186,6 @@ M.setup_neogit = function()
       }
     }
   }
-
 end
 
 --vim.api.nvim_create_autocmd({'BufWritePost', 'BufEnter', 'FocusGained', 'ShellCmdPost', 'VimResume'}, {
