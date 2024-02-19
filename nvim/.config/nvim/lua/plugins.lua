@@ -106,7 +106,21 @@ if ok then
       -- fuzzy pickers / file finders
       use { 'vijaymarupudi/nvim-fzf' }
       use { 'vijaymarupudi/nvim-fzf-commands' }
-      use { opt = true, 'leisiji/fzf_utils' }
+      use { "ibhagwan/fzf-lua", config = function()
+        require 'fzf-lua'.setup({
+          'telescope',
+          actions = {
+            files = {
+              ["ctrl-s"]  = require 'fzf-lua.actions'.file_split,
+              ["ctrl-x"]  = require 'fzf-lua.actions'.file_split,
+              ["ctrl-v"]  = require 'fzf-lua.actions'.file_vsplit,
+              ["default"] = require 'fzf-lua.actions'.file_edit_or_qf
+            }
+          }
+        })
+      end, requires = {
+        "nvim-tree/nvim-web-devicons" } }
+      use { lazy = true, 'leisiji/fzf_utils' }
       use { 'vifm/vifm.vim' }
 
       -- git
