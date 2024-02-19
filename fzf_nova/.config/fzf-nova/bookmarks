@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+if [[ -z $(command -v nb) ]]; then
+  echo 'missing nb'
+  exit 1
+fi
+
+if [[ -f ~/.nb/.current ]]; then
+  current_notebook=$(cat ~/.nb/.current)
+fi
+
+if [[ ! $current_notebook =~ "bookmarks" ]] || [[ -z $current_notebook ]]; then
+  nb use bookmarks
+fi
+
+
+
+# vim: ft=sh
