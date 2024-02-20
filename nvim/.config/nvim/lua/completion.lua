@@ -124,6 +124,12 @@ if ok then
     }
   })
 
+  cmp.setup.filetype('ledger', {
+    sources = {
+      { name = 'hledger' }
+    }
+  })
+
   -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline(':', {
     completion = { autocomplete = false },

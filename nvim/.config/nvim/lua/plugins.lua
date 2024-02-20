@@ -1,5 +1,6 @@
 local utils = require('utils')
 local autocmd = utils.autocmd
+local backup = utils.backup
 local execute = vim.api.nvim_commandplugin
 local fn = vim.fn
 
@@ -15,16 +16,11 @@ autocmd('BufWritePre', {
   command = 'PackerCompile'
 })
 
-function backup()
-  local filename = os.date("%Y%m%dT%H%M")
-  require 'packer'.snapshot(filename)
-  vim.notify('Packer Snapshot created: ' .. filename, vim.log.levels.INFO)
-end
+vim.api.nvim_create_user_command('PackerBackup', utils.backup, {})
 
 autocmd({ 'BufEnter', 'BufRead' }, {
   pattern = 'plugins.lua',
   callback = function(args)
-    print('ENTER plugins')
     vim.keymap.set('n', '\\ps', function()
       backup()
       require 'packer'.sync()
@@ -77,14 +73,8 @@ if ok then
       end }
       use({ 'j-hui/fidget.nvim', config = function()
         require('fidget').setup({
-          window = {
-            relative = 'editor',
-            blend = 0,
-          },
-          sources = {
-            ['null-ls'] = {
-              ignore = true
-            },
+          progress = {
+            ignore = {'null-ls'}
           },
         })
       end,
@@ -208,7 +198,7 @@ if ok then
 
       -- statusline
       use { 'glepnir/galaxyline.nvim', requires = { 'kyazdani42/nvim-web-devicons' },
-        config = function() require('statusline') end
+        config = function() require('status').galaxy() end
       }
       use { 'nanozuki/tabby.nvim', config = function()
         require('tabby.tabline').use_preset('tab_only', {
@@ -234,6 +224,7 @@ if ok then
         requires = {
           'hrsh7th/cmp-buffer',
           'hrsh7th/cmp-path',
+          'kirasok/cmp-hledger',
           'hrsh7th/cmp-nvim-lua',
           'hrsh7th/cmp-nvim-lsp',
           'hrsh7th/cmp-cmdline',
