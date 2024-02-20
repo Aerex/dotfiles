@@ -7,9 +7,10 @@
 # REFF:   https://github.com/erebe/greenclip
 # NOTE:   not good with multiline at the moment
 
-selected="$(greenclip print | fzf --bind ctrl-g:jump -e -i --reverse --prompt='Clipboard> ')"
+selected="$(greenclip print | grep . | fzf --bind ctrl-g:jump -e -i --reverse --prompt='Clipboard> ')"
 [ -z "$selected" ] && exit
-printf "%s" "$selected" | xsel -b
+xsel -c
+printf "%s" "$selected" | xsel --clipboard --input
 printf "%s" "$selected" | tmux load-buffer -
 
 # vim: ft=sh

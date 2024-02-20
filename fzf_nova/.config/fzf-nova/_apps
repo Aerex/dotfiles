@@ -16,7 +16,8 @@ if [ ! -d $HOME/.cache/fzf-nova ]; then
   mkdir $HOME/.cache/fzf-nova
 fi
 
-
+# TODO: Need to figure out a way to delete cache after session restart/exit or after a few days
+# Could use 
 declare -A name_hash
 if [ ! -f $HOME/.cache/fzf-nova/desktop-files ]; then
   for file in $(desktop_file); do

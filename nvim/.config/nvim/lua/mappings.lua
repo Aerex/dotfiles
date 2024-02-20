@@ -43,13 +43,13 @@ local noremaps = {
       [',p']                                                        = function() require'nvim-fzf.git'() end,
       ['<leader>rg']                                                 = function() require'nvim-telescope'.rg_search() end,
       ['<leader>\\rg']                                                 = function() require'nvim-fzf.rg'() end,
-      ['\\rG']                                                        = function() require'nvim-fzf.rg'(vim.fn.expand('<cword>'), true) end,
-      ['\\rg']                                                        = function() require'nvim-telescope'.rg_string() end,
-      [',rg']                                                        = function() require'nvim-fzf.rg'(vim.fn.input('Search term: '), true) end,
-      ['<leader>nv']                                                 = function() require'nvim-fzf.notes'() end,
-      ['<leader>yr']                                                 = 'YankyRingHistory',
-      -- snippets
-      ['<leader>ue']                                                 = 'UltiSnipsEdit',
+    ['<leader>rg']   = function()
+      require 'fzf-lua'.live_grep_native({ cwd = utils.get_workspace(), rg_opts =
+      "-g !*.lock -g !*.sum -g !*i18n_resources.go" })
+    end,
+    ['<leader>\\rg'] = function() require 'nvim-fzf.rg' () end,
+    ['<leader>rG']   = function() require 'nvim-telescope'.rg_string() end,
+    [',rg']          = function() require 'nvim-fzf.rg' (vim.fn.input('Search term: '), true) end,
       -- git
       ['<leader>gS']                                                 = 'Git',
       ['<leader>gl']                                                 = 'Git log',

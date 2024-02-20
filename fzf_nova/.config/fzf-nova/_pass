@@ -17,6 +17,12 @@ function copy_pass_safe() {
     fi
     pass "$1" | head -n 1 | xsel --clipboard --input
 }
+function fzf_all_content() {
+  ENTRY=$1
+  selected=$(pass $ENTRY | fzf --reverse | cut -d: -f 2 | tr -d " ")
+  echo "$selected" | xsel --clipboard --input
+}
+
 USERNAME_PREFIX="login:"
 URL_PREFIX="url:"
 
