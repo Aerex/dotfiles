@@ -4,44 +4,31 @@
 -- |_| \_|_____\___/  \_/  |___|_|  |_|
 --
 -- config options
-require('options')
+require('config.options')
 local autocmd = require('utils').autocmd
+vim.loader.enable()
 
---vim.cmd('autocmd FileType * setlocal formatoptions-=r formatoptions-=o')
-autocmd('VimResized', {
-  pattern = '*',
-  command = 'wincmd ='
-})
-autocmd('VimEnter', {
-  pattern = '*',
-  callback = function()
-    vim.fn.system('kill -s SIGWINCH $PPID')
-  end
-})
---vim.cmd('autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"')
 
---vim.cmd('autocmd VimResized * :wincmd =')
--- FIXME(me): Figure out why set spell is being enabled in all buffers
---vim.cmd('autocmd BufEnter qutebrowser-editor* set spell wrap')
---vim.cmd('autocmd FileType trans set keywordprg=trans\\ -no-ansi\\ ja: ')
-vim.o.grepprg="rg --vimgrep --no-heading --smart-case"
-vim.o.grepformat="%f:%l:%c:%m"
+if vim.fn.executable('rg') then
+  vim.o.grepprg = "rg --vimgrep --no-heading --smart-case"
+end
+
+vim.o.grepformat = "%f:%l:%c:%m"
 
 --buffers
-vim.o.splitright = true
 vim.g.seiya_auto_enable = 1
-vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and {'guibg'} or {'ctermbg'}
+vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and { 'guibg' } or { 'ctermbg' }
 vim.cmd('hi rainbowcol7 guifg=#D8DEE9')
 --vim.cmd[[hi GitGutterAdd guifg=#4ca64c guibg=none]]
-vim.cmd[[hi GitSignAdd guifg=#4ca64c guibg=none]]
-vim.cmd[[hi DiffAdd guifg=#4ca64c guibg=none]]
-vim.cmd[[hi SpellBad guibg=#FF0000]]
-vim.cmd[[hi DiffAdded guifg=#4ca64c guibg=none]]
-vim.cmd[[hi DiffRemoved guifg=#BF616A guibg=none]]
-vim.cmd[[hi Folded guifg=#D8DEE9]]
-vim.cmd[[hi SignatureMarkText guifg=#ffa500]]
-vim.cmd[[hi LineNr guifg=None]]
-vim.cmd[[hi SignColumn guifg=None]]
+vim.cmd [[hi GitSignAdd guifg=#4ca64c guibg=none]]
+vim.cmd [[hi DiffAdd guifg=#4ca64c guibg=none]]
+vim.cmd [[hi SpellBad guibg=#FF0000]]
+vim.cmd [[hi DiffAdded guifg=#4ca64c guibg=none]]
+vim.cmd [[hi DiffRemoved guifg=#BF616A guibg=none]]
+vim.cmd [[hi Folded guifg=#D8DEE9]]
+vim.cmd [[hi SignatureMarkText guifg=#ffa500]]
+vim.cmd [[hi LineNr guifg=None]]
+vim.cmd [[hi SignColumn guifg=None]]
 
 vim.cmd('autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"')
 
@@ -62,15 +49,15 @@ require('mappings')
 require('colors').setup()
 
 vim.api.nvim_create_autocmd('VimEnter', {
-  pattern = {'*'},
+  pattern = { '*' },
   command = 'syntax on',
 })
 
 local ok, _ = pcall(require, 'nvim-local')
 if ok then
   -- NOTE(me): Find a better event to fire this function
-  vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
-    pattern =  {'*.go', '*.feature', '*.ts', '*.java'},
+  vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
+    pattern = { '*.go', '*.feature', '*.ts', '*.java' },
     callback = function()
       set_local_config()
     end
@@ -83,4 +70,4 @@ if ok_v then
   vim.notify = notify
 end
 
-vim.ui.select = require'nvim-fzf.uiselect'
+vim.ui.select = require 'nvim-fzf.uiselect'

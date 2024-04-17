@@ -1,8 +1,10 @@
-local g = vim.g
-local o = vim.o
-local bo = vim.bo
-local wo = vim.wo
-local opt = vim.opt
+local g           = vim.g
+local o           = vim.o
+local bo          = vim.bo
+local wo          = vim.wo
+local opt         = vim.opt
+
+o.splitright      = true
 
 o.relativenumber  = true
 wo.relativenumber = true
@@ -24,19 +26,22 @@ o.expandtab       = true
 o.dictionary      = "/usr/share/dict/words"
 bo.expandtab      = true
 o.undodir         = vim.fn.stdpath('cache') .. '/undodir/'
-bo.undofile       = true
-o.undofile        = true
 o.hidden          = true
 o.showmode        = true
 o.autoread        = true
-o.timeoutlen      = 500
+o.timeoutlen      = 300
 o.foldmethod      = vim.bo.filetype == 'python' and 'indent' or 'syntax'
 o.foldlevel       = 5
 wo.signcolumn     = "auto:3"
 o.smartindent     = true
 opt.spell         = false
 opt.spelllang     = { 'en_us' }
-vim.opt.clipboard:append('unnamedplus')
+opt.autowrite     = true            -- Enable autowrite
+opt.clipboard:append('unnamedplus') -- Sync with clipboardclipboard
+opt.conceallevel = 3                -- Hide * markup for bold and italics
+opt.undolevels = 10000
+opt.undofile = true
+
 
 -- disable builtin plugins
 g.loaded_gzip = 0
@@ -68,5 +73,7 @@ g.clipboard = {
     ['+'] = 'xsel --output --clipboard',
     ['*'] = 'xsel --output --primary',
   },
+  cache_enabled = 1,
+}
   cache_enabled = 1,
 }
