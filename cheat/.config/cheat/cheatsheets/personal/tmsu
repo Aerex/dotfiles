@@ -1,0 +1,5 @@
+# Tagging just the directory
+tmsu tag /tmp tmp-dir
+
+# Remove a file from a tag 
+tmsu untag <file> <tag>

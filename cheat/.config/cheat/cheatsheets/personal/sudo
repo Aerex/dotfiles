@@ -1,0 +1,2 @@
+# Prompt to login as root using passwd of logged user
+sudo -i

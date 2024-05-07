@@ -16,11 +16,11 @@ end
 
 M.toggle_breakpoints_qf = function()
   -- Add breakpoints to quickfix window
-  require'dap'.list_breakpoints()
+  require 'dap'.list_breakpoints()
   -- Load trouble
-  require'packer'.loader('trouble.nvim')
+  require 'packer'.loader('trouble.nvim')
   -- open trouble quickfix
-  require'trouble'.open({ provider = 'quickfix'})
+  require 'trouble'.open({ provider = 'qf' })
 end
 
 M.restore_keymaps = function()
@@ -38,7 +38,7 @@ M.debugger_keymaps = function()
       local keymaps = api.nvim_buf_get_keymap(buf, 'n')
       for _, keymap in pairs(keymaps) do
         -- save default keymap to restore after session is over
-        if utils.list_contains(ref_map, keymap.lhs) then
+        if vim.tbl_contains(ref_map, keymap.lhs) then
           table.insert(default_key_maps, keymap)
           api.nvim_buf_del_keymap(buf, 'n', keymap.lhs)
         end
@@ -54,7 +54,7 @@ M.debugger_keymaps = function()
           ['<A-h>'] = { function() require('dap').continue() end, 'Continue'},
           ['<leader>dr'] = {function() require'dap'.float_element('repl', { enter = true }) end, 'REPL'},
           ['<leader>dR'] = {function() require'dap'.repl.toggle({height = 7}); utils.send_keys('<C-w>b', 'n') end, 'REPL'},
-          ['<leader>dl'] = {function() M.toggle_breakpoints_qf() end, 'Show breakpoint list'},
+          ['<leader>dlL'] = {function() M.toggle_breakpoints_qf() end, 'Show breakpoint list'},
         }, options)
       end
     end
@@ -210,7 +210,6 @@ dapui.setup({
 })
 
 -- Toggle dap ui when debugger starts and exits
-dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
 dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end
 dap.listeners.before.event_exited['dapui_config'] = function()  dapui.close()end
 
@@ -251,6 +250,30 @@ M.start_or_continue  = function()
   end
 
   dap.continue()
+end
+
+M.run_with_args = function()
+  local args = vim.fn.input('Enter args: ')
+  if vim.fn.split(args, ' ') > 0 then
+    args = vim.split(vim.fn.expand(args), '\n')
+    local approval = vim.fn.confirm(
+      "Will try to run:\n    " ..
+      vim.bo.filetype .. " " ..
+      vim.fn.expand('%') .. " " ..
+      args .. "\n\n" ..
+      "Do you approve? ",
+      "&Yes\n&No", 1
+    )
+    if approval == 1 then
+      dap.run({
+        type = vim.bo.filetype,
+        request = 'launch',
+        name = 'Launch file with custom arguments (adhoc)',
+        program = '${file}',
+        args = args,
+      })
+    end
+	end
 end
 
 return M

@@ -50,7 +50,7 @@ if ok then
       ['<C-j>'] = cmp.mapping.scroll_docs(-4),
       ['<C-b>'] = cmp.mapping.scroll_docs(-4),
       ['<CR>'] = cmp.mapping.confirm({
-        behavior = cmp.ConfirmBehavior.Insert,
+        behavior = cmp.ConfirmBehavior.Replace,
         select = false
       }),
       ['<Tab>'] = cmp.mapping(function(fallback)
@@ -96,10 +96,11 @@ if ok then
       end,
     },
     sources = {
-      { name = 'ultisnips' },
-      { name = 'nvim_lsp' },
-      { name = 'path' },
-      { name = 'dictionary', keyword_length = 2 },
+      { name = 'nvim_lsp'},
+      { name = 'ultisnips'},
+      --{ name = 'rg'},
+      { name = 'path'},
+      { name = 'dictionary', keyword_length = 2},
     },
   }
 
@@ -140,10 +141,9 @@ if ok then
         ["*"] = { "/usr/share/dict/words" }
       },
       -- The following are default values, so you don't need to write them if you don't want to change them
-      exact = 2,
+      exact_length = 2,
       first_case_insensitive = false,
       async = true,
-      capacity = 5,
       debug = false,
     })
   end

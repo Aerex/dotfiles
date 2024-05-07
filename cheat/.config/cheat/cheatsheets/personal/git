@@ -237,3 +237,7 @@ git config core.sparseCheckout true
 mkdir -p .git/info
 echo 'some/dir/' >> .git/info/sparse-checkout
 echo 'another/sub/tree' >> .git/info/sparse-checkout
+
+# To commit without configuring the user email and name to the local repo 
+# Requires git 2.13+
+git -c user.email=<EMAIL> -c user.name=<NAME> commit

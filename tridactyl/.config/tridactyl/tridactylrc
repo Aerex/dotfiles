@@ -1,0 +1,144 @@
+" vim: filetype=vim
+
+" This wipes all existing settings. This means that if a setting in this file
+" is removed, then it will return to default. In other words, this file serves
+" as an enforced single point of truth for Tridactyl's configuration.
+sanitize tridactyllocal tridactylsync
+
+
+# aliases
+alias logall js let l=prompt() ; Object.keys(tri.config.get("logging")).forEach(k => tri.config.set("logging", k, l))
+
+" Disable all searchurls
+jsb Object.keys(tri.config.get("searchurls")).reduce((prev, u) => prev.catch(()=>{}).then(_ => tri.excmds.setnull("searchurls." + u)), Promise.resolve())
+
+set searchurls.searxme https://searx.aerex.me/?q=%s&categories=general&language=en-US
+
+set searchengine searxme
+
+bind --mode=normal <Space>ce composite exclaim_quiet bash -c "alacritty -t config -e nvim /home/noamfo/.config/tridactyl/tridactylrc"
+bind --mode=normal <Space>cE composite exclaim_quiet bash -c "alacritty -t config -e nvim /home/noamfo/.config/tridactyl/tridactylrc.local"
+
+bind --mode=input <C-j> focusinput -N
+bind --mode=input <C-k> focusinput -n
+
+bind --mode=ex <C-k> ext.next_history
+bind --mode=ex <C-j> ext.prev_history
+unbind --mode=ex <C-p>
+bind --mode=ex <C-p> ext.next_history
+
+unbind w
+bind --mode=normal wo winopen
+bind O fillcmdline tabnew
+bind go current_url open
+
+unbind v
+bind --mode=normal v mode visual
+bind --mode=visual <Enter> js -p navigator.clipboard.writeText(JS_ARG.innerText)
+
+" Just use a blank page for new tab. It would be nicer to use the standard
+" Firefox homepage, but Tridactyl doesn't support this yet.
+set newtab https://searx.aerex.me
+
+set homepages ["https://dash.aerex.me"]
+
+set editorcmd alacritty -t firefox-edit -e "nvim"
+
+bind --mode=insert <C-e> editor 
+
+" Easier way to get into commandline
+bind --mode=normal <Space><Enter> fillcmdline_notrail
+
+" But also support Tridactyl search too.
+bind / fillcmdline find
+bind ? fillcmdline find -?
+bind n findnext 1
+bind N findnext -1
+" Remove search highlighting.
+bind ,<Space> nohlsearch
+" Use sensitive case. Smart case would be nice here, but it doesn't work.
+set findcase sensitive
+
+" Smooth scrolling, yes please. This is still a bit janky in Tridactyl.
+set smoothscroll true
+
+" The default jump of 10 is a bit much.
+bind j scrollline 5
+bind k scrollline -5
+
+" K and J should move between tabs. x should close them.
+bind J tabprev
+bind K tabnext
+bind x tabclose
+
+" Don't run Tridactyl on some web sites because it doesn't work well, or
+" because the web site has its own keybindings.
+autocmd DocStart mail.google.com mode ignore
+
+autocmd DocStart apps.diagram.net mode ignore
+
+" Sometimes the status bar in the bottom left corner overlaps the Tridactyl
+" command line, so set an option to move the status bar to the right.
+guiset_quiet hoverlink right
+
+unbind ;t
+unbind ;T
+
+" Sane hinting mode
+set hintfiltermode vimperator-reflow
+set hintnames numeric
+
+" Defaults to 300ms but I'm a 'move fast and close the wrong tabs' kinda chap
+set hintdelay 100
+
+"SLACK
+" ;s highlights all sidebar items
+bindurl .*.slack.com --mode=normal ;s hint -Jc div[data-sidebar-link-id]:not([data-sidebar-link-id=""]),div[data-section-channel-index]:not([data-section-channel-index=""])
+
+" ;u jumps to "All unreads" directly
+bindurl .*.slack.com --mode=normal ;u hint -Jc div[data-sidebar-link-id="Punreads"]
+" ;t jumps to "Threads" directly
+bindurl .*.slack.com --mode=normal ;t hint -Jc div[data-sidebar-link-id="Vall_threads"]
+" ;d jumps to "All DMs" directly
+bindurl .*.slack.com --mode=normal ;d hint -Jc div[data-sidebar-link-id="Pdms"]
+" ;a jumps to "Mentions & Reactions" directly
+bindurl .*.slack.com --mode=normal ;a hint -Jc div[data-sidebar-link-id="Pactivity"]
+
+"Hints all messages shown on the screen and let's you select an action (like editing, deleting etc.) that you can apply on a message:
+bindurl .*.slack.com ;m composite hint -Jc div[class=c-message_kit__gutter]; hint -Jc button[data-qa=more_message_actions]; hint -Jc button[data-focus-key=message_actions],[role=menuitem]
+bindurl .*.slack.com ;c composite hint -Jc div[class=c-message_kit__gutter]; hint -Jc button[data-qa=more_message_actions]; hint -Jc button[data-qa=copy_link]
+
+" f -> just like f but more intelligent
+bindurl .*.slack.com --mode=normal f hint -Jc div[data-sidebar-link-id]:not([data-sidebar-link-id=""]),div[data-section-channel-index]:not([data-section-channel-index=""]),button,a
+
+" v -> select and copy the message
+bindurl .*.slack.com --mode=normal v composite hint -pipe div[data-qa=message-text] | js -p navigator.clipboard.writeText(JS_ARG.innerText)
+
+" ;n -> compose new message
+bindurl .*.slack.com --mode=normal ;n hint -Jc button[data-qa=composer_button]
+
+" ;q quote selected message
+bindurl .*.slack.com --mode=normal ;q composite hint -pipe div[data-qa=message-text] | js -p navigator.clipboard.writeText(JS_ARG.innerText.split('\n').map(it => `> ${it}`).join('\n')); hint -c div[data-qa=message_input]
+
+" ;u -> open unreads
+bindurl .*.slack.com --mode=normal ;u hint -Jc div[data-sidebar-link-id="Punreads"]
+
+" ;t -> open all threads
+bindurl .*.slack.com --mode=normal ;t hint -Jc div[data-sidebar-link-id="Vall_threads"]
+
+" ;d -> open all dms
+bindurl .*.slack.com --mode=normal ;d hint -Jc div[data-sidebar-link-id="Pdms"]
+
+" ;a -> open activity window
+bindurl .*.slack.com --mode=normal ;a hint -Jc div[data-sidebar-link-id="Pactivity"]
+
+" ;m -> interactively select a message and open message actions
+bindurl .*.slack.com ;m composite hint -Jc div[class=c-message_kit__gutter]; hint -Jc button[data-qa=more_message_actions]; hint -Jc button[data-focus-key=message_actions],[role=menuitem]
+
+" ;e -> interactively select a message and edit the selected message
+bindurl .*.slack.com ;e composite hint -Jc div[class=c-message_kit__gutter]; hint -Jc button[data-qa=more_message_actions]; hint -Jc button[data-qa=edit_message]
+
+" ;c -> interactively select a message and copy the link of selected message
+bindurl .*.slack.com ;c composite hint -Jc div[class=c-message_kit__gutter]; hint -Jc button[data-qa=more_message_actions]; hint -Jc button[data-qa=copy_link]
+
+source ~/.config/tridactyl/tridactylrc.local 

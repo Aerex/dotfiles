@@ -27,6 +27,8 @@ o.dictionary      = "/usr/share/dict/words"
 bo.expandtab      = true
 o.undodir         = vim.fn.stdpath('cache') .. '/undodir/'
 o.hidden          = true
+opt.clipboard:append('unnamedplus')
+opt.runtimepath:append('/usr/share/vifm/vim-doc/')
 o.showmode        = true
 o.autoread        = true
 o.timeoutlen      = 300

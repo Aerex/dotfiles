@@ -1,0 +1,12 @@
+# container-service (ks)
+## Create a free cluster
+$ ibmcloud ks cluster create classic --name mycluster
+
+# secret-manager (sm)
+
+## Create an arbitrary secret
+$ ibmcloud secrets-manager secret-create --secret-type=arbitrary \
+  --resources='[{"name": "example-arbitrary-secret", "description": "Extended description for this secret.", "secret_group_id": "bc656587-8fda-4d05-9ad8-b1de1ec7e712", "labels": ["dev","us-south"], "expiration_date": "2030-01-01T00:00:00Z", "payload": "secret-data"}]'
+
+## Search resource by service_name
+$ ibmcloud resource search "service_name:<service_name>"

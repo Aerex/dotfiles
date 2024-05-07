@@ -1,0 +1,9 @@
+# Connect to a remote computer (default port is 3389):
+# rdesktop -u <username> -p <password> host:port
+
+# Enable clipboard
+# rdesktop -u <username> -p <password> -r clipboard:CLIPBOARD
+
+# Do not override keybinding from host
+# rdesktop -u <username> -p <password> -K
+

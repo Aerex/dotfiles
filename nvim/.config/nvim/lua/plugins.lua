@@ -1,5 +1,6 @@
-local autocmd = require('utils').autocmd
-local execute = vim.api.nvim_command
+local utils = require('utils')
+local autocmd = utils.autocmd
+local execute = vim.api.nvim_commandplugin
 local fn = vim.fn
 
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -28,7 +29,6 @@ autocmd({ 'BufEnter', 'BufWinEnter' }, {
 
 return require('lazy').setup({
   function(use)
-
     -- textobject
     use { 'tpope/vim-surround' }
     use { 'tpope/vim-repeat' }

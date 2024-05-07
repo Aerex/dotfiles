@@ -4,18 +4,18 @@ func(cmd *cobra.Command, args []string) {
 }
 endsnippet
 
+# Gomega {{{
 snippet gde "Add gomega Describe function block"
 Describe("$1", func() {
 	$0
 })
 endsnippet
 
-snippet gct "Add gomega Context function block"
+snippet "\b(gct)|(ctx)|(context)\b" "Add gomega Context function block" r
 Context("$1", func() {
 	$0
 })
 endsnippet
-	
 
 snippet gbe "Add gomega BeforeEach function block"
 BeforeEach(func() {
@@ -23,7 +23,19 @@ BeforeEach(func() {
 })
 endsnippet
 
+snippet gbf "Add gomega Before function block"
+Before(func() {
+	$0
+})
+endsnippet
+
 snippet gae "Add gomega AfterEach function block"
+AfterEach(func() {
+	$0
+})
+endsnippet
+
+snippet aftereach "Add gomega AfterEach function block"
 AfterEach(func() {
 	$0
 })
@@ -50,32 +62,52 @@ endsnippet
 snippet eq "Add gomega Equal() function block"
 Equal($1)
 endsnippet
+#}}}
+
+snippet sprint "Add fmt.Sprintf"
+fmt.Sprintf("$1", $2)
+endsnippet
 
 snippet todo "Add TODO block"
 // TODO: $1 $0
 endsnippet
 
-snippet logn "fmt.Println"
-fmt.Println("#`!v line(".")`")
-fmt.Println($1)
-$0
+snippet note "Add note block"
+// NOTE: $1 $0
+endsnippet
+
+snippet log "Print variable"
+// REMOVEME: Do not commit
+fmt.Printf("\n$1: %s\n", $1)
 endsnippet
 
 snippet logs "Print struct"
-fmt.Printf("\n$1 -> %#v", $1)
+// REMOVEME: Do not commit
+fmt.Printf("\n$1: %+v\n", $1)
+endsnippet
+
+snippet logn "Log number"
+// REMOVEME: Do not commit
+fmt.Println("\n`!v line('.')`")
 endsnippet
 
 snippet fixme "Add FIXME block"
 // FIXME: $1 $0
 endsnippet
 
-snippet note "Add note block"
-// NOTE: $1
+snippet haveoc "Add gomega HaveOccured block"
+HaveOccured()
 endsnippet
 
-snippet log "Log variable"
-fmt.Printf("\n$1: %v\n", $1)
+snippet exne "Add Expect(..).ShouldNot(HaveOccurred) gomega block"
+Expect($1).ShouldNot(HaveOccurred())
 endsnippet
+
+snippet exer "Add Expect(..).Should(HaveOccurred) gomega block"
+Expect($1).Should(HaveOccurred())
+endsnippet
+
+# vim: fdm=marker
 
 #global p!
 #def insert_interface():

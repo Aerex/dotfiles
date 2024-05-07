@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # AUTHOR: Aerex
 # DESC:   Copy credentials with fzf and pass like rofi-pass
 # DEPEND: fzf pass 
@@ -17,11 +17,28 @@ function copy_pass_safe() {
     fi
     pass "$1" | head -n 1 | xsel --clipboard --input
 }
+function fzf_all_content() {
+  ENTRY=$1
+  selected=$(pass $ENTRY | fzf --reverse | cut -d: -f 2 | tr -d " ")
+  echo "$selected" | xsel --clipboard --input
+}
+
 USERNAME_PREFIX="login:"
 URL_PREFIX="url:"
-tree -fia ~/.password-store | grep '.gpg' | sed 's/^.\///' | sed "s|$HOME/.password-store/||g" | sed 's/.gpg//' | fzf -e -i -m --reverse --header="enter=copy password, alt-o=copy otp alt-u=copy username, alt-l=copy url"  \
+
+mapfile -d '' _fhelp <<-EOF
+Enter   Copy Password
+Alt-u   Copy Username
+Alt-o   Copy OTP
+Alt-l   Copy URL
+EOF
+
+pass "$1" >/dev/null 2>&1 || exit 1
+tree -fia ~/.password-store | grep '.gpg' | sed 's/^.\///' | sed "s|$HOME/.password-store/||g" | sed 's/.gpg//' | fzf -e -i -m --reverse --header="${_fhelp[0]}"  \
+    --no-multi \
+    --print-query\
     --bind="alt-u:execute-silent[pass {} | grep ^$USERNAME_PREFIX | sed \"s/$USERNAME_PREFIX//\" | tr -d ' '  | xsel --clipboard --input]+abort" \
     --bind="alt-l:execute-silent[pass {} | grep ^$URL_PREFIX | sed \"s/$URL_PREFIX//\" | tr -d ' '  | xsel --clipboard --input]+abort" \
     --bind="alt-o:execute-silent[pass otp {} | xsel --clipboard --input]+abort" \
-    --bind="enter:execute-silent[pass {} | head -n 1 | tr -d '\n' | xsel --clipboard --input]+abort" 
-  
+    --bind="enter:execute-silent[pass {} | head -n 1 | tr -d '\n' | xsel --clipboard --input]+abort"  \
+    --bind="ctrl-i:execute(pass {} | fzf --reverse | cut -d: -f 2 | tr -d ' ' | xsel --clipboard --input)+abort"

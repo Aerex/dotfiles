@@ -37,6 +37,44 @@ done
 
 shift $((OPTIND -1) # parse first arg next if necessary
 
+# Parse opts with long option flags (ie: --version)
+options=$(getopt -o brg --long color: -- "$@")
+[ $? -eq 0 ] || {
+    echo "Incorrect options provided"
+    exit 1
+}
+eval set -- "$options"
+while true; do
+    case "$1" in
+    -b)
+        COLOR=BLUE
+        ;;
+    -r)
+        COLOR=RED
+        ;;
+    -g)
+        COLOR=GREEN
+        ;;
+    --color)
+        shift; # The arg is next in position args
+        COLOR=$1
+        [[ ! $COLOR =~ BLUE|RED|GREEN ]] && {
+            echo "Incorrect options provided"
+            exit 1
+        }
+        ;;
+    --)
+        shift
+        break
+        ;;
+    esac
+    shift
+done
+
+echo "Color is $COLOR"
+exit 0;
+```
+
 # Turn on debugging:
 set -x
 
@@ -101,3 +139,7 @@ $((expression))
 echo $((2+2)
 # Add a number to a variable
 echo $(($n+1))
+
+# Arrays
+## Get length
+echo "${#ArrayName[@]}"
