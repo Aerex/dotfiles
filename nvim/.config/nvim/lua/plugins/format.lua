@@ -10,5 +10,12 @@ return {
         filetype_exclude = { 'ledger', 'help' }
       }
     end
+  },
+  {
+    'dhruvasagar/vim-table-mode',
+    cmd = { 'TableModeToggle', 'TableModeEnable', 'TableModeDisable', 'Tabelize', 'TableModeRealign' },
+    config = function()
+      vim.table_mode_auto_align = 1
+    end
   }
 }
