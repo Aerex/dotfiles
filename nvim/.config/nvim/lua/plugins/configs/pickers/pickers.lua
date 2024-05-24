@@ -1,4 +1,7 @@
 local get_workspace = require'utils'.get_workspace
+local actions = require('telescope.actions')
+local action_state = require('telescope.actions.state')
+local transform_mod = require('telescope.actions.mt').transform_mod
 local M = {}
 
 local get_dropdown = function(opts)
@@ -16,32 +19,129 @@ local get_dropdown = function(opts)
   return vim.tbl_deep_extend("force", theme_opts, opts)
 end
 
+local telescope_multiopen = function (prompt_bufnr, method)
+  local cmd_map = {
+    vertical = "vsplit",
+    horizontal = "split",
+    tab = "tabe",
+    default = "edit"
+  }
+  local picker = action_state.get_current_picker(prompt_bufnr)
+  local multi_selection = picker:get_multi_selection()
+  local has_multi_selection = (next(picker:get_multi_selection()) ~= nil)
+
+  if has_multi_selection then
+    require("telescope.pickers").on_close_prompt(prompt_bufnr)
+    pcall(vim.api.nvim_set_current_win, picker.original_win_id)
+
+    for i, entry in ipairs(multi_selection) do
+      -- opinionated use-case
+      local cmd = i == 1 and "edit" or cmd_map[method]
+      vim.cmd(string.format("%s %s", cmd, entry.value))
+    end
+  else
+    actions["select_" .. method](prompt_bufnr)
+  end
+end
+
+local multi_select = transform_mod({
+  vertical = function(prompt_bufnr)
+    telescope_multiopen(prompt_bufnr, "vertical")
+  end,
+  horizontal = function(prompt_bufnr)
+    telescope_multiopen(prompt_bufnr, "horizontal")
+  end,
+  tab = function(prompt_bufnr)
+    telescope_multiopen(prompt_bufnr, "tab")
+  end,
+  open = function(prompt_bufnr)
+    telescope_multiopen(prompt_bufnr, "default")
+  end,
+})
+
+local multi_open_maps = {
+  i = {
+    ['<C-x>'] = require('telescope.actions').select_horizontal,
+    ['<C-s>'] = require('telescope.actions').select_horizontal,
+    ['<C-c>'] = require('telescope.actions').close,
+    ['<C-j>'] = require('telescope.actions').move_selection_next,
+    ['<C-k>'] = require('telescope.actions').move_selection_previous,
+    ['<A-p>'] = require('telescope.actions.layout').toggle_preview,
+    ['<Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_next,
+    ["<C-f>"] = require('telescope.actions').to_fuzzy_refine,
+    ['<S-Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_previous
+    --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
+  },
+  n = {
+    ['q'] = require('telescope.actions').close,
+    ['<CR>'] = multi_select.open,
+    ['<C-c>'] = require('telescope.actions').close,
+    ['<C-s>'] = multi_select.horizonal,
+    ['<C-x>'] = multi_select.horizontal,
+    ['<C-v>'] = multi_select.veritical,
+    ['<C-T>'] = multi_select.tab,
+    ['<A-j>'] = require('telescope.actions').preview_scrolling_up,
+    ['<A-k>'] = require('telescope.actions').preview_scrolling_up,
+    ['<A-p>'] = require('telescope.actions.layout').toggle_preview,
+    ['<Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_next,
+    ['<S-Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_previous
+    --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
+  }
+}
+
+
+
 M.telescope = {
   setup = function()
     require('telescope').setup {
       defaults = {
-        pickers = {
-          octo = {
-            theme = 'ivy'
+      layout_strategy = 'vertical',
+      path_display = {
+        shorten = {
+          len     = 4,
+          exclude = { -1 }
+        }
+      },
+      pickers = {
+        octo = {
+          theme = 'ivy'
+        },
+        oldfiles = {
+          mappings = multi_open_maps
+        },
+        find_files = {
+          mappings = multi_open_maps
+        },
+        buffers = {
+          mappings = multi_open_maps
+        },
+        live_grep = {
+          mappings = multi_open_maps
+        },
+        grep_string = {
+          mappings = multi_open_maps
+        },
+        lsp_references = {
+          mappings = multi_open_maps
+        },
+        mappings = {
+          i = {
+            ['<C-x>'] = require('telescope.actions').select_horizontal,
+            ['<C-s>'] = require('telescope.actions').select_horizontal,
+            ['<C-c>'] = require('telescope.actions').close,
+            ['<C-j>'] = require('telescope.actions').move_selection_next,
+            ['<C-k>'] = require('telescope.actions').move_selection_previous,
+            --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
           },
-          mappings = {
-            i = {
-              ['<C-x>'] = require('telescope.actions').select_horizontal,
-              ['<C-s>'] = require('telescope.actions').select_horizontal,
-              ['<C-c>'] = require('telescope.actions').close,
-              ['<C-j>'] = require('telescope.actions').move_selection_next,
-              ['<C-k>'] = require('telescope.actions').move_selection_previous,
-              --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
-            },
-            n = {
-              ['q'] = require('telescope.actions').close,
-              ['<Esc>'] = require('telescope.actions').close,
-              ['<C-c>'] = require('telescope.actions').close,
-              ['<C-s>'] = require('telescope.actions').select_horizontal,
-              ['<C-x>'] = require('telescope.actions').select_horizontal,
-              ['<A-j>'] = require('telescope.actions').preview_scrolling_up,
-              ['<A-k>'] = require('telescope.actions').preview_scrolling_up,
-              ['<Tab>'] = require('telescope.actions').toggle_selection,
+          n = {
+            ['q'] = require('telescope.actions').close,
+            ['<Esc>'] = require('telescope.actions').close,
+            ['<C-c>'] = require('telescope.actions').close,
+            ['<C-s>'] = require('telescope.actions').select_horizontal,
+            ['<C-x>'] = require('telescope.actions').select_horizontal,
+            ['<A-j>'] = require('telescope.actions').preview_scrolling_up,
+            ['<A-k>'] = require('telescope.actions').preview_scrolling_up,
+            ['<Tab>'] = require('telescope.actions').toggle_selection,
               --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
             }
           },

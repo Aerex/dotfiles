@@ -1,5 +1,5 @@
 return {
-  { 'sbdchd/neoformat' },
+  { 'mhartington/formatter.nvim' },
   { 'godlygeek/tabular', cmd = { 'Tabularize' } },
   {
     'lukas-reineke/indent-blankline.nvim',

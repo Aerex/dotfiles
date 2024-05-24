@@ -10,6 +10,9 @@ return {
     }
   },
   {
+    'folke/which-key.nvim'
+  },
+  {
     'serenevoid/kiwi.nvim',
     lazy = true
   },
