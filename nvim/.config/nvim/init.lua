@@ -5,15 +5,18 @@
 --
 -- config options
 require('config.options')
-local autocmd = require('utils').autocmd
 vim.loader.enable()
-
 
 if vim.fn.executable('rg') then
   vim.o.grepprg = "rg --vimgrep --no-heading --smart-case"
+
+  vim.o.grepformat = "%f:%l:%c:%m"
 end
 
-vim.o.grepformat = "%f:%l:%c:%m"
+if vim.fn.executable('ug') then
+  vim.o.grepprg = 'ugrep -RInk -j -u --tabs=1 --ignore-files'
+  vim.o.grepformat = '%f:%l:%c:%m,%f+%l+%c+%m,%-G%f\\|%l\\|%c\\|%m'
+end
 
 --buffers
 vim.g.seiya_auto_enable = 1
