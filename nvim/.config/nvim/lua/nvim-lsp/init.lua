@@ -93,8 +93,10 @@ local on_attach = function(client, bufnr)
         },
       }, { silent = true, buffer = bufnr })
     else
-      vim.keymap.set('n', 'gpd', function() require'goto-preview'.goto_preview_definition() end, { silent = true, buffer = bufnr })
-      vim.keymap.set('n', 'gpr', function() require'goto-preview'.goto_preview_references() end, { silent = true, buffer = bufnr })
+      vim.keymap.set('n', 'gpd', function() require 'goto-preview'.goto_preview_definition() end,
+        { silent = true, buffer = bufnr })
+      vim.keymap.set('n', 'gpr', function() require 'goto-preview'.goto_preview_references() end,
+        { silent = true, buffer = bufnr })
     end
   end
 
@@ -206,6 +208,11 @@ require 'lspconfig'.pylsp.setup {
 }
 
 require 'lspconfig'.vimls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities
+}
+
+require 'lspconfig'.ansiblels.setup {
   on_attach = on_attach,
   capabilities = capabilities
 }
@@ -517,6 +524,10 @@ if ok_nav then
         on_attach = on_attach,
         capabilities = capabilities,
         settings = lua_settings,
+      },
+      ansiblels = {
+        on_attach = on_attach,
+        capabilities = capabilities,
       },
     }
   })

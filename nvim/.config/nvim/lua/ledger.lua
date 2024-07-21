@@ -1,5 +1,5 @@
 local ok, wk = pcall(require, 'which-key')
-
+vim.g.cmp_hledger_file = '/home/aerex/Documents/repos/.private/ledger/main.journal'
 if ok then
   wk.register({
     t = {
@@ -20,8 +20,8 @@ if ok then
     prefix = '<leader>'
   })
   wk.register({
-      ["]"] = { "/^\\d", "Next Transaction"},
-      ["["] = { "?^\\d", "Previous Transaction"}
+      ["]"] = { "/^\\d<CR>", "Next Transaction"},
+      ["["] = { "?^\\d<CR>", "Previous Transaction"}
   }, {
     buffer = 0,
     mode = 'n',
@@ -31,5 +31,3 @@ if ok then
     prefix = ''
   })
 end
-
-

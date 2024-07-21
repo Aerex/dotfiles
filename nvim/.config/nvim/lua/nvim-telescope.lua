@@ -160,7 +160,7 @@ M.setup = function()
   }
   require('telescope').load_extension('fzf')
   require 'telescope'.load_extension('yank_history')
-  require('telescope').load_extension('fzf_writer')
+  --require('telescope').load_extension('fzf_writer')
   vim.g.telescope_cache_results = 1
   vim.g.telescope_prime_fuzzy_find = 1
 end

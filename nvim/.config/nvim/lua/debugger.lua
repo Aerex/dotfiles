@@ -105,6 +105,13 @@ dap.configurations.go = {
   },
   {
     type = "go",
+    name = "Debug file",
+    request = "launch",
+    program = "${file}",
+    mode = "debug"
+  },
+  {
+    type = "go",
     name = "Debug with args",
     request = "launch",
     program = "${file}",

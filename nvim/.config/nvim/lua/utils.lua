@@ -123,4 +123,10 @@ M.get_git_root_path = function()
   return vim.split(vim.fn.system('git rev-parse --show-toplevel'), '\n')[1]
 end
 
+M.backup = function()
+  local filename = os.date("%Y%m%dT%H%M")
+  require 'packer'.snapshot(filename)
+  vim.notify('Packer Snapshot created: ' .. filename, vim.log.levels.INFO)
+end
+
 return M
