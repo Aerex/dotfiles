@@ -1,2 +1,5 @@
-#!/bin/sh
-.git/hooks/ctags >/dev/null 2>&1 &
+#!/bin/env bash
+# Run post-checkout hook for local env
+if [[ -n $WORK_NODE ]] && [[ $(command -v post-checkout.local) ]]; then
+  post-checkout.local
+fi
