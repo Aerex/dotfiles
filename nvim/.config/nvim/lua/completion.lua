@@ -96,11 +96,10 @@ if ok then
       end,
     },
     sources = {
-      { name = 'nvim_lsp'},
-      { name = 'ultisnips'},
-      --{ name = 'rg'},
-      { name = 'path'},
-      { name = 'dictionary', keyword_length = 2},
+      { name = 'nvim_lsp' },
+      { name = 'ultisnips' },
+      { name = 'path' },
+      { name = 'dictionary', keyword_length = 2 },
     },
   }
 
