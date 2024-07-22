@@ -90,3 +90,15 @@ Shift-Tab
 ~( PATTERN )	 	messages in threads containing messages matching PATTERN , e.g. all threads containing messages from you: ~(~P)
 ~<( PATTERN )	 	messages whose immediate parent matches PATTERN , e.g. replies to your messages: ~<(~P)
 ~>( PATTERN )	 	messages having an immediate child matching PATTERN , e.g. messages you replied to: ~>(~P)
+
+### Operations 
+
+Logical AND is performed by specifying more than one criterion. For example:
+
+`~t mutt ~f elkins`
+
+`!` — logical NOT operator
+
+`|` — logical OR operator
+
+`()` — logical grouping operator

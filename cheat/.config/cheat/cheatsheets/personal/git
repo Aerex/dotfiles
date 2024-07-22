@@ -241,3 +241,8 @@ echo 'another/sub/tree' >> .git/info/sparse-checkout
 # To commit without configuring the user email and name to the local repo 
 # Requires git 2.13+
 git -c user.email=<EMAIL> -c user.name=<NAME> commit
+
+# Merge theirs 
+git merge -s ours ref-to-be-merged
+git diff --binary ref-to-be-merged | git apply  -R --index
+git commit -F .git/COMMIT_EDIT_MSG --amend

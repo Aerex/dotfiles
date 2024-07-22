@@ -3,3 +3,9 @@ du -sk *| sort -rn
 
 # To show cumulative humanreadable size
 du -sh
+
+# Find the 10 biggest folders in current directory
+du -h | sort -hr | head -n 10u
+
+# Find the 10 biggest files and folders in current directory
+du -ah | sort -hr | head -n 10

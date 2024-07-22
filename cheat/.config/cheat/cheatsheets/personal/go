@@ -1,2 +1,5 @@
 # Upgrade a package 
 go get -u <package-path>@version
+
+# Edit go mod 
+go mod edit -replace

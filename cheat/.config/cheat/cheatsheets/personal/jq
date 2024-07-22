@@ -49,3 +49,8 @@ jq '.results[] | select(.name | test("Joe\s+Smith"))'      # Get complete record
 
 # Select objects with at least one widget and at least one user
 $ cat part-r-00000 | jq 'select((.widgets | length) > 0 and (.users | length) > 0)'
+
+# Check if there are objects in an array
+$ if [[ $(jq 'if type =="array" and length > 0 then true else false end' file.json) == "true" ]]; then
+$   echo "file has elements in array"
+$ fi
