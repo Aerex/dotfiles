@@ -32,32 +32,40 @@ M.restore_keymaps = function()
 end
 
 M.debugger_keymaps = function()
-  local ref_map = { 'K', '<A-j>','<A-k>', '<A-l>', '<A-h>', '<leader>dr', '<leader>dR', '<leader>dl', 'qq' }
-  local api = vim.api
+  local ref_map = { 'K', '<A-j>', '\\l', '\\L', '<A-k>', '<A-l>', '<A-h>', '<leader>dr', '<leader>dR', '<leader>dl',
+    '<leader>dcb' }
   for _, buf in pairs(api.nvim_list_bufs()) do
-      local keymaps = api.nvim_buf_get_keymap(buf, 'n')
-      for _, keymap in pairs(keymaps) do
-        -- save default keymap to restore after session is over
-        if vim.tbl_contains(ref_map, keymap.lhs) then
-          table.insert(default_key_maps, keymap)
-          api.nvim_buf_del_keymap(buf, 'n', keymap.lhs)
-        end
-      end
-      local ok, wk = pcall(require, 'which-key')
-      if ok then
-        local options = { silent = true, buffer = buf }
-        wk.register({
-          K = {function() require('dap.ui.widgets').hover() end, 'Hover'},
-          ['<A-j>'] = { function() require('dap').step_over() end, 'Step Over'},
-          ['<A-k>'] = { function() require('dap').step_into() end, 'Step Into'},
-          ['<A-l>'] = { function() require('dap').step_out() end, 'Step Out'},
-          ['<A-h>'] = { function() require('dap').continue() end, 'Continue'},
-          ['<leader>dr'] = {function() require'dap'.float_element('repl', { enter = true }) end, 'REPL'},
-          ['<leader>dR'] = {function() require'dap'.repl.toggle({height = 7}); utils.send_keys('<C-w>b', 'n') end, 'REPL'},
-          ['<leader>dlL'] = {function() M.toggle_breakpoints_qf() end, 'Show breakpoint list'},
-        }, options)
+    local keymaps = api.nvim_buf_get_keymap(buf, 'n')
+    for _, keymap in pairs(keymaps) do
+      -- save default keymap to restore after session is over
+      if vim.tbl_contains(ref_map, keymap.lhs) then
+        table.insert(default_key_maps, keymap)
+        api.nvim_buf_del_keymap(buf, 'n', keymap.lhs)
       end
     end
+    local ok, wk = pcall(require, 'which-key')
+    if ok then
+      local options = { silent = true, buffer = buf }
+      wk.register({
+        K = { function() require('dap.ui.widgets').hover() end, 'Hover' },
+        ['<A-j>'] = { function() require('dap').step_over() end, 'Step Over' },
+        ['\\L'] = { '<cmd>tabnew | DapShowLog<cr>', 'Show Dap Log' },
+        ['<leader>dbl'] = { function() M.toggle_breakpoints_qf() end, 'Show breakpoint list' },
+        ['<A-k>'] = { function() require('dap').step_into() end, 'Step Into' },
+        ['<A-l>'] = { function() require('dap').step_out() end, 'Step Out' },
+        ['<A-h>'] = { function() require('dap').continue() end, 'Continue' },
+        ['<leader>dr'] = { function() require 'dap'.float_element('repl', { enter = true }) end, 'REPL' },
+        ['<leader>dcb'] = { function() require 'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,
+          'Breakpoint Condition' },
+        ['<leader>dR'] = { function()
+          require 'dap'.repl.toggle({ height = 7 });
+          utils.send_keys('<C-w>b', 'n')
+        end,
+          'REPL' },
+        ['<leader>dl'] = { function() require 'dap'.run_last() end, 'Run Last' }
+      }, options)
+    end
+  end
 end
 
 dap.adapters.go = function(callback, _)
