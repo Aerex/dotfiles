@@ -37,22 +37,29 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
 
-  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-      -- Enable underline, use default values
-      underline = true,
-      -- Enable virtual text, override spacing to 4
-      virtual_text = {
-        spacing = 4,
-      },
-      -- Use a function to dynamically turn signs off
-      -- and on, using buffer local variables
-      signs = true,
-      -- Disable a feature
-      update_in_insert = false,
-    }
-  )
+  local diagnostic_opts = {
+    -- Enable underline, use default values
+    underline = true,
+    -- Enable virtual text, override spacing to 4
+    virtual_text = {
+      spacing = 4,
+    },
+    signs = {
+      [vim.diagnostic.severity.ERROR] = '✖',
+      [vim.diagnostic.severity.WARN]  = '',
+      [vim.diagnostic.severity.INFO]  = 'כֿ',
+      [vim.diagnostic.severity.HINT]  = '',
+    },
+    -- Disable a feature
+    update_in_insert = false,
+  }
 
+  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics, diagnostic_opts
+  )
+  vim.lsp.handlers["textDocument/diagnostic"] = vim.lsp.with(
+    vim.lsp.diagnostic.on_diagnostic, diagnostic_opts
+  )
 
   local ok_tsu, ts_utils = pcall(require, 'nvim-lsp-ts-utils')
   if ok_tsu then
@@ -93,8 +100,10 @@ local on_attach = function(client, bufnr)
         },
       }, { silent = true, buffer = bufnr })
     else
-      vim.keymap.set('n', 'gpd', function() require'goto-preview'.goto_preview_definition() end, { silent = true, buffer = bufnr })
-      vim.keymap.set('n', 'gpr', function() require'goto-preview'.goto_preview_references() end, { silent = true, buffer = bufnr })
+      vim.keymap.set('n', 'gpd', function() require 'goto-preview'.goto_preview_definition() end,
+        { silent = true, buffer = bufnr })
+      vim.keymap.set('n', 'gpr', function() require 'goto-preview'.goto_preview_references() end,
+        { silent = true, buffer = bufnr })
     end
   end
 
@@ -123,7 +132,8 @@ local on_attach = function(client, bufnr)
   local opts = { noremap = true, silent = true }
   vim.keymap.set('n', 'gd', function() vim.lsp.buf.declaration() end, { silent = true, buffer = bufnr })
   vim.keymap.set('n', 'gr', function() require 'nvim-telescope'.lsp_ref() end, opts)
-  vim.keymap.set('n', '<c-]>', function() vim.lsp.buf.definition() end, { silent = true, buffer = bufnr })
+  vim.keymap.set('n', '<C-]>', function() require('navigator.definition').definition() end,
+    { silent = true, buffer = bufnr })
   vim.keymap.set('n', '<C-w>]', function()
       vim.cmd('vsplit');
       vim.lsp.buf.definition()
@@ -220,6 +230,34 @@ require 'lspconfig'.bashls.setup {
   capabilities = capabilities
 }
 
+--require 'lspconfig'.terraformls.setup {
+--  on_attach = on_attach,
+--  capabilities = capabilities
+--}
+
+vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+  pattern = { '*.tf', '*.tfvars' },
+  callback = function()
+    vim.lsp.buf.format()
+  end,
+})
+
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+  pattern = { '*.tf' },
+  command = 'set filetype=terraform'
+})
+
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+  pattern = { '*.tfvars' },
+  command = 'set filetype=terraform-vars'
+})
+
+require 'lspconfig'.tflint.setup {
+  on_attach = on_attach,
+  filetypes = { 'tf' },
+  capabilities = capabilities
+}
+
 local okl, lcfg = pcall(require, 'nvim-local')
 if okl and lcfg['setup_lsps'] then
   lcfg.setup_lsps()
@@ -243,6 +281,11 @@ end
 --end
 
 
+require 'lspconfig'.ansiblels.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  root_dir = require 'lspconfig'.util.root_pattern('roles', 'playbooks'),
+}
 
 --require'lspconfig'.solutionbuilder.setup{
 --  on_attach = on_attach,
@@ -280,12 +323,24 @@ if not configs.golangcilsp then
     default_config = {
       cmd = { 'golangci-lint-langserver' },
       root_dir = require 'lspconfig'.util.root_pattern('.git', 'go.mod'),
-    },
+      settings = {
+        gopls = {
+          usePlaceholders = false,
+          analysisProgressReporting = false
+        }
+      }
+    }
   }
 end
 require 'lspconfig'.golangci_lint_ls.setup({
   capabilities = capabilities,
   on_attach = on_attach,
+  settings = {
+    gopls = {
+      usePlaceholders = false,
+      analysisProgressReporting = false,
+    }
+  },
   init_options = {
     command = {
       'golangci-lint',
@@ -392,11 +447,12 @@ if ok_j then
 
         -- 💀
         '-jar',
-        '/home/noamfo/.local/share/jdt-language-server/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
+        os.getenv('HOME') ..
+        '/.local/share/jdt-language-server/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
 
 
         -- 💀
-        '-configuration', '/home/noamfo/.local/share/jdt-language-server/config_linux',
+        '-configuration', os.getenv('HOME') .. '/.local/share/jdt-language-server/config_linux',
         -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^
         -- Must point to the                      Change to one of `linux`, `win` or `mac`
         -- eclipse.jdt.ls installation            Depending on your system.
@@ -404,7 +460,7 @@ if ok_j then
 
         -- 💀
         -- See `data directory configuration` section in the README
-        '-data', '/home/noamfo/Documents/eclipse/' .. project_name,
+        '-data', os.getenv('HOME') .. '/Documents/eclipse/' .. project_name,
       },
       -- 💀
       -- This is the default if not provided, you can remove it. Or adjust as needed.
@@ -466,7 +522,7 @@ if ok_nav then
     treesitter_analysis_max_num = 100,   -- how many items to run treesitter analysis
     treesitter_analysis_condense = true, -- condense form for treesitter analysis
     -- this value prevent slow in large projects, e.g. found 100000 reference in a project
-    transparency = 50,                   -- 0 ~ 100 blur the main window, 100: fully transparent, 0: opaque,  set to nil or 100 to disable it
+    transparency = 65,                   -- 0 ~ 100 blur the main window, 100: fully transparent, 0: opaque,  set to nil or 100 to disable it
     lsp_signature_help = true,           -- if you would like to hook ray-x/lsp_signature plugin in navigator
     -- setup here. if it is nil, navigator will not init signature help
     signature_help_cfg = nil,            -- if you would like to init ray-x/lsp_signature plugin in navigator, and pass in your own config to signature help
@@ -486,11 +542,11 @@ if ok_nav then
       -- own on_attach
       code_action = { enable = true, sign = true, sign_priority = 40, virtual_text = true },
       code_lens_action = { enable = true, sign = true, sign_priority = 40, virtual_text = true },
-      document_highlight = true,         -- LSP reference highlight,
+      document_highlight = true,                             -- LSP reference highlight,
       -- it might already supported by you setup, e.g. LunarVim
-      format_on_save = true,             -- {true|false} set to false to disasble lsp code format on save (if you are using prettier/efm/formater etc)
-      format_options = { async = true }, -- async: disable by default, the option used in vim.lsp.buf.format({async={true|false}, name = 'xxx'})
-      disable_format_cap = { "json" },   -- a list of lsp disable format capacity (e.g. if you using efm or vim-codeformat etc), empty {} by default
+      format_on_save = true,                                 -- {true|false} set to false to disasble lsp code format on save (if you are using prettier/efm/formater etc)
+      format_options = { async = true },                     -- async: disable by default, the option used in vim.lsp.buf.format({async={true|false}, name = 'xxx'})
+      disable_format_cap = { "json", "yamlls", "tsserver" }, -- a list of lsp disable format capacity (e.g. if you using efm or vim-codeformat etc), empty {} by default
       diagnostic = {
         underline = true,
         virtual_text = true,      -- show virtual for diagnostic message
@@ -510,6 +566,11 @@ if ok_nav then
         settings = {
           gopls = {
             usePlaceholders = false,
+            analysisProgressReporting = false,
+          }
+        }
+      },
+      cucumber_language_server = {
           }
         }
       },
@@ -530,4 +591,5 @@ end
 
 vim.lsp.handlers['textDocument/documentSymbol'] = lsp_document_symbol_callback
 vim.lsp.handlers['textDocument/references'] = lsp_references_callback
+vim.lsp.handlers['textDocument/implementation'] = lsp_implementation_callback
 vim.lsp.handlers['textDocument/implementation'] = lsp_implementation_callback
