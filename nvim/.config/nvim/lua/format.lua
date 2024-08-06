@@ -3,9 +3,9 @@ local M = {}
 M.setup = function()
   require("formatter").setup {
     -- Enable or disable logging
-    logging = true,
+    logging = false,
     -- Set the log level
-    log_level = vim.log.levels.WARN,
+    log_level = vim.log.levels.INFO,
     -- All formatter configurations are opt-in
     filetype = {
       -- Formatter configurations for filetype "lua" go here
@@ -21,6 +21,14 @@ M.setup = function()
       },
       python = {
         require('formatter.filetypes.python').autopep8
+      },
+      cucumber = {
+        function()
+          return {
+            exe = 'reformat-gherkin',
+            args = {'--tab-width', '4'}
+          }
+        end
       },
       -- Use the special "*" filetype for defining formatter configurations on
       -- any filetype
