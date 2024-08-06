@@ -1,5 +1,6 @@
 local get_packer_path = require('utils').get_packer_path
 local ultisnips = require('utils').ultisnips
+local get_local_cfgs = require('utils').get_local_cfgs
 local ok, cmp = pcall(require, 'cmp')
 
 if ok then
@@ -88,6 +89,7 @@ if ok then
           nvim_lua = '[Lua]',
           buffer = '[BUF]',
           spell = '[SPELL]',
+          git = '',
           dictionary = '[DICT]',
           --rg = '[RG]'
         })[entry.source.name]
@@ -98,10 +100,19 @@ if ok then
     sources = {
       { name = 'nvim_lsp' },
       { name = 'ultisnips' },
+      { name = 'git' },
       { name = 'path' },
       { name = 'dictionary', keyword_length = 2 },
     },
   }
+
+  local ok_git, cmp_git = pcall(require, 'cmp_git')
+  if ok_git then
+    local setup = { filetypes = { 'gitcommit', 'octo', 'NeogitCommitMessage' } }
+    local cfg = get_local_cfgs(setup, 'cmp_git')
+    cmp_git.setup(cfg)
+  end
+
 
   -- use dictionary and snips in document files
   for _, doc_ft in pairs({ 'markdown', 'vimwiki' }) do

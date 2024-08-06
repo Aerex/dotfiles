@@ -82,4 +82,11 @@ M.find_index_of = function(tbl, value)
   end
 end
 
+M.get_workspace = function()
+    if #vim.lsp.buf.list_workspace_folders() > 0 then
+      return vim.lsp.buf.list_workspace_folders()[1]
+    end
+    return ""
+end
+
 return M
