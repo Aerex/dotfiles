@@ -11,6 +11,12 @@ Describe("$1", func() {
 })
 endsnippet
 
+snippet git "Add gomega It function block"
+It("$1", func() {
+	$0
+})
+endsnippet
+
 snippet "\b(gct)|(ctx)|(context)\b" "Add gomega Context function block" r
 Context("$1", func() {
 	$0
@@ -93,6 +99,10 @@ endsnippet
 
 snippet fixme "Add FIXME block"
 // FIXME: $1 $0
+endsnippet
+
+snippet removeme "Add REMOVEME block"
+// REMOVEME: $1 $0
 endsnippet
 
 snippet haveoc "Add gomega HaveOccured block"
