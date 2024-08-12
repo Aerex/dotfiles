@@ -26,7 +26,7 @@ local function telescope_multiopen(prompt_bufnr, method)
     for i, entry in ipairs(multi_selection) do
       -- opinionated use-case
       local cmd = i == 1 and "edit" or cmd_map[method]
-      vim.cmd(string.format("%s %s", cmd, entry.value))
+      vim.cmd(string.format("%s +%s %s", cmd, entry.value['lnum'], entry.value['filename']))
     end
   else
     actions["select_" .. method](prompt_bufnr)
@@ -63,6 +63,12 @@ local multi_open_maps = {
     --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
   },
   n = {
+    ['?'] = require('telescope.actions.generate').which_key({
+      name_width = 20, -- typically leads to smaller floats
+      max_height = 0.25, -- increase potential maximum height
+      separator = " > ", -- change sep between mode, keybind, and name
+      close_with_action = false, -- do not close float on action
+    }),
     ['q'] = require('telescope.actions').close,
     ['<CR>'] = multi_select.open,
     ['<C-c>'] = require('telescope.actions').close,
@@ -101,50 +107,12 @@ M.setup = function()
           ['<S-Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_previous
           --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
         },
-        n = {
-          --['?'] = require('telescope.actions').which_key {
-          --  name_width = 20, -- typically leads to smaller floats
-          --  max_height = 0.5, -- increase potential maximum height
-          --  separator = " > ", -- change sep between mode, keybind, and name
-          --  close_with_action = false, -- do not close float on action
-          --},
-          ['q'] = require('telescope.actions').close,
-          ['<Esc>'] = require('telescope.actions').close,
-          ['<C-c>'] = require('telescope.actions').close,
-          ['<C-s>'] = require('telescope.actions').select_horizontal,
-          ['<C-x>'] = require('telescope.actions').select_horizontal,
-          ['<A-j>'] = require('telescope.actions').preview_scrolling_up,
-          ['<A-k>'] = require('telescope.actions').preview_scrolling_up,
-          ['<A-p>'] = require('telescope.actions.layout').toggle_preview,
-          ['<Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_next,
-          ['<S-Tab>'] = require('telescope.actions').toggle_selection + require('telescope.actions').move_selection_previous
-          --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
-        }
+        n = multi_open_maps['n'],
       },
       -- file_sorter = require('telescope.sorters').get_fzy_sorter,
       file_previewer = require('telescope.previewers').vim_buffer_cat.new,
       grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
       qflist_previewer = require('telescope.previewers').vim_buffer_qflist.new,
-      pickers = {
-        oldfiles = {
-          mappings = multi_open_maps
-        },
-        find_files = {
-          mappings = multi_open_maps
-        },
-        buffers = {
-          mappings = multi_open_maps
-        },
-        live_grep = {
-          mappings = multi_open_maps
-        },
-        grep_string = {
-          mappings = multi_open_maps
-        },
-        lsp_references = {
-          mappings = multi_open_maps
-        },
-      }
     },
     extensions = {
       fzf = {
