@@ -137,7 +137,7 @@ M.get_local_cfgs = function(cfg, fn_name, args)
   local ok, lcfg = pcall(require, 'nvim-local')
   local cust_cfg = cfg
   if ok and lcfg[fn_name] then
-    cust_cfg = vim.tbl_deep_extend("force", cfg, lcfg[fn_name](args))
+    cust_cfg = vim.tbl_deep_extend('force', cfg, lcfg[fn_name](args))
   end
   return cust_cfg
 end
