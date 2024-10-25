@@ -44,13 +44,6 @@ M.setup_signs = function()
         -- Text object
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
       end,
-      signs                        = {
-        add = { hl = 'GitSignsAdd', text = '+' },
-        change = { hl = 'GitSignsChange', text = '~' },
-        delete = { hl = 'GitSignsDelete', text = "▂" },
-        topdelete = { hl = 'GitSignsDelete', text = "▔" },
-        changedelete = { hl = 'GitSignsChange', text = '▎' },
-      },
       signcolumn                   = true,  -- Toggle with `:Gitsigns toggle_signs`
       numhl                        = false, -- Toggle with `:Gitsigns toggle_numhl`
       linehl                       = false, -- Toggle with `:Gitsigns toggle_linehl`
@@ -84,6 +77,11 @@ M.setup_signs = function()
         enable = false
       },
     }
+    vim.api.nvim_set_hl(0, 'GitSignsAdd', { link = 'GitSignsAdd' })
+    vim.api.nvim_set_hl(0, 'GitSignsChange', { link = 'GitSignsChange' })
+    vim.api.nvim_set_hl(0, 'GitSignsChangedelete', { link = 'GitSignsChange' })
+    vim.api.nvim_set_hl(0, 'GitSignsDelete', { link = 'GitSignsDelete' })
+    vim.api.nvim_set_hl(0, 'GitSignsTopdelete', { link = 'GitSignsDelete' })
   end
   -- override color highlights
   --vim.cmd[[hi GitSignsAdd guifg=#afd700 guibg=None]]

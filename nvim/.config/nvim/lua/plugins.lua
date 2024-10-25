@@ -1,7 +1,8 @@
 local fn = vim.fn
 
+-- Bootstrap lazy.nvim
 local lazypath = fn.stdpath('data') .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
   fn.system({
     'git',
     'clone',
@@ -10,8 +11,17 @@ if not vim.loop.fs_stat(lazypath) then
     '--branch=stable', -- latest stable release
     lazypath,
   })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { 'Failed to clone lazy.nvim:\n', 'ErrorMsg' },
+      { out,                            'WarningMsg' },
+      { '\nPress any key to exit...' },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 end
-vim.lazy.rtp:prepend(lazypath)
+vim.opt.rtp:prepend(lazypath)
 
 return require('lazy').setup({
   spec = {
@@ -22,6 +32,13 @@ return require('lazy').setup({
   checker = {
     enabled = true
   },
+  change_detection = {
+    enabled = true,
+    notify = true
+  },
+  diff = {
+    cmd = 'diffview.nvim'
+  },
   performance = {
     rtp = {
       disabled_plugins = {
@@ -30,9 +47,10 @@ return require('lazy').setup({
         'matchparen',
         'netrwPlugin',
         'tarPlugin',
-        'tohtml',
         'tutor',
         'zipPlugin',
+        'logiPat',
+        'zip',
       },
     }
   }

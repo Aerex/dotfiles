@@ -1,4 +1,4 @@
-local get_workspace = require'utils'.get_workspace
+local get_workspace = require 'utils'.get_workspace
 local actions = require('telescope.actions')
 local action_state = require('telescope.actions.state')
 local transform_mod = require('telescope.actions.mt').transform_mod
@@ -19,7 +19,7 @@ local get_dropdown = function(opts)
   return vim.tbl_deep_extend("force", theme_opts, opts)
 end
 
-local telescope_multiopen = function (prompt_bufnr, method)
+local telescope_multiopen = function(prompt_bufnr, method)
   local cmd_map = {
     vertical = "vsplit",
     horizontal = "split",
@@ -95,53 +95,53 @@ M.telescope = {
   setup = function()
     require('telescope').setup {
       defaults = {
-      layout_strategy = 'vertical',
-      path_display = {
-        shorten = {
-          len     = 4,
-          exclude = { -1 }
-        }
-      },
-      pickers = {
-        octo = {
-          theme = 'ivy'
+        layout_strategy = 'vertical',
+        path_display = {
+          shorten = {
+            len     = 4,
+            exclude = { -1 }
+          }
         },
-        oldfiles = {
-          mappings = multi_open_maps
-        },
-        find_files = {
-          mappings = multi_open_maps
-        },
-        buffers = {
-          mappings = multi_open_maps
-        },
-        live_grep = {
-          mappings = multi_open_maps
-        },
-        grep_string = {
-          mappings = multi_open_maps
-        },
-        lsp_references = {
-          mappings = multi_open_maps
-        },
-        mappings = {
-          i = {
-            ['<C-x>'] = require('telescope.actions').select_horizontal,
-            ['<C-s>'] = require('telescope.actions').select_horizontal,
-            ['<C-c>'] = require('telescope.actions').close,
-            ['<C-j>'] = require('telescope.actions').move_selection_next,
-            ['<C-k>'] = require('telescope.actions').move_selection_previous,
-            --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
+        pickers = {
+          octo = {
+            theme = 'ivy'
           },
-          n = {
-            ['q'] = require('telescope.actions').close,
-            ['<Esc>'] = require('telescope.actions').close,
-            ['<C-c>'] = require('telescope.actions').close,
-            ['<C-s>'] = require('telescope.actions').select_horizontal,
-            ['<C-x>'] = require('telescope.actions').select_horizontal,
-            ['<A-j>'] = require('telescope.actions').preview_scrolling_up,
-            ['<A-k>'] = require('telescope.actions').preview_scrolling_up,
-            ['<Tab>'] = require('telescope.actions').toggle_selection,
+          oldfiles = {
+            mappings = multi_open_maps
+          },
+          find_files = {
+            mappings = multi_open_maps
+          },
+          buffers = {
+            mappings = multi_open_maps
+          },
+          live_grep = {
+            mappings = multi_open_maps
+          },
+          grep_string = {
+            mappings = multi_open_maps
+          },
+          lsp_references = {
+            mappings = multi_open_maps
+          },
+          mappings = {
+            i = {
+              ['<C-x>'] = require('telescope.actions').select_horizontal,
+              ['<C-s>'] = require('telescope.actions').select_horizontal,
+              ['<C-c>'] = require('telescope.actions').close,
+              ['<C-j>'] = require('telescope.actions').move_selection_next,
+              ['<C-k>'] = require('telescope.actions').move_selection_previous,
+              --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
+            },
+            n = {
+              ['q'] = require('telescope.actions').close,
+              ['<Esc>'] = require('telescope.actions').close,
+              ['<C-c>'] = require('telescope.actions').close,
+              ['<C-s>'] = require('telescope.actions').select_horizontal,
+              ['<C-x>'] = require('telescope.actions').select_horizontal,
+              ['<A-j>'] = require('telescope.actions').preview_scrolling_up,
+              ['<A-k>'] = require('telescope.actions').preview_scrolling_up,
+              ['<Tab>'] = require('telescope.actions').toggle_selection,
               --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
             }
           },
@@ -188,100 +188,100 @@ M.telescope = {
           return math.min(max_columns, 9)
         end,
         --height = function(_, _, max_lines)
-          --  return math.min(max_lines, 15)
-          --end,
-          vertical = {
-            width = 0.5,
-            anchor = 'N',
-            prompt_position = 'top',
-          }
-        },
-        prompt_prefix = 'Document Symbols> ',
-      })
-    end,
-    lsp_ref = function()
-      require('telescope.builtin').lsp_references(get_dropdown({
-        fname_width = 10,
-        trim_text = true,
-        layout_strategy = 'vertical',
-        layout_config = {
-          preview_cutoff = 0, -- Preview should always show (unless previewer = false)
-          width = function(_, max_columns, _)
-            return math.min(max_columns, 9)
-          end,
-          --height = function(_, _, max_lines)
-            --  return math.min(max_lines, 15)
-            --end,
-            vertical = {
-              width = 0.5,
-              anchor = 'N',
-              prompt_position = 'top',
-            }
-          },
-          prompt_prefix = 'References> ',
-        }))
-      end,
-      rg_string = function()
-        require('telescope.builtin').grep_string(get_dropdown({
-          layout_strategy = 'cursor',
-          cwd = get_workspace(),
-          layout_config = {
-            width = function(_, max_columns, _)
-              return math.min(max_columns, 150)
-            end,
-            height = function(_, _, max_lines)
-              return math.min(max_lines, 25)
-            end,
-            cursor = {
-              anchor = 'N',
-              prompt_position = 'top',
-            }
-          },
-          prompt_prefix = 'Rg> ',
-        }))
-      end,
-      live_grep = function()
-        require('telescope.builtin').live_grep(get_dropdown({
-          layout_strategy = 'cursor',
-          cwd = get_workspace(),
-          layout_config = {
-            width = function(_, max_columns, _)
-              return math.min(max_columns, 150)
-            end,
-            height = function(_, _, max_lines)
-              return math.min(max_lines, 30)
-            end,
-            cursor = {
-              anchor = 'N',
-              prompt_position = 'top',
-            }
-          },
-          prompt_prefix = 'Rg Search> ',
-        }))
-      end,
-      rg_search = function()
-        require('telescope').grep_string(get_dropdown({
-          path_display = { 'smart' },
-          search = '',
-          only_sort_text = true,
-          word_match = '-w',
-          layout_strategy = 'cursor',
-          disable_coordinates = true,
-          layout_config = {
-            width = function(_, max_columns, _)
-              return math.min(max_columns, 150)
-            end,
-            height = function(_, _, max_lines)
-              return math.min(max_lines, 30)
-            end,
-            cursor = {
-              anchor = 'N',
-              prompt_position = 'top',
-            }
-          },
-          prompt_prefix = 'Rg Search> ',
-        }))
-      end
+        --  return math.min(max_lines, 15)
+        --end,
+        vertical = {
+          width = 0.5,
+          anchor = 'N',
+          prompt_position = 'top',
+        }
+      },
+      prompt_prefix = 'Document Symbols> ',
+    })
+  end,
+  lsp_ref = function()
+    require('telescope.builtin').lsp_references(get_dropdown({
+      fname_width = 10,
+      trim_text = true,
+      layout_strategy = 'vertical',
+      layout_config = {
+        preview_cutoff = 0,   -- Preview should always show (unless previewer = false)
+        width = function(_, max_columns, _)
+          return math.min(max_columns, 9)
+        end,
+        --height = function(_, _, max_lines)
+        --  return math.min(max_lines, 15)
+        --end,
+        vertical = {
+          width = 0.5,
+          anchor = 'N',
+          prompt_position = 'top',
+        }
+      },
+      prompt_prefix = 'References> ',
+    }))
+  end,
+  rg_string = function()
+    require('telescope.builtin').grep_string(get_dropdown({
+      layout_strategy = 'cursor',
+      cwd = get_workspace(),
+      layout_config = {
+        width = function(_, max_columns, _)
+          return math.min(max_columns, 150)
+        end,
+        height = function(_, _, max_lines)
+          return math.min(max_lines, 25)
+        end,
+        cursor = {
+          anchor = 'N',
+          prompt_position = 'top',
+        }
+      },
+      prompt_prefix = 'Rg> ',
+    }))
+  end,
+  live_grep = function()
+    require('telescope.builtin').live_grep(get_dropdown({
+      layout_strategy = 'cursor',
+      cwd = get_workspace(),
+      layout_config = {
+        width = function(_, max_columns, _)
+          return math.min(max_columns, 150)
+        end,
+        height = function(_, _, max_lines)
+          return math.min(max_lines, 30)
+        end,
+        cursor = {
+          anchor = 'N',
+          prompt_position = 'top',
+        }
+      },
+      prompt_prefix = 'Rg Search> ',
+    }))
+  end,
+  rg_search = function()
+    require('telescope').grep_string(get_dropdown({
+      path_display = { 'smart' },
+      search = '',
+      only_sort_text = true,
+      word_match = '-w',
+      layout_strategy = 'cursor',
+      disable_coordinates = true,
+      layout_config = {
+        width = function(_, max_columns, _)
+          return math.min(max_columns, 150)
+        end,
+        height = function(_, _, max_lines)
+          return math.min(max_lines, 30)
+        end,
+        cursor = {
+          anchor = 'N',
+          prompt_position = 'top',
+        }
+      },
+      prompt_prefix = 'Rg Search> ',
+    }))
+  end
 }
 
 return M

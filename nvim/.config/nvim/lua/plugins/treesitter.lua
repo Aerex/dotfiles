@@ -2,7 +2,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     config = function()
-      require('configs.treesitter').setup()
+      require('plugins.configs.treesitter')
     end,
     build = ':TSUpdate',
     opts = {

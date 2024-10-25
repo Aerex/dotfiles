@@ -5,7 +5,7 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
       config = function()
-        require 'rest'
+        require 'plugins.configs.misc'
       end
     }
   },
@@ -26,7 +26,7 @@ return {
   {
     'voldikss/vim-translator',
     cmd = { 'Translate', 'TranslateR', 'TranslateW', 'TranslateL' },
-    ft = { "trans" }
+    ft = { 'trans' }
   },
   {
     'ledger/vim-ledger',

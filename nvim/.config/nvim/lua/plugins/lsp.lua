@@ -3,7 +3,7 @@ return {
     'neovim/nvim-lspconfig',
     dependencies = { 'jose-elias-alvarez/nvim-lsp-ts-utils' },
     config = function()
-      require('config.lsp')
+      require('plugins.configs.lsp')
     end
   },
   {

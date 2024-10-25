@@ -1,14 +1,13 @@
 return {
   { 'mhartington/formatter.nvim' },
-  { 'godlygeek/tabular', cmd = { 'Tabularize' } },
+  { 'godlygeek/tabular',         cmd = { 'Tabularize' } },
   {
     'lukas-reineke/indent-blankline.nvim',
     config = function()
-      require('indent_blankline').setup {
-        char = '|',
-        buftype_exclude = { 'terminal' },
-        filetype_exclude = { 'ledger', 'help' }
-      }
+      require('ibl').setup({
+        indent = { char = '|' },
+        exclude = { buftypes = { 'terminal' }, filetypes = { 'ledger', 'help' } }
+      })
     end
   },
   {

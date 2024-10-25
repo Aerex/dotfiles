@@ -1,19 +1,26 @@
 local M = {}
 M.setup = function()
   local hl_cfg = {
-    LineNr = { fg = "#7a966c" },
-    Label = { fg = "#cec6cc" },
-    Comment = { gui = "bold", fg = "#4C566A" },
-    TSComment = { gui = "bold", fg = "#4C566A" },
-    Folded = { bg = "#4c566a", fg = "black" },
-    GitGutterAdd = { fg = "#4ca64c " },
-    FidgetTask = { bg = "None" },
-    SpellBad = { fg = "#FF0000" },
-
+    rainbowcol17      = { fg = "#D8DEE9" },
+    LineNr            = { fg = "None" },
+    Label             = { fg = "#cec6cc" },
+    Comment           = { gui = "bold", fg = "#4C566A" },
+    TSComment         = { gui = "bold", fg = "#4C566A" },
+    Folded            = { fg = "#D8DEE9" },
+    GitGutterAdd      = { fg = "#4ca64c" },
+    FidgetTask        = { bg = "None" },
+    GitSignAdd        = { fg = "#4ca64c" },
+    DiffAdd           = { fg = "#4ca64c", bg = "None" },
+    DiffAdded         = { fg = "#4ca64c", bg = "None" },
+    DiffRemoved       = { fg = "#BF616A", bg = "None" },
+    SpellBad          = { fg = "#FF0000" },
+    SignatureMarkText = { fg = "#FFA500" },
+    SignColumn        = { fg = "None" },
   }
 
 
   local ok, lcfg = pcall(require, 'nvim-local')
+  local custom_hl_config
   if ok and lcfg['get_hl_config'] then
     custom_hl_config = vim.tbl_deep_extend('force', hl_cfg, lcfg.get_hl_config())
   else

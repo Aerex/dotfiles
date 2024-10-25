@@ -1,4 +1,4 @@
-require {
+return {
   {
     'tpope/vim-fugitive',
     cmd = {
@@ -9,7 +9,7 @@ require {
   {
     'ruifm/gitlinker.nvim',
     config = function()
-      require('configs.git').setup_gitlinker()
+      require('plugins.configs.git').setup_gitlinker()
     end
   },
   {
@@ -58,7 +58,8 @@ require {
               }
             }
           })
-        end, }
+        end,
+      }
     },
     config = function() require('configs.git').setup_octo() end
   }

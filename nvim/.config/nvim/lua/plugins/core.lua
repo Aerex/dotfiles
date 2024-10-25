@@ -1,4 +1,4 @@
-require {
+return {
 
   { 'nathom/filetype.nvim' },
   { 'lewis6991/impatient.nvim' },
@@ -30,8 +30,14 @@ require {
   },
   {
     'gbprod/yanky.nvim',
+    opts = {
+      rocks = {
+        hererocks = true
+      }
+    },
+    build = 'luarocks install --local --check-lua-versions luv && luarocks install --check-lua-versions sqlite',
     config = function()
-      require'configs.core'.yanky()
+      require 'plugins.configs.core'.yanky()
     end
   },
   {

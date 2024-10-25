@@ -5,6 +5,7 @@
 --
 -- config options
 require('config.options')
+local autocmd = require('utils').autocmd
 vim.loader.enable()
 
 if vim.fn.executable('rg') then
@@ -21,48 +22,57 @@ end
 --buffers
 vim.g.seiya_auto_enable = 1
 vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and { 'guibg' } or { 'ctermbg' }
-vim.cmd('hi rainbowcol7 guifg=#D8DEE9')
+-- vim.cmd('hi rainbowcol7 guifg=#D8DEE9')
 --vim.cmd[[hi GitGutterAdd guifg=#4ca64c guibg=none]]
-vim.cmd [[hi GitSignAdd guifg=#4ca64c guibg=none]]
-vim.cmd [[hi DiffAdd guifg=#4ca64c guibg=none]]
-vim.cmd [[hi SpellBad guibg=#FF0000]]
-vim.cmd [[hi DiffAdded guifg=#4ca64c guibg=none]]
-vim.cmd [[hi DiffRemoved guifg=#BF616A guibg=none]]
-vim.cmd [[hi Folded guifg=#D8DEE9]]
-vim.cmd [[hi SignatureMarkText guifg=#ffa500]]
-vim.cmd [[hi LineNr guifg=None]]
-vim.cmd [[hi SignColumn guifg=None]]
+-- vim.cmd [[hi GitSignAdd guifg=#4ca64c guibg=none]]
+-- vim.cmd [[hi DiffAdd guifg=#4ca64c guibg=none]]
+-- vim.cmd [[hi SpellBad guibg=#FF0000]]
+-- vim.cmd [[hi DiffAdded guifg=#4ca64c guibg=none]]
+-- vim.cmd [[hi DiffRemoved guifg=#BF616A guibg=none]]
+-- vim.cmd [[hi Folded guifg=#D8DEE9]]
+-- vim.cmd [[hi SignatureMarkText guifg=#ffa500]]
+-- vim.cmd [[hi LineNr guifg=None]]
+-- vim.cmd [[hi SignColumn guifg=None]]
 
-vim.cmd('autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"')
+-- vim.cmd('autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"')
+autocmd({'VimEnter'}, {
+  pattern = { '*' },
+  callback = function()
+    vim.fn.execute('!kill -s SIGWINCH $PPID','silent')
+  end
+})
 
 -- misc
 vim.g.vifm_embed_split = true
 vim.g.notes_dir = '~/Documents/repos/.private/notes'
 vim.g.surround_mappings_style = 'surround'
-vim.g.miniyank_filename = vim.fn.stdpath('cache') .. '/.miniyank.mpack'
 
--- Remove trailing spaces after saving for certain file types
-vim.api.nvim_exec([[autocmd BufWritePre *.php,*.lua,*.md,*.go %s/\s\+$//e ]], '')
 -- Enable spell on markdown and vimwiki filetypes
-vim.api.nvim_exec([[autocmd BufEnter * if matchstr(&filetype, '\(markdown\)\|\(vimwiki\)') | set spell | endif ]], '')
+autocmd({'BufEnter'}, {
+  pattern = { '*' },
+  callback = function()
+    if vim.tbl_contains({'markdown', 'vimwiki'}, vim.o.filetype) then
+      vim.cmd[[set spell]]
+    end
+  end
+})
+-- vim.api.nvim_exec([[autocmd BufEnter * if matchstr(&filetype, '\(markdown\)\|\(vimwiki\)') | set spell | endif ]], '')
 
 -- load plugins
 require('plugins')
-require('mappings')
-require('colors').setup()
 
 vim.api.nvim_create_autocmd('VimEnter', {
   pattern = { '*' },
   command = 'syntax on',
 })
 
-local ok, _ = pcall(require, 'nvim-local')
+local ok, nlocal = pcall(require, 'nvim-local')
 if ok then
   -- NOTE(me): Find a better event to fire this function
   vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
     pattern = { '*.go', '*.feature', '*.ts', '*.java' },
     callback = function()
-      set_local_config()
+      nlocal.setup()
     end
   })
 end

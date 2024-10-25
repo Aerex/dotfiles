@@ -1,16 +1,16 @@
-require
+return
 {
 
   {
     'folke/which-key.nvim',
     config = function()
-      require 'configs.ui'.wk.setup()
+      require 'plugins.configs.ui'.wk.setup()
     end
   },
   {
     'glepnir/galaxyline.nvim',
     dependencies = { 'kyazdani42/nvim-web-devicons' },
-    config = function() require('configs.ui').galaxyline() end
+    config = function() require('plugins.configs.ui').galaxyline() end
   },
   {
     'AndrewRadev/bufferize.vim',
@@ -20,9 +20,7 @@ require
     'kevinhwang91/nvim-bqf',
     dependencies = {
       'junegunn/fzf',
-      build = function()
-        vim.fn['fzf#install']()
-      end
+      build = ':call fzf#install()'
     },
     ft = 'qf',
     cmd = 'QuickFixCmdPost',

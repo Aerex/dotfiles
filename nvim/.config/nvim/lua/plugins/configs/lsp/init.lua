@@ -1,11 +1,9 @@
--- TODO: Need to figure out why requiring modules creates a loop
---local utils = require('nvim-lsp').utils
 local lsp_status = require('lsp-status')
 local lsp_signature = require('lsp_signature')
-local lsp_document_symbol_callback = require('nvim-fzf.lsp').document_symbols
-local lsp_references_callback = require('nvim-fzf.lsp').references
-local lsp_implementation_callback = require('nvim-fzf.lsp').implementation
-local utils = require('nvim-lsp.utils')
+local lsp_document_symbol_callback = require('plugins.configs.pickers.fzf.lsp').document_symbols
+local lsp_references_callback = require('plugins.configs.pickers.fzf.lsp').references
+local lsp_implementation_callback = require('plugins.configs.pickers.fzf.lsp').implementation
+local utils = require('plugins.configs.lsp.utils')
 --
 -- configure lsp-status
 lsp_status.config({
@@ -64,69 +62,70 @@ local on_attach = function(client, bufnr)
   end
   local ok_goto, _ = pcall(require, 'goto-preview')
   if ok_goto then
-    require'goto-preview'.setup{
-      width = 120; -- Width of the floating window
-      height = 15; -- Height of the floating window
-      border = {'↖', '─' ,'┐', '│', '┘', '─', '└', '│'}; -- Border characters of the floating window
-      default_mappings = false; -- Bind default mappings
-      debug = false; -- Print debug information
-      opacity = 10; -- 0-100 opacity level of the floating window where 100 is fully transparent.
-      resizing_mappings = false; -- Binds arrow keys to resizing the floating window.
+    require 'goto-preview'.setup {
+      width = 120, -- Width of the floating window
+      height = 15, -- Height of the floating window
+      border = { '↖', '─', '┐', '│', '┘', '─', '└', '│' }, -- Border characters of the floating window
+      default_mappings = false, -- Bind default mappings
+      debug = false, -- Print debug information
+      opacity = 10, -- 0-100 opacity level of the floating window where 100 is fully transparent.
+      resizing_mappings = false, -- Binds arrow keys to resizing the floating window.
       post_open_hook = function(_, w)
         -- close preview window
-          vim.keymap.set('n', 'qq', function() vim.api.nvim_win_close(w, true) end)
+        vim.keymap.set('n', 'qq', function() vim.api.nvim_win_close(w, true) end)
       end,
       references = { -- Configure the telescope UI for slowing the references cycling window.
-        telescope = require'telescope.themes'.get_dropdown({ hide_preview = false })
-      };
+        telescope = require 'telescope.themes'.get_dropdown({ hide_preview = false })
+      },
       -- These two configs can also be passed down to the goto-preview definition and implementation calls for one off "peak" functionality.
-      focus_on_open = true; -- Focus the floating window when opening it.
-      dismiss_on_move = false; -- Dismiss the floating window when moving the cursor.
-      force_close = true, -- passed into vim.api.nvim_win_close's second argument. See :h nvim_win_close
-      bufhidden = 'wipe', -- the bufhidden option to set on the floating window. See :h bufhidden
+      focus_on_open = true,    -- Focus the floating window when opening it.
+      dismiss_on_move = false, -- Dismiss the floating window when moving the cursor.
+      force_close = true,      -- passed into vim.api.nvim_win_close's second argument. See :h nvim_win_close
+      bufhidden = 'wipe',      -- the bufhidden option to set on the floating window. See :h bufhidden
     }
-   local wk_ok, wk = pcall(require, 'which-key')
+    local wk_ok, wk = pcall(require, 'which-key')
     if wk_ok then
       wk.register({
         g = {
           name = 'Preview',
-          d = { function() require'goto-preview'.goto_preview_definition() end, 'Preview Definition' },
+          d = { function() require 'goto-preview'.goto_preview_definition() end, 'Preview Definition' },
         },
       }, { prefix = '\\', silent = true, buffer = buf
       })
     else
-      vim.keymap.set('n', '\\gpd',  function() require'goto-preview'.goto_preview_definition() end,
-        { silent = true, buffer = buf})
+      vim.keymap.set('n', '\\gpd', function() require 'goto-preview'.goto_preview_definition() end,
+        { silent = true, buffer = buf })
     end
-
   end
 
 
- -- Attach LSP Signature
- lsp_signature.on_attach({
-    bind = true, -- This is mandatory, otherwise border config won't get registered.
-    doc_lines = 10, -- only show one line of comment set to 0 if you do not want API comments be shown
+  -- Attach LSP Signature
+  lsp_signature.on_attach({
+    bind = true,        -- This is mandatory, otherwise border config won't get registered.
+    doc_lines = 10,     -- only show one line of comment set to 0 if you do not want API comments be shown
     hint_enable = true, -- virtual hint enable
     hint_prefix = ' ',
     hint_scheme = 'String',
     handler_opts = {
-      border = 'rounded'   -- double, single, shadow, none
+      border = 'rounded' -- double, single, shadow, none
     },
     auto_close_after = 10,
-    decorator = {'`', '`'}  -- or decorator = {'***', '***'}  decorator = {'**', '**'} see markdown help
+    decorator = { '`', '`' } -- or decorator = {'***', '***'}  decorator = {'**', '**'} see markdown help
   })
 
--- Set diagnostic symbols
-vim.fn.sign_define('DiagnosticSignError', {text='✖', texthl='DiagnosticSignError'})
-vim.fn.sign_define('DiagnosticSignWarn', {text='⚠', texthl='DiagnosticSignWarn'})
-vim.fn.sign_define('DiagnosticSignInfo', {text='כֿ',texthl='DiagnosticSignInfo'})
-vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint'})
+  -- Set diagnostic symbols
+  vim.fn.sign_define('DiagnosticSignError', { text = '✖', texthl = 'DiagnosticSignError' })
+  vim.fn.sign_define('DiagnosticSignWarn', { text = '⚠', texthl = 'DiagnosticSignWarn' })
+  vim.fn.sign_define('DiagnosticSignInfo', { text = 'כֿ', texthl = 'DiagnosticSignInfo' })
+  vim.fn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
 
   -- LSP keymap
- local opts = { noremap=true, silent=true }
-  vim.keymap.set('n', 'gd',  function() vim.lsp.buf.declaration() end, { silent = true, buffer = bufnr })
+  local opts = { noremap = true, silent = true }
+  vim.keymap.set('n', 'gd', function() vim.lsp.buf.declaration() end, { silent = true, buffer = bufnr })
   vim.keymap.set('n', '<c-]>', function() vim.lsp.buf.definition() end, { silent = true, buffer = bufnr })
-  vim.keymap.set('n', '<C-w>]', function() vim.cmd('vsplit'); vim.lsp.buf.definition() end, { silent = true, buffer = bufnr })
+  vim.keymap.set('n', '<C-w>]', function()
+    vim.cmd('vsplit'); vim.lsp.buf.definition()
+  end, { silent = true, buffer = bufnr })
   --keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
   keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
   keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
@@ -148,15 +147,15 @@ vim.fn.sign_define('DiagnosticSignHint', {text='', texthl='DiagnosticSignHint
   keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   keymap('n', '<leader>di', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  vim.keymap.set('n', '<leader>,d', function() vim.diagnostic.open_float() end, { silent= true, buffer = bufnr })
+  vim.keymap.set('n', '<leader>,d', function() vim.diagnostic.open_float() end, { silent = true, buffer = bufnr })
   keymap('n', '<leader>xD', '<cmd>lua vim.diagnostic.disable()<CR>', opts)
   keymap('n', '<leader>lr', '<cmd>LspRestart<CR>', opts)
   keymap('n', '<leader>ll', '<cmd>LspLog<CR>', opts)
 
   local ok_d, _ = pcall(require, 'jdtls')
   if ok_d and vim.bo.filetype == 'java' then
-    require'jdtls.setup'.add_commands()
-    require'jdtls'.setup_dap()
+    require 'jdtls.setup'.add_commands()
+    require 'jdtls'.setup_dap()
   end
 end
 
@@ -165,7 +164,7 @@ local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
-require'lspconfig'.sumneko_lua.setup {
+require 'lspconfig'.sumneko_lua.setup {
   settings = {
     Lua = {
       runtime = {
@@ -176,7 +175,7 @@ require'lspconfig'.sumneko_lua.setup {
       },
       diagnostics = {
         -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
+        globals = { 'vim' },
       },
       workspace = {
         -- Make the server aware of Neovim runtime files
@@ -221,12 +220,12 @@ require'lspconfig'.sumneko_lua.setup {
 --    }
 --  }
 --}
-require'lspconfig'.pylsp.setup{
-  on_attach=on_attach,
+require 'lspconfig'.pylsp.setup {
+  on_attach = on_attach,
   autostart = true,
   capabilities = capabilities,
   root_dir = function(fname)
-    local util = require'lspconfig.util'
+    local util = require 'lspconfig.util'
     local root_files = {
       'pyproject.toml',
       'setup.py',
@@ -240,47 +239,47 @@ require'lspconfig'.pylsp.setup{
   settings = {
     pylsp = {
       plugins = {
-        pycodestyle =  {enabled = false},
-        pylint =  {enabled = false},
-        black = {enabled = true},
-        pyflakes = {enabled = false}
+        pycodestyle = { enabled = false },
+        pylint = { enabled = false },
+        black = { enabled = true },
+        pyflakes = { enabled = false }
       }
     }
   }
 }
 
-require'lspconfig'.gopls.setup{
-  on_attach=on_attach,
+require 'lspconfig'.gopls.setup {
+  on_attach = on_attach,
   capabilities = capabilities,
   settings = {
     gopls = {
-        usePlaceholders = false
-      },
-    }
+      usePlaceholders = false
+    },
+  }
 }
 
 local gopls_grp = vim.api.nvim_create_augroup('gopls', { clear = false })
 vim.api.nvim_create_autocmd('BufWritePre', {
-  pattern = {'*.go'},
+  pattern = { '*.go' },
   group = gopls_grp,
   callback = function()
     vim.lsp.buf.formatting()
-    require'nvim-lsp.utils'.goimports(2000)
+    require 'nvim-lsp.utils'.goimports(2000)
   end
 })
 
-require'lspconfig'.vimls.setup {
-  on_attach=on_attach,
+require 'lspconfig'.vimls.setup {
+  on_attach = on_attach,
   capabilities = capabilities
 }
 
-require'lspconfig'.intelephense.setup {
-  on_attach=on_attach,
+require 'lspconfig'.intelephense.setup {
+  on_attach = on_attach,
   capabilities = capabilities
 }
 
-require'lspconfig'.bashls.setup {
-  on_attach=on_attach,
+require 'lspconfig'.bashls.setup {
+  on_attach = on_attach,
   capabilities = capabilities
 }
 
@@ -292,30 +291,30 @@ require'lspconfig'.bashls.setup {
 --  capabilities = capabilities
 --}
 
-require'lspconfig'.tsserver.setup{
+require 'lspconfig'.tsserver.setup {
   on_attach = on_attach,
   capabilities = capabilities
 }
 
-require'lspconfig'.jsonls.setup {
+require 'lspconfig'.jsonls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
-    commands = {
-      Format = {
-        function()
-          vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
-        end
-      }
+  commands = {
+    Format = {
+      function()
+        vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line("$"), 0 })
+      end
     }
+  }
 }
 
-require'lspconfig'.bashls.setup {
+require 'lspconfig'.bashls.setup {
   on_attach = on_attach,
   capabilities = capabilities
 }
 
 if vim.fn.executable('solargraph') then
-  require'lspconfig'.solargraph.setup {
+  require 'lspconfig'.solargraph.setup {
     on_attach = on_attach,
     capabilities = capabilities
   }
@@ -323,7 +322,7 @@ end
 
 local ok_j, _ = pcall(require, 'jdtls')
 if ok_j then
-  local project_name = require'lspconfig.util'.root_pattern({'.project', 'pom.xml','java.security'})(vim.fn.getcwd())
+  local project_name = require 'lspconfig.util'.root_pattern({ '.project', 'pom.xml', 'java.security' })(vim.fn.getcwd())
   if project_name then
     -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
     local config = {
@@ -340,64 +339,65 @@ if ok_j then
         '-Declipse.product=org.eclipse.jdt.ls.core.product',
         '-Dlog.protocol=true',
         '-Dlog.level=ALL',
-      '-Xms1g',
-      '--add-modules=ALL-SYSTEM',
-      '--add-opens', 'java.base/java.util=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+        '-Xms1g',
+        '--add-modules=ALL-SYSTEM',
+        '--add-opens', 'java.base/java.util=ALL-UNNAMED',
+        '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
 
-    -- 💀
-    '-jar', '/home/noamfo/.local/share/jdt-language-server/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
-
-
-    -- 💀
-    '-configuration', '/home/noamfo/.local/share/jdt-language-server/config_linux',
-                    -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^
-                    -- Must point to the                      Change to one of `linux`, `win` or `mac`
-                    -- eclipse.jdt.ls installation            Depending on your system.
+        -- 💀
+        '-jar',
+        '/home/noamfo/.local/share/jdt-language-server/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
 
 
-    -- 💀
-    -- See `data directory configuration` section in the README
-    '-data', '/home/noamfo/Documents/eclipse/' .. project_name,
-  },
+        -- 💀
+        '-configuration', '/home/noamfo/.local/share/jdt-language-server/config_linux',
+        -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^
+        -- Must point to the                      Change to one of `linux`, `win` or `mac`
+        -- eclipse.jdt.ls installation            Depending on your system.
 
-  -- 💀
-  -- This is the default if not provided, you can remove it. Or adjust as needed.
-  -- One dedicated LSP server & client will be started per unique root_dir
-  root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'}),
 
-  -- Here you can configure eclipse.jdt.ls specific settings
-  -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
-  -- for a list of options
-  settings = {
-    java = {
+        -- 💀
+        -- See `data directory configuration` section in the README
+        '-data', '/home/noamfo/Documents/eclipse/' .. project_name,
+      },
+
+      -- 💀
+      -- This is the default if not provided, you can remove it. Or adjust as needed.
+      -- One dedicated LSP server & client will be started per unique root_dir
+      root_dir = require('jdtls.setup').find_root({ '.git', 'mvnw', 'gradlew' }),
+
+      -- Here you can configure eclipse.jdt.ls specific settings
+      -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
+      -- for a list of options
+      settings = {
+        java = {
+        }
+      },
+
+      -- Language server `initializationOptions`
+      -- You need to extend the `bundles` with paths to jar files
+      -- if you want to use additional eclipse.jdt.ls plugins.
+      --
+      -- See https://github.com/mfussenegger/nvim-jdtls#java-debug-installation
+      --
+      -- If you don't plan on using the debugger or other eclipse.jdt.ls plugins you can remove this
+      init_options = {
+        bundles = {}
+      },
+      on_attach = on_attach
     }
-  },
+    -- This starts a new client & server,
+    -- or attaches to an existing client & server depending on the `root_dir`.
 
-  -- Language server `initializationOptions`
-  -- You need to extend the `bundles` with paths to jar files
-  -- if you want to use additional eclipse.jdt.ls plugins.
-  --
-  -- See https://github.com/mfussenegger/nvim-jdtls#java-debug-installation
-  --
-  -- If you don't plan on using the debugger or other eclipse.jdt.ls plugins you can remove this
-  init_options = {
-    bundles = {}
-  },
-  on_attach = on_attach
-}
--- This starts a new client & server,
--- or attaches to an existing client & server depending on the `root_dir`.
-
-local jdtls_grp = vim.api.nvim_create_augroup('jdtls', {})
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'java',
-  group = jdtls_grp,
-  callback = function()
-    require('jdtls').start_or_attach(config)
+    local jdtls_grp = vim.api.nvim_create_augroup('jdtls', {})
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'java',
+      group = jdtls_grp,
+      callback = function()
+        require('jdtls').start_or_attach(config)
+      end
+    })
   end
-})
-end
 end
 
 require('lspkind').init({
@@ -409,18 +409,18 @@ require('lspkind').init({
 local ok_null, null_ls = pcall(require, 'null-ls')
 if ok_null then
   null_ls.setup({
-      debug = true,
-      log = {
-        enable = true,
-        level = "debug",
-        use_console = "async",
-      },
-      sources = {
-          null_ls.builtins.diagnostics.eslint,
-          null_ls.builtins.code_actions.eslint, -- eslint or eslint_d
-          null_ls.builtins.formatting.eslint_d -- prettier, eslint, eslint_d, or prettierd
-      },
-      on_attach = on_attach
+    debug = true,
+    log = {
+      enable = true,
+      level = "debug",
+      use_console = "async",
+    },
+    sources = {
+      null_ls.builtins.diagnostics.eslint,
+      null_ls.builtins.code_actions.eslint, -- eslint or eslint_d
+      null_ls.builtins.formatting.eslint_d  -- prettier, eslint, eslint_d, or prettierd
+    },
+    on_attach = on_attach
   })
 end
 -- Register the progress handle

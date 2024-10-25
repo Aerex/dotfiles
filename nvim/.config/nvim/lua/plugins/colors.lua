@@ -7,7 +7,7 @@ return {
   {
     'rmehri01/onenord.nvim',
     config = function()
-      require('config.colors').setup()
+      require('plugins.configs.colors').setup()
     end
   },
   'miyakogi/seiya.vim', -- enable transparent background
