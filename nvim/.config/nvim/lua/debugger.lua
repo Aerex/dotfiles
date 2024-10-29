@@ -9,7 +9,7 @@ local dapui = require('dapui')
 M.hover_var = function()
   local status = dap.status()
   if status then
-    local w = require'dap.ui.widgets'
+    local w = require 'dap.ui.widgets'
     w.hover()
   end
 end
@@ -74,8 +74,8 @@ dap.adapters.go = function(callback, _)
   local pid_or_err
   local port = 38697
   local opts = {
-    stdio = {nil, stdout},
-    args = {"dap", "-l", "127.0.0.1:" .. port},
+    stdio = { nil, stdout },
+    args = { 'dap', '-l', '127.0.0.1:' .. port },
     detached = true
   }
   handle, pid_or_err = vim.loop.spawn("dlv", opts, function(code)
@@ -97,92 +97,81 @@ dap.adapters.go = function(callback, _)
   -- Wait for delve to start
   vim.defer_fn(
     function()
-      callback({type = "server", host = "127.0.0.1", port = port})
+      callback({ type = 'server', host = '127.0.0.1', port = port })
     end,
     100)
 end
 -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
 dap.configurations.go = {
   {
-    type = "go",
-    name = "Debug",
-    request = "launch",
-    program = "./${relativeFileDirname}",
-    args= { "card", "list", "-q", "deck:Vocabulary vaci" },
-    mode = "debug"
-  },
-  {
-    type = "go",
-    name = "Debug with args",
-    request = "launch",
-    program = "${file}",
-    mode = "debug",
+    type = 'go',
+    name = 'Debug with args',
+    request = 'launch',
+    program = function()
+      return require 'dap.utils'.pick_file({
+        executables = false,
+        path = utils.get_workspace(),
+        filter = function(filepath)
+          return vim.endswith(filepath, '.go')
+        end
+      })
+    end,
+    mode = 'debug',
     args = function()
-      resp = vim.fn.input("Enter args separated by space: ")
-      args = vim.fn.split(resp, " ")
-      print(vim.inspect(args))
+      resp = vim.fn.input('Enter args separated by space: ')
+      args = vim.fn.split(resp, ' ')
       return args
     end
   },
   {
-    type = "go",
-    name = "Debug test", -- configuration for debugging test files
-    request = "launch",
-    mode = "test",
-    program = "${file}"
+    type = 'go',
+    name = 'Debug test', -- configuration for debugging test files
+    request = 'launch',
+    mode = 'test',
+    program = '${file}'
   },
   -- works with go.mod packages and sub packages
   {
-    type = "go",
-    name = "Debug test (go.mod)",
-    request = "launch",
-    mode = "test",
-    program = "./${relativeFileDirname}"
-  }, {
-      type= "go",
-      name= "anki-cli card list",
-      request= "launch",
-      program = function()
-        local w = vim.lsp.buf.list_workspace_folders()[1]
-        return w .. "/cmd/anki/main.go"
-      end,
-      args= { "card", "list", "-q", "too already" },
-      mode= "debug"
-  }
+    type = 'go',
+    name = 'Debug test (go.mod)',
+    request = 'launch',
+    mode = 'test',
+    program = './${relativeFileDirname}'
+  } 
 }
 dap.repl.commands =
-  vim.tbl_extend(
-    "force",
-    dap.repl.commands,
-    {
-      continue = {".continue", "c"},
-      next_ = {".next", ".n"},
-      into = {".into", "s"},
-      out = {".out", "r"},
-      scopes = {".scopes", "a"},
-      threads = {".threads", "t"},
-      frames = {".frames", "f"},
-      exit = {"exit", ".exit"},
-      up = {".up", "j"},
-      down = {".down", "k"},
-      goto_ = {".goto", "g"},
-      into_targets = {".into_targets", "t"},
-      capabilities = {".capabilities", ".ca"},
-      custom_commands = {
-        [".echo"] = function(text)
-          dap.repl.append(text)
-        end
+    vim.tbl_extend(
+      'force',
+      dap.repl.commands,
+      {
+        continue = { '.continue', 'c' },
+        next_ = { '.next', '.n' },
+        into = { '.into', 's' },
+        out = { '.out', 'r' },
+        scopes = { '.scopes', 'a' },
+        threads = { '.threads', 't' },
+        frames = { '.frames', 'f' },
+        exit = { 'exit', '.exit' },
+        up = { '.up', 'j' },
+        down = { '.down', 'k' },
+        goto_ = { '.goto', 'g' },
+        into_targets = { '.into_targets', 't' },
+        capabilities = { '.capabilities', '.ca' },
+        custom_commands = {
+          ['.echo'] = function(text)
+            dap.repl.append(text)
+          end
+        }
       }
-    }
-  )
+    )
 vim.g.dap_virtual_text = true -- 'all frames'
-vim.fn.sign_define("DapBreakpoint", {text = "●", texthl = "", linehl = "", numhl = ""})
-vim.fn.sign_define('DapStopped', {text='▶', texthl='', linehl='NvimDapStopped', numhl=''})
-vim.fn.sign_define('DapBreakpointCondition', {text='', texthl='ErrorMsg', linehl='', numhl=''})
-vim.fn.sign_define('DapBreakpointRejected',  {text='', texthl='WarningMsg', linehl='', numhl=''})
-vim.fn.sign_define('DapLogPoint',            {text='', texthl='ErrorMsg', linehl='', numhl=''})
+vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapStopped', { text = '▶', texthl = '', linehl = 'NvimDapStopped', numhl = '' })
+vim.fn.sign_define('DapBreakpointCondition', { text = '', texthl = 'ErrorMsg', linehl = '', numhl = '' })
+vim.fn.sign_define('DapBreakpointRejected', { text = '', texthl = 'WarningMsg', linehl = '', numhl = '' })
+vim.fn.sign_define('DapLogPoint', { text = '', texthl = 'ErrorMsg', linehl = '', numhl = '' })
 dapui.setup({
-  icons = { expanded = "▾", collapsed = "▸" },
+  icons = { expanded = '▾', collapsed = '▸' },
   mappings = {
     -- Use a table to apply multiple mappings
     expand = { '<CR>', '<2-LeftMouse>' },
@@ -212,14 +201,14 @@ dapui.setup({
   },
   floating = {
     max_height = nil, -- These can be integers or a float between 0 and 1.
-    max_width = nil, -- Floats will be treated as percentage of your screen.
+    max_width = nil,  -- Floats will be treated as percentage of your screen.
   },
   windows = { indent = 1 },
 })
 
 -- Toggle dap ui when debugger starts and exits
 dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end
-dap.listeners.before.event_exited['dapui_config'] = function()  dapui.close()end
+dap.listeners.before.event_exited['dapui_config'] = function() dapui.close() end
 
 dap.listeners.after.event_terminated['me'] = M.restore_keymaps
 dap.listeners.after.event_initialized['me'] = M.debugger_keymaps
@@ -234,20 +223,20 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 
-M.toggle_dap_ele = function(ele, type)
+M.toggle_dap_ele    = function(ele, type)
   local widgets = require('dap.ui.widgets')
   local eles = {
-    frames =  widgets.frames,
+    frames = widgets.frames,
     scopes = widgets.scopes
   }
   if ele then
-    if type == "float" then
+    if type == 'float' then
       local wind = widgets.centered_float(eles[ele])
     end
   end
 end
 
-M.start_or_continue  = function()
+M.start_or_continue = function()
   if not vim.g.loaded_vscode_dap then
     vim.g.loaded_vscode_dap = 1
     local workspace = nil
@@ -262,26 +251,26 @@ end
 
 M.run_with_args = function()
   local args = vim.fn.input('Enter args: ')
-  if vim.fn.split(args, ' ') > 0 then
+  if #vim.fn.split(args, ' ') > 0 then
     args = vim.split(vim.fn.expand(args), '\n')
     local approval = vim.fn.confirm(
-      "Will try to run:\n    " ..
-      vim.bo.filetype .. " " ..
-      vim.fn.expand('%') .. " " ..
-      args .. "\n\n" ..
-      "Do you approve? ",
-      "&Yes\n&No", 1
+      'Will try to run:\n    ' ..
+      vim.bo.filetype .. ' ' ..
+      vim.fn.expand('%') .. ' ' ..
+      args .. '\n\n' ..
+      'Do you approve? ',
+      '&Yes\n&No', 1
     )
     if approval == 1 then
       dap.run({
         type = vim.bo.filetype,
         request = 'launch',
         name = 'Launch file with custom arguments (adhoc)',
-        program = '${file}',
+        program = './${relativeFileDirname}',
         args = args,
       })
     end
-	end
+  end
 end
 
 return M
