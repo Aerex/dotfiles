@@ -108,7 +108,7 @@ if ok then
 
   local ok_git, cmp_git = pcall(require, 'cmp_git')
   if ok_git then
-    local setup = { filetypes = { 'gitcommit', 'octo', 'NeogitCommitMessage' } }
+    local setup = { filetypes = { 'gitcommit', 'octo', 'NeogitCommitMessage', 'vimwiki' } }
     local cfg = get_local_cfgs(setup, 'cmp_git')
     cmp_git.setup(cfg)
   end
