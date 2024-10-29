@@ -61,6 +61,19 @@ local on_attach = function(client, bufnr)
     vim.lsp.diagnostic.on_diagnostic, diagnostic_opts
   )
 
+  local goimport_gp = vim.api.nvim_create_augroup("goimport", {
+    clear = true
+  })
+
+  vim.api.nvim_create_autocmd('BufWritePre', {
+    pattern = '*.go',
+    group = goimport_gp,
+    callback = function()
+      vim.lsp.buf.format()
+      utils.goimports(1000)
+    end
+  })
+
   local ok_tsu, ts_utils = pcall(require, 'nvim-lsp-ts-utils')
   if ok_tsu then
     ts_utils.setup({})

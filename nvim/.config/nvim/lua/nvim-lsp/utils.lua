@@ -46,7 +46,7 @@ end
 
 M.goimports = function(timeout_ms)
   -- Credits to https://github.com/neovim/neovim/blob/release-0.5/runtime/lua/vim/lsp/handlers.lua#L113
-  local context = {source = {organizeImports = true}}
+  local context = { source = { organizeImports = true } }
   vim.validate { context = { context, 't', true } }
 
   local params = vim.lsp.util.make_range_params()
@@ -57,10 +57,8 @@ M.goimports = function(timeout_ms)
   local result = vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params, timeout_ms)
   for _, res in pairs(result or {}) do
     for _, r in pairs(res.result or {}) do
-      if r.edit then
-        vim.lsp.util.apply_workspace_edit(r.edit, 'utf-8')
-      else
-        vim.lsp.buf.execute_command(r.command)
+      if r.kind == "source.organizeImports"  and r.edit then
+          vim.lsp.util.apply_workspace_edit(r.edit, 'utf-8')
       end
     end
   end
