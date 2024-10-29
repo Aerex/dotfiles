@@ -34,7 +34,7 @@ local noremaps = {
     ['<leader>xl']        = 'Trouble lsp toggle focus=false win.position=right',
     ['<leader>xtq']       = 'TodoQuickFix',
     ['<leader>xtl']       = 'TodoLocList',
-    ['<leader>xtx']       = 'TodoTrouble',
+    ['<leader>xtx']       = 'TodoTelescope',
     -- vifm
     ['<leader>fm']        = 'VsplitVifm',
     ['<leader>Fm']        = 'Vifm',
@@ -48,7 +48,7 @@ local noremaps = {
       require 'fzf-lua'.live_grep_native({
         cwd = utils.get_workspace(),
         rg_opts =
-        "-g !*.lock -g !*.sum -g !*i18n_resources.go"
+        '-g !*.lock -g !*.sum -g !*i18n_resources.go'
       })
     end,
     ['<leader>\\rg']      = function() require 'nvim-fzf.rg' () end,
