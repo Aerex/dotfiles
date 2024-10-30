@@ -1,7 +1,6 @@
 return {
   {
     'neovim/nvim-lspconfig',
-    dependencies = { 'jose-elias-alvarez/nvim-lsp-ts-utils' },
     config = function()
       require('plugins.configs.lsp')
     end
@@ -19,6 +18,13 @@ return {
   },
   {
     'nvim-lua/lsp-status.nvim'
+  },
+  {
+    'williamboman/mason.nvim',
+    dependencies = 'williamboman/mason-lspconfig.nvim',
+    config = function()
+      require 'mason'.setup(); require 'mason-lspconfig'.setup()
+    end
   },
   {
     'ray-x/lsp_signature.nvim'

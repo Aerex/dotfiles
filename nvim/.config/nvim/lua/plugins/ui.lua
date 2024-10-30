@@ -4,7 +4,7 @@ return
   {
     'folke/which-key.nvim',
     config = function()
-      require 'plugins.configs.ui'.wk.setup()
+      require 'plugins.configs.misc'.which_key.setup()
     end
   },
   {

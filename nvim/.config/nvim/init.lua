@@ -35,10 +35,10 @@ vim.g.seiya_target_groups = vim.fn.has('nvim') == 1 and { 'guibg' } or { 'ctermb
 -- vim.cmd [[hi SignColumn guifg=None]]
 
 -- vim.cmd('autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"')
-autocmd({'VimEnter'}, {
+autocmd({ 'VimEnter' }, {
   pattern = { '*' },
   callback = function()
-    vim.fn.execute('!kill -s SIGWINCH $PPID','silent')
+    vim.fn.execute('!kill -s SIGWINCH $PPID', 'silent')
   end
 })
 
@@ -48,18 +48,18 @@ vim.g.notes_dir = '~/Documents/repos/.private/notes'
 vim.g.surround_mappings_style = 'surround'
 
 -- Enable spell on markdown and vimwiki filetypes
-autocmd({'BufEnter'}, {
+autocmd({ 'BufEnter' }, {
   pattern = { '*' },
   callback = function()
-    if vim.tbl_contains({'markdown', 'vimwiki'}, vim.o.filetype) then
-      vim.cmd[[set spell]]
+    if vim.tbl_contains({ 'markdown', 'vimwiki' }, vim.o.filetype) then
+      vim.cmd [[set spell]]
     end
   end
 })
 -- vim.api.nvim_exec([[autocmd BufEnter * if matchstr(&filetype, '\(markdown\)\|\(vimwiki\)') | set spell | endif ]], '')
 
 -- load plugins
-require('plugins')
+require('lazy_plugins')
 
 vim.api.nvim_create_autocmd('VimEnter', {
   pattern = { '*' },
@@ -83,4 +83,4 @@ if ok_v then
   vim.notify = notify
 end
 
-vim.ui.select = require 'nvim-fzf.uiselect'
+vim.ui.select = require 'plugins.configs.pickers.fzf.uiselect'

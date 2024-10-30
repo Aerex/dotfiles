@@ -110,7 +110,7 @@ M.document_symbols = function()
   if ok_nav then
     require('navigator.symbols').document_symbols()
   else
-    require('nvim-fzf.lsp').document_symbols()
+    require('plugins.configs.lsp').document_symbols()
   end
 end
 

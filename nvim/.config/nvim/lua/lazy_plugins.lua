@@ -23,7 +23,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-return require('lazy').setup({
+require('lazy').setup({
   spec = {
     {
       import = 'plugins'
@@ -34,7 +34,7 @@ return require('lazy').setup({
   },
   change_detection = {
     enabled = true,
-    notify = true
+    notify = false
   },
   diff = {
     cmd = 'diffview.nvim'

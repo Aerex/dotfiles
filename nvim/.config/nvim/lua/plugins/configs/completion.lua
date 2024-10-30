@@ -4,7 +4,6 @@ local ultisnips = require('utils').ultisnips
 local ok, cmp = pcall(require, 'cmp')
 
 if ok then
-  vim.g.UltiSnipsExpandTrigger = nil
   vim.g.UltiSnipsRemoveSelectModeMappings = 0
   vim.g.UltiSnipsSnippetsDir = os.getenv('HOME') .. '/.config/nvim/UltiSnips/'
   vim.g.UltiSnipsEditSplit = 'vertical'
@@ -98,12 +97,12 @@ if ok then
       end,
     },
     sources = {
-      { name = 'nvim_lsp'},
-      { name = 'ultisnips'},
+      { name = 'nvim_lsp' },
+      { name = 'ultisnips' },
       { name = 'git' },
       --{ name = 'rg'},
-      { name = 'path'},
-      { name = 'dictionary', keyword_length = 2},
+      { name = 'path' },
+      { name = 'dictionary', keyword_length = 2 },
     },
   }
 

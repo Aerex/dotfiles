@@ -30,12 +30,9 @@ return {
   },
   {
     'gbprod/yanky.nvim',
-    opts = {
-      rocks = {
-        hererocks = true
-      }
+    dependencies = {
+      'kkharji/sqlite.lua'
     },
-    build = 'luarocks install --local --check-lua-versions luv && luarocks install --check-lua-versions sqlite',
     config = function()
       require 'plugins.configs.core'.yanky()
     end
