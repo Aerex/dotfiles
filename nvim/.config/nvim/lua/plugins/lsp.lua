@@ -36,15 +36,12 @@ return {
     'j-hui/fidget.nvim',
     config = function()
       require('fidget').setup({
-        window = {
-          relative = 'editor',
-          blend = 0,
-        },
-        sources = {
-          ['null-ls'] = {
-            ignore = true
-          },
-        },
+        notification = {
+          window = {
+            relative = 'editor',
+            winblend = 0,
+          }
+        }
       })
     end,
   },

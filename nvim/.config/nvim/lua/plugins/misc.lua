@@ -37,12 +37,9 @@ return {
   },
   {
     'iamcco/markdown-preview.nvim',
-    build = 'cd app && npm install',
-    cmd = { 'MarkdownPreview', 'MarkdownPreviewStop' },
+    build = 'cd app && rm app/yarn.lock && npm install',
+    cmd = { 'MarkdownPreview', 'MarkdownPreviewStop', 'MarkdownPreviewToggle' },
     ft = { 'markdown' },
-    config = function()
-      vim.p.mkdp_filetypes = { 'markdown', 'vimwiki' }
-    end
   },
   {
     'sunaku/vim-dasht',

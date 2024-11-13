@@ -30,7 +30,7 @@ require('lazy').setup({
     }
   },
   checker = {
-    enabled = true
+    enabled = false
   },
   change_detection = {
     enabled = true,
