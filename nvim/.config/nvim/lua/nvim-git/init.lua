@@ -217,8 +217,10 @@ M.setup_gitlinker = function()
   require 'gitlinker'.setup(cfg)
 end
 
+local curr_branch = function() return vim.fn.system('git rev-parse --abbrev-ref HEAD') end
+
 M.git_push_upstream = function()
-  local curr_branch = vim.fn.system('git rev-parse --abbrev-ref HEAD')
+  local current_branch = curr_branch()
   local remotes = vim.fn.systemlist('git remote')
   local remote = 'origin'
   if #remotes > 0 then
@@ -230,7 +232,19 @@ M.git_push_upstream = function()
     local remote_choice = remote_choices[idx]
     remote = string.gsub(remote_choice, '%d. ', '')
   end
-  vim.fn.system(string.format('git push --set-upstream %s %s', remote, curr_branch))
+  vim.fn.system(string.format('git push --set-upstream %s %s', remote, current_branch))
+end
+
+M.force_push = function()
+  local current_branch = curr_branch()
+  local abrv_branch = current_branch
+  if #current_branch > 17 then
+    abrv_branch = string.sub(current_branch, 1, 16) .. '...' 
+  end
+  local choice = vim.fn.confirm(string.format('Are you sure you want to force push (branch: %s)', abrv_branch), "Yes\n&No\n&Cancel")
+  if choice == 1 then
+    vim.cmd[[Git push --force]]
+  end
 end
 
 M.setup_gh = function()
