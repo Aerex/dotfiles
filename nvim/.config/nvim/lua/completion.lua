@@ -32,6 +32,10 @@ if ok then
       completeopt = 'menu,menuone,noinsert'
     },
     preselect = cmp.PreselectMode.None,
+    enabled = function()
+      return vim.api.nvim_buf_get_option(0, 'buftype') ~= 'prompt'
+      or require('cmp_dap').is_dap_buffer()
+    end,
     snippet = {
       expand = function(args)
         vim.fn['UltiSnips#Anon'](args.body)
@@ -76,13 +80,18 @@ if ok then
       end, { 'i', 's' }),
     },
     formatting = {
-      format = function(entry, vim_item)
-        -- load lspkind icons
-        vim_item.kind = string.format(
-          '%s %s',
-          require('nvim-lsp.utils').symbol_map[vim_item.kind],
-          vim_item.kind
-        )
+      format = require'lspkind'.cmp_format({
+        mode = 'symbol', -- show only symbol annotations
+        preset = 'codicons',
+        maxwidth = {
+          -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+          -- can also be a function to dynamically calculate max width such as
+          -- menu = function() return math.floor(0.45 * vim.o.columns) end,
+          menu = 50, -- leading text (labelDetails)
+          abbr = 50, -- actual suggestion item
+        },
+        ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+        show_labelDetails = true, -- show labelDetails in menu. Disabled by default
 
         vim_item.menu = ({
           nvim_lsp = '[LSP]',
@@ -100,6 +109,7 @@ if ok then
     sources = {
       { name = 'nvim_lsp' },
       { name = 'ultisnips' },
+      { name = 'nvim_lsp' },
       { name = 'git' },
       { name = 'path' },
       { name = 'dictionary', keyword_length = 2 },
@@ -132,6 +142,12 @@ if ok then
     sources = {
       { name = 'buffer', option = { keyword_pattern = [=[[^[:blank:]].*]=] } }
     }
+  })
+
+  cmp.setup.filetype({'dap-repl', 'dapui_watches', 'dapui_hover'}, {
+    sources = {
+      { name = 'dap' },
+    },
   })
 
   -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
