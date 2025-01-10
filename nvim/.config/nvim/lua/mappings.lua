@@ -65,6 +65,7 @@ local noremaps = {
     ['<leader>gb']        = 'Git blame',
     ['<leader>gw']        = 'Gwrite',
     ['<leader>gp']        = 'Git push',
+    ['<leader>gP']        =  function() require'nvim-git'.force_push() end,
     ['<leader>gup']       = function() require 'nvim-git'.git_push_upstream() end,
     ['<leader>gc']        = 'Neogit commit',
     ['<leader>gz']        = 'lua require\'terminals\'.lazygit_toggle()',
