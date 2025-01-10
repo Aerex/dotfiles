@@ -14,7 +14,7 @@ alias la='ls -a'
 alias lal='ls -la'
 alias lt='ls --tree'
 alias wconf="nvim ~/.wuzz/config.toml"
-alias wttr="curl wttr.in?0"
+alias wttr="curl wttr.in\?0"
 alias speedtest="export PYTHONHTTPSVERIFY=0; speedtest-cli"
 alias uuid="python3 -c \"import uuid; print(uuid.uuid4())\" | copy"
 alias mail="neomutt -d5"

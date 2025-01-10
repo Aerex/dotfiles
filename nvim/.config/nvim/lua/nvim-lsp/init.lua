@@ -233,6 +233,11 @@ require 'lspconfig'.vimls.setup {
   capabilities = capabilities
 }
 
+require 'lspconfig'.ansiblels.setup {
+  on_attach = on_attach,
+  capabilities = capabilities
+}
+
 require 'lspconfig'.intelephense.setup {
   on_attach = on_attach,
   capabilities = capabilities
@@ -591,6 +596,10 @@ if ok_nav then
         on_attach = on_attach,
         capabilities = capabilities,
         settings = lua_settings,
+      },
+      ansiblels = {
+        on_attach = on_attach,
+        capabilities = capabilities,
       },
     }
   })

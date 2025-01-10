@@ -41,4 +41,4 @@ tree -fia ~/.password-store | grep '.gpg' | sed 's/^.\///' | sed "s|$HOME/.passw
     --bind="alt-l:execute-silent[pass {} | grep ^$URL_PREFIX | sed \"s/$URL_PREFIX//\" | tr -d ' '  | xsel --clipboard --input]+abort" \
     --bind="alt-o:execute-silent[pass otp {} | xsel --clipboard --input]+abort" \
     --bind="enter:execute-silent[pass {} | head -n 1 | tr -d '\n' | xsel --clipboard --input]+abort"  \
-    --bind="ctrl-i:execute(pass {} | fzf --reverse | cut -d: -f 2 | tr -d ' ' | xsel --clipboard --input)+abort"
+    --bind="tab:execute(pass {} | fzf --reverse | cut -d: -f 2 | tr -d ' ' | xsel --clipboard --input)+abort"

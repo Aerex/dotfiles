@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# Credits to Nominal Animal
+#https://www.linuxquestions.org/questions/linux-server-73/how-to-scp-files-only-after-they%27ve-been-there-for-x-seconds-897913/#post4447309
+
+# Directory watched for completed files.
+# Subdirectories are not watched.
+INCOMING=
+
+# SCP target for files.
+# Note: all files end up in this same directory.
+# Password authentication will not work, you need
+# to set up authentication keys.
+REMOTE=
+
+
+# Number of retry attempts
+RETRY_ATTEMPTS=3
+
+# Directory scp'd files are moved to.
+# Note: all files end up in this same directory.
+COMPLETED=
+
+# Extra SCP options. Use blowfish, only try 5 secs to connect.
+#SCPOPTS=(-o ConnectTimeout=5)
+SCPOPTS=""
+
+# Paths are relative to INCOMING directory.
+cd "$INCOMING" || exit $?
+
+echo "Current Directory for processing ... $INCOMING"
+
+# Wait for completed files in the INCOMING directory,
+inotifywait -m -e moved_to -e create --format '%f' . | while read FILE ; do
+
+
+        echo "Processing $FILE"
+        sleep 1
+        RETRY_COUNTER=0
+        # Only consider normal files.
+        if [[ -f "$FILE" && "$FILE" != *"pdf"* ]]; then
+          echo "$FILE is not a pdf"
+          continue
+        fi
+
+        # Try to transfer the file(s) using SCP.
+        if ! scp "$FILE" "$REMOTE" ; then
+                printf '%s scp-failure %s\n' "$(date '+%Y-%m-%d %T %z')" "$FILE"
+                printf '\nMaking $(echo $RETRY_COUNTER+1 | bc) attempt'
+                while [ $RETRY_COUNTER -lt $RETRY_ATTEMPTS ]; do
+                  RETRY_COUNTER=$((RETRY_COUNTER+1))
+                  if [ scp "$FILE" "$REMOTE"  ] && [ mv -f "$FILE" "$COMPLETED" ]; then
+                    printf '%s success %s\n' "$(date '+%Y-%m-%d %T %z')" "$FILE"
+                  #  printf '\n%s success %s\n' "$(date '+%Y-%m-%d %T %z')" "$FILE"
+                    break
+                  fi
+                done
+
+                continue
+        fi
+
+         #SCP was successful. Move the file. May overwrite an old one.
+        if ! mv -f "$FILE" "$COMPLETED" ; then
+                printf '%s mv-failure %s\n' "$(date '+%Y-%m-%d %T %z')" "$FILE"
+                continue
+        fi        # Success.
+
+        printf '%s success %s\n' "$(date '+%Y-%m-%d %T %z')" "$FILE"
+
+done

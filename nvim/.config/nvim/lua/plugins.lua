@@ -292,6 +292,7 @@ if ok then
         requires = {
           'hrsh7th/cmp-buffer',
           'hrsh7th/cmp-path',
+          'kirasok/cmp-hledger',
           'hrsh7th/cmp-nvim-lua',
           'hrsh7th/cmp-nvim-lsp',
           'hrsh7th/cmp-cmdline',

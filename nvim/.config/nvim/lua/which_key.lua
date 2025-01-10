@@ -68,6 +68,7 @@ M.load_maps = function()
           g = { 'Yank Git URL to clipboard' },
           s = { 'Yank surrounding word' },
           S = { 'Yank surrounding WORD' },
+          r = { 'Yank Ring' },
         },
         ['[n'] = 'Go to previous failed test',
         [']n'] = 'Go to next failed test',

@@ -160,6 +160,8 @@ if yok then
 
   vim.keymap.set({ "n", "x" }, "y", "<Plug>(YankyYank)")
 
+  vim.keymap.set("n", "<c-p>", "<Plug>(YankyPreviousEntry)")
+  vim.keymap.set("n", "<c-n>", "<Plug>(YankyNextEntry)")
   vim.keymap.set("n", "]p", "<Plug>(YankyPutIndentAfterLinewise)")
   vim.keymap.set("n", "[p", "<Plug>(YankyPutIndentBeforeLinewise)")
   vim.keymap.set("n", "]P", "<Plug>(YankyPutIndentAfterLinewise)")
