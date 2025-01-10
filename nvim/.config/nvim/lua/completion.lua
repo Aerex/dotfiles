@@ -93,21 +93,11 @@ if ok then
         ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
         show_labelDetails = true, -- show labelDetails in menu. Disabled by default
 
-        vim_item.menu = ({
-          nvim_lsp = '[LSP]',
-          nvim_lua = '[Lua]',
-          buffer = '[BUF]',
-          spell = '[SPELL]',
-          git = '',
-          dictionary = '[DICT]',
-          --rg = '[RG]'
-        })[entry.source.name]
-
-        return vim_item
-      end,
+        -- The function below will be called before any actual modifications from lspkind
+        -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+      })  
     },
     sources = {
-      { name = 'nvim_lsp' },
       { name = 'ultisnips' },
       { name = 'nvim_lsp' },
       { name = 'git' },
