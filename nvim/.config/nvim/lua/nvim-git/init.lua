@@ -44,12 +44,19 @@ M.setup_signs = function()
         -- Text object
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
       end,
-      signs                        = {
-        add = { hl = 'GitSignsAdd', text = '+' },
-        change = { hl = 'GitSignsChange', text = '~' },
-        delete = { hl = 'GitSignsDelete', text = "▂" },
-        topdelete = { hl = 'GitSignsDelete', text = "▔" },
-        changedelete = { hl = 'GitSignsChange', text = '▎' },
+      signs = {
+        add = {  text = '+' },
+        change = {  text = '~' },
+        delete = {  text = "▂" },
+        topdelete = {  text = "▔" },
+        changedelete = {  text = '▎' },
+      },
+      signs_staged = {
+        add = {  text = '+' },
+        change = {  text = '~' },
+        delete = {  text = "▂" },
+        topdelete = {  text = "▔" },
+        changedelete = {  text = '▎' },
       },
       signcolumn                   = true,  -- Toggle with `:Gitsigns toggle_signs`
       numhl                        = false, -- Toggle with `:Gitsigns toggle_numhl`
@@ -84,10 +91,14 @@ M.setup_signs = function()
         enable = false
       },
     }
+
+    vim.api.nvim_set_hl(0, 'GitSignsAdd', { link = 'GitSignsAdd', fg='#afd700' })
+    vim.api.nvim_set_hl(0, 'GitSignsChange', { link = 'GitSignsChange', fg='#ebcb8b' })
+    vim.api.nvim_set_hl(0, 'GitSignsChangedelete', { link = 'GitSignsChange', fg='#e28527' })
+    vim.api.nvim_set_hl(0, 'GitSignsDelete', { link = 'GitSignsDelete', fg='#e22727'  })
+    vim.api.nvim_set_hl(0, 'GitSignsTopdelete', { link = 'GitSignsDelete', fg='#e22727' })
   end
   -- override color highlights
-  --vim.cmd[[hi GitSignsAdd guifg=#afd700 guibg=None]]
-  --vim.cmd[[hi GitSignsChange guifg=#EBCB8B guibg=None]]
 
   local ok_d, diffview = pcall(require, 'diffview')
   if ok_d then
@@ -176,7 +187,6 @@ M.setup_neogit = function()
         ['='] = 'Toggle',
         ['x'] = 'Discard',
         ['-'] = 'Stage',
-        ['#'] = 'Console',
         ['<c-x>'] = 'SplitOpen',
         ['<c-s>'] = 'SplitOpen',
         ['<c-v>'] = 'VSplitOpen',
@@ -239,7 +249,7 @@ M.force_push = function()
   local current_branch = curr_branch()
   local abrv_branch = current_branch
   if #current_branch > 17 then
-    abrv_branch = string.sub(current_branch, 1, 16) .. '...' 
+    abrv_branch = string.sub(current_branch, 1, 16) .. '...'
   end
   local choice = vim.fn.confirm(string.format('Are you sure you want to force push (branch: %s)', abrv_branch), "Yes\n&No\n&Cancel")
   if choice == 1 then
