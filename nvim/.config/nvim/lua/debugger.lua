@@ -252,7 +252,7 @@ end
 M.run_with_args = function()
   local args = vim.fn.input('Enter args: ')
   if #vim.fn.split(args, ' ') > 0 then
-    args = vim.split(vim.fn.expand(args), '\n')
+    args = require'dap.utils'.splitstr(vim.fn.expand(args), '\n')
     local approval = vim.fn.confirm(
       'Will try to run:\n    ' ..
       vim.bo.filetype .. ' ' ..
