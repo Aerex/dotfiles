@@ -1,0 +1,5 @@
+# List devices
+xinput list
+
+# Disable device 
+xinput disable <deviceid>

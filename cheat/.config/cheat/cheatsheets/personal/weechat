@@ -1,0 +1,4 @@
+# To list local variables in the current buffer
+/buffer listvar
+# To list local variables in a buffer
+/buffer listvar [bufnum]

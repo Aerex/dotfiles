@@ -10,3 +10,18 @@ $ ibmcloud secrets-manager secret-create --secret-type=arbitrary \
 
 ## Search resource by service_name
 $ ibmcloud resource search "service_name:<service_name>"
+
+## Set allowlist on private service endpoint
+$ ibmcloud ks cluster master private-service-endpoint allowlist get --cluster <cluster-name>
+
+# Find the toolchain attached to a resource group (given the resource group name)
+RESOURCE_GROUP_NAME=test
+TOOLCHAIN_NAME=toolchain_test
+RESOURCE_GROUP_ID=$(ibmcloud resource groups --output json | jq -r --arg name "$RESOURCE_GROUP_NAME" '.[] | select(.name == $name).id')
+ibmcloud dev toolchains --output json | jq --arg id "$RESOURCE_GROUP_ID" --arg name '.items[] | select((.container.type == "resource_group_id") and (.container.guid == $id) and (.name == $name)'
+
+# Find the tekton pipeline for a toolchain
+PIPELINE_NAME=tk_pipeline
+TOOLCHAIN_ID=$(ibmcloud dev toolchains --output json | jq --arg id "$RESOURCE_GROUP_ID" --arg name '.items[] | select((.container.type == "resource_group_id") and (.container.guid == $id)) and (.name == $name)).id')
+PIPELINE_ID=$(ibmcloud dev toolchain-get $TOOLCHAIN_ID --output json | jq --arg name "$PIPELINE_NAME" '.items[0].services[] | select(.parameters.name == $name).instance_id')
+ibmcloud dev tekton-info $PIPELINE_ID

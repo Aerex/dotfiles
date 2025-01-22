@@ -1,0 +1,79 @@
+# Navigation	
+J                   Move the document display window one line down.
+K                   Move the document display window one line up.
+L                   Move the document display window one column to the right.
+H                   Move the document display window one column to the left.
+Ctrl + D            Move the document display window half a page down.
+Ctrl + U            Move the document display window half a page up.
+Ctrl + Y            Move the document display window half a page to the right.
+Ctrl + T            Move the document display window half a page to the left.
+Ctrl + B            Move the document display window a full page down.
+Ctrl + F            Move the document display window a full page up.
+Y                   Move the document display window an entire page to the left.
+T                   Move the document display window a full page to the left.
+G, then G	          Go to the first page of the current document.
+Shift + G	          Go to the last page of the current document.
+5, then Shift + G	  Go to the fifth page of the current document.
+Shift + P	Go to the currently selected page.
+Shift + H	Go to the top of the currently selected page.
+Shift + L	Go to the bottom of the currently selected page.
+/	Open Zathura’s forward search prompt.
+Shift + /	Open Zathura’s reverse search prompt.
+N	Go to the next occurrence of the current search term.
+Shift + N	Go back to the previous occurrence of the current search term.
+
+#Interface Navigation	
+A	Fit the height of the current page to the display window.
+S	Fit the width of the current page to the display window.
+D	Redraw the current document in a booklet format.
+R	Rotate the current document by 90 degrees clockwise.
+Ctrl + N	Toggle Zathura’s information bar.
+Ctrl + M	Toggle Zathura’s input field bar.
+Shift + Equal (=)	Zoom in the document at currently selected page.
+Minus (-)	Zoom out of the currently selected page.
+Equal (=)	Revert the zoom level of the document at the currently selected page.
+60 + Equal (=)	Set the current zoom level of the document to 60%.
+Ctrl + R	Invert the colors of the current document.
+Shift + R	Refresh and redraw the current document.
+F5	Go to Zathura’s presentation mode.
+F11	Go to Zathura’s fullscreen mode.
+Q	Terminate the current Zathura session.
+
+# Linking and Indexing	
+Shift + F	      Show all link hints in the current page.
+F	              Load a link hint’s page to the document viewer.
+C	              Copy a link hint’s page to the system clipboard.
+Meta + 1	      Create a new bookmark on the current page and save it to the character “1.”
+' + 1	          Load the bookmark that is currently stored in the character “1.”
+Tab	            Display the document’s content index. (table of contents)
+J	Scroll one item down in the document’s content index.
+K	Scroll one item up in the document’s content index.
+L	Display the current index item’s subitems.
+H	Hide the current index item’s subitems.
+Shift + L	Display all the subitems in the document’s content index.
+Shift + H	Hide all the subitems in the document’s content index.
+Enter	Load the page of the currently selected index entry.
+Presentation Mode	
+Space	Go to the next document slide.
+Shift + Space	Go back to the previous document slide.
+Esc	Cancel any currently running presentation mode task.
+F5	Go back to the default Zathura mode.
+Fullscreen Mode	
+Shift + J	Move the document display window a full page down.
+Shift + K	Move the document display window a full page up.
+Z, then Shift + I	Zoom in the currently selected page.
+Z, then Shift + O	Zoom out of the current selected page.
+Z + 0	Reset the current zoom level.
+60 + Equal (=)	Set the zoom level of the document to 60%.
+Esc	Cancel any currently running fullscreen mode task.
+F11	Go back to the default Zathura mode.
+Command Mode	
+Shift + Semicolon (;)	Open Zathura’s command prompt.
+Shift + Semicolon (;), then “close”	Exit the current document without exiting Zathura.
+Shift + Semicolon (;), then “open”	Open a new document on the current Zathura window.
+Shift + Semicolon (;), then “blist”	List all the available bookmarks for the current session.
+Shift + Semicolon (;), then “badd”	Add the current page to the session’s bookmark index.
+Shift + Semicolon (;), then “bdelete”	Open Zathura’s bookmark deletion prompt.
+Shift + Semicolon (;), then “exec”	Run an external shell command on the current document.
+Shift + Semicolon (;), then “info”	Print the document’s internal properties.
+Shift + Semicolon (;), then “print”	Send the current document to the machine’s print spool.

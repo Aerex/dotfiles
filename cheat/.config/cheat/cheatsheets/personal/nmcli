@@ -48,3 +48,8 @@ nmcli nm wifi on
 
 # To import ovpn client cert
 nmcli con import type openvpn file <file_dir>
+
+# To modify a property in a connection
+nmcli con modify <name> <property> <value>
+## Disable ipv6
+nmcli con modify <name> ipv6.method 'disabled'

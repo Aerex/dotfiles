@@ -4,3 +4,9 @@ pandoc --from=markdown --to=rst --output=README.rst README.md
 #To create a pdf, use -t latex and -o myoutput.pdf. You can omit the -t argument since a .pdf in -o defaults to latex. So you can use either:
 pandoc reports/7/report.html -t latex -o reports/7/report.pdf
 pandoc reports/7/report.html -o reports/7/report.pdf
+
+# convert docx to markdown
+myfilename="example"
+pandoc -t markdown_strict 
+--extract-media='./attachments/$myfilename' \
+$myfilename.docx -o $myfilename.md

@@ -54,3 +54,9 @@ $ cat part-r-00000 | jq 'select((.widgets | length) > 0 and (.users | length) > 
 $ if [[ $(jq 'if type =="array" and length > 0 then true else false end' file.json) == "true" ]]; then
 $   echo "file has elements in array"
 $ fi
+
+# Check a property is defined before accessing
+jq '.result 
+  | select(.property_history != null) 
+  | .property_history 
+  | map(select(.event_name == "Sold"))[0].date'

@@ -19,8 +19,8 @@ in
     3*) echo "something beginning with 3 found";;
 esac
 
-# Parse opts (ex. -h -v)
-while getopts ":hv" opt
+# Parse opts (ex. -h -v -d /)
+while getopts ":hvd:" opt
 do
   case "$arg"
     h)
@@ -28,6 +28,9 @@ do
       ;;
     v)
       # enable verbose
+      ;;
+    d)
+      DIR=$OPTARG
       ;;
     *)
       # otherwise do something else
@@ -141,5 +144,18 @@ echo $((2+2)
 echo $(($n+1))
 
 # Arrays
+## Declare an array
+declare -a arr=("1", "2")
+
+#loop through an array
+for i in "${a[@]}"
+do
+  echo "$i"
+done
+# Note that the double quotes around "${arr[@]}" are really important. 
+# Without them, the for loop will break up the array by substrings separated by any spaces within the strings 
+# instead of by whole string elements within the array.
+
 ## Get length
 echo "${#ArrayName[@]}"
+

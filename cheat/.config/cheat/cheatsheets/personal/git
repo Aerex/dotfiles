@@ -185,6 +185,12 @@ git revert <commit SHA>
 # this just applies a single commit from a branch to current branch
 git cherry-pick <commit SHA1>
 
+# Cherry pick from a fork
+git checkout <branch>
+git remote add <other-fork-alias> <url>
+git fetch <other-fork-alias> <other-fork-branch>
+git cherry-pick <commit-hash>
+
 # List permission in HEAD
 git ls-tre HEAD
 

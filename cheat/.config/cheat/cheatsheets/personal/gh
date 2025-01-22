@@ -1,0 +1,11 @@
+# Get project issue ID given the issue number 
+gh project item-list <PROJECT_NUMBER> --format json -q '.items[] | select(.content.number == 123).id'
+
+
+# Get Status field id in project
+gh project field-list <PROJECT_NUMBER> --format json -q '.fields[] | select(.name == "Status").id'
+
+# Change Status field (dropdown) in issue 
+gh project item-edit --id <PROJECT_ISSUE_ID> --field-id <STATUS_FIELD_ID> --single-select-option-id <OPTION_VALUE_FIELD_ID> --project-id <PROJECT_ID>
+
+
