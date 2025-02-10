@@ -17,7 +17,7 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim' },
     event = { 'BufRead' },
     config = function()
-      require('nvim-git').setup_signs()
+      require('plugins.configs.git').setup_signs()
     end
   },
   {
@@ -37,7 +37,7 @@ return {
     'TimUntersberger/neogit',
     cmd = { 'Neogit' },
     config = function()
-      require('nvim-git').setup_neogit()
+      require('plugins.config.git').setup_neogit()
     end,
     dependencies = { 'nvim-lua/plenary.nvim', 'sindrets/diffview.nvim' }
   },

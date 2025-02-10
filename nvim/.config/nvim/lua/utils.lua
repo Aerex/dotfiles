@@ -201,4 +201,8 @@ M.get_local_cfgs = function(cfg, fn_name, args)
   return cust_cfg
 end
 
+M.autocmd = function(...)
+  vim.api.nvim_create_autocmd(...)
+end
+
 return M

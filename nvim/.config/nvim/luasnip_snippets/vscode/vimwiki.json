@@ -22,5 +22,23 @@
       "def $1():",
       "\t$2"
     ]
+  },
+  "ghh": {
+    "prefix": "ghh",
+    "description": "Add PR/Issue Header",
+    "body": [
+      "# Context",
+      "$1",
+      "",
+      "# Steps To Test",
+      "$2",
+      "",
+      "ref: $0"
+    ]
+  },
+  "@anup": {
+    "prefix": "@anup",
+    "description": "Add Anup GH handler",
+    "body": "@apokharel"
   }
 }

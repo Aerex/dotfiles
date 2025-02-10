@@ -10,107 +10,104 @@ function _G.smart_carrier_return()
   return vim.v.hlsearch == 1 and ':noh' .. t '<cr>' or t '<CR>'
 end
 
-local ok, wk = pcall(require, 'which-key')
 local noremaps = {
   n = {
     -- misc
-    ['<leader>w'] = { 'write', 'Write' },
-    ['\\zz'] = {'quitall!', 'Quit'},
-    ['<leader>rb'] = {'edit', 'Reload Buffer'},
-    ['<leader>b'] = { function() require 'telescope.builtin'.buffers() end, 'Buffers'},
-    {'<leader>rc', function() require 'nvim-reload'.Reload() end, 'Reload Nvim'},
-    {'<C-Space>'    , function() require 'notify'.dismiss() end, 'Dismiss Notification'},
-    {'[t'           , 'tabprevious', 'Previous Tab'},
-    {'t]'           , 'tabnext', 'Next Tab'},
-    {'<leader>xx'   , 'TroubleToggle', 'Show Trouble'},
-    {'<leader>xw'   , 'TroubleToggle workspace_diagnostics', 'Workspace Diagnostics'},
-    {'<leader>xd'   , 'TroubleToggle document_diagnostics', 'Document Diagnostics'},
-    {'<leader>xq'   , 'TroubleToggle quickfix', 'Trouble Quickfix'},
-    {'<leader>xl'   , 'TroubleToggle loclist', 'Trouble Location'},
-    {'<leader>xtq'  , 'TodoQuickFix', 'Todo Quickfix'},
-    {'<leader>xtl'  , 'TodoLocList', 'TodoLocList'}
-    {'<leader>xtx'  , 'TodoTrouble',
-    {- vifm
-    {'<leader>fm'   , 'VsplitVifm',
-    {'<leader>Fm'   , 'Vifm',
-    {- fzf
-    {'<leader>ff'   , function() require 'nvim-fzf.files' () end,
-    {'<leader>fh'   , function() require 'nvim-fzf.helptags' () end,
-    {'<leader>fo'   , 'lua require(\'nvim-fzf.mru\').get_mru()',
-    {'<leader>fM'   , function() require 'nvim-fzf.manpages' () end,
-    {- TODO: telescope seems faster here need to figure out why fzf is not
-    {'<leader>p'    , function() require 'nvim-telescope'.git_files() end,
-    {',p'           , function() require 'nvim-fzf.git' () end,
-    {'<leader>rg'   , function() require 'nvim-telescope'.rg_search() end,
-    {'<leader>\\rg' , function() require 'nvim-fzf.rg' () end,
-    {'\\rG'         , function() require 'nvim-fzf.rg' (vim.fn.expand('<cword>'), true) end,
-    {'\\rg'         , function() require 'nvim-telescope'.rg_string() end,
-    {',rg'          , function() require 'nvim-fzf.rg' (vim.fn.input('Search term: '), true) end,
-    {'<leader>nv'   , function() require 'nvim-fzf.notes' () end,
-    {'<leader>yr'   , 'YankyRingHistory',
-    {- docs
-    {'<leader>dg'   , 'DogeGenerate',
-    {- snippets
-    {'<leader>ue'   , 'UltiSnipsEdit',
-    {- git
-    {'<leader>gS'   , 'Git',
-    {'<leader>gl'   , 'Git log',
-    {'<leader>gd'   , 'Gdiffsplit!',
-    {'<leader>gb'   , 'Git blame',
-    {'<leader>gw'   , 'Gwrite',
-    {'<leader>gp'   , 'Git push',
-    {'<leader>gc'   , 'Neogit commit',
-    {'<leader>gz'   , 'lua require\'terminals\'.lazygit_toggle()',
-    {'<leader>gm'   , 'GitMessenger',
-    {- neogit variant
-    {'<leader>gs'   , 'Neogit kind,split_above',
-    {- TODO: create map for git push --set-upstream current branch
-    {- test
-    {'<leader>tf'   , function() require('test').test_file() end,
-    {'<leader>tn'   , function() require('test').test_nearest() end,
-    {'<leader>ts'   , function() require('test').summary() end,
-    {'<leader>tc'   , 'UltestClear',
-    {'<leader>to'   , function() require('test').output() end,
-    {'<leader>tO'   , function() require('test').output({ enter , true }) end,
-    {- debugger
-    {'<leader>dd'   , 'lua require\'debugger\'.start_or_continue()',
-    {'<F5>'         , function() require 'debugger'.start_or_continue() end,
-    {'<leader>dbb'  , 'lua require\'dap\'.toggle_breakpoint()',
-    {'<F9>'         , 'lua require\'dap\'.toggle_breakpoint()',
-    {'<leader>dso'  , 'lua require\'dap\'.step_over()',
-    {'<F10>'        , 'lua require\'dap\'.step_over()',
-    {'<leader>dsO'  , 'lua require\'dap\'.step_out()',
-    {'<leader>dsi'  , 'lua require\'dap\'.step_into()',
-    {'<leader>dR'   , 'lua require\'dap\'.disconnect({restart , true })',
-    {'<leader>drc'  , 'lua require\'dap\'.run_to_cursor()',
-    {'<leader>dK'   , 'lua require\'dap.ui.widgets\'.hover()',
-    {'<leader>dv'   , 'lua require\'dapui\'.float_element(\'scopes\', { enter , true })',
-    {'<leader>dbl'  , function() require 'debugger'.toggle_breakpoints_qf() end,
-    {'<leader>tdd'  , function() require 'test'.debug_file() end,
-    {'<leader>tdn'  , function() require 'test'.debug_nearest() end,
-    {'<leader>du'   , 'lua require\'dapui\'.toggle()',
-    {- TODO: Need to make a method to only call method if running debugger (might set a global variable on debug session)
-    {'<leader>drp'  , 'lua require\'dap\'.repl.toggle()<CR><C-w>b',
-    {'<leader>drP'  , 'lua require\'dapui\'.float_element(\'repl\', { width , 75, enter , true })',
-    {'<leader>de'   , 'lua require\'dap\'.disconnect({terminateDebuggee , true })',
-    {'<leader>dcb'  , 'lua require\'dap\'.set_breakpoint(vim.fn.input(\'Breakpoint condition: \'))',
-    {'<leader>dlb'  , 'lua require\'dap\'.set_breakpoint(nil, nil, vim.fn.input(\'Log point message: \'))',
-    {'<leader>d,l'  , 'lua require\'dap\'.set_log_level("TRACE")',
-    {'<leader>dL'   , 'DapShowLog',
-    {- fcitx
-    {'<M-Tab>'      , 'lua require\'fcitx5\'.toggle()',
-    {- scratch
-    {'<M-C-n>'      , function() require 'scratch'.scratch() end,
-    {'<M-C-m>'      , function() require 'scratch'.scratchWithName() end,
-    {'<M-C-o>'      , function() require 'scratch'.fzfScratch() end
-  }
-}
-
-
-local maps = {
-  n = {
-    p = '<Plug>(miniyank-autoput)',
-    P = '<Plug>(miniyank-autoPut)',
+    ['<leader>w']    = 'write',
+    ['<leader>yr']   = function() require('telescope').extensions.yank_history.yank_history() end,
+    ['<C-a>']        = '<NOP>', --disable due to tmux prefix
+    ['\\zz']         = 'quitall!',
+    ['<leader>rb']   = 'edit',
+    ['<leader>b']    = function() require 'telescope.builtin'.buffers() end,
+    ['<leader>rc']   = function() require 'nvim-reload'.Reload() end,
+    ['<C-Space>']    = function() require 'notify'.dismiss() end,
+    ['[t']           = 'tabprevious',
+    [']t']           = 'tabnext',
+    -- trouble
+    ['<leader>xx']   = 'Trouble',
+    ['<leader>xw']   = 'Trouble diagnostic toggle',
+    ['<leader>xd']   = 'Trouble diagnostic toggle filter.buf=0',
+    ['<leader>xq']   = 'Trouble quickfix toggle',
+    ['<leader>xl']   = 'Trouble loclist toggle',
+    ['<leader>xtq']  = 'TodoQuickFix',
+    ['<leader>xtl']  = 'TodoLocList',
+    ['<leader>xtx']  = 'TodoTrouble',
+    ['<leader>xtX']  = 'TodoTelescope',
+    -- vifm
+    ['<leader>fm']   = 'VsplitVifm',
+    ['<leader>Fm']   = 'Vifm',
+    -- fzf
+    ['<leader>ff']   = function() require 'plugins.configs.pickers.fzf.files' () end,
+    ['<leader>fh']   = function() require 'plugins.configs.pickers.fzf.helptags' () end,
+    ['<leader>fo']   = 'lua require(\'nvim-fzf.mru\').get_mru()',
+    ['<leader>o']    = function() require 'telescope.builtin'.oldfiles() end,
+    ['<leader>fM']   = function() require 'plugins.configs.pickers.fzf.manpages' () end,
+    -- TODO: telescope seems faster here need to figure out why fzf is not
+    ['<leader>p']    = function() require 'nvim-telescope'.git_files() end,
+    [',p']           = function() require 'nvim-fzf.git' () end,
+    ['<leader>\\rg'] = function() require 'plugins.configs.pickers.fzf.rg' () end,
+    ['<leader>rg']   = function()
+      require 'fzf-lua'.live_grep_native({
+        cwd = utils.get_workspace(),
+        rg_opts =
+        "--column -g !*.lock -g !*.sum -g !*i18n_resources.go"
+      })
+    end,
+    ['<leader>rG']   = function() require 'nvim-telescope'.rg_string() end,
+    [',rg']          = function() require 'plugins.configs.pickers.fzf.rg' (vim.fn.input('Search term: '), true) end,
+    -- git
+    ['<leader>gS']   = 'Git',
+    ['<leader>gl']   = 'Git log',
+    ['<leader>gd']   = 'Gdiffsplit!',
+    ['<leader>gb']   = 'Git blame',
+    ['<leader>gw']   = 'Gwrite',
+    ['<leader>gp']   = 'Git push',
+    ['<leader>gc']   = 'Neogit commit',
+    ['<leader>gz']   = 'lua require\'terminals\'.lazygit_toggle()',
+    ['<leader>gm']   = 'GitMessenger',
+    -- neogit variant
+    ['<leader>gs']   = 'Neogit kind=split_above',
+    -- TODO: create map for git push --set-upstream current branch
+    -- test
+    ['<leader>tf']   = function() require 'test'.test_file() end,
+    ['<leader>tn']   = function() require 'test'.test_nearest() end,
+    ['<leader>ts']   = function() require 'test'.summary() end,
+    ['<leader>tc']   = 'UltestClear',
+    ['<leader>to']   = function() require 'test'.output() end,
+    ['<leader>tO']   = function() require 'test'.output({ enter = true }) end,
+    -- debugger
+    ['<leader>dd']   = function() require 'debugger'.start_or_continue() end,
+    ['<F5>']         = function() require 'debugger'.start_or_continue() end,
+    ['<leader>dbb']  = 'lua require\'dap\'.toggle_breakpoint()',
+    ['<F9>']         = 'lua require\'dap\'.toggle_breakpoint()',
+    ['<leader>dso']  = function() require 'dap'.step_over() end,
+    ['<F10>']        = function() require 'dap'.step_over() end,
+    ['<leader>dsO']  = function() require 'dap'.step_out() end,
+    ['<leader>dsi']  = function() require 'dap'.step_into() end,
+    ['<leader>dR']   = 'lua require\'dap\'.disconnect({restart = true })',
+    ['<leader>drc']  = 'lua require\'dap\'.run_to_cursor()',
+    ['<leader>dK']   = 'lua require\'dap.ui.widgets\'.hover()',
+    ['<leader>dv']   = 'lua require\'dapui\'.float_element(\'scopes\', { enter = true })',
+    ['<leader>dbl']  = function() require 'debugger'.toggle_breakpoints_qf() end,
+    ['<leader>tdd']  = function() require 'test'.debug_file() end,
+    ['<leader>tdn']  = function() require 'test'.debug_nearest() end,
+    ['<leader>du']   = 'lua require\'dapui\'.toggle()',
+    -- TODO: Need to make a method to only call method if running debugger (might set a global variable on debug session)
+    ['<leader>drp']  = 'lua require\'dap\'.repl.toggle()<CR><C-w>b',
+    ['<leader>drP']  = 'lua require\'dapui\'.float_element(\'repl\', { width = 75, enter = true })',
+    ['<leader>de']   = 'lua require\'dap\'.disconnect({terminateDebuggee = true })',
+    ['<leader>dcb']  = 'lua require\'dap\'.set_breakpoint(vim.fn.input(\'Breakpoint condition: \'))',
+    ['<leader>dlb']  = 'lua require\'dap\'.set_breakpoint(nil, nil, vim.fn.input(\'Log point message: \'))',
+    ['<leader>dll']  = function() require 'dap'.run_last() end,
+    ['<leader>d,l']  = 'lua require\'dap\'.set_log_level("TRACE")',
+    ['<leader>dL']   = 'DapShowLog',
+    ['<leader>ue']   = function() require 'luasnip.loaders'.edit_snippet_files() end,
+    -- fcitx
+    ['<M-Tab>']      = 'lua require\'fcitx5\'.toggle()',
+    -- scratch
+    ['<M-C-n>']      = function() require 'scratch'.scratch() end,
+    ['<M-C-m>']      = function() require 'scratch'.scratchWithName() end,
+    ['<M-C-o>']      = function() require 'scratch'.fzfScratch() end
   }
 }
 
@@ -131,17 +128,34 @@ local file_type_keymaps = {
   },
   http = {
     nmap = {
-      ['<CR>'] = 'lua require\'rest-nvim\'.run()',
-      ['K'] = 'lua require\'rest-nvim\'.run(true)'
+      ['<CR>'] = 'Rest run'
     }
   }
 }
 
 -- misc
-vim.keymap.set({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)')
-vim.keymap.set({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)')
-vim.keymap.set({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)')
-vim.keymap.set({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
+local yok = pcall(require, 'yanky')
+if yok then
+  vim.keymap.set({ "n", "x" }, "p", "<Plug>(YankyPutAfter)")
+  vim.keymap.set({ "n", "x" }, "P", "<Plug>(YankyPutBefore)")
+  vim.keymap.set({ "n", "x" }, "gp", "<Plug>(YankyGPutAfter)")
+  vim.keymap.set({ "n", "x" }, "gP", "<Plug>(YankyGPutBefore)")
+
+  vim.keymap.set("n", "<c-p>", "<Plug>(YankyPreviousEntry)")
+  vim.keymap.set("n", "<c-n>", "<Plug>(YankyNextEntry)")
+  vim.keymap.set("n", "]p", "<Plug>(YankyPutIndentAfterLinewise)")
+  vim.keymap.set("n", "[p", "<Plug>(YankyPutIndentBeforeLinewise)")
+  vim.keymap.set("n", "]P", "<Plug>(YankyPutIndentAfterLinewise)")
+  vim.keymap.set("n", "[P", "<Plug>(YankyPutIndentBeforeLinewise)")
+
+  vim.keymap.set("n", ">p", "<Plug>(YankyPutIndentAfterShiftRight)")
+  vim.keymap.set("n", "<p", "<Plug>(YankyPutIndentAfterShiftLeft)")
+  vim.keymap.set("n", ">P", "<Plug>(YankyPutIndentBeforeShiftRight)")
+  vim.keymap.set("n", "<P", "<Plug>(YankyPutIndentBeforeShiftLeft)")
+
+  vim.keymap.set("n", "=p", "<Plug>(YankyPutAfterFilter)")
+  vim.keymap.set("n", "=P", "<Plug>(YankyPutBeforeFilter)")
+end
 
 vim.keymap.set('n', '<leader><enter>', ':', { silent = true })
 vim.keymap.set('n', '<A-a>', '<C-a>', { silent = true })
@@ -150,7 +164,7 @@ vim.keymap.set('n', '[n', function() require 'test'.prev_fail() end, { silent = 
 vim.keymap.set('n', '!', ':!', { silent = true })
 vim.keymap.set('v', '<leader>yg', function() require 'gitlinker'.get_buf_range_url('v', {}) end, { silent = true })
 vim.keymap.set('n', '<leader>yg', function() require 'gitlinker'.get_buf_range_url('n', {}) end, { silent = true })
-vim.keymap.set('n', '<leader>sp', function() print(vim.fn.expand('%:p')) end, { silent = true })
+vim.keymap.set('n', '<leader>sp', function() vim.notify(vim.fn.expand('%:p')) end, { silent = true })
 api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = true })
 api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
 autocmd('TermOpen', {
@@ -160,6 +174,15 @@ autocmd('TermOpen', {
   end
 })
 api.nvim_set_keymap('', '<F2>', ":echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, \"name\")')<CR>",
+  { silent = true })
+autocmd('FileType', {
+  pattern =
+  '{lspinfo},{qf},{dap-repl},{dap-float},{neotest-output},{man},{help},{fugitiveblame},{dap-float},{httpResult}',
+  callback = function(args)
+    vim.keymap.set('n', 'qq', function() api.nvim_win_close(0, true) end,
+      { silent = true, buffer = args.buf })
+  end
+})
 
 -- TableMode
 
@@ -207,9 +230,5 @@ end
 
 M.set_keymap(noremaps, { silent = true, noremap = true })
 M.set_filetype_keymap(file_type_keymaps)
-
--- load which-keys if available
-require 'which_key'.load_maps()
-
 
 return M

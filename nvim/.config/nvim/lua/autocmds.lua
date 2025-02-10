@@ -1,11 +1,9 @@
 local api = vim.api
+local autocmd = require('utils').autocmd
+
 
 local create_group = function(name)
   return api.nvim_create_augroup(name, { clear = true })
-end
-
-local autocmd = function(...)
-  vim.api.nvim_create_autocmd(...)
 end
 
 autocmd('VimResized', {

@@ -10,7 +10,25 @@ return {
     }
   },
   {
-    'folke/which-key.nvim'
+      'folke/which-key.nvim',
+       config = function()
+        require 'plugins.configs.misc'.which_key.setup()
+      end,
+      event = 'VeryLazy',
+      opts = {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      },
+      keys = {
+        {
+          '<leader>?',
+          function()
+            require('which-key').show({ global = false })
+          end,
+          desc = 'Buffer Local Keymaps (which-key)',
+        },
+      },
   },
   {
     'serenevoid/kiwi.nvim',
@@ -37,7 +55,7 @@ return {
   },
   {
     'iamcco/markdown-preview.nvim',
-    build = 'cd app && rm app/yarn.lock && npm install',
+    build = function() vim.fn['mkdp#util#install']() end,
     cmd = { 'MarkdownPreview', 'MarkdownPreviewStop', 'MarkdownPreviewToggle' },
     ft = { 'markdown' },
   },

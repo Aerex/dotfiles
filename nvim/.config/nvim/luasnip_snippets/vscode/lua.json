@@ -1,0 +1,30 @@
+{
+  "todo": {
+    "prefix": "todo",
+    "description": "Add todo",
+    "body": "-- TODO(me): $0",
+    "luasnip": {
+      "priority": 100
+    }
+  },
+  "fixme": {
+    "prefix": "fixme",
+    "description": "Add fixme",
+    "body": "-- FIXME(me): $0"
+  },
+  "use": {
+    "prefix": "use",
+    "description": "Use",
+    "body": "use { $1 \\}"
+  },
+  "logt": {
+    "prefix": "logt",
+    "description": "Print table",
+    "body": "print('\\n$1\\n' .. vim.inspect($1))"
+  },
+  "log": {
+    "prefix": "log",
+    "description": "Print variable",
+    "body": "print('\\n$1 -> ' .. $1)"
+  }
+}

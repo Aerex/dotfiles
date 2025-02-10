@@ -1,0 +1,32 @@
+{
+  "doc": {
+    "prefix": "doc",
+    "description": "Added method doc",
+    "body": [
+      "# AUTHOR: $1",
+      "# DESC: $2",
+      "# DEPEND: $3",
+      "# REFF: $4"
+    ]
+  },
+  "todo": {
+    "prefix": "todo",
+    "description": "Add TODO block",
+    "body": "# TODO(me): $1"
+  },
+  "head": {
+    "prefix": "head",
+    "description": "Add header comment block",
+    "body": [
+      "#!/usr/bin/env ${1:bash}",
+      "# AUTHOR: ${2:Aerex}",
+      "# DESC: $3",
+      "# DEPEND: $4"
+    ]
+  },
+  "log": {
+    "prefix": "log",
+    "description": "Add log",
+    "body": "prinf \"\\n$1: \\$$1\""
+  }
+}

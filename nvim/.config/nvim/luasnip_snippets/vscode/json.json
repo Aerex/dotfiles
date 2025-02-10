@@ -1,0 +1,13 @@
+{
+  "btr": {
+    "prefix": "btr",
+    "description": "Add i18 json translation",
+    "body": [
+      "{",
+      "\t\"id\": \"$1\",",
+      "\t\"translation\": \"$1\"",
+      "\\},",
+      "$0"
+    ]
+  }
+}

@@ -8,7 +8,7 @@ return {
     event = 'BufRead',
     dependencies = 'nvim-lua/plenary.nvim',
     config = function()
-      require('plugins.diagnostics').setup()
+      require('plugins.configs.diagnostics').setup()
     end
   }
 }

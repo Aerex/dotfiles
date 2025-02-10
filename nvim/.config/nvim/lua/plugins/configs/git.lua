@@ -72,10 +72,7 @@ M.setup_signs = function()
         relative = 'cursor',
         row = 0,
         col = 1
-      },
-      yadm                         = {
-        enable = false
-      },
+      }
     }
     vim.api.nvim_set_hl(0, 'GitSignsAdd', { link = 'GitSignsAdd' })
     vim.api.nvim_set_hl(0, 'GitSignsChange', { link = 'GitSignsChange' })

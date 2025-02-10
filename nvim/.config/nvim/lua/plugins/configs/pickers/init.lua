@@ -161,6 +161,7 @@ M.telescope = {
       }
     }
     require('telescope').load_extension('fzf')
+    require('telescope').load_extension('luasnip')
     vim.g.telescope_cache_results = 1
     vim.g.telescope_prime_fuzzy_find = 1
   end,
@@ -205,7 +206,7 @@ M.telescope = {
       trim_text = true,
       layout_strategy = 'vertical',
       layout_config = {
-        preview_cutoff = 0,   -- Preview should always show (unless previewer = false)
+        preview_cutoff = 0, -- Preview should always show (unless previewer = false)
         width = function(_, max_columns, _)
           return math.min(max_columns, 9)
         end,

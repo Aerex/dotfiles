@@ -5,6 +5,7 @@
 --
 -- config options
 require('config.options')
+require('config.mappings')
 local autocmd = require('utils').autocmd
 vim.loader.enable()
 
@@ -59,7 +60,7 @@ autocmd({ 'BufEnter' }, {
 -- vim.api.nvim_exec([[autocmd BufEnter * if matchstr(&filetype, '\(markdown\)\|\(vimwiki\)') | set spell | endif ]], '')
 
 -- load plugins
-require('lazy_plugins')
+require('packages')
 
 vim.api.nvim_create_autocmd('VimEnter', {
   pattern = { '*' },

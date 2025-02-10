@@ -1,14 +1,10 @@
 local get_packer_path = require('utils').get_packer_path
 local get_local_cfgs = require('utils').get_local_cfgs
-local ultisnips = require('utils').ultisnips
 local ok, cmp = pcall(require, 'cmp')
+local luasnip = require('luasnip')
+luasnip.log.set_loglevel('debug')
 
 if ok then
-  vim.g.UltiSnipsRemoveSelectModeMappings = 0
-  vim.g.UltiSnipsSnippetsDir = os.getenv('HOME') .. '/.config/nvim/UltiSnips/'
-  vim.g.UltiSnipsEditSplit = 'vertical'
-  vim.g.UltiSnipsSnippetDirectories = { get_packer_path().start .. '/vim-snippets/UltiSnips',
-    os.getenv('HOME') .. '/.config/nvim/UltiSnips' }
   local default_mapping = {
     ['<Tab>'] = function(fallback)
       if cmp.visible() then
@@ -54,10 +50,8 @@ if ok then
         select = false
       }),
       ['<Tab>'] = cmp.mapping(function(fallback)
-        if cmp.get_selected_entry() == nil and ultisnips.can_expand_snippet() then
-          ultisnips.expand_snippet()
-        elseif ultisnips.can_jump_forward() then
-          ultisnips.jump_forward()
+        if luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
         elseif cmp.visible() then
           cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
         else
@@ -67,8 +61,8 @@ if ok then
       ['<S-Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-        elseif ultisnips.jump_backwards() then
-          ultisnips.jump_backwards()
+        elseif luasnip.jumpable(-1) then
+          luasnip.jump(-1)
         else
           fallback()
         end
@@ -79,7 +73,7 @@ if ok then
         -- load lspkind icons
         vim_item.kind = string.format(
           '%s %s',
-          require('nvim-lsp.utils').symbol_map[vim_item.kind],
+          require('utils').symbol_map[vim_item.kind],
           vim_item.kind
         )
 
@@ -97,8 +91,8 @@ if ok then
       end,
     },
     sources = {
+      { name = 'luasnip' },
       { name = 'nvim_lsp' },
-      { name = 'ultisnips' },
       { name = 'git' },
       --{ name = 'rg'},
       { name = 'path' },
@@ -119,7 +113,7 @@ if ok then
       sources = {
         { name = 'spell' },
         { name = 'dictionary', keyword_length = 4 },
-        { name = 'ultisnips' }
+        { name = 'luasnip' }
       }
     })
   end

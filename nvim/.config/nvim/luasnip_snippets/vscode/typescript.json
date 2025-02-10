@@ -1,23 +1,4 @@
 {
-  "int": {
-    "prefix": "int",
-    "description": "interface",
-    "body": [
-      "interface $1 {",
-      "\\}"
-    ],
-    "luasnip": {
-      "priority": -50
-    }
-  },
-  "nspc": {
-    "prefix": "nspc",
-    "description": "namespace",
-    "body": [
-      "namespace $1 {",
-      "\\}"
-    ]
-  },
   "beforeeach": {
     "prefix": "beforeeach",
     "description": "Add beforeEach block",
