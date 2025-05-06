@@ -1,0 +1,8 @@
+set selection-clipboard clipboard
+set database sqlite
+set synctex-editor-command "nvim %{input} +%{line}"
+set synctex true
+map t toggle_page_mode
+map m mark_add
+map \' mark_evaluate
+map \? search backward
