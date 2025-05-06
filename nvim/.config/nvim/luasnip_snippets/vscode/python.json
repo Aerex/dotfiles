@@ -1,0 +1,26 @@
+{
+  "todo": {
+    "prefix": "todo",
+    "description": "Add TODO block",
+    "body": "# TODO(me): $1"
+  },
+  "log": {
+    "prefix": "log",
+    "description": "Add log statement",
+    "body": [
+      "# REMOVEME: Do not commit",
+      "print('$1: {\\}\\n'.format($1))"
+    ]
+  },
+  "tenv": {
+    "prefix": "tenv",
+    "description": "Add environment variable try catch",
+    "body": [
+      "try:",
+      "    $1 = os.environ['$1']",
+      "except Exception as e:",
+      "    print('$1 is missing')",
+      "    exit(1)"
+    ]
+  }
+}

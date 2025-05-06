@@ -1,0 +1,7 @@
+{
+  "mapc": {
+    "prefix": "mapc",
+    "description": "Add map to go to directory",
+    "body": "map <silent> $1 :cd $0<cr>"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "rmme": {
+    "prefix": "rmme",
+    "description": "Add REMOVEME comment block",
+    "body": "# REMOVEME(me): $1"
+  }
+}

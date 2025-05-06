@@ -1,0 +1,7 @@
+{
+  "@r": {
+    "prefix": "@r",
+    "description": "Add @rsteph GHE handler",
+    "body": "@rsteph"
+  }
+}

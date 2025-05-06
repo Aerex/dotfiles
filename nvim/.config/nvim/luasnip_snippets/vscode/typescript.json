@@ -1,0 +1,81 @@
+{
+  "beforeeach": {
+    "prefix": "beforeeach",
+    "description": "Add beforeEach block",
+    "body": [
+      "beforeEach(async function () {",
+      "\t$1",
+      "\\});"
+    ]
+  },
+  "aftereach": {
+    "prefix": "aftereach",
+    "description": "Add afterEach block",
+    "body": [
+      "afterEach(async function () {",
+      "\t$1",
+      "\\});"
+    ]
+  },
+  "after": {
+    "prefix": "after",
+    "description": "Add after block",
+    "body": [
+      "after(async function() {",
+      "\t$1",
+      "\\});"
+    ]
+  },
+  "before": {
+    "prefix": "before",
+    "description": "Add Mocha before block",
+    "body": [
+      "before(async function() {",
+      "\t$1",
+      "\\});"
+    ]
+  },
+  "it": {
+    "prefix": "it",
+    "description": "Add it block",
+    "body": [
+      "it('$1', async function() {",
+      "\t$2",
+      "\\});"
+    ]
+  },
+  "log": {
+    "prefix": "log",
+    "description": "Log a variable",
+    "body": "console.log(`$1: \\${$1\\}\\n`);"
+  },
+  "context": {
+    "prefix": "context",
+    "description": "Add mocha context block",
+    "body": [
+      "context('$1', function() {",
+      "\t$0",
+      "\\});"
+    ]
+  },
+  "todo": {
+    "prefix": "todo",
+    "description": "Add TODO block",
+    "body": "// TODO(me): $1"
+  },
+  "fixme": {
+    "prefix": "fixme",
+    "description": "Add FIXME block",
+    "body": "// FIXME(me): $1"
+  },
+  "note": {
+    "prefix": "note",
+    "description": "Add NOTE block",
+    "body": "// NOTE(me): $1"
+  },
+  "removeme": {
+    "prefix": "removeme",
+    "description": "Add REMOVEME block",
+    "body": "// REMOVEME(me): $1"
+  }
+}

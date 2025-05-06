@@ -1,0 +1,20 @@
+{
+  "todo": {
+    "prefix": "todo",
+    "description": "Add todo",
+    "body": "# TODO(me): $0",
+    "luasnip": {
+      "priority": 100
+    }
+  },
+  "fixme": {
+    "prefix": "fixme",
+    "description": "Add fixme",
+    "body": "# FIXME(me): $0"
+  },
+  "log": {
+    "prefix": "log",
+    "description": "Print variable",
+    "body": "puts\"\\n$1 -> #{$1}\""
+  }
+}

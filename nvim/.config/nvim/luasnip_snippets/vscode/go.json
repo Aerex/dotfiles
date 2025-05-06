@@ -1,28 +1,4 @@
 {
-  "map": {
-    "prefix": "map",
-    "description": "Map type",
-    "body": "map[${1:keytype}]${2:valtype}"
-  },
-  ":": {
-    "prefix": ":",
-    "description": "Variable declaration :=",
-    "body": "${1:name} := ${0:value}"
-  },
-  "json": {
-    "prefix": "json",
-    "description": "JSON field",
-    "body": "`json:\"${1:displayName}\"`"
-  },
-  "err": {
-    "prefix": "err",
-    "description": "Basic error handling",
-    "body": [
-      "if err != nil {",
-      "\tlog.${1:Fatal}(err)",
-      "\\}"
-    ]
-  },
   "cfrune": {
     "prefix": "cfrune",
     "description": "Cobra RunE function",
@@ -45,7 +21,7 @@
     "prefix": "gbe",
     "description": "Add gomega BeforeEach function block",
     "body": [
-      "Context(\"$1\", func() {",
+      "BeforeEach(func() {",
       "\t$0",
       "\\})"
     ]
@@ -54,7 +30,7 @@
     "prefix": "gbf",
     "description": "Add gomega Before function block",
     "body": [
-      "BeforeEach(func() {",
+      "Before(func() {",
       "\t$0",
       "\\})"
     ]
@@ -86,6 +62,15 @@
       "\\})"
     ]
   },
+  "gc": {
+    "prefix": "gc",
+    "description": "Add gomega Context function block",
+    "body": [
+      "Context(\"$1\", func() {",
+      "\t$0",
+      "\\})"
+    ]
+  },
   "exp": {
     "prefix": "exp",
     "description": "Add gomega Expect() function block",
@@ -106,25 +91,15 @@
     "description": "Add gomega Equal() function block",
     "body": "Equal($1)"
   },
+  "sprint": {
+    "prefix": "sprint",
+    "description": "Add fmt.Sprintf",
+    "body": "fmt.Sprintf(\"$1\", $2)"
+  },
   "todo": {
     "prefix": "todo",
     "description": "Add TODO block",
     "body": "// TODO: $1 $0"
-  },
-  "logs": {
-    "prefix": "logs",
-    "description": "Print struct",
-    "body": "fmt.Printf(\"\\n$1 -> %+v\\n\", $1)"
-  },
-  "fixme": {
-    "prefix": "fixme",
-    "description": "Add FIXME block",
-    "body": "// FIXME: $1 $0"
-  },
-  "perf": {
-    "prefix": "perf",
-    "description": "Add PERF block",
-    "body": "// PERF: $1 $0"
   },
   "note": {
     "prefix": "note",
@@ -133,13 +108,24 @@
   },
   "log": {
     "prefix": "log",
-    "description": "Log variable",
-    "body": "fmt.Printf(\"\\n$1: %v\\n\", $1)"
+    "description": "Print variable",
+    "body": [
+      "// REMOVEME: Do not commit",
+      "fmt.Printf(\"\\n$1: %s\\n\", $1)"
+    ]
   },
-  "sprintf": {
-    "prefix": "sprintf",
-    "description": "Add fmt.Sprintf",
-    "body": "fmt.Sprintf(\"$1\", $2)"
+  "logs": {
+    "prefix": "logs",
+    "description": "Print struct",
+    "body": [
+      "// REMOVEME: Do not commit",
+      "fmt.Printf(\"\\n$1: %+v\\n\", $1)"
+    ]
+  },
+  "fixme": {
+    "prefix": "fixme",
+    "description": "Add FIXME block",
+    "body": "// FIXME: $1 $0"
   },
   "haveoc": {
     "prefix": "haveoc",
@@ -155,5 +141,10 @@
     "prefix": "exer",
     "description": "Add Expect(..).Should(HaveOccurred) gomega block",
     "body": "Expect($1).Should(HaveOccurred())"
+  },
+  "mapii": {
+    "prefix": "mapii",
+    "description": "Add map[string]interface{}{}",
+    "body": "map[string]interface{}{}"
   }
 }
