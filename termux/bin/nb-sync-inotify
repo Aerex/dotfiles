@@ -1,0 +1,14 @@
+#!/data/data/com.termux/files/usr/bin/bash
+DIR=$HOME/storage/shared/Documents/repos/notes
+while true; do
+  changedFile=$(inotifywait "$DIR" -r -e modify,move,create,delete \
+    --format "%w%f" --exclude '\.git' -t 500 2>/dev/null)
+  if [[ -n $changedFile ]]; then
+    echo "Syncing for: $changedFile"
+    nb use notes
+    nb sync
+    termux-toast -g top "Synced \"$changedFile\" note"
+  fi
+done
+
+# vim: filetype=bash
