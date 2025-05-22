@@ -1,0 +1,9 @@
+{
+  "pushd": {
+    "prefix": "pd",
+    "description": "pushd with /dev/null",
+    "body": [
+      "pushd $1 > /dev/null || exit"
+    ]
+  }
+}
