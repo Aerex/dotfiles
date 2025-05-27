@@ -37,30 +37,8 @@ return {
     'TimUntersberger/neogit',
     cmd = { 'Neogit' },
     config = function()
-      require('plugins.config.git').setup_neogit()
+      require('plugins.configs.git').setup_neogit()
     end,
     dependencies = { 'nvim-lua/plenary.nvim', 'sindrets/diffview.nvim' }
-  },
-  {
-    lazy = true,
-    'pwntester/octo.nvim',
-    cmd = { 'Octo' },
-    dependencies = {
-      { 'nvim-lua/popup.nvim' },
-      { 'nvim-lua/plenary.nvim' },
-      {
-        'nvim-telescope/telescope.nvim',
-        config = function()
-          require 'telescope'.setup({
-            pickers = {
-              octo = {
-                theme = 'ivy'
-              }
-            }
-          })
-        end,
-      }
-    },
-    config = function() require('configs.git').setup_octo() end
   }
 }

@@ -127,7 +127,7 @@ local on_attach = function(client, bufnr)
   -- LSP keymap
   local opts = { noremap = true, silent = true }
   vim.keymap.set('n', 'gd', function() vim.lsp.buf.declaration() end, { silent = true, buffer = bufnr })
-  vim.keymap.set('n', 'gr', function() require 'nvim-telescope'.lsp_ref() end, opts)
+  vim.keymap.set('n', 'gr', function() require 'plugins.configs.pickers'.telescope.lsp_ref() end, opts)
   vim.keymap.set('n', '<c-]>', function() vim.lsp.buf.definition() end, { silent = true, buffer = bufnr })
   vim.keymap.set('n', '<C-w>]', function()
       vim.cmd('vsplit');
@@ -137,7 +137,7 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', 'g0', function() utils.document_symbols() end, { silent = true, buffer = bufnr })
   --keymap('n', '<C-w>]', '<cmd>vsplit<bar>lua vim.lsp.buf.definition()<CR>', opts)
   vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, { silent = true, buffer = bufnr })
-  vim.keymap.set('n', 'gi', function() require 'telescope.builtin'.lsp_implementations() end,
+  vim.keymap.set('n', 'gi', function() require 'plugins.configs.pickers'.telescope.lsp_implementations() end,
     { silent = true, buffer = bufnr })
   keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   keymap('n', '\\wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
@@ -146,13 +146,13 @@ local on_attach = function(client, bufnr)
   keymap('n', '<M-D>', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   vim.keymap.set('n', '<leader>rn', function() vim.lsp.buf.rename() end, { silent = true, buffer = bufnr })
   -- FIXME(me): nvim-fzf.lsp#document_symbols is not working on selected
-  vim.keymap.set('n', 'g0', function() require 'nvim-telescope'.document_symbols() end, { silent = true, buffer = bufnr })
+  vim.keymap.set('n', 'g0', function() require 'plugins.configs.pickers'.telescope.document_symbols() end, { silent = true, buffer = bufnr })
   vim.keymap.set('n', '<leader>la', function() require 'navigator.codelens'.run_action() end,
     { silent = true, buffer = bufnr })
   --keymap('n', '<A-O>', '<cmd>Telescope lsp_document_symbols<CR>', opts)
   vim.keymap.set('n', '<leader>la', function() require 'navigator.codelens'.run_action() end,
     { silent = true, buffer = bufnr })
-  vim.keymap.set({ 'n', 'v' }, '<leader>ca', function() require 'action-preview'.code_actions() end,
+  vim.keymap.set({ 'n', 'v' }, '<leader>ca', function() require 'actions-preview'.code_actions() end,
     { silent = true, buffer = bufnr })
   keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
@@ -322,21 +322,14 @@ require 'lspconfig'.yamlls.setup {
 --  capabilities = capabilities
 --}
 
-require 'lspconfig'.tsserver.setup {
+require 'lspconfig'.ts_ls.setup {
   on_attach = on_attach,
   capabilities = capabilities
 }
 
 require 'lspconfig'.jsonls.setup {
   on_attach = on_attach,
-  capabilities = capabilities,
-  commands = {
-    Format = {
-      function()
-        vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line("$"), 0 })
-      end
-    }
-  }
+  capabilities = capabilities
 }
 
 require 'lspconfig'.bashls.setup {
@@ -374,6 +367,11 @@ local lua_settings = {
       enable = false,
     },
   },
+}
+require'lspconfig'.lua_ls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = lua_settings
 }
 
 local ok_j, _ = pcall(require, 'jdtls')
@@ -461,7 +459,7 @@ require('lspkind').init({
 
 if ok_nav then
   navigator.setup({
-    debug = false, -- log output, set to true and log path: ~/.cache/nvim/gh.log
+    debug = true, -- log output, set to true and log path: ~/.cache/nvim/gh.log
     width = 0.75, -- max width ratio (number of cols for the floating window) / (window width)
     height = 0.3, -- max list window height, 0.3 by default
     preview_height = 0.35, -- max height of preview windows
@@ -510,7 +508,7 @@ if ok_nav then
       diagnostic_virtual_text = true,      -- show virtual for diagnostic message
       diagnostic_update_in_insert = false, -- update diagnostic message in insert mode
       display_diagnostic_qf = false,       -- always show quickfix if there are diagnostic errors, set to false if you  want to
-      tsserver = {
+      ts_ls = {
         filetypes = { 'typescript' }       -- disable javascript etc,
         -- set to {} to disable the lspclient for all filetypes
       },

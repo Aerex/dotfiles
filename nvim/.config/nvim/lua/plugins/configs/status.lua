@@ -28,6 +28,7 @@ end
 M.galaxy = function ()
   local gl = require('galaxyline')
   local galaxyline_colours = require("galaxyline.theme").default
+  local conditions = require('galaxyline.condition')
   local devicons = require('nvim-web-devicons')
   local u = require('utils').u
   local gls = gl.section
@@ -128,10 +129,12 @@ local get_fcitx_status = function()
 end
 
 local buffer_not_empty = function()
-  if vim.fn.empty(vim.fn.expand('%:t')) ~= 1 then
-    return true
+  return #vim.fn.expand('%:t') > 0
+end
+local show_git = function()
+  return function()
+    return buffer_not_empty() and conditions.check_git_workspace()
   end
-  return false
 end
 
 local get_file_name = function()
@@ -254,6 +257,7 @@ gls.left[2] = {
     highlight = {colors.red,colors.line_bg,'bold'},
   },
 }
+
 gls.left[3] ={
   FileIcon = {
     provider = 'FileIcon',
@@ -261,6 +265,7 @@ gls.left[3] ={
     highlight = {require('galaxyline.provider_fileinfo').get_file_icon_color,colors.line_bg},
   },
 }
+
 gls.left[4] = {
   FileStateIcon = {
     provider = get_file_state_icon,
@@ -285,24 +290,18 @@ gls.left[6] = {
   }
 }
 
-
-gls.left[7] = {
-  GitIcon = {
-    provider = function() return '  ' end,
-    condition = require('galaxyline.provider_vcs').check_git_workspace,
-    highlight = {colors.orange,colors.line_bg},
-  }
-}
-
 -- TODO(me): This is too slow with big repos or using a worktree with many nested directories
 -- Need to make custom provider to handle this better
---gls.left[8] = {
---  GitBranch = {
---    provider = 'GitBranch',
---    condition = buffer_not_empty,
---    highlight = {colors.fg,colors.line_bg,'bold'},
---  }
---}
+gls.left[7] = {
+  GitBranch = {
+    provider = function()
+      return require('galaxyline.provider_vcs').get_git_branch()
+    end,
+    icon = '  ',
+    condition = show_git,
+    highlight = {colors.fg,colors.line_bg,'bold'},
+  }
+}
 
 local checkwidth = function()
   local squeeze_width  = vim.fn.winwidth(0) / 2
@@ -312,7 +311,7 @@ local checkwidth = function()
   return false
 end
 
-gls.left[9] = {
+gls.left[8] = {
   BlankSpace = {
     provider = function() return ' ' end,
     condition = checkwidth,
@@ -320,7 +319,7 @@ gls.left[9] = {
     highlight = {colors.fg,colors.line_bg}
   }
 }
-gls.left[10] = {
+gls.left[9] = {
   DiffAdd = {
     provider = 'DiffAdd',
     condition = checkwidth,
@@ -328,7 +327,7 @@ gls.left[10] = {
     highlight = {colors.green,colors.line_bg},
   }
 }
-gls.left[11] = {
+gls.left[10] = {
   DiffModified = {
     provider = 'DiffModified',
     condition = checkwidth,
@@ -336,7 +335,7 @@ gls.left[11] = {
     highlight = {colors.orange,colors.line_bg},
   }
 }
-gls.left[12] = {
+gls.left[11] = {
   DiffRemove = {
     provider = 'DiffRemove',
     condition = checkwidth,
@@ -344,7 +343,7 @@ gls.left[12] = {
     highlight = {colors.red,colors.line_bg},
   }
 }
-gls.left[13] = {
+gls.left[12] = {
   LeftEnd = {
     provider = function() return '' end,
     separator = '',
@@ -353,7 +352,7 @@ gls.left[13] = {
   }
 }
 
-gls.left[14] = {
+gls.left[13] = {
     TrailingWhiteSpace = {
      provider = TrailingWhiteSpace,
      icon = '  ',
@@ -361,7 +360,7 @@ gls.left[14] = {
     }
 }
 
-gls.left[15] = {
+gls.left[14] = {
   LSPStatus = {
     provider = LSPStatus,
     highlight = {colors.yellow,colors.bg},

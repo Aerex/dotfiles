@@ -76,9 +76,9 @@ local multi_open_maps = {
     ['q'] = require('telescope.actions').close,
     ['<CR>'] = multi_select.open,
     ['<C-c>'] = require('telescope.actions').close,
-    ['<C-s>'] = multi_select.horizonal,
+    ['<C-s>'] = multi_select.horizontal,
     ['<C-x>'] = multi_select.horizontal,
-    ['<C-v>'] = multi_select.veritical,
+    ['<C-v>'] = multi_select.vertical,
     ['<C-T>'] = multi_select.tab,
     ['<A-j>'] = require('telescope.actions').preview_scrolling_up,
     ['<A-k>'] = require('telescope.actions').preview_scrolling_up,
@@ -102,54 +102,7 @@ M.telescope = {
             exclude = { -1 }
           }
         },
-        pickers = {
-          octo = {
-            theme = 'ivy'
-          },
-          oldfiles = {
-            mappings = multi_open_maps
-          },
-          find_files = {
-            mappings = multi_open_maps
-          },
-          buffers = {
-            mappings = multi_open_maps
-          },
-          live_grep = {
-            mappings = multi_open_maps
-          },
-          grep_string = {
-            mappings = multi_open_maps
-          },
-          lsp_references = {
-            mappings = multi_open_maps
-          },
-          mappings = {
-            i = {
-              ['<C-x>'] = require('telescope.actions').select_horizontal,
-              ['<C-s>'] = require('telescope.actions').select_horizontal,
-              ['<C-c>'] = require('telescope.actions').close,
-              ['<C-j>'] = require('telescope.actions').move_selection_next,
-              ['<C-k>'] = require('telescope.actions').move_selection_previous,
-              --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
-            },
-            n = {
-              ['q'] = require('telescope.actions').close,
-              ['<Esc>'] = require('telescope.actions').close,
-              ['<C-c>'] = require('telescope.actions').close,
-              ['<C-s>'] = require('telescope.actions').select_horizontal,
-              ['<C-x>'] = require('telescope.actions').select_horizontal,
-              ['<A-j>'] = require('telescope.actions').preview_scrolling_up,
-              ['<A-k>'] = require('telescope.actions').preview_scrolling_up,
-              ['<Tab>'] = require('telescope.actions').toggle_selection,
-              --['<A-x>'] = require'trouble.providers.telescope'.open_with_trouble
-            }
-          },
-          -- file_sorter = require('telescope.sorters').get_fzy_sorter,
-          file_previewer = require('telescope.previewers').vim_buffer_cat.new,
-          grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
-          qflist_previewer = require('telescope.previewers').vim_buffer_qflist.new,
-        },
+        mappings = multi_open_maps,
         extensions = {
           fzf = {
             fuzzy = true,                   -- false will only do exact matching
@@ -166,7 +119,7 @@ M.telescope = {
     vim.g.telescope_prime_fuzzy_find = 1
   end,
   git_files = function()
-    require('telescope.builtin').git_files(M.get_dropdown({
+    require('telescope.builtin').git_files(get_dropdown({
       layout_strategy = 'vertical',
       layout_config = {
         vertical = {

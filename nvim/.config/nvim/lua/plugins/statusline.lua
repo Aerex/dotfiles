@@ -2,7 +2,7 @@ return {
   {
     'glepnir/galaxyline.nvim',
     dependencies = { 'kyazdani42/nvim-web-devicons' },
-    config = function() require('plugins.configs.status').galaxyline() end
+    config = function() require('plugins.configs.status').galaxy() end
   },
   {
     'alvarosevilla95/luatab.nvim',

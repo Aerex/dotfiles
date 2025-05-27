@@ -87,6 +87,8 @@ M.setup_signs = function()
   local ok_d, diffview = pcall(require, 'diffview')
   if ok_d then
     diffview.setup {
+      view = {
+      },
       hooks = {
         view_opened = function(view)
           -- load which key labels
@@ -171,7 +173,6 @@ M.setup_neogit = function()
         ['='] = 'Toggle',
         ['x'] = 'Discard',
         ['-'] = 'Stage',
-        ['#'] = 'Console',
         ['<c-x>'] = 'SplitOpen',
         ['<c-s>'] = 'SplitOpen',
         ['<c-v>'] = 'VSplitOpen',

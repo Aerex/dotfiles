@@ -1,5 +1,19 @@
 return {
-  { 'mhartington/formatter.nvim' },
+  { 'mhartington/formatter.nvim',
+    config = function()
+      require('formatter').setup{
+      logging = true,
+      filetype = {
+        json = {
+          require('formatter.filetypes.json').jq
+        },
+        go = {
+          require('formatter.filetypes.go').gofmt
+        }
+      }
+    }
+    end
+  },
   { 'godlygeek/tabular',         cmd = { 'Tabularize' } },
   {
     'lukas-reineke/indent-blankline.nvim',

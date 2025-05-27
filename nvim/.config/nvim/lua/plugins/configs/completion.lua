@@ -1,4 +1,3 @@
-local get_packer_path = require('utils').get_packer_path
 local get_local_cfgs = require('utils').get_local_cfgs
 local ok, cmp = pcall(require, 'cmp')
 local luasnip = require('luasnip')
@@ -29,7 +28,7 @@ if ok then
     preselect = cmp.PreselectMode.None,
     snippet = {
       expand = function(args)
-        vim.fn['UltiSnips#Anon'](args.body)
+        luasnip.lsp_expand(args.body)
       end,
     },
     mapping = {
@@ -81,8 +80,8 @@ if ok then
           nvim_lsp = '[LSP]',
           nvim_lua = '[Lua]',
           buffer = '[BUF]',
-          spell = '[SPELL]',
-          dictionary = '[DICT]',
+          spell = '',
+          dictionary = '',
           git = '',
           --rg = '[RG]'
         })[entry.source.name]
@@ -117,6 +116,12 @@ if ok then
       }
     })
   end
+
+  cmp.setup.filetype('ledger', {
+    sources = {
+      { name = 'hledger' }
+    }
+  })
 
   -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline('/', {

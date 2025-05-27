@@ -9,9 +9,15 @@ return {
   {
     'tweekmonster/startuptime.vim'
   },
-
   {
-    'kshenoy/vim-signature'
+   "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+        require("nvim-surround").setup({
+            -- Configuration here, or leave empty to use defaults
+        })
+    end  
   },
   {
     'kylechui/nvim-surround'
@@ -74,5 +80,39 @@ return {
   },
   {
     'tweekmonster/startuptime.vim'
+  },
+  {
+    'kevinhwang91/nvim-bqf',
+    dependencies = {
+      'junegunn/fzf',
+      build = ':call fzf#install()'
+    },
+    ft = 'qf',
+    cmd = 'QuickFixCmdPost',
+    opts = {
+      func_map = {
+        tab = '<C-t>',
+        split = '<C-s>',
+        vsplit = '<C-v>',
+        stoggleup = 'K',
+        stoggledown = 'J',
+
+        ptoggleitem = 'p',
+        ptoggleauto = 'P',
+        ptogglemode = 'zp',
+
+        pscrollup = '<C-b>',
+        pscrolldown = '<C-f>',
+
+        prevfile = '[f',
+        nextfile = ']f',
+
+        prevhist = '<C-p>',
+        nexthist = '<C-n>',
+      }
+    },
+    config = function()
+      require 'plugins.configs.core'.bqf.setup()
+    end
   }
 }

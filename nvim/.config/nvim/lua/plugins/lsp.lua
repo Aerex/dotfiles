@@ -46,7 +46,7 @@ return {
     end,
   },
   {
-    'weilbith/nvim-code-action-menu',
+    'aznhe21/actions-preview.nvim',
     cmd = 'CodeActionMenu',
     config = function()
       vim.g.code_action_menu_show_details = false

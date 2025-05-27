@@ -43,7 +43,7 @@ local noremaps = {
     ['<leader>o']    = function() require 'telescope.builtin'.oldfiles() end,
     ['<leader>fM']   = function() require 'plugins.configs.pickers.fzf.manpages' () end,
     -- TODO: telescope seems faster here need to figure out why fzf is not
-    ['<leader>p']    = function() require 'nvim-telescope'.git_files() end,
+    ['<leader>p']    = function() require 'plugins.configs.pickers'.telescope.git_files() end,
     [',p']           = function() require 'nvim-fzf.git' () end,
     ['<leader>\\rg'] = function() require 'plugins.configs.pickers.fzf.rg' () end,
     ['<leader>rg']   = function()
@@ -53,7 +53,7 @@ local noremaps = {
         "--column -g !*.lock -g !*.sum -g !*i18n_resources.go"
       })
     end,
-    ['<leader>rG']   = function() require 'nvim-telescope'.rg_string() end,
+    ['<leader>rG']   = function() require 'plugins.configs.pickers'.telescope.rg_string() end,
     [',rg']          = function() require 'plugins.configs.pickers.fzf.rg' (vim.fn.input('Search term: '), true) end,
     -- git
     ['<leader>gS']   = 'Git',
@@ -76,8 +76,8 @@ local noremaps = {
     ['<leader>to']   = function() require 'test'.output() end,
     ['<leader>tO']   = function() require 'test'.output({ enter = true }) end,
     -- debugger
-    ['<leader>dd']   = function() require 'debugger'.start_or_continue() end,
-    ['<F5>']         = function() require 'debugger'.start_or_continue() end,
+    ['<leader>dd']   = function() require 'plugins.configs.debugger'.start_or_continue() end,
+    ['<F5>']         = function() require 'plugins.configs.debugger'.start_or_continue() end,
     ['<leader>dbb']  = 'lua require\'dap\'.toggle_breakpoint()',
     ['<F9>']         = 'lua require\'dap\'.toggle_breakpoint()',
     ['<leader>dso']  = function() require 'dap'.step_over() end,
@@ -88,7 +88,7 @@ local noremaps = {
     ['<leader>drc']  = 'lua require\'dap\'.run_to_cursor()',
     ['<leader>dK']   = 'lua require\'dap.ui.widgets\'.hover()',
     ['<leader>dv']   = 'lua require\'dapui\'.float_element(\'scopes\', { enter = true })',
-    ['<leader>dbl']  = function() require 'debugger'.toggle_breakpoints_qf() end,
+    ['<leader>dbl']  = function() require 'plugins.configs.debugger'.toggle_breakpoints_qf() end,
     ['<leader>tdd']  = function() require 'test'.debug_file() end,
     ['<leader>tdn']  = function() require 'test'.debug_nearest() end,
     ['<leader>du']   = 'lua require\'dapui\'.toggle()',

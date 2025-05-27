@@ -100,7 +100,7 @@ M.references = function()
   if ok_nav then
     require 'navigator.reference'.async_ref()
   elseif ok_tele then
-    require 'nvim-telescope'.lsp_ref()
+    require 'plugins.configs.pickers'.lsp_ref()
   else
     vim.lsp.buf.references()
   end
