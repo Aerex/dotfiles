@@ -322,10 +322,10 @@ require 'lspconfig'.yamlls.setup {
 --  capabilities = capabilities
 --}
 
-require 'lspconfig'.ts_ls.setup {
-  on_attach = on_attach,
-  capabilities = capabilities
-}
+-- require 'lspconfig'.ts_ls.setup {
+--   on_attach = on_attach,
+--   capabilities = capabilities
+-- }
 
 require 'lspconfig'.jsonls.setup {
   on_attach = on_attach,
@@ -508,10 +508,10 @@ if ok_nav then
       diagnostic_virtual_text = true,      -- show virtual for diagnostic message
       diagnostic_update_in_insert = false, -- update diagnostic message in insert mode
       display_diagnostic_qf = false,       -- always show quickfix if there are diagnostic errors, set to false if you  want to
-      ts_ls = {
-        filetypes = { 'typescript' }       -- disable javascript etc,
-        -- set to {} to disable the lspclient for all filetypes
-      },
+      -- ts_ls = {
+      --   filetypes = { 'typescript' }       -- disable javascript etc,
+      --   -- set to {} to disable the lspclient for all filetypes
+      -- },
       pylsp = {
         capabilities = capabilities,
         on_attach = on_attach,

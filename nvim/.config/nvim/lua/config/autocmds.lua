@@ -30,6 +30,13 @@ autocmd('VimEnter', {
   end
 })
 
+autocmd('TermOpen', {
+  pattern = '*toggleterm#*',
+  callback = function()
+    require'plugins.configs.core'.terminal.maps()
+  end
+})
+
 local format_auto = augrp('format_auto', { clear = false })
 autocmd('BufWritePost', {
   pattern = { '*.go' },
@@ -46,4 +53,13 @@ autocmd('BufWritePost', {
   end,
   desc = 'Autoformat on file on save'
 })
+})
+
+autocmd('FileType', {
+  pattern =
+  '{lspinfo},{qf},{dap-repl},{dap-float},{neotest-output},{man},{help},{fugitiveblame},{dap-float},{httpResult}',
+  callback = function(args)
+    vim.keymap.set('n', 'qq', function() api.nvim_win_close(0, true) end,
+      { silent = true, buffer = args.buf })
+  end
 })

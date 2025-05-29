@@ -1,6 +1,5 @@
 local utils = require('utils')
 local t = utils.t
-local autocmd = utils.autocmd
 
 -- slower to access vim.api direct
 local api = vim.api
@@ -167,23 +166,8 @@ vim.keymap.set('n', '<leader>yg', function() require 'gitlinker'.get_buf_range_u
 vim.keymap.set('n', '<leader>sp', function() vim.notify(vim.fn.expand('%:p')) end, { silent = true })
 api.nvim_set_keymap('n', '<CR>', 'v:lua.smart_carrier_return()', { expr = true })
 api.nvim_set_keymap('n', '<C-w><leader>', '<C-w>=', { noremap = true, silent = true })
-autocmd('TermOpen', {
-  pattern = '*toggleterm#*',
-  callback = function()
-    require 'terminals'.set_terminal_keymaps()
-  end
-})
 api.nvim_set_keymap('', '<F2>', ":echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, \"name\")')<CR>",
   { silent = true })
-autocmd('FileType', {
-  pattern =
-  '{lspinfo},{qf},{dap-repl},{dap-float},{neotest-output},{man},{help},{fugitiveblame},{dap-float},{httpResult}',
-  callback = function(args)
-    vim.keymap.set('n', 'qq', function() api.nvim_win_close(0, true) end,
-      { silent = true, buffer = args.buf })
-  end
-})
-
 -- TableMode
 
 vim.g['table_mode_motion_left_map'] = ']\\'

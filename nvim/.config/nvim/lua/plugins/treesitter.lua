@@ -1,9 +1,10 @@
 return {
   {
+    priority = 100,
     'nvim-treesitter/nvim-treesitter',
-    config = function()
-      require('plugins.configs.treesitter')
-    end,
+    -- config = function()
+    --   require('plugins.configs.treesitter')
+    -- end,
     build = ':TSUpdate',
     opts = {
       highlight = {

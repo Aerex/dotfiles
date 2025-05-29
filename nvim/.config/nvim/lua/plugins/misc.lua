@@ -1,34 +1,48 @@
 return {
   {
-    'NTBBloodbath/rest.nvim',
-    ft = { 'http' },
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      config = function()
-        require 'plugins.configs.misc'
-      end
+    "vhyrro/luarocks.nvim",
+    priority = 1000,
+    config = true,
+    opts = {
+      rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" }
     }
   },
   {
-      'folke/which-key.nvim',
-       config = function()
-        require 'plugins.configs.misc'.which_key.setup()
-      end,
-      event = 'VeryLazy',
-      opts = {
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
+    'rest-nvim/rest.nvim',
+    ft = { 'http' },
+    branch = 'v3.8.4',
+    opts = {
+      ensure_installed = { "http" },
+      sync_install = false,
+      indent = { enable = true },
+    },
+    config = function()
+      require 'plugins.configs.misc'.rest.setup()
+    end,
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+    }
+  },
+  {
+    'folke/which-key.nvim',
+    config = function()
+      require 'plugins.configs.misc'.which_key.setup()
+    end,
+    event = 'VeryLazy',
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+    keys = {
+      {
+        '<leader>?',
+        function()
+          require('which-key').show({ global = false })
+        end,
+        desc = 'Buffer Local Keymaps (which-key)',
       },
-      keys = {
-        {
-          '<leader>?',
-          function()
-            require('which-key').show({ global = false })
-          end,
-          desc = 'Buffer Local Keymaps (which-key)',
-        },
-      },
+    },
   },
   {
     'serenevoid/kiwi.nvim',
@@ -152,5 +166,11 @@ return {
           'nvim-lua/plenary.nvim',
           'nvim-treesitter/nvim-treesitter',
         }
+  },
+  {
+    dir = '~/Documents/repos/ibm/wca.nvim',
+    opts = {
+
+    }
   }
 }
