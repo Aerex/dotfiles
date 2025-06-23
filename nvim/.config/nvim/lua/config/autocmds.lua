@@ -27,33 +27,33 @@ autocmd('VimEnter', {
   pattern = '*',
   callback = function()
     vim.fn.system('kill -s SIGWINCH $PPID')
+    vim.cmd [[syntax on]]
   end
 })
 
 autocmd('TermOpen', {
   pattern = '*toggleterm#*',
   callback = function()
-    require'plugins.configs.core'.terminal.maps()
+    require 'plugins.configs.core'.terminal.maps()
   end
 })
 
-local format_auto = augrp('format_auto', { clear = false })
-autocmd('BufWritePost', {
-  pattern = { '*.go' },
-  group = format_auto,
-  callback = function()
-    vim.cmd [[Format]]
-    -- FIXME: Issue with args 1-2 in lua format
-    --local win_ids = vim.fn.win_findbuf(args.buf)
-    --local end_line = vim.fn.line('$')
-    --if #win_ids > 0 then
-    --  end_line = vim.fn.lin('$', win_ids)
-    --end
-    --require('formatter.format').format({}, {}, 0, end_line, { write = true })
-  end,
-  desc = 'Autoformat on file on save'
-})
-})
+-- local format_auto = augrp('format_auto', { clear = false })
+-- autocmd('BufWritePost', {
+--   pattern = { '*.go' },
+--   group = format_auto,
+--   callback = function()
+--     vim.cmd [[Format]]
+--     -- FIXME: Issue with args 1-2 in lua format
+--     --local win_ids = vim.fn.win_findbuf(args.buf)
+--     --local end_line = vim.fn.line('$')
+--     --if #win_ids > 0 then
+--     --  end_line = vim.fn.lin('$', win_ids)
+--     --end
+--     --require('formatter.format').format({}, {}, 0, end_line, { write = true })
+--   end,
+--   desc = 'Autoformat on file on save'
+-- })
 
 autocmd('FileType', {
   pattern =
@@ -63,3 +63,30 @@ autocmd('FileType', {
       { silent = true, buffer = args.buf })
   end
 })
+
+autocmd('FileType', {
+  pattern = "http",
+  callback = function(ev)
+    vim.treesitter.start(ev.buf, 'http')
+  end,
+})
+
+autocmd({ 'BufEnter' }, {
+  pattern = { '*' },
+  callback = function()
+    if vim.tbl_contains({ 'markdown', 'vimwiki' }, vim.o.filetype) then
+      vim.cmd [[set spell]]
+    end
+  end
+})
+
+local ok, nlocal = pcall(require, 'nvim-local')
+if ok then
+  -- NOTE(me): Find a better event to fire this function
+  autocmd({ 'BufEnter', 'BufWinEnter' }, {
+    pattern = { '*.go', '*.feature', '*.ts', '*.java' },
+    callback = function()
+      nlocal.setup()
+    end
+  })
+end

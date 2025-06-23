@@ -3,7 +3,7 @@ local fn = vim.fn
 -- Bootstrap lazy.nvim
 local lazypath = fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  fn.system({
+  local out = fn.system({
     'git',
     'clone',
     '--filter=blob:none',
@@ -22,6 +22,8 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   end
 end
 vim.opt.rtp:prepend(lazypath)
+-- add in order for some plugins to function
+package.cpath = package.cpath .. ';' .. vim.env.HOME .. '/.luarocks/lib64/lua/5.1/?.so'
 
 require('lazy').setup({
   spec = {
@@ -35,6 +37,9 @@ require('lazy').setup({
   change_detection = {
     enabled = true,
     notify = false
+  },
+  rocks = {
+    hererocks = nil
   },
   diff = {
     cmd = 'diffview.nvim'
