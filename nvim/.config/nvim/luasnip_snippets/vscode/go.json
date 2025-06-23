@@ -8,6 +8,15 @@
       "\\}"
     ]
   },
+  "gc": {
+    "prefix": "gc",
+    "description": "Add gomega Context function block",
+    "body": [
+      "Context(\"$1\", func() {",
+      "\t$0",
+      "\\})"
+    ]
+  },
   "gde": {
     "prefix": "gde",
     "description": "Add gomega Describe function block",
@@ -132,5 +141,10 @@
     "prefix": "exer",
     "description": "Add Expect(..).Should(HaveOccurred) gomega block",
     "body": "Expect($1).Should(HaveOccurred())"
+  },
+  "map[string]any": {
+    "prefix": "mapsa",
+    "description": "Add map[string]any",
+    "body": "map[string]any"
   }
 }

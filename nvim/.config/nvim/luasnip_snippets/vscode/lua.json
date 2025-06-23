@@ -12,6 +12,11 @@
     "description": "Add fixme",
     "body": "-- FIXME(me): $0"
   },
+  "removeme": {
+    "prefix": "removeme",
+    "description": "Add REMOVEME",
+    "body": "-- REMOVEME: $0"
+  },
   "use": {
     "prefix": "use",
     "description": "Use",
@@ -20,11 +25,17 @@
   "logt": {
     "prefix": "logt",
     "description": "Print table",
-    "body": "print('\\n$1\\n' .. vim.inspect($1))"
+    "body": [
+      "--REMOVEME: Do not commit",
+      "print('\\n$1\\n' .. vim.inspect($1))"
+    ]
   },
   "log": {
     "prefix": "log",
     "description": "Print variable",
-    "body": "print('\\n$1 -> ' .. $1)"
+    "body": [
+      "--REMOVEME: Do not commit",
+      "print('\\n$1 -> ' .. $1)"
+    ]
   }
 }
