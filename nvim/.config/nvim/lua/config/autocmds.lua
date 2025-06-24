@@ -76,6 +76,8 @@ autocmd({ 'BufEnter' }, {
   callback = function()
     if vim.tbl_contains({ 'markdown', 'vimwiki' }, vim.o.filetype) then
       vim.cmd [[set spell]]
+    else
+      vim.cmd [[set nospell]]
     end
   end
 })
