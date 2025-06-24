@@ -69,10 +69,8 @@ M.goimports = function(timeout_ms)
   local result = vim.lsp.buf_request_sync(bufnr, 'textDocument/codeAction', params, timeout_ms)
   for _, res in pairs(result or {}) do
     for _, r in pairs(res.result or {}) do
-      if r.edit then
+      if r.kind == "source.organizeImports" and r.edit then
         vim.lsp.util.apply_workspace_edit(r.edit, 'utf-8')
-      else
-        vim.lsp.buf.execute_command(r.command)
       end
     end
   end
@@ -111,6 +109,14 @@ M.document_symbols = function()
     require('navigator.symbols').document_symbols()
   else
     require('plugins.configs.lsp').document_symbols()
+  end
+end
+
+M.goto_definition = function()
+  if ok_nav then
+    require('navigator.definition').definition()
+  else
+    vim.lsp.buf.definition()
   end
 end
 
