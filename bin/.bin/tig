@@ -1,7 +1,0 @@
-#!/bin/sh
-if [[ $(uname -r) == *"el8"* ]] ; then
-  TIGRC_USER=$HOME/.tigrc-local \tig "$@"
-else
-  \tig "$@"
-fi
-# vim: ft=sh

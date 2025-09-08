@@ -106,41 +106,41 @@ bind generic cc ?<git checkout %(commit)
 # ================ Commits  ====================
 bind generic c  none
 bind generic ca !?@git commit --amend --no-edit
-# bind status   yy !./tig-yank commit %(commit)
 bind generic K view-help
 bind generic <C-n><C-w> view-next
 bind generic X !./open-commit %(commit)
 bind generic x !./open-links-in-commit-message %(commit)
-
-
 
 # ================ Tags ====================
 bind main Ta !git tag %(prompt) %(commit) 
 bind main Td !git tag -d %(tag)
 bind main Tp !git push origin %(tag)
 
-
 # Fixup with parent commit
-bind main <Ctrl-f> !./tig-rebase.sh fixup %(commit)
-bind diff <Ctrl-f> !./tig-rebase.sh fixup %(commit)
+bind main <Ctrl-f> !./bin/tig-rebase fixup %(commit)
+bind diff <Ctrl-f> !./bin/tig-rebase fixup %(commit)
 
 # Rebase to move commit up
-bind main <Ctrl-k> !./tig-rebase.sh ascend %(commit)
-bind diff <Ctrl-k> !./tig-rebase.sh ascend %(commit)
+bind main <Ctrl-k> !./bin/tig-rebase ascend %(commit)
+bind diff <Ctrl-k> !./bin/tig-rebase ascend %(commit)
 
 # Rebase to move commit down
-bind main <Ctrl-j> !./tig-rebase.sh descend %(commit)
-bind diff <Ctrl-j> !./tig-rebase.sh descend %(commit)
+bind main <Ctrl-j> !./bin/tig-rebase descend %(commit)
+bind diff <Ctrl-j> !./bin/tig-rebase descend %(commit)
 
 # Edit commit message
-bind main <Ctrl-r> !./tig-rebase.sh reword %(commit)
-bind diff <Ctrl-r> !./tig-rebase.sh reword %(commit)
+bind main <Ctrl-r> !./bin/tig-rebase.sh reword %(commit)
+bind diff <Ctrl-r> !./bin/tig-rebase.sh reword %(commit)
 # Reset to commit
 bind main <Esc>r !git reset %(commit)
 
+# Interactive rebase from commit 
+bind main <Ctrl-b> !>sh -c "git rebase -i %(commit)"
+bind diff <Ctrl-b> !>sh -c "git rebase -i %(commit)"
+
 # Abort current rebase
-bind main <Ctrl-x> !./tig-rebase.sh abort
-bind diff <Ctrl-x> !./tig-rebase.sh abort
+bind main <Ctrl-x> !~/.config/tig/bin/tig-rebase abort
+bind diff <Ctrl-x> !./bin/tig-rebase abort
 
 # ================ Browser ====================
 bind main    <Space> none
@@ -158,3 +158,5 @@ bind blob    <Space>B      @gh browse -- blob/"%(prompt Enter branch name: )"/%(
 bind grep    <Space>b      @gh browse -- blob/%(branch)/%(file)
 bind grep    <Space>B      @gh browse -- blob/"%(prompt Enter branch name: )"/%(file)
 
+# TODO(me): Need to figure out how to conditional set colors 
+# see for https://github.com/jonas/tig/issues/477 for possible solution

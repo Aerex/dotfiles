@@ -10,10 +10,12 @@ function usage()
 }
 
 os=$(uname -s)
-if [ "$os" = "Darwin" ]; then 
+if [[ "$os" = "Darwin" ]]; then 
   copy_command=pbcopy
-else
+else if [[ -s $(command -v xclip) ]]; then
   copy_command=xclip -b
+else if [[ -s $(command -v xsel) ]]; then
+  copy_command=xsel --clipboard --input
 fi
 
 [ "$#" -lt 1 ] && usage
