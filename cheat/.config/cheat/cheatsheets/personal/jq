@@ -55,8 +55,11 @@ $ if [[ $(jq 'if type =="array" and length > 0 then true else false end' file.js
 $   echo "file has elements in array"
 $ fi
 
-# Check a property is defined before accessing
-jq '.result 
+# Check a property is defined before accessing in an array
+jq '.result  
   | select(.property_history != null) 
   | .property_history 
   | map(select(.event_name == "Sold"))[0].date'
+
+# Check a property exists in an object
+jq 'try(.result)' 

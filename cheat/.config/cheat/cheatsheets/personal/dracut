@@ -1,0 +1,2 @@
+# Generate a initramf 
+dracut --kver 6.1.8-200.fc37.x86_64

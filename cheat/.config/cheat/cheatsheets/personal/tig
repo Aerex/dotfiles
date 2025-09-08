@@ -1,3 +1,8 @@
 # Misc
 
 X 	Toggle commit ID display on/off
+
+# Filter
+
+## Filter by author
+tig --author='<AUTHOR_NAME>'

@@ -1,0 +1,6 @@
+# Import as a singleton
+beet import -s 
+
+# Enable dry-run
+beet --pretend
+

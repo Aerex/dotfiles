@@ -42,3 +42,17 @@ This is [an example](http://example.com "Title") inline link.
 *em* _em_
 
 **strong** __strong__
+
+## GitHub 
+
+### Note
+> [!NOTE]
+> This is a note
+
+### Important
+> [!IMPORTANT]
+> This is important
+
+### Warning
+> [!WARNING]
+> This is a warning

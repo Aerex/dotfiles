@@ -206,9 +206,6 @@ git push --delete origin <tagname>
 # Delete local tag
 git tag -d <tagname:>
 
-#Fetch tags
-git fetch --tags
-
 # Recover a drop stash (Need to have terminal still open where you called git stash drop)
 git fsc --no-reflo | awk '/dangling commit/ {print $3}'
 
@@ -252,3 +249,6 @@ git -c user.email=<EMAIL> -c user.name=<NAME> commit
 git merge -s ours ref-to-be-merged
 git diff --binary ref-to-be-merged | git apply  -R --index
 git commit -F .git/COMMIT_EDIT_MSG --amend
+
+# Create a patch file
+git diff > file.patch

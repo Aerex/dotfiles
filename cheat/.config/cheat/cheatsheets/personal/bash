@@ -136,6 +136,17 @@ Editing:
  
 done
 
+#loop through an array
+for i in "${a[@]}"
+do
+  echo "$i"
+done
+
+# loop using seq (1-100)
+for i in $(seq 100); do
+  echo "$i"
+done
+
 # Arithmetic Expansion
 $((expression))
 ## Adding two numbers
@@ -147,11 +158,6 @@ echo $(($n+1))
 ## Declare an array
 declare -a arr=("1", "2")
 
-#loop through an array
-for i in "${a[@]}"
-do
-  echo "$i"
-done
 # Note that the double quotes around "${arr[@]}" are really important. 
 # Without them, the for loop will break up the array by substrings separated by any spaces within the strings 
 # instead of by whole string elements within the array.
@@ -159,3 +165,7 @@ done
 ## Get length
 echo "${#ArrayName[@]}"
 
+## Negate regex check
+if [[ ! "$var" =~ .*(arm|amd).* ]]; then
+  echo "Not arm or amd"
+fi
