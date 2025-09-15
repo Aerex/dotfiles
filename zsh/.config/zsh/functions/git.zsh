@@ -62,10 +62,36 @@ function ghpv() {
 
 }
 
+function gcod() {
+  dev_branch=$(git branch --list | sed 's/\*\s//' | tr -d ' ' | grep -E '^dev$')
+  git checkout $dev_branch
+}
+
+function gcom() {  
+  master_branch=$(git branch --list | sed 's/\*\s//' | tr -d ' ' | grep -E '^ma(in|ster)')
+  git checkout $master_branch
+}
+
+function gmm() {
+  master_branch=$(git branch --list | sed 's/\*\s//' | tr -d ' ' | grep -E '^ma(in|ster)')
+  git merge $master_branch
+}
+
+function ghpc() {
+  _gh_exists
+
+  gh pr comment $@
+}
+
+function ghc() { 
+  _gh_exists
+  gh issue comment $@
+}
+
 function ghpm() { 
   _gh_exists
 
-  gh pr list --assignee @me
+  gh pr list --author @me
 
 }
 
@@ -76,4 +102,99 @@ function ghb() {
 
 }
 
+function ghe() { 
+  _gh_exists
+
+  gh issue edit $@
+}
+
+function ghy() {
+  local skip
+  
+  #===  FUNCTION  ================================================================
+  #         NAME:  usage
+  #  DESCRIPTION:  Display usage information.
+  #===============================================================================
+  function usage ()
+  {
+    echo "Usage:  ghy [options] 
+
+Options:
+-h|help            Display this message
+-t|title           Copy gh title to clipboard
+-u|url|l|link      Copy gh url/link to clipboard"
+      skip=1
+  
+  }    # ----------  end of function usage  ----------
+  
+  #-----------------------------------------------------------------------
+  #  Handle command line arguments
+  #-----------------------------------------------------------------------
+  
+  while getopts ":htuls" opt
+  do
+    case $opt in
+  
+    h|help )  usage; ;;
+    t|title) PROP="title";;
+    u|l|link|url) PROP="url";;
+    * ) printf "\\033[31mOption does not exist: -$OPTARG\\033[0m\\n\n";usage; skip=1 ;;
+    esac    # --- end of case ---
+  done
+  shift $(($OPTIND-1))
+
+  if [[ -z $skip ]]; then 
+    ISSUE=$1
+    _gh_exists
+
+    if [[ -z $(command -v jq) ]]; then 
+      echo 'Missing jq'
+      exit 1
+    fi
+    gh issue view $ISSUE --json $PROP | jq -r ".$PROP" | copy
+  fi
+}
+
+function ghyt() { 
+  ISSUE=$1
+  _gh_exists
+
+  if [[ $(command -v jq) ]]; then
+    gh issue view $ISSUE --json title | jq -r '.title' | copy
+  else
+    echo 'Missing jq'
+  fi
+}
+
+
+function ghyl() { 
+  ISSUE=$1
+  _gh_exists
+
+  if [[ $(command -v jq) ]]; then
+    gh issue view $ISSUE --json url | jq -r '.url' | copy
+  else
+    echo 'Missing jq'
+  fi
+}
+
+function ghvs(){
+  ISSUE=$1
+  _gh_exists
+
+  if [[ $(command -v jq) ]]; then
+    gh issue view $ISSUE --json state | jq -r '.state'
+  else
+    echo 'Missing jq'
+  fi
+}
+
+function gws(){
+  if [[ $(command -v ghwork) ]]; then
+    dir=$(ghwork)
+    if [[ -n $dir ]]; then
+      cd $dir
+    fi
+  fi
+}
 

@@ -1,16 +1,55 @@
 function conf(){
-  if [[ ! -z $(command -v tmsu) ]]; then 
-    tmsu files --path=$HOME conf | fzf --preview="highlight -O ansi -l --force {}" \
-      --bind "enter:execute($EDITOR {})+abort"
+  if [[ $(command -v tmsu 2>/dev/null) ]]; then
+    VERT_CONFIG_DIRS=$(tmsu files conf)
   else
     CONFIG_DIRS=(~/.wuzz/config.toml, ~/.tmux.conf, ~/.config/nvim/init.vim, ~/.jira.d/config.yml, ~/.chunkwmrc, ~/.skhdrc, ~/.kube/config,
-      ~/.myclirc, ~/.qutebrowser/config.py, ~/.taskrc, ~/.config/bugwarrior/bugwarriorrc, ~/.config/vdirsyncer/config, ~/.config/tig/config, 
-      ~/tmux.powerline.conf, ~/.my.cnf, ~/.config/neomutt/muttrc, ~/.offlineimaprc, ~/.config/i3/config, ~/.Xresources)
-      VERT_CONFIG_DIRS=$(echo $CONFIG_DIRS | awk -v RS=, '{ sub(" ", ""); print }')
-
-      echo $VERT_CONFIG_DIRS | fzf --preview="highlight -O ansi -l --force {}" \
-        --bind "enter:execute($EDITOR {})+abort"
+    ~/.myclirc, ~/.qutebrowser/config.py, ~/.taskrc, ~/.config/bugwarrior/bugwarriorrc, ~/.config/vdirsyncer/config, ~/.config/tig/config, 
+    ~/tmux.powerline.conf, ~/.my.cnf, ~/.config/neomutt/muttrc, ~/.offlineimaprc, ~/.config/i3/config, ~/.Xresources)
+    VERT_CONFIG_DIRS=$(echo $CONFIG_DIRS | awk -v RS=, '{ sub(" ", ""); print }')
   fi
+    echo $VERT_CONFIG_DIRS | fzf --preview="highlight -O ansi -l --force {}" \
+      --bind "enter:execute($EDITOR {})+abort"
+}
+function favf() { 
+  echo $(tmsu files fav) | fzf --preview="highlight -O ansi -l --force {}" \
+      --bind "enter:execute($EDITOR {})+abort"
+}
+
+# Select a running docker container to stop
+function ds() {
+  local cid
+  cid=$(docker ps | sed 1d | fzf -q "$1" | awk '{print $1}')
+
+  [ -n "$cid" ] && docker stop "$cid"
+}
+# Select a docker container to remove
+function drm() {
+  local cid
+  cid=$(docker ps -a | sed 1d | fzf -q "$1" | awk '{print $1}')
+
+  [ -n "$cid" ] && docker rm "$cid"
+}
+
+# Select a docker image or images to remove
+function usage_drmi() {
+  echo "Usage: drmi [options]
+Options: 
+-f  Force delete images
+-q  Start list with query
+-h  Display this message"
+}
+function drmi() {
+  FORCE_FLAG=""
+  while getopts "hf" opt
+  do
+    case "$opt" in
+      h) usage_drmi; exit 0 ;;
+      f) FORCE_FLAG="-f"; ;;
+    esac
+  done
+  shift $(($OPTIND - 1))
+    
+  docker images | sed 1d | fzf -q "$*" --no-sort -m --tac | awk '{ print $3 }' | xargs -r docker rmi $FORCE_FLAG
 }
 # Open a file at specified linenumber in $EDITOR using rg and fzf
 vg() {
@@ -19,12 +58,14 @@ vg() {
 
 
   # Use ag if rg does not exist in system
-  if [[ $(command -v $(which rg) 2>/dev/null) ]]; then
+  if [[ $(command -v $(which ugrep) 2>/dev/null) ]]; then
+    read -r file line <<<"$(ugrep --ignore-binary -n --no-heading --colors='mt=k:fn=hyG' $@ | fzf -0 -1 | awk -F: '{print $1, $2}')"
+  elif [[ $(command -v $(which rg) 2>/dev/null) ]]; then
     read -r file line <<<"$(rg -n --no-heading --colors 'match:fg:black' --colors 'match:bg:yellow' --colors 'path:fg:green' $@ | fzf -0 -1 | awk -F: '{print $1, $2}')"
   elif [[  $(command -v $(which ag) 2>/dev/null) ]]; then
     read -r file line <<<"$(ag --nobreak --noheading $@ | fzf 1 -1 | awk -F: '{print $1, $2}')"
   else
-    print 'Could not find either ag or rg'
+    print 'Could not find either ug, ag, or rg'
     exit 1
   fi
 
@@ -74,7 +115,7 @@ fcop() {
   tags=$(
 git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
   branches=$(
-git branch --all | grep -v HEAD |
+git branch --all | ugrep -v HEAD |
 sed "s/.* //" | sed "s#remotes/[^/]*/##" |
 sort -u | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
   target=$(
@@ -140,51 +181,40 @@ fdeskl() {
       --bind="enter:execute($EDITOR {})+abort"\
       --bind="ctrl-space:execute(echo {})+abort"
 }
-# Helper function to integrate pikaur and fzf
-pifz() {
-  pos=$1
-  if [[ ! -f ~/.pifz_history$pos ]]; then
-    touch ~/.pifz_history$pos
-  fi
-  shift
-  sed "s/ /\t/g" |
-    fzf --nth=$pos --multi --history="/home/aerex/.pifz_history$pos" \
-      --ansi \
-      --preview-window=60%,border-left \
-      --bind="double-click:execute(xdg-open 'https://archlinux.org/packages/{$pos}'),alt-enter:execute(xdg-open 'https://aur.archlinux.org/packages?K={$pos}&SB=p&SO=d&PP=100')" \
-       "$@" | cut -f$pos | xargs
-}
 
-# Dev note: print -s adds a shell history entry
 
-# List installable packages into fzf and install selection
-pacf() {
-  cache_dir="/tmp/pikaur-$USER"
-  test "$1" = "-y" && rm -rf "$cache_dir" && shift
-  mkdir -p "$cache_dir"
-  preview_cache="$cache_dir/preview_{2}"
-  list_cache="$cache_dir/list"
-  { test "$(cat "$list_cache$@" | wc -l)" -lt 50000 && rm "$list_cache$@"; } 2>/dev/null
-  pkg=$( (cat "$list_cache$@" 2>/dev/null || { pacman --color=always -Sl "$@"} | sed 's/ [^ ]*unknown-version[^ ]*//' | tee "$list_cache$@") |
-    pifz 2 --tiebreak=index --preview="cat $preview_cache 2>/dev/null | grep -v 'Querying' | grep . || pikaur --color always -Si {2} | tee $preview_cache")
-  if test -n "$pkg"
-    then echo "Installing $pkg..."
-      cmd="pikaur -S $pkg"
-      print -s "$cmd"
-      eval "$cmd"
-      rehash
-  fi
-}
-# List installed packages into fzf and remove selection
-# Tip: use -e to list only explicitly installed packages
-pacfr() {
-  pkg=$(pikaur --color=always -Q "$@" | pifz 1 --tiebreak=length --preview="pikaur --color always -Qli {1}")
-  if test -n "$pkg"
-    then echo "Removing $pkg..."
-      cmd="pikaur -R --cascade --recursive $pkg"
-      print -s "$cmd"
-      eval "$cmd"
-  fi
-}
+# nvp - Search neovim plugins on https://nvim.sh/ with FZF 
+nvp() {
+  local plugin
+  local results
+  declare -i num_of_results 
+  readonly HELP="\
+Ctrl-O open with browser
+Enter view README"
 
-alias pacfu="pacfr"
+  search=$1
+
+  if [[ -z $(command -v gh) ]]; then
+    echo "Missing gh" 
+    exit 1
+  fi
+
+
+  if [[ -z $search ]]; then
+    results=$(curl https://nvim.sh/s --silent)
+  else
+    results=$(curl https://nvim.sh/s/$search --silent)
+  fi
+
+  # Remove header
+  num_of_results=$(echo $results | wc -l)
+  results_wo_header=$(echo $results | tail -n $(($num_of_results-1)))
+
+  echo $results_wo_header | fzf --prompt="Neovim Plugins> " \
+    --with-nth=1 \
+    --delimiter=' ' \
+    --header "${HELP}"\
+    --preview="GH_REPO=github.com gh repo view {1}" \
+    --bind "enter:execute(GH_REPO=github.com gh repo view {1})" \
+    --bind "ctrl-o:execute(GH_REPO=github.com gh repo view {1} -w &>/dev/null &)"
+}

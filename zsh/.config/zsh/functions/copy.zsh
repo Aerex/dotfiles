@@ -3,7 +3,7 @@ function copy() {
   if [[ $(uname -s) == "Darwin" ]]; then
     pbcopy $@
   else 
-    xsel --clipboard --input
+    cat | tr -d '\n' | xsel --clipboard --input
   fi
 
 }
