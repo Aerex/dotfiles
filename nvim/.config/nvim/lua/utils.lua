@@ -125,26 +125,31 @@ M.get_git_root_path = function()
 end
 
 M.symbol_map = {
+  Method = "󰆧",
+  Function = "󰊕",
+  Constructor = "",
+  Field = "󰜢",
+  Variable = "󰀫",
+  Class = "󰠱",
+  Interface = "",
+  Module = "",
+  Unit = "󰑭",
+  Value = "󰎠",
+  Enum = "",
+  Snippet = "",
+  File = "󰈙",
+  Reference = "󰈇",
+  Folder = "󰉋",
+  EnumMember = "",
+  Event = "",
+  Operator = "󰆕",
+  TypeParameter = "",
   Text = '',
-  Method = 'ƒ',
-  Function = '',
-  Constructor = '',
-  Field = 'ﰠ',
-  Variable = '',
-  Class = '',
-  Interface = 'ﰮ',
-  Module = '',
   Property = '',
-  Enum = '了',
   Keyword = '',
-  Snippet = '﬌',
   Color = '',
-  File = '',
-  Folder = '',
-  EnumMember = '',
   Constant = '',
   Struct = '',
-  TypeParameter = ''
 }
 
 M.get_efm_configs = function()
@@ -203,6 +208,20 @@ end
 
 M.autocmd = function(...)
   vim.api.nvim_create_autocmd(...)
+end
+
+M.paste_text = function()
+  local clip = vim.fn.getreg('+')
+  if #clip > 0 then
+    if clip:sub(0, 1) == "\"" then
+      clip = clip:sub(1)
+    end
+    if clip:sub(#clip) == "\"" then
+      clip = clip:sub(0, #clip - 1)
+    end
+    return clip
+  end
+  return ""
 end
 
 return M
