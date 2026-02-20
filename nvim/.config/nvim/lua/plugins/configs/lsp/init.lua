@@ -310,6 +310,19 @@ require 'lspconfig'.golangci_lint_ls.setup({
   },
 })
 
+
+local goimport_gp = vim.api.nvim_create_augroup("goimport", {
+  clear = true
+})
+
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = '*.go',
+  group = goimport_gp,
+  callback = function()
+    utils.goimports(1000)
+  end
+})
+
 require 'lspconfig'.yamlls.setup {
   capabilities = capabilities,
   on_attach = on_attach
