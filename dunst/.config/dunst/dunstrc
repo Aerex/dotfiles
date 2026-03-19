@@ -31,6 +31,8 @@
     # Position the notification in the top right corner
     origin = top-right
 
+    enable_posix_regex = true
+
     # Offset from the origin
     offset = 10x50
 
