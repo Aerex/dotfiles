@@ -47,12 +47,29 @@ This is [an example](http://example.com "Title") inline link.
 
 ### Note
 > [!NOTE]
-> This is a note
+> Highlights information that users should take into account, even when skimming.
 
 ### Important
 > [!IMPORTANT]
-> This is important
+> Crucial information necessary for users to succeed.
 
 ### Warning
 > [!WARNING]
 > This is a warning
+
+### Caution
+> [!CAUTION]
+> Negative potential consequences of an action.
+
+# [!NOTE]  
+> 
+
+> [!TIP]
+> Optional information to help a user be more successful.
+
+> [!IMPORTANT]  
+> 
+
+> [!WARNING]  
+> Critical content demanding immediate user attention due to potential risks.
+

@@ -8,3 +8,6 @@ date -d @1440359821
 date -r 1440359821
 nix timestamp to Date(Mac)
 date -r 1440359821
+
+# Get the next date in a specific format
+date -d 'next day' +'%Y-%m-%d'

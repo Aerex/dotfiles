@@ -1,0 +1,5 @@
+# Get workspaces
+i3-msg -t get_workspaces
+
+# Get focused workpace
+i3-msg -t get_worksaces | jq -c '.[] | select(.focused==true)'

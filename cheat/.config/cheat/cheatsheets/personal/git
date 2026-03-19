@@ -252,3 +252,6 @@ git commit -F .git/COMMIT_EDIT_MSG --amend
 
 # Create a patch file
 git diff > file.patch
+
+# Apply a patch file
+git apply file.patch

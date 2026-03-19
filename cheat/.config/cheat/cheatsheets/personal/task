@@ -31,3 +31,10 @@ task tag:1234
 
 # Shows a graphical report of task status by year.
 task ghistory.(annual|monthly|weekly|daily)
+
+# Specifying relative dates
+## End of current (w)ork week (Friday), (c)alendar week (Saturday or Sunday), month, quarter and year
+### End of week
+task ... due:eow 
+### End of next week
+task ... due:eonw

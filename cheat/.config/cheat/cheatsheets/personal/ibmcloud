@@ -22,8 +22,9 @@ ibmcloud dev toolchains --output json | jq --arg id "$RESOURCE_GROUP_ID" --arg n
 
 # Find the tekton pipeline for a toolchain
 PIPELINE_NAME=tk_pipeline
-TOOLCHAIN_ID=$(ibmcloud dev toolchains --output json | jq --arg id "$RESOURCE_GROUP_ID" --arg name '.items[] | select((.container.type == "resource_group_id") and (.container.guid == $id)) and (.name == $name)).id')
-PIPELINE_ID=$(ibmcloud dev toolchain-get $TOOLCHAIN_ID --output json | jq --arg name "$PIPELINE_NAME" '.items[0].services[] | select(.parameters.name == $name).instance_id')
+TOOLCHAIN_NAME=toolchain-test
+TOOLCHAIN_ID=$(ibmcloud dev toolchains --output json | jq -r --arg id "$RESOURCE_GROUP_ID" --arg name "$TOOLCHAIN_NAME" '.items[] | select((.container.type == "resource_group_id") and (.container.guid == $id) and (.name == $name)).toolchain_guid')
+PIPELINE_ID=$(ibmcloud dev toolchain-get $TOOLCHAIN_ID --output json | jq -r --arg name "$PIPELINE_NAME" '.items[0].services[] | select(.parameters.name == $name).instance_id')
 ibmcloud dev tekton-info $PIPELINE_ID
 
 # Find services that are not provisionable by resource controller 

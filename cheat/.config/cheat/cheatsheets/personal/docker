@@ -39,3 +39,6 @@ docker rmi $(docker images -q)
 
 # Prune build caches
 docker builder prune
+
+# View history
+docker history <image>:<tag>
