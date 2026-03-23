@@ -1,0 +1,7 @@
+[[keyboard.bindings]]
+chars = "\u001B/"
+key = 53
+mods = "Alt"
+
+[window]
+decorations = "None"
