@@ -1,0 +1,11 @@
+#!/bin/bash
+
+SERVICE_WORKER_DIR=$HOME/.local/share/qutebrowser/webengine/Service Worker
+
+
+if [[ -d $SERVICE_WORKER_DIR ]]; then
+  echo "message-warning \"Deleting Service Worker dir\"" >> "$QUTE_FIFO"
+  rm -rf $SERVICE_WORKER_DIR
+fi
+
+# vim: ft=sh

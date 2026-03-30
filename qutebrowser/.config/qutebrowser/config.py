@@ -4,6 +4,7 @@
 #   qute://help/settings.html
 
 # Uncomment this to still load settings configured via autoconfig.yml
+from os import path
 config.load_autoconfig(False)
 
 # Aliases for commands. The keys of the given dictionary are the
@@ -13,7 +14,14 @@ c.aliases = {
     'run-cmd': 'spawn -u main.sh',
     'clear-cache': 'spawn -u clear-cache.sh',
     'json': 'spawn -u format_json',
-    'tg': 'tab-give'
+    'tg': 'tab-give',
+    'rst': 'restart',
+    'pin': 'tab-pin',
+    'ms': 'open -t qute://log/',
+    'mse': 'open -t qute://log/?level=error',
+    'read': 'spawn -u readability',
+    'cls': 'clear-messages',
+    'rm-wks': 'spawn -u remove-workers'
 }
 
 # How to open links in an existing instance if a new one is launched.
@@ -74,7 +82,8 @@ config.set('content.javascript.enabled', True, 'chrome://*/*')
 # Type: Bool
 config.set('content.javascript.enabled', True, 'qute://*/*')
 
-# Enable save to clipboard buttons to work 
+# Enable save to clipboard buttons to work
+# Type: str
 config.set('content.javascript.clipboard', 'access', 'github.com')
 
 # Allow pdf.js to view PDF files in the browser. Note that the files can
@@ -86,6 +95,10 @@ c.content.pdfjs = True
 # Enable plugins in Web pages.
 # Type: Bool
 c.content.plugins = True
+
+# Allow websites to show notifications.
+# Type: Dict
+config.set('content.notifications.enabled', True, 'outlook.office.com')
 
 # Editor (and arguments) to use for the `open-editor` command. The
 # following placeholders are defined: * `{file}`: Filename of the file
@@ -114,15 +127,23 @@ c.fileselect.handler = 'external'
 # The following placeholders are defined: * `{}`: Filename of the file to be
 # written to. If not contained in any argument, the standard output of the command is read instead.
 # Type: ShellCommand
-c.fileselect.single_file.command =  ['alacrity', '-t', 'qute-fileselect', '-e', 'vifm', '--choose-files={}']
+c.fileselect.single_file.command = [
+    'alacritty', '-t', 'qute-fileselect', '-e', 'vifm', '--choose-files={}']
 
 # Command (and arguments) to use for selecting multiple files in forms. The command should write
 # the selected file paths to the specified file or to stdout, separated by newlines. The following
 # placeholders are defined: * `{}`: Filename of the file to be written to. If not contained in any
 # argument, the standard output of the command is read instead.
 # Type: ShellCommand
-c.fileselect.multiple_files.command =  ['alacrity', '-t', 'qute-fileselect', '-e', 'vifm', '--choose-files={}']
+c.fileselect.multiple_files.command = [
+    'alacritty', '-t', 'qute-fileselect', '-e', 'vifm', '--choose-files={}']
 
+# Command (and arguments) to use for selecting a single folder in forms. The command should write the selected folder path to the specified file or stdout.
+# The following placeholders are defined:
+# * `{}`: Filename of the file to be written to. If not contained in any argument, the
+# standard output of the command is read instead.
+c.fileselect.folder.command = [
+    'alacritty', '-t', 'qute-fileselect', '-e', 'vifm', '--choose-dir={}']
 # Mode to use for hints.
 # Type: String
 # Valid values:
@@ -134,7 +155,7 @@ c.hints.mode = 'number'
 # A comma-separated list of regexes to use for 'next' links.
 # Type: List of Regex
 c.hints.next_regexes = [
-    "\\bnext\\b",
+    "\\b(n|N)ext\\b",
     "\\bmore\\b",
     "\\bnewer\\b",
     "\\b[>→≫]\\b",
@@ -159,6 +180,14 @@ c.hints.border = '1px solid #002b36'
 # after loading the page.
 # Type: Bool
 c.input.insert_mode.auto_load = True
+
+# Leave insert mode if a non-editable element is clicked.
+# Type: Bool
+c.input.insert_mode.auto_leave = False
+
+# Enter insert mode if an editable element is clicked.
+# Type: Bool
+c.input.insert_mode.auto_enter = True
 
 # Languages to use for spell checking. You can check for available
 # languages and install dictionaries using scripts/dictcli.py. Run the
@@ -230,12 +259,13 @@ c.url.searchengines = {
     'duck': 'https://duckduckgo.com?q={}',
     'yt': 'https://www.youtube.com/results?search_query={}',
     'r': 'https://reddit.com/r/{}',
+    'npm': 'https://www.npmjs.com/search?q={}',
     'arfg': 'https://github.ibm.com/arf?utf8=%E2%9C%93&q={}',
     'amz': 'https://www.amazon.com/s?field-keywords={}',
     'so': 'http://stackoverflow.com/search?q={}',
     'imdb': 'http://www.imdb.com/find?q={}&s=all',
     'arch': 'http://wiki.archlinux.org/index.php?title=Special%3ASearch&search={}&go=Go',
-    'aur': 'https://aur.archlinux.org/packages.php?O=0&K={}&do_Search=Go',
+    'aur': 'https://aur.archlinux.org/packages?O=0&SeB=nd&K={}&outdated=&SB=p&SO=d&PP=50&submit=Go',
     'man': 'https://www.die.net/search/?q={}',
     'viwiki': 'http://vim.wikia.com/wiki/Special:Search?query={}',
     'gh': 'https://github.com/search?q={}',
@@ -538,7 +568,7 @@ c.colors.tabs.selected.even.bg = '#002b36'
 # Default monospace fonts. Whenever "monospace" is used in a font
 # setting, it's replaced with the fonts listed here.
 # Type: Font
-#c.fonts.monospace = 'Noto Sans'
+# c.fonts.monospace = 'Noto Sans'
 
 # Font used in the completion widget.
 # Type: Font
@@ -558,7 +588,7 @@ c.fonts.downloads = '12pt Noto Sans'
 
 # Font used for the hints.
 # Type: Font
-c.fonts.hints = 'bold 16pt Noto Sans'
+c.fonts.hints = 'bold 12pt Noto Sans'
 
 # Font used in the keyhint widget.
 # Type: Font
@@ -586,7 +616,7 @@ c.fonts.statusbar = '12pt Noto Sans'
 
 # Font used in the tab bar.
 # Type: QtFont
-#c.fonts.tabs = '12pt Noto Sans'
+# c.fonts.tabs = '12pt Noto Sans'
 c.fonts.tabs.selected = 'bold 12pt Noto Sans'
 c.fonts.tabs.unselected = '12pt Noto Sans'
 
@@ -608,7 +638,11 @@ c.fonts.web.family.sans_serif = 'Noto Sans'
 
 # Prevent accidental close tab use x
 config.unbind('d', mode='normal')
-config.bind('x', 'tab-close') 
+config.bind('x', 'tab-close')
+
+# Prevent accidental entering passthrough mode; use Ctrl+Shift+v
+config.unbind('<Ctrl+v>', mode='normal')
+config.bind('<Ctrl+Shift+v>', 'mode-enter passthrough')
 
 config.bind('J', 'tab-prev')
 config.bind('K', 'tab-next')
@@ -618,47 +652,63 @@ config.bind(';ki', 'hint links spawn kodi-cli -y "{hint-url}"')
 config.bind(';kq', 'hint --rapid links spawn kodi-cli -q "{hint-url}"')
 
 # Binding for caret mode
-config.bind(';l','spawn --userscript goto-highlighted-link.sh', mode='caret')
+config.bind(';l', 'spawn --userscript goto-highlighted-link.sh', mode='caret')
 
 # Bindings for normal mode
-config.bind(';yp', 'spawn --userscript yank-url-path')
+config.bind('yp', 'spawn --userscript yank-url-path')
+config.bind('ygp', 'spawn --userscript yank-url-path -d')
+config.bind('ygsc', 'spawn --userscript yank-url-path --git-ssh-clone')
 config.bind(';w', 'hint links spawn --userscript wall')
-#config.bind(';m', 'spawn --userscript umpv {url}')
+
+# config.bind(';m', 'spawn --userscript umpv {url}')
 config.bind(';m', 'hint links spawn --userscript umpv {hint-url}')
 config.bind(';M', 'hint --rapid links spawn --userscript umpv {hint-url}')
 config.bind('<Ctrl+w>', 'close')
 config.bind('<Space>ce', 'config-edit')
+config.bind('<Space>cls', 'clear-messages')
 config.bind('<Ctrl+e>', 'edit-text')
 config.bind('<Ctrl+H>', 'home')
-config.bind('<Space>tg', 'tab-give')
-config.bind('<Space>tG', 'set-cmd-text -s :tab-give')
-config.bind('<Space>gt', 'tab-give')
-config.bind('<Space>gT', 'set-cmd-text -s :tab-give')
+config.bind('<Space>tG', 'tab-give')
+config.bind('<Space>gT', 'tab-give')
+config.bind('<Space>tg', 'cmd-set-text -s :tab-give')
+config.bind('<Space>gt', 'cmd-set-text -s :tab-give')
 config.bind('<Space>tp', 'tab-pin')
+config.bind('<Ctrl-p>', 'tab-pin')
 config.bind('<Space>jj', 'spawn --userscript format_json')
-config.bind('<Space>m', 'set-cmd-text -s :set-mark')
-config.bind('<Space>b', 'set-cmd-text -s :tab-select')
+config.bind('<Space>m', 'cmd-set-text -s :set-mark')
+config.bind('<Space>b', 'cmd-set-text -s :tab-select')
 config.bind('<Meta+t>', 'open -t')
 config.bind('<Space>cc', 'spawn -u clear-cache.sh')
-config.bind('<Space><Enter>', 'set-cmd-text -s :')
+config.bind('<Space><Return>', 'cmd-set-text :')
 config.bind('H', 'back')
 config.bind('L', 'forward')
-config.bind('O', 'set-cmd-text -s :open -t')
+config.bind('O', 'cmd-set-text -s :open -t')
 config.bind('wo', 'open -w')
-config.bind('zl', 'spawn --userscript qute-pass')
-config.bind('zol', 'spawn --userscript qute-pass --otp-only')
-config.bind('zpl', 'spawn --userscript qute-pass --password-only')
-config.bind('zul', 'spawn --userscript qute-pass --username-only')
+config.bind('zl', 'spawn --userscript qute-pass -d "rofi -dmenu"')
+config.bind(
+    'zol', 'spawn --userscript qute-pass --otp-only -d "rofi -dmenu"')
+config.bind(
+    'zpl', 'spawn --userscript qute-pass --password-only -d "rofi -dmenu"')
+config.bind(
+    'zul', 'spawn --userscript qute-pass --username-only -d "rofi -dmenu"')
 
+config.bind(
+    '<Space>.', 'spawn alacritty -e xdg-open "nvim-gitdev://open/?repo={url}"')
 # Bindings for command mod
 config.bind('<Ctrl+j>', 'completion-item-focus next', mode='command')
 config.bind('<Ctrl+k>', 'completion-item-focus prev', mode='command')
 config.bind('<Ctrl+Shift+h>', 'rl-unix-filename-rubout', mode='command')
 config.bind('<Ctrl+Tab>', 'completion-item-focus next', mode='command')
+config.bind('<Ctrl+n>', 'completion-item-focus prev-category', mode='command')
 config.bind('<Escape>', 'mode-leave', mode='command')
 
+# List of widgets displayed in the statusbar.
+# Type: List
+c.statusbar.widgets = ["keypress", "search_match", "url",
+                       "scroll", "history", "tabs", "progress", "clock"]
 
-#config.bind('<meta-d>', 'completion-item-del', mode='command')
+c.qt.force_software_rendering = 'chromium'
+config.bind('<Space>cE', 'spawn --userscript edit-local-config')
 
-
-
+if path.exists(path.join(config.configdir, 'config.local.py')):
+    config.source(path.join(config.configdir, 'config.local.py'))
