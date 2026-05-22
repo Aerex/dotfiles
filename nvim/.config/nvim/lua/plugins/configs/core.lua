@@ -81,14 +81,15 @@ M.bqf = {
     func_map = {
         drop = 'o',
         openc = 'O',
+        closeall = '<C-c>',
         split = '<C-s>',
         tabdrop = '<C-t>',
         tabc = '',
-        ptogglemode = 'z,',
+        ptogglemode = 'zz',
     },
     filter = {
         fzf = {
-            action_for = {['ctrl-s'] = 'split', ['ctrl-t'] = 'tab drop'},
+            action_for = {['ctrl-s'] = 'split', ['ctrl-t'] = 'tab drop', ['ctrl-c'] = 'closeall'},
             extra_opts = {'--bind', 'ctrl-o:toggle-all', '--prompt', '> '}
         }
     }

@@ -13,6 +13,7 @@ local noremaps = {
   n = {
     -- misc
     ['<leader>w']    = 'write',
+    ['<leader>nn']    = 'Notifications',
     ['<leader>yr']   = function() require('telescope').extensions.yank_history.yank_history() end,
     ['<C-a>']        = '<NOP>', --disable due to tmux prefix
     ['\\zz']         = 'quitall!',
@@ -36,11 +37,11 @@ local noremaps = {
     ['<leader>fm']   = 'VsplitVifm',
     ['<leader>Fm']   = 'Vifm',
     -- fzf
-    ['<leader>ff']   = function() require 'plugins.configs.pickers.fzf.files' () end,
-    ['<leader>fh']   = function() require 'plugins.configs.pickers.fzf.helptags' () end,
+    ['<leader>ff']   = function() require'telescope.builtin'.find_files({ cwd = require'telescope.utils'.buffer_dir() }) end,
+    ['<leader>fh']   = function() require'telescope.builtin'.help_tags() end,
     ['<leader>fo']   = 'lua require(\'nvim-fzf.mru\').get_mru()',
     ['<leader>o']    = function() require 'telescope.builtin'.oldfiles() end,
-    ['<leader>fM']   = function() require 'plugins.configs.pickers.fzf.manpages' () end,
+    ['<leader>fM']   = function() require 'telescope.builtin'.man_pages() end,
     -- TODO: telescope seems faster here need to figure out why fzf is not
     ['<leader>p']    = function() require 'plugins.configs.pickers'.telescope.git_files() end,
     [',p']           = function() require 'nvim-fzf.git' () end,
@@ -106,7 +107,9 @@ local noremaps = {
     -- scratch
     ['<M-C-n>']      = function() require 'scratch'.scratch() end,
     ['<M-C-m>']      = function() require 'scratch'.scratchWithName() end,
-    ['<M-C-o>']      = function() require 'scratch'.fzfScratch() end
+    ['<M-C-o>']      = function() require 'scratch'.fzfScratch() end,
+    --ai
+    [',wca'] = function() require'wca'.open_chat() end
   }
 }
 

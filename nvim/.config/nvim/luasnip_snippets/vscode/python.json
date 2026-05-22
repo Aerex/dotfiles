@@ -8,7 +8,7 @@
     "prefix": "log",
     "description": "Add log statement",
     "body": [
-      "// REMOVEME: Do not commit",
+      "# REMOVEME: Do not commit",
       "print('$1: {\\}\\n'.format($1))"
     ]
   }

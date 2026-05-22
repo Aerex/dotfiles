@@ -76,13 +76,16 @@ return {
     end
   },
   {
-    dir = '~/Documents/repos/.private/wca.nvim/',
+    dir = '~/Documents/repos/.private/wca.nvim',
     dependencies = {
       'MunifTanjim/nui.nvim'
     },
     config = function()
       require'wca'.setup({})
     end
+  },
+  {
+    dir = '~/Documents/repos/git/GPTModels.nvim'
   },
   {
     "jackMort/ChatGPT.nvim",
@@ -101,76 +104,55 @@ return {
     'kkoomen/vim-doge'
   },
   {
-
     'olimorris/codecompanion.nvim',
     config = function()
-          require('codecompanion').setup({
-            opts = {
-              log_level = 'TRACE',
-              send_code = false,
-            },
-            display = {
-              action_palette = {
-                width = 95,
-                height = 10,
-                prompt = "Prompt ",                   -- Prompt used for interactive LLM calls
-                provider = "telescope",               -- default|telescope|mini_pick
-                opts = {
-                  show_default_actions = true,        -- Show the default actions in the action palette?
-                  show_default_prompt_library = true, -- Show the default prompt library in the action palette?
+      require('codecompanion').setup({
+        adapters = {
+          http = {
+            anthropic = function()
+              return require('codecompanion.adapters').extend('anthropic', {
+                env = {
+                  api_key = 'cmd:pass claude.com/token'
                 },
-              },
-              strategies = {
-                chat = {
-                  adapter = 'llama3_1'
-                },
-                inline = {
-                  adapter = 'ollama'
-                }
-              },
-              adapters = {
-                openai = function()
-                  return require('codecompanion.adapters').extend('openai', {
-                    name = 'openaimod',
-                    env = {
-                      api_key = "cmd:pass openai.com/token"
-                    },
-                    schema = {
-                      model = {
-                        default = 'gpt-4o-mini'
-                      }
-                    }
-                  })
-                end,
-                llama3_1 = function()
-                  return require('codecompanion.adapters').extend('ollama', {
-                    name = "llama3", -- Give this adapter a different name to differentiate it from the default ollama adapter
-                    schema = {
-                      model = {
-                        default = "llama3.1:latest",
-                      },
-                      num_ctx = {
-                        default = 16384,
-                      },
-                      num_predict = {
-                        default = -1,
-                      },
-                    },
-                  })
-                end
-              }
-            }
-          })
-        end,
-        requires = {
-          'nvim-lua/plenary.nvim',
-          'nvim-treesitter/nvim-treesitter',
-        }
+              })
+            end,
+          }
+        },
+        interactions = {
+          chat = {
+            adapter = 'anthropic',
+            model = 'claude-sonnet-4-20250514'
+          },
+          inline = {
+            adapter = 'anthropic'
+          },
+        },
+        opts = {
+          log_level = 'TRACE',
+        },
+      })
+    end,
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+    }
   },
   {
-    dir = '~/Documents/repos/ibm/wca.nvim',
+    'iamironz/android-nvim-plugin',
+    config = function()
+      require('android').setup()
+    end,
+  },
+  {
+    'kawre/leetcode.nvim',
+    dependencies = {
+        -- include a picker of your choice, see picker section for more details
+        'nvim-lua/plenary.nvim',
+        'MunifTanjim/nui.nvim',
+    },
     opts = {
-
-    }
-  }
+      lang = "python"
+        -- configuration goes here
+    },
+}
 }

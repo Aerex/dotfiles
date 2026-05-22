@@ -8,6 +8,11 @@ M.rest = {
       custom_dynamic_variables = lcfg.http_rest_config().custom_dynamic_variables
     end
     require('rest-nvim').setup({
+      response = {
+        hooks = {
+          format = true,
+        }
+      },
       result = {
         split = {
           horizontal = true
@@ -52,8 +57,8 @@ M.ledger = {
         prefix = '<leader>'
       })
       wk.register({
-          ["]"] = { "/^\\d", 'Next Transaction' },
-          ["["] = { "?^\\d", 'Previous Transaction' }
+          ["]"] = { "/^\\d<cr>", 'Next Transaction' },
+          ["["] = { "?^\\d<cr>", 'Previous Transaction' }
         },
         {
           buffer = 0,
@@ -148,6 +153,89 @@ M.which_key = {
       },
       show_help = true,                                                             -- show help message on the command line when the popup is visible
     }
+
+    require'which-key'.add({
+    -- misc
+    { '<leader>z', desc = 'QuitAll' },
+    { '<M-C-n>', desc = 'Toggle Scratch' },
+    -- yanky
+    { 'y', group = 'Yank' },
+    { 'yS', desc = 'Yank surrounding WORD' },
+    { 'yg', desc = 'Yank Git URL to clipboard' },
+    { 'yr', desc = 'Yank Ring' },
+    { 'ys', desc = 'Yank surrounding word' },
+    -- neotest
+    { '[n', desc = 'Go to previous failed test' },
+    { ']n', desc = 'Go to next failed test' },
+    -- nvim-dap
+    { '<leader>d', group = 'Debug' },
+    { '<leader>dK', desc = 'Inspect' },
+    { '<leader>dR', desc = 'Restart debugger' },
+    { '<leader>dT', desc = 'Debug Filetype Test' },
+    { '<leader>db', group = 'Breakpoint+' },
+    { '<leader>dbb', desc = 'Toggle breakpoint' },
+    { '<leader>dbl', desc = 'Show breakpoint list' },
+    { '<leader>dc', desc = 'Code window' },
+    { '<leader>dcb', desc = 'Toggle conditional breakpoint' },
+    { '<leader>dd', desc = 'Choose debugger / Continue' },
+    { '<leader>de', desc = 'Close / Reset debugger' },
+    { '<leader>di', desc = 'Step into' },
+    { '<leader>dk', desc = 'Step out' },
+    { '<leader>dlb', desc = 'Show Dap Log' },
+    { '<leader>dll', desc = 'Run Last' },
+    { '<leader>do', desc = 'Step over' },
+    { '<leader>drc', desc = 'Run to cursor' },
+    { '<leader>drp', desc = 'Open REPL' },
+    { '<leader>dt', desc = 'Tag window' },
+    { '<leader>dv', desc = 'Variables window' },
+    { '<leader>f', group = 'Fzf' },
+    { '<leader>fM', desc = 'Manpages' },
+    { '<leader>ff', desc = 'Files' },
+    { '<leader>fh', desc = 'Help' },
+    { '<leader>fm', desc = 'ViFm' },
+    { '<leader>fo', desc = 'Most Used Files' },
+    { '<leader>g', group = 'Git' },
+    { '<leader>gc', desc = 'Commit' },
+    { '<leader>gm', desc = 'Blame/Messages' },
+    { '<leader>gp', desc = 'Push' },
+    { '<leader>gup', desc = 'Push Upstream' },
+    { '<leader>h', group = 'GitSigns' },
+    { '<leader>hR', desc = 'Reset Buffer' },
+    { '<leader>hS', desc = 'Stage Buffer' },
+    { '<leader>hU', desc = 'Undo Stage Buffer' },
+    { '<leader>hb', desc = 'Show Git Blame' },
+    { '<leader>hp', desc = 'Preview Hunk' },
+    { '<leader>hr', desc = 'Reset Hunk' },
+    { '<leader>hs', desc = 'Stage Hunk' },
+    { '<leader>ht', desc = 'Toggle Signs' },
+    { '<leader>hu', desc = 'Undo Stage Hunk' },
+    { '<leader>l', group = 'LSP' },
+    { '<leader>ll', desc = 'Show Log' },
+    { '<leader>lr', desc = 'Restart LSP' },
+    { '<leader>r', group = 'Refresh/Reload+Ripgrep' },
+    { '<leader>rb', desc = 'Buffer' },
+    { '<leader>rc', desc = 'Config' },
+    { '<leader>rg', desc = 'Ripgrep all' },
+    { '<leader>t', group = 'Ultest/Neotest' },
+    { '<leader>tO', desc = 'Show and Jump Into Output' },
+    { '<leader>tc', desc = 'Ultest Clear' },
+    { '<leader>td', group = 'Debug' },
+    { '<leader>tdd', desc = 'File' },
+    { '<leader>tdn', desc = 'Nearest' },
+    { '<leader>tf', desc = 'Run Tests in File' },
+    { '<leader>tn', desc = 'Run Nearest' },
+    { '<leader>to', desc = 'Show Output' },
+    { '<leader>ts', desc = 'Summary Toggle' },
+    { '<leader>x', group = 'Diagnostics' },
+    { '<leader>xD', desc = 'Disable diagnostics' },
+    { '<leader>xd', desc = 'Show document diagnostics' },
+    { '<leader>xl', desc = 'Show location window' },
+    { '<leader>xq', desc = 'Show quickfix window' },
+    { '<leader>xt', group = 'Todo' },
+    { '<leader>xtx', desc = 'Show todo' },
+    { '<leader>xw', desc = 'Show workspace diagnostics' },
+    { '<leader>xx', desc = 'Toggle Trouble window' },
+  })
 
     require('which-key').register(
       {

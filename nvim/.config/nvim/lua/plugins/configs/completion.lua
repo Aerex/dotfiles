@@ -111,6 +111,7 @@ if ok then
     cmp.setup.filetype(doc_ft, {
       sources = {
         { name = 'spell' },
+        { name = 'path' },
         { name = 'dictionary', keyword_length = 4 },
         { name = 'luasnip' }
       }

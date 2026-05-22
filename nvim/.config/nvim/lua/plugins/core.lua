@@ -1,6 +1,5 @@
 return {
 
-  { 'nathom/filetype.nvim' },
   { 'lewis6991/impatient.nvim' },
   {
     lazy = true,
@@ -114,5 +113,13 @@ return {
     config = function()
       require 'plugins.configs.core'.bqf.setup()
     end
+  },
+  {
+  'vim-scripts/bbcode',
+  setup = function()
+    vim.g.tskelBitGroup_bbcode = {'bbcode', 'tex'}
+    -- vim.g.tskelKeyword_bbcode = '\(\[\*\|[\[\\][*[:alnum:]]\{-}\)'
+
+  end
   }
 }

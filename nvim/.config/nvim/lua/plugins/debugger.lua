@@ -5,6 +5,7 @@ return {
       'nvim-neotest/nvim-nio',
       'rcarriga/nvim-dap-ui',
       'mfussenegger/nvim-dap-python',
+      'jbyuki/one-small-step-for-vimkind',
       'theHamsta/nvim-dap-virtual-text'
     },
     config = function()

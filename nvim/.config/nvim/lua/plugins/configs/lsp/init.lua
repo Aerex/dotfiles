@@ -182,6 +182,7 @@ local on_attach = function(client, bufnr)
   end
 end
 
+
 require 'lspconfig'.pylsp.setup {
   on_attach = on_attach,
   autostart = true,
@@ -278,6 +279,30 @@ if not configs.mdls then
     },
   }
 end
+require'mason'.setup()
+require("mason-lspconfig").setup {
+    automatic_enable = {
+        "kotlin_lsp",
+        'ts_ls'
+    }
+}
+
+if not configs.kotlin_ls then
+  local kotlin = vim.fn.stdpath('data') .. "/mason/bin/kotlin-lsp"
+  configs.kotlin_ls = {
+    default_config = {
+      cmd = {kotlin, '--stdio'},
+      filetypes = { 'kotlin' },
+      root_dir = function(fname)
+        return require 'lspconfig'.util.find_git_ancestor(fname)
+      end,
+    }
+  }
+end
+require 'lspconfig'.kotlin_ls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
 
 
 require 'lspconfig'.mdls.setup {
@@ -285,30 +310,6 @@ require 'lspconfig'.mdls.setup {
   capabilities = capabilities,
 }
 
-if not configs.golangcilsp then
-  configs.golangcilsp = {
-    default_config = {
-      cmd = { 'golangci-lint-langserver' },
-      root_dir = require 'lspconfig'.util.root_pattern('.git', 'go.mod'),
-    },
-  }
-end
-require 'lspconfig'.golangci_lint_ls.setup({
-  capabilities = capabilities,
-  on_attach = on_attach,
-  init_options = {
-    command = {
-      'golangci-lint',
-      'run',
-      '--out-format',
-      'json',
-      '--enable',
-      'gosec,revive',
-      '--disable',
-      'typecheck',
-    },
-  },
-})
 
 
 local goimport_gp = vim.api.nvim_create_augroup("goimport", {
@@ -327,6 +328,31 @@ require 'lspconfig'.yamlls.setup {
   capabilities = capabilities,
   on_attach = on_attach
 }
+require 'lspconfig'.gopls.setup{
+  capabilities = capabilities,
+  on_attach = on_attach
+}
+-- if not configs.golangcilsp then
+--   configs.golangcilsp = {
+--     default_config = {
+--       cmd = { 'golangci-lint-langserver' },
+--       root_dir = require 'lspconfig'.util.root_pattern('.git', 'go.mod'),
+--       init_options = {
+--         command = { "golangci-lint", "run", "--output.json.path", "stdout", "--show-stats=false", "--issues-exit-code=1" };
+--       };
+--     },
+--   }
+-- end
+-- require 'lspconfig'.golangci_lint_ls.setup({
+--   capabilities = capabilities,
+--   on_attach = on_attach,
+--   file_types = {'go', 'gomod'}
+-- })
+
+  require 'lspconfig'.yamlls.setup {
+    capabilities = capabilities,
+    on_attach = on_attach
+  }
 --local efm_settings, efm_filetypes = utils.get_efm_configs()
 --require'lspconfig'.efm.setup {
 --  on_attach=on_attach,
@@ -335,10 +361,11 @@ require 'lspconfig'.yamlls.setup {
 --  capabilities = capabilities
 --}
 
--- require 'lspconfig'.ts_ls.setup {
---   on_attach = on_attach,
---   capabilities = capabilities
--- }
+ require 'lspconfig'.ts_ls.setup {
+   on_attach = on_attach,
+   capabilities = capabilities,
+   file_types = {'typescript', 'javascript'}
+ }
 
 require 'lspconfig'.jsonls.setup {
   on_attach = on_attach,
@@ -499,7 +526,8 @@ if ok_nav then
     },
     mason = true,    -- set to true if you would like use the lsp installed by williamboman/mason
     lsp = {
-      enable = true, -- skip lsp setup, and only use treesitter in navigator.
+      disable_lsp = 'all',
+      enable = false, -- skip lsp setup, and only use treesitter in navigator.
       -- Use this if you are not using LSP servers, and only want to enable treesitter support.
       -- If you only want to prevent navigator from touching your LSP server configs,
       -- use `disable_lsp = "all"` instead.
@@ -509,7 +537,9 @@ if ok_nav then
       code_lens_action = { enable = true, sign = true, sign_priority = 40, virtual_text = true },
       document_highlight = true,         -- LSP reference highlight,
       -- it might already supported by you setup, e.g. LunarVim
-      format_on_save = true,             -- {true|false} set to false to disasble lsp code format on save (if you are using prettier/efm/formater etc)
+      format_on_save = { 
+        disable = { 'json' }
+      },             -- {true|false} set to false to disasble lsp code format on save (if you are using prettier/efm/formater etc)
       format_options = { async = true }, -- async: disable by default, the option used in vim.lsp.buf.format({async={true|false}, name = 'xxx'})
       disable_format_cap = { "json" },   -- a list of lsp disable format capacity (e.g. if you using efm or vim-codeformat etc), empty {} by default
       diagnostic = {
@@ -542,6 +572,7 @@ if ok_nav then
       gopls = {
         -- gopls setting
         on_attach = on_attach,
+        capabilities = capabilities,
         settings = {
           gopls = {
             usePlaceholders = false,
@@ -569,4 +600,4 @@ end
 
 vim.lsp.handlers['textDocument/documentSymbol'] = lsp_document_symbol_callback
 vim.lsp.handlers['textDocument/references'] = lsp_references_callback
-vim.lsp.handlers['textDocument/implementation'] = lsp_implementation_callback
+-- vim.lsp.handlers['textDocument/implementation'] = lsp_implementation_callback

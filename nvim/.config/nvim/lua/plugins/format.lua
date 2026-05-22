@@ -30,5 +30,9 @@ return {
     config = function()
       vim.table_mode_auto_align = 1
     end
+  },
+  {
+  'gpanders/nvim-parinfer'
   }
+
 }

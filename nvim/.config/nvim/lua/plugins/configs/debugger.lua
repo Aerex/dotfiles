@@ -29,6 +29,9 @@ M.restore_keymaps = function()
     vim.keymap.set(keymap.mode, keymap.lhs, rhs, { buffer = keymap.buffer, silent = true })
   end
   default_key_maps = {}
+  if require'osv'.is_running() then
+    require'osv'.stop()
+  end
 end
 
 M.debugger_keymaps = function()
@@ -58,6 +61,17 @@ M.debugger_keymaps = function()
         }, options)
       end
     end
+end
+dap.configurations.lua = { 
+  {
+    type = 'nlua',
+    request = 'attach',
+    name = "Attach to running Neovim instance",
+  }
+}
+
+dap.adapters.nlua = function(callback, config)
+  callback({ type = 'server', host = config.host or "127.0.0.1", port = config.port or 38698})
 end
 
 dap.adapters.go = function(callback, _)
@@ -93,16 +107,9 @@ dap.adapters.go = function(callback, _)
     end,
     100)
 end
+
 -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
 dap.configurations.go = {
-  {
-    type = "go",
-    name = "Debug",
-    request = "launch",
-    program = "./${relativeFileDirname}",
-    args= { "card", "list", "-q", "deck:Vocabulary vaci" },
-    mode = "debug"
-  },
   {
     type = "go",
     name = "Debug with args",
@@ -247,6 +254,12 @@ M.start_or_continue  = function()
       workspace = vim.lsp.buf.list_workspace_folders()[1] .. '/.vscode/launch.json'
     end
     require('dap.ext.vscode').load_launchjs(workspace)
+  end
+
+  if vim.o.filetype == 'lua' then
+    if not require'osv'.is_running() then
+      require'osv'.launch({port=38698})
+    end
   end
 
   dap.continue()
