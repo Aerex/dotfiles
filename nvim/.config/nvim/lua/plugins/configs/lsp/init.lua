@@ -158,7 +158,7 @@ local on_attach = function(client, bufnr)
   keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   keymap('n', '<leader>di', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   vim.keymap.set('n', '<leader>,d', function() vim.diagnostic.open_float() end, { silent = true, buffer = bufnr })
-  vim.keymap.set('n', '<leader>xD', vim.diagnostic.disable, { silent = true, buffer = bufnr })
+  vim.keymap.set('n', '<leader>xD', function() vim.diagnostic.enable(false, { bufnr = bufnr }) end, { silent = true, buffer = bufnr })
   keymap('n', '<leader>lr', '<cmd>LspRestart<CR>', opts)
   keymap('n', '\\ll', '<cmd>LspLog<CR>', opts)
 
@@ -324,10 +324,6 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   end
 })
 
-require 'lspconfig'.yamlls.setup {
-  capabilities = capabilities,
-  on_attach = on_attach
-}
 require 'lspconfig'.gopls.setup{
   capabilities = capabilities,
   on_attach = on_attach
