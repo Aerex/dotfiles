@@ -34,13 +34,19 @@ return
   },
   'miyakogi/seiya.vim', -- enable transparent background
   {
-    'p00f/nvim-ts-rainbow',
-    dependencies = { 'nvim-treesitter/nvim-treesitter' }
+    'HiPhish/rainbow-delimiters.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function() require('plugins.configs.ui').lualine() end
   },
   {
+    lazy = true,
     'glepnir/galaxyline.nvim',
     dependencies = { 'kyazdani42/nvim-web-devicons' },
     config = function() require('plugins.configs.ui').galaxy() end
+  },
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
   {
     'alvarosevilla95/luatab.nvim',

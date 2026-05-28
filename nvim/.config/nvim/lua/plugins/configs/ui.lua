@@ -488,4 +488,237 @@ M.colors = {
   end
 }
 
+M.lualine = function()
+  local icons = {
+    modified = '',
+    readonly = ''
+  }
+  local colors = {
+    bg       = '#282c34',
+    line_bg  = '#353644',
+    fg       = '#8FBCBB',
+    fg_green = '#65a380',
+    yellow   = '#fabd2f',
+    cyan     = '#008080',
+    darkblue = '#081633',
+    green    = '#afd700',
+    orange   = '#FF8800',
+    purple   = '#5d4d7a',
+    magenta  = '#c678dd',
+    blue     = '#51afef',
+    red      = '#ec5f67',
+  }
+
+  -- per-mode foreground colors (ctrl-v = '\22', ctrl-s = '\19')
+  local mode_colors = {
+    n       = colors.green,
+    i       = colors.blue,
+    v       = colors.magenta,
+    V       = colors.magenta,
+    ['\22'] = colors.magenta,
+    c       = colors.purple,
+    no      = colors.magenta,
+    s       = colors.orange,
+    S       = colors.orange,
+    ['\19'] = colors.orange,
+    ic      = colors.yellow,
+    R       = colors.yellow,
+    Rv      = colors.magenta,
+    cv      = colors.red,
+    ce      = colors.red,
+    r       = colors.cyan,
+    rm      = colors.red,
+    ['r?']  = colors.red,
+    ['!']   = colors.green,
+    t       = colors.green,
+  }
+
+  local mode_names = {
+    n       = 'NORMAL',
+    i       = 'INSERT',
+    v       = 'VISUAL',
+    V       = 'VISUAL LINE',
+    ['\22'] = 'VISUAL BLOCK',
+    c       = 'COMMAND-LINE',
+    ['r?']  = ':CONFIRM',
+    rm      = '--MORE',
+    R       = 'REPLACE',
+    Rv      = 'VIRTUAL',
+    s       = 'SELECT',
+    S       = 'SELECT LINE',
+    ['\19'] = 'SELECT BLOCK',
+    r       = 'HIT-ENTER',
+    t       = 'TERMINAL',
+    ['!']   = 'SHELL',
+  }
+
+  local buf_not_empty = function()
+    return #vim.fn.expand('%:t') > 0
+  end
+
+  -- lualine_a: vi-mode with dynamic per-mode fg color
+  local vi_mode = {
+    function()
+      local mode = vim.fn.mode()
+      return mode_names[mode] or mode
+    end,
+    color   = function()
+      return { fg = mode_colors[vim.fn.mode()] or colors.fg, bg = colors.line_bg, gui = 'bold' }
+    end,
+  }
+
+  -- lualine_b: readonly '' / modified '' state icon
+  local file_state = {
+    function()
+      if vim.bo.readonly then
+        return icons.readonly
+      elseif vim.bo.modifiable and vim.bo.modified then
+        return icons.modified
+      end
+      return ''
+    end,
+    color   = { fg = colors.fg, bg = colors.line_bg, gui = 'bold' },
+    cond    = buf_not_empty,
+  }
+
+  -- lualine_b: truncated file path (mirrors galaxyline get_file_name)
+  local custom_fname = {
+    function()
+      local fname = vim.fn.expand('%:p')
+      if vim.startswith(fname, vim.env.HOME) then
+        fname = vim.fn.substitute(fname, vim.env.HOME, '~', '')
+      end
+      local parts = vim.split(fname, '/')
+      local sname
+      if #parts > 4 then
+        sname = vim.fn.join(vim.list_slice(parts, #parts - 2, #parts), '/')
+        sname = parts[1] .. '/../' .. sname
+      elseif #parts == 3 then
+        sname = vim.fn.expand('%:t')
+      else
+        sname = fname
+      end
+      return sname or ''
+    end,
+    seperator = '',
+    color   = { fg = colors.fg, bg = colors.line_bg, gui = 'bold' },
+    cond    = buf_not_empty,
+  }
+
+  -- lualine_c: trailing whitespace indicator
+  local trailing_whitespace = {
+    function()
+      local trail = vim.fn.search('\\s$', 'nw')
+      return trail ~= 0 and ' ' or ''
+    end,
+    icon  = '  ',
+    color = { fg = colors.yellow, bg = colors.bg },
+  }
+
+  -- lualine_c: active LSP client name(s), mirrors get_diagnostic_info
+  local lsp_status = {
+    function()
+      local clients = vim.lsp.get_clients({ bufnr = 0 })
+      if #clients == 0 then return '' end
+      local names = {}
+      for _, client in ipairs(clients) do
+        if not string.find(client.name, 'github.com') then
+          table.insert(names, client.name)
+        end
+      end
+      return table.concat(names, ', ')
+    end,
+    icon  = ' λ ',
+    color = { fg = colors.yellow, bg = colors.bg },
+  }
+
+  -- lualine_x: SSH remote IP
+  local remote_ip = {
+    function()
+      if not vim.env.SSH_CLIENT then return '' end
+      local parts = vim.split(vim.env.SSH_CLIENT, ' ')
+      return #parts > 0 and parts[1] or ''
+    end,
+    color = { fg = colors.yellow, bg = colors.bg },
+  }
+
+  -- lualine_x: FCITX placeholder (disabled – uncomment body to enable)
+  local fcitx_status = {
+    function() return '' end,
+    color = { fg = colors.yellow, bg = colors.bg },
+  }
+
+  -- Custom theme: a/b/y → line_bg, c/x → bg, z → darkblue
+  local theme = {
+    normal = {
+      a = { fg = colors.fg,   bg = colors.line_bg, gui = 'bold' },
+      b = { fg = colors.fg,   bg = colors.line_bg },
+      c = { fg = colors.fg,   bg = colors.bg },
+      x = { fg = colors.fg,   bg = colors.bg },
+      y = { fg = colors.fg,   bg = colors.line_bg },
+      z = { fg = colors.cyan, bg = colors.darkblue, gui = 'bold' },
+    },
+    insert  = { a = { fg = colors.blue,    bg = colors.line_bg, gui = 'bold' } },
+    visual  = { a = { fg = colors.magenta, bg = colors.line_bg, gui = 'bold' } },
+    replace = { a = { fg = colors.red,     bg = colors.line_bg, gui = 'bold' } },
+    command = { a = { fg = colors.purple,  bg = colors.line_bg, gui = 'bold' } },
+    inactive = {
+      a = { fg = colors.fg, bg = colors.line_bg },
+      b = { fg = colors.fg, bg = colors.line_bg },
+      c = { fg = colors.fg, bg = colors.bg },
+    },
+  }
+
+  require('lualine').setup({
+    options = {
+      theme                = theme,
+      icons_enabled        = true,
+      component_separators = { left = '', right = '' },
+      section_separators   = { left = '', right = '' },
+      -- mirrors galaxyline short_line_list
+      disabled_filetypes   = {
+        statusline = {
+          'fugitive', 'fugitiveblame',
+          'dapui-watches', 'dapui-stacks', 'dapui-scopes', 'dap-repl',
+        },
+        winbar = {
+      lualine_a = {},
+      lualine_b = {},
+      lualine_c = {'filename'},
+      lualine_x = {},
+      lualine_y = {},
+      lualine_z = {}
+        },
+      },
+      globalstatus = false,
+    },
+    sections = {
+      lualine_a = { vi_mode },
+      lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {custom_fname},
+    lualine_x = {remote_ip, fcitx_status,'encoding', file_state, 'fileformat', 'filetype'},
+    lualine_y = {'lsp_status', 'progress'},
+    lualine_z = {'location'}
+    },
+    -- mirrors galaxyline short_line_left / short_line_right
+    inactive_sections = {
+      lualine_a = {},
+      lualine_b = {},
+      lualine_c = {
+        { 'filetype', icon_only = false, color = { fg = colors.fg, bg = colors.line_bg } },
+      },
+      lualine_x = {
+        { 'filetype', icon_only = true, color = { fg = colors.fg, bg = colors.line_bg } },
+      },
+      lualine_y = {},
+      lualine_z = {},
+    },
+    tabline         = {},
+    winbar          = {},
+    inactive_winbar = {},
+    extensions      = {},
+  })
+end
+
+
 return M

@@ -33,6 +33,7 @@ return {
     'rmagatti/goto-preview'
   },
   {
+    lazy = true,
     'j-hui/fidget.nvim',
     config = function()
       require('fidget').setup({

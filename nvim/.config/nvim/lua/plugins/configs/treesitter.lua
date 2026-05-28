@@ -1,7 +1,9 @@
 local M = {}
 
 M.setup = function()
-  require 'nvim-treesitter.configs'.setup {
+
+  local ensure_installed = { 'javascript', 'ledger', 'python', 'c', 'query', 'go', 'bash', 'json', 'php', 'http', 'yaml' }
+  require 'nvim-treesitter.config'.setup {
     highlight = {
       enable = true,
       -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
@@ -113,8 +115,16 @@ M.setup = function()
     indent = {
       enable = false
     },
-    ensure_installed = { 'javascript', 'ledger', 'python', 'c', 'query', 'go', 'bash', 'json', 'php', 'http', 'yaml' }
   }
+  -- credits to https://www.qu8n.com/posts/treesitter-migration-guide-for-nvim-0-12
+  local alreadyInstalled = require('nvim-treesitter.config').get_installed()
+  -- install only the ones that don't exist 
+  local parsersToInstall = vim.iter(ensure_installed)
+    :filter(function(parser)
+      return not vim.tbl_contains(alreadyInstalled, parser)
+    end)
+    :totable()
+    require('nvim-treesitter').install(parsersToInstall)
 end
 
 return M
