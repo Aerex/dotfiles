@@ -1,0 +1,8 @@
+#!/bin/sh
+
+[[ -z $1 ]] && man && exit 0
+
+# run man on builtin command then use pattern to search for section in manpage
+man bash | less -p "^\s+$1\s*\[+"
+
+# vim: ft=sh

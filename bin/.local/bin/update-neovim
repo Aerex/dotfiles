@@ -1,0 +1,79 @@
+#!/bin/bash 
+#===  update-neovim  ================================================================
+#         NAME:  update-neovim
+#  DESCRIPTION:  Utility to update neovim 
+#===============================================================================
+source ~/.config/zsh/functions/colors.zsh
+function usage ()
+{
+  echo "Usage: update-neovim [options]
+
+Options:
+-l|--lts       Update to the latest stable version
+-d|--dev        Update to dev version
+-h|--help       Display this message"
+}    # ----------  end of function usage  ----------
+
+#-----------------------------------------------------------------------
+#  Handle command line arguments
+#-----------------------------------------------------------------------
+options=$(getopt -o hdl --long dev --long lts --long help -- "$@")
+[ $? -eq 0 ] || {
+  log_error "Incorrect option provided"
+  exit 1
+}
+eval set -- "$options"
+while true
+do
+  case "$1" in
+  -h|--help)  usage; exit 0   ;;
+  -l|--lts) use_lts=1 ;;
+  -d|--dev) use_dev=1 ;;
+  --) shift; break ;;
+  esac    # --- end of case ---
+  shift
+done
+CMAKE_EXTRA_FLAGS=""
+CMAKE_BUILD_TYPE=Release
+if [[ -n $use_dev ]]; then
+    CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$HOME/neovim"
+    CMAKE_BUILD_TYPE=Debug
+fi
+  #while getopts :r:h arg; do
+  #  case "$arg" in
+  #    r)
+#      CMAKE_EXTRA_FLAGS=""
+#      CMAKE_BUILD_TYPE=Release
+#      ;;
+#    *)
+#      CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$HOME/neovim"
+#      CMAKE_BUILD_TYPE=Debug
+#      ;;
+#    h)
+#
+#    esac
+#done
+
+if [[ ! -d $HOME/Documents/repos/git ]]; then
+  mkdir -p $HOME/Documents/repos/git
+fi
+
+if [[ ! -d $HOME/Documents/repos/git/neovim ]]; then
+  git clone https://github.com/neovim/neovim
+fi
+pushd $HOME/Documents/repos/git/neovim >/dev/null || exit 1
+git fetch origin
+if [[ -n $use_lts ]]; then
+  ver=$(curl --silent 'https://api.github.com/repos/neovim/neovim/releases' | jq -r '.[] | select(.tag_name | test("^v.*")) | .tag_name' | head -n 1)
+elif [[ -n $use_dev ]]; then
+  ver=master
+fi
+git checkout $ver
+sudo make distclean
+make CMAKE_EXTRA_FLAGS="$CMAKE_EXTRA_FLAGS" CMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"
+sudo make install
+
+if [ $CMAKE_BUILD_TYPE == 'Debug' ]; then
+  export PATH="$HOME/neovim/bin:$PATH"
+fi
+popd >/dev/null || exit 1

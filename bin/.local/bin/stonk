@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e && \
+  . ~/Documents/repos/git/GamestonkTerminal/.pyenv/bin/activate && \
+  python ~/Documents/repos/git/GamestonkTerminal/terminal.py
