@@ -10,10 +10,6 @@ return {
     'mfussenegger/nvim-jdtls'
   },
   {
-    lazy = true,
-    'jose-elias-alvarez/null-ls.nvim'
-  },
-  {
     'onsails/lspkind-nvim'
   },
   {
