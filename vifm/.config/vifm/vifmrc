@@ -159,7 +159,6 @@ mark t /tmp
 mark S ~/Documents/Scans
 mark c ~/.config
 mark z ~/.config/zsh
-mark . ~/dotfiles
 mark l ~/Downloads
 
 " Commands ------------------------------------------------------------------------------ {{{1
@@ -187,7 +186,7 @@ command! reload :write | restart
 command! extract :atool -x %f
 command! wget :wget
 command! FZFfind :set noquickview | :execute 'goto "'.system('find | fzf --height 20 2>/dev/tty ').'"%IU' | redraw
-if $TERM 
+if $TERM != ""
   command! FZFlocate	:set noquickview |
     \ :execute 'goto "'.system('locate $HOME | fzf-tmux --header=locate\ in\ \$HOME  2>/dev/tty ').'"%IU' |
     \ redraw
@@ -197,7 +196,6 @@ endif
 
 " File Types ------------------------------------------------------------------------------ {{{1
 
-" The file type is for the default programs to be used with
 " a file extension.
 " :filetype pattern1,pattern2 defaultprogram,program2
 " :fileviewer pattern1,pattern2 consoleviewer
