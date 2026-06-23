@@ -76,31 +76,6 @@ return {
     end
   },
   {
-    dir = '~/Documents/repos/.private/wca.nvim',
-    dependencies = {
-      'MunifTanjim/nui.nvim'
-    },
-    config = function()
-      require'wca'.setup({})
-    end
-  },
-  {
-    dir = '~/Documents/repos/git/GPTModels.nvim'
-  },
-  {
-    "jackMort/ChatGPT.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("chatgpt").setup()
-    end,
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim",
-      "folke/trouble.nvim", -- optional
-      "nvim-telescope/telescope.nvim"
-    }
-  },
-  {
     'kkoomen/vim-doge'
   },
   {
@@ -138,6 +113,7 @@ return {
     }
   },
   {
+    lazy = true,
     'iamironz/android-nvim-plugin',
     config = function()
       require('android').setup()

@@ -109,7 +109,8 @@ local noremaps = {
     ['<M-C-m>']      = function() require 'scratch'.scratchWithName() end,
     ['<M-C-o>']      = function() require 'scratch'.fzfScratch() end,
     --ai
-    [',wca'] = function() require'wca'.open_chat() end
+    [',wca'] = function() require'wca'.open_chat() end,
+    ['<leader>aa'] = function() require'codecompanion'.toggle() end
   }
 }
 
