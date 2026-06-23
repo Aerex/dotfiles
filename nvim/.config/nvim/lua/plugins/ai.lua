@@ -56,24 +56,6 @@ return {
     }
   },
   {
-    dir = '~/Documents/repos/ibm/wca.nvim',
-    dependencies = {
-      'MunifTanjim/nui.nvim'
-    },
-    config = function()
-      require 'wca'.setup({})
-    end
-  },
-  {
-    'rcampos2029/GPTModels.nvim',
-    branch = 'gemini',
-    dependencies = {
-      'MunifTanjim/nui.nvim',
-      'nvim-telescope/telescope.nvim'
-    }
-
-  },
-  {
     'ravitemer/mcphub.nvim',
     dependencies = {
       'nvim-lua/plenary.nvim',              -- Required for Job and HTTP requests
