@@ -20,7 +20,18 @@ return {
       require 'plugins.configs.misc'.rest.setup()
     end,
     dependencies = {
+      'nvim-neotest/nvim-nio',
+      'j-hui/fidget.nvim',
       'nvim-treesitter/nvim-treesitter',
+      {
+        -- Lazy.nvim does not recognize this library's rocksfile, so add it
+        -- to package path manually.
+        'manoelcampos/xml2lua',
+        config = function(plugin)
+          package.path = package.path .. ";" .. plugin.dir .. "/?.lua"
+        end,
+      },
+      'lunarmodules/lua-mimetypes'
     }
   },
   {
