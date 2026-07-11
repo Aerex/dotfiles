@@ -32,7 +32,8 @@ opt.runtimepath:append('/usr/share/vifm/vim-doc/')
 o.showmode    = true
 o.autoread    = true
 o.timeoutlen  = 300
-o.foldmethod  = vim.bo.filetype == 'python' and 'indent' or 'syntax'
+o.foldmethod  = vim.bo.filetype == 'python' and 'indent' or 'expr'
+o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 o.foldlevel   = 5
 wo.signcolumn = "auto:3"
 o.smartindent = true

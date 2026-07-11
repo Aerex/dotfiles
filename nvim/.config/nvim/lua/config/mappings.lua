@@ -111,6 +111,9 @@ local noremaps = {
     --ai
     [',wca'] = function() require'wca'.open_chat() end,
     ['<leader>aa'] = function() require'codecompanion'.toggle() end
+  },
+  v = {
+  ['<leader>aa>'] = function() require'codecompanion'.chat() end
   }
 }
 

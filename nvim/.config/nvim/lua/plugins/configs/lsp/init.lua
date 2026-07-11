@@ -35,27 +35,26 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
 
-  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-      -- Enable underline, use default values
-      underline = true,
-      -- Enable virtual text, override spacing to 4
-      virtual_text = {
-        spacing = 4,
-      },
-      -- Use a function to dynamically turn signs off
-      -- and on, using buffer local variables
-      signs = {
+  vim.diagnostic.config({
+    -- Enable underline, use default values
+    underline = true,
+    -- Enable virtual text, override spacing to 4
+    virtual_text = {
+      spacing = 4,
+    },
+    -- Use a function to dynamically turn signs off
+    -- and on, using buffer local variables
+    signs = {
+      text = {
         [vim.diagnostic.severity.ERROR] = '✖',
         [vim.diagnostic.severity.WARN]  = '',
         [vim.diagnostic.severity.INFO]  = '',
         [vim.diagnostic.severity.HINT]  = '',
-      },
-      -- Disable a feature
-      update_in_insert = false,
-    }
-  )
-
+      }
+  },
+    -- Disable a feature
+    update_in_insert = false,
+  })
 
   local ok_tsu, ts_utils = pcall(require, 'nvim-lsp-ts-utils')
   if ok_tsu then
